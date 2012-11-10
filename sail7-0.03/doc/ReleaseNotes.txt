@@ -1,0 +1,29 @@
+	
+*******************************************************************************
+
+
+                                        sail7
+
+                          A tool for the design of sails and boats
+                            Program based on xflr5 source code
+
+                                    Copyright (C) 2012
+
+                                     Andre Deperrois
+
+
+*******************************************************************************
+
+
+sail7 v0.03 November 4th, 2012
+	- code published on sourceforge
+
+
+
+sail7 v0.02 alpha June 9th, 2012
+	- first operational release for alpha-testing
+
+
+
+sail7 v0.01 alpha January 4th, 2012
+	- concept demonstration
