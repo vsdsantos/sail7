@@ -367,7 +367,6 @@ private:
 
 	QCheckBox *m_pctrlVortices;
 	QSlider *m_pctrlClipPlanePos;
-	QLabel *m_pctrlUnit1, *m_pctrlUnit2, *m_pctrlUnit3;
 
 	QTextEdit *m_pctrlPolarProps1;
 	QStackedWidget *m_pctrBottomControls, *m_pctrlMiddleControls;

@@ -225,10 +225,6 @@ void QSail7::SetupLayout()
 				m_pctrlControlMax     = new FloatEdit(1., 3);
 				m_pctrlControlDelta   = new FloatEdit(0.5, 3);
 
-				m_pctrlUnit1 = new QLabel(QString::fromUtf8("°"));
-				m_pctrlUnit2 = new QLabel(QString::fromUtf8("°"));
-				m_pctrlUnit3 = new QLabel(QString::fromUtf8("°"));
-
 			/*	m_pctrlControlMin->setMinimumHeight(20);
 				m_pctrlControlMax->setMinimumHeight(20);
 				m_pctrlControlDelta->setMinimumHeight(20);*/
@@ -241,9 +237,6 @@ void QSail7::SetupLayout()
 				SequenceGroupLayout->addWidget(m_pctrlControlMin,1,2);
 				SequenceGroupLayout->addWidget(m_pctrlControlMax,2,2);
 				SequenceGroupLayout->addWidget(m_pctrlControlDelta,3,2);
-				SequenceGroupLayout->addWidget(m_pctrlUnit1,1,3);
-				SequenceGroupLayout->addWidget(m_pctrlUnit2,2,3);
-				SequenceGroupLayout->addWidget(m_pctrlUnit3,3,3);
 			}
 
 			m_pctrlStoreOpp    = new QCheckBox(tr("Store OpPoint"));
@@ -6389,13 +6382,6 @@ void QSail7::SetCurveParams()
 		{
 			FillComboBoxes(false);
 		}
-	}
-
-	if(m_pCurBoatPolar)
-	{
-			m_pctrlUnit1->setText(QString::fromUtf8("°"));
-			m_pctrlUnit2->setText(QString::fromUtf8("°"));
-			m_pctrlUnit3->setText(QString::fromUtf8("°"));
 	}
 }
 
