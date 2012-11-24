@@ -396,12 +396,12 @@ void GL3dBodyDlg::GLCreateBodyOverlay()
 		width = 1;
 		glLineWidth(width);
 
-		style = DASHLINE;
-		if     (style == DASHLINE)       glLineStipple (1, 0xCFCF);
-		else if(style == DOTLINE)        glLineStipple (1, 0x6666);
-		else if(style == DASHDOTLINE)    glLineStipple (1, 0xFF18);
-		else if(style == DASHDOTDOTLINE) glLineStipple (1, 0x7E66);
-		else                             glLineStipple (1, 0xFFFF);
+		style = Qt::DashLine;
+		if     (style == Qt::DashLine)       glLineStipple (1, 0xCFCF);
+		else if(style == Qt::DotLine)        glLineStipple (1, 0x6666);
+		else if(style == Qt::DashDotLine)    glLineStipple (1, 0xFF18);
+		else if(style == Qt::DashDotDotLine) glLineStipple (1, 0x7E66);
+		else                                 glLineStipple (1, 0xFFFF);
 
 		glColor3d(color.redF(), color.greenF(), color.blueF());
 
@@ -671,11 +671,11 @@ void GL3dBodyDlg::GLCreateBodyFrames()
 
 		glLineWidth(width);
 
-		if     (style == DASHLINE)       glLineStipple (1, 0xCFCF);
-		else if(style == DOTLINE)        glLineStipple (1, 0x6666);
-		else if(style == DASHDOTLINE)    glLineStipple (1, 0xFF18);
-		else if(style == DASHDOTDOTLINE) glLineStipple (1, 0x7E66);
-		else                             glLineStipple (1, 0xFFFF);
+		if     (style == Qt::DashLine)       glLineStipple (1, 0xCFCF);
+		else if(style == Qt::DotLine)        glLineStipple (1, 0x6666);
+		else if(style == Qt::DashDotLine)    glLineStipple (1, 0xFF18);
+		else if(style == Qt::DashDotDotLine) glLineStipple (1, 0x7E66);
+		else                                 glLineStipple (1, 0xFFFF);
 
 
 		glColor3d(color.redF(), color.greenF(), color.blueF());
@@ -810,11 +810,11 @@ void GL3dBodyDlg::GLCreateBodyFrames()
 		glLineWidth(width);
 
 
-		if     (style == DASHLINE)       glLineStipple (1, 0xCFCF);
-		else if(style == DOTLINE)        glLineStipple (1, 0x6666);
-		else if(style == DASHDOTLINE)    glLineStipple (1, 0xFF18);
-		else if(style == DASHDOTDOTLINE) glLineStipple (1, 0x7E66);
-		else                             glLineStipple (1, 0xFFFF);
+		if     (style == Qt::DashLine)       glLineStipple (1, 0xCFCF);
+		else if(style == Qt::DotLine)        glLineStipple (1, 0x6666);
+		else if(style == Qt::DashDotLine)    glLineStipple (1, 0xFF18);
+		else if(style == Qt::DashDotDotLine) glLineStipple (1, 0x7E66);
+		else                                 glLineStipple (1, 0xFFFF);
 
 
 		glColor3d(color.redF(), color.greenF(), color.blueF());
@@ -1087,11 +1087,11 @@ void GL3dBodyDlg::GLCreateBodyGrid()
 			glColor3d(W3dPrefsDlg::s_3DAxisColor.redF(), W3dPrefsDlg::s_3DAxisColor.greenF(), W3dPrefsDlg::s_3DAxisColor.blueF());
 			glLineWidth(W3dPrefsDlg::s_3DAxisWidth);
 
-			if     (style == DASHLINE)       glLineStipple (1, 0xCFCF);
-			else if(style == DOTLINE)        glLineStipple (1, 0x6666);
-			else if(style == DASHDOTLINE)    glLineStipple (1, 0xFF18);
-			else if(style == DASHDOTDOTLINE) glLineStipple (1, 0x7E66);
-			else                             glLineStipple (1, 0xFFFF);
+			if     (style == Qt::DashLine)       glLineStipple (1, 0xCFCF);
+			else if(style == Qt::DotLine)        glLineStipple (1, 0x6666);
+			else if(style == Qt::DashDotLine)    glLineStipple (1, 0xFF18);
+			else if(style == Qt::DashDotDotLine) glLineStipple (1, 0x7E66);
+			else                                 glLineStipple (1, 0xFFFF);
 
 			glBegin(GL_LINES);
 			{
@@ -1113,11 +1113,11 @@ void GL3dBodyDlg::GLCreateBodyGrid()
 		glLineWidth(m_BodyGridDlg.m_Width2);
 
 		style = m_BodyGridDlg.m_Style2;
-		if     (style == DASHLINE)       glLineStipple (1, 0xCFCF);
-		else if(style == DOTLINE)        glLineStipple (1, 0x6666);
-		else if(style == DASHDOTLINE)    glLineStipple (1, 0xFF18);
-		else if(style == DASHDOTDOTLINE) glLineStipple (1, 0x7E66);
-		else                             glLineStipple (1, 0xFFFF);
+		if     (style == Qt::DashLine)       glLineStipple (1, 0xCFCF);
+		else if(style == Qt::DotLine)        glLineStipple (1, 0x6666);
+		else if(style == Qt::DashDotLine)    glLineStipple (1, 0xFF18);
+		else if(style == Qt::DashDotDotLine) glLineStipple (1, 0x7E66);
+		else                                 glLineStipple (1, 0xFFFF);
 
 		glBegin(GL_LINES);
 		{
@@ -1171,11 +1171,11 @@ void GL3dBodyDlg::GLCreateBodyGrid()
 		glLineWidth(m_BodyGridDlg.m_MinWidth2);
 
 		style = m_BodyGridDlg.m_MinStyle2 ;
-		if     (style == DASHLINE)       glLineStipple (1, 0xCFCF);
-		else if(style == DOTLINE)        glLineStipple (1, 0x6666);
-		else if(style == DASHDOTLINE)    glLineStipple (1, 0xFF18);
-		else if(style == DASHDOTDOTLINE) glLineStipple (1, 0x7E66);
-		else                             glLineStipple (1, 0xFFFF);
+		if     (style == Qt::DashLine)       glLineStipple (1, 0xCFCF);
+		else if(style == Qt::DotLine)        glLineStipple (1, 0x6666);
+		else if(style == Qt::DashDotLine)    glLineStipple (1, 0xFF18);
+		else if(style == Qt::DashDotDotLine) glLineStipple (1, 0x7E66);
+		else                                 glLineStipple (1, 0xFFFF);
 
 		glBegin(GL_LINES);
 		{
@@ -1243,11 +1243,11 @@ void GL3dBodyDlg::GLCreateBodyGrid()
 			glLineWidth(W3dPrefsDlg::s_3DAxisWidth);
 
 			style = W3dPrefsDlg::s_3DAxisStyle;
-			if     (style == DASHLINE)       glLineStipple (1, 0xCFCF);
-			else if(style == DOTLINE)        glLineStipple (1, 0x6666);
-			else if(style == DASHDOTLINE)    glLineStipple (1, 0xFF18);
-			else if(style == DASHDOTDOTLINE) glLineStipple (1, 0x7E66);
-			else                             glLineStipple (1, 0xFFFF);
+			if     (style == Qt::DashLine)       glLineStipple (1, 0xCFCF);
+			else if(style == Qt::DotLine)        glLineStipple (1, 0x6666);
+			else if(style == Qt::DashDotLine)    glLineStipple (1, 0xFF18);
+			else if(style == Qt::DashDotDotLine) glLineStipple (1, 0x7E66);
+			else                                 glLineStipple (1, 0xFFFF);
 
 			// BodyLine axis____________
 
@@ -1270,11 +1270,11 @@ void GL3dBodyDlg::GLCreateBodyGrid()
 		glLineWidth(m_BodyGridDlg.m_Width);
 
 		style = m_BodyGridDlg.m_Style;
-		if     (style == DASHLINE)       glLineStipple (1, 0xCFCF);
-		else if(style == DOTLINE)        glLineStipple (1, 0x6666);
-		else if(style == DASHDOTLINE)    glLineStipple (1, 0xFF18);
-		else if(style == DASHDOTDOTLINE) glLineStipple (1, 0x7E66);
-		else                             glLineStipple (1, 0xFFFF);
+		if     (style == Qt::DashLine)       glLineStipple (1, 0xCFCF);
+		else if(style == Qt::DotLine)        glLineStipple (1, 0x6666);
+		else if(style == Qt::DashDotLine)    glLineStipple (1, 0xFF18);
+		else if(style == Qt::DashDotDotLine) glLineStipple (1, 0x7E66);
+		else                                 glLineStipple (1, 0xFFFF);
 
 		glBegin(GL_LINES);
 		{
@@ -1322,11 +1322,11 @@ void GL3dBodyDlg::GLCreateBodyGrid()
 		glLineWidth(m_BodyGridDlg.m_MinWidth);
 
 		style = m_BodyGridDlg.m_MinStyle;
-		if     (style == DASHLINE)       glLineStipple (1, 0xCFCF);
-		else if(style == DOTLINE)        glLineStipple (1, 0x6666);
-		else if(style == DASHDOTLINE)    glLineStipple (1, 0xFF18);
-		else if(style == DASHDOTDOTLINE) glLineStipple (1, 0x7E66);
-		else                             glLineStipple (1, 0xFFFF);
+		if     (style == Qt::DashLine)       glLineStipple (1, 0xCFCF);
+		else if(style == Qt::DotLine)        glLineStipple (1, 0x6666);
+		else if(style == Qt::DashDotLine)    glLineStipple (1, 0xFF18);
+		else if(style == Qt::DashDotDotLine) glLineStipple (1, 0x7E66);
+		else                                 glLineStipple (1, 0xFFFF);
 
 		glBegin(GL_LINES);
 		{

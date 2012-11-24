@@ -8,8 +8,8 @@
 
 
 
-#ifndef CBOATPOLAR_H
-#define CBOATPOLAR_H
+#ifndef QBOATPOLAR_H
+#define QBOATPOLAR_H
 
 #include <QString>
 #include <QColor>
@@ -18,18 +18,27 @@
 #include "./BoatOpp.h"
 #include "../objects/CVector.h"
 
-class CBoatPolar
+class BoatPolar
 {
+	friend class MainFrame;
+	friend class QSail;
+	friend class QSail7;
+	friend class BoatPolarDlg;
+	friend class BoatAnalysisDlg;
+
 public:
-	CBoatPolar();
-	void AddPoint(CBoatOpp *pBOpp);
+	BoatPolar();
+	void AddPoint(BoatOpp *pBOpp);
 	bool SerializeBoatPlr(QDataStream &ar, bool bIsStoring);
-	void *GetBoatPlrVariable(int iVar);
+	void *GetBoatPlrVariable(enumPolarVar iVar);
 	void GetPolarProperties(QString &PolarProperties, bool bData=false);
 	void Export(QTextStream &out, int FileType, bool bDataOnly=false);
 	void ResetBoatPlr();
-	void DuplicateSpec(CBoatPolar *pBoatPolar);
+	void DuplicateSpec(BoatPolar *pBoatPolar);
 
+	static QString GetPolarVariableName(int iVar);
+
+private:
 	double WindFactor(double z);
 
 	static void *s_pMainFrame;
@@ -41,7 +50,6 @@ public:
 //	int m_UnitType;//1= International, 2= English
 	int m_AnalysisMethod;
 
-//	bool m_bTiltedGeom;//true if calculation is performed on the tilted geometry, at alpha=0.0
 	bool m_bGround;
 	bool m_bVLM1;
 	bool m_bDirichlet;
@@ -74,6 +82,8 @@ public:
 	double m_SailAngleMax[MAXSAILS];
 
 	QList <double>  m_Ctrl; // The main parameter for the polar
+	QList <double>  m_Lift;    // resulting lift force in the far field
+	QList <double>  m_Drag;    // resulting drag force in the far field
 	QList <double>  m_FFFx;    // resulting force in the far field
 	QList <double>  m_FFFy;
 	QList <double>  m_FFFz;
@@ -85,4 +95,4 @@ public:
 	QList <double>  m_Mz;
 };
 
-#endif // CBOATPOLAR_H
+#endif // QBOATPOLAR_H

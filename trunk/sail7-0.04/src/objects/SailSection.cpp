@@ -237,14 +237,14 @@ void SailSection::DrawSpline(QPainter &painter, double const &scalex, double con
 
 bool SailSection::IsNURBSSection()
 {
-	CSail *pSail = (CSail*)m_pSail;
+	QSail *pSail = (QSail*)m_pSail;
 	return (pSail->IsNURBSSail());
 }
 
 
 bool SailSection::IsSailcutSection()
 {
-	CSail *pSail = (CSail*)m_pSail;
+	QSail *pSail = (QSail*)m_pSail;
 	return (pSail->IsSailcutSail());
 }
 

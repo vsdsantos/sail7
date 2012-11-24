@@ -58,7 +58,7 @@ private:
 	void contextMenuEvent (QContextMenuEvent * event);
 
 	void Connect();
-	void Initialize(CSail *pSail, SailSection *pSection);
+	void Initialize(QSail *pSail, SailSection *pSection);
 	void SetSection(SailSection *pSection);
 	void PaintLegend(QPainter &painter);
 	void ReleaseZoom();
@@ -101,7 +101,7 @@ private:
 	QAction *m_pInsertPoint, *m_pRemovePoint, *m_pCurrentOnly;
 
 
-	CSail *m_pSail;
+	QSail *m_pSail;
 	SailSection *m_pSailSection;
 };
 

@@ -40,7 +40,7 @@ ScaleSailDlg::ScaleSailDlg(void *pParent)
 
 
 
-void ScaleSailDlg::InitDialog(CSail *pSail)
+void ScaleSailDlg::InitDialog(QSail *pSail)
 {
 	m_pSail = pSail;
 	m_pctrlXScaleFactor->SetValue(m_XFactor);

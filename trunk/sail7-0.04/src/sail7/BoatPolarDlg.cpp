@@ -24,7 +24,7 @@
 
 void* BoatPolarDlg::s_pMainFrame;
 void* BoatPolarDlg::s_pSail7;
-CBoatPolar BoatPolarDlg::s_BoatPolar;
+BoatPolar BoatPolarDlg::s_BoatPolar;
 
 int BoatPolarDlg::s_UnitType= 1;//1= International, 2= English
 
@@ -166,7 +166,7 @@ void BoatPolarDlg::FillVariableList()
 	// the next set of line are the sail angles
 	for(int is=0; is<m_pBoat->m_poaSail.size(); is++)
 	{
-		CSail *pSail = (CSail*)m_pBoat->m_poaSail.at(is);
+		QSail *pSail = (QSail*)m_pBoat->m_poaSail.at(is);
 		ind = m_pVariableModel->index(is+3, 0, QModelIndex());
 		m_pVariableModel->setData(ind, pSail->m_SailName+" Angle");
 		ind = m_pVariableModel->index(is+3, 1, QModelIndex());
@@ -251,7 +251,7 @@ void BoatPolarDlg::ReadData()
 
 
 
-void BoatPolarDlg::InitDialog(CBoat *pBoat, CBoatPolar *pBoatPolar)
+void BoatPolarDlg::InitDialog(CBoat *pBoat, BoatPolar *pBoatPolar)
 {
 	MainFrame* pMainFrame = (MainFrame*)s_pMainFrame;
 	QString str;
@@ -281,7 +281,7 @@ void BoatPolarDlg::InitDialog(CBoat *pBoat, CBoatPolar *pBoatPolar)
 		int size=0;
 		for(int i=0; i<pMainFrame->m_oaBoatPolar.size();i++)
 		{
-			CBoatPolar* pBoatPolar = (CBoatPolar*)pMainFrame->m_oaBoatPolar.at(i);
+			BoatPolar* pBoatPolar = (BoatPolar*)pMainFrame->m_oaBoatPolar.at(i);
 			if(pBoatPolar->m_BoatName==pBoat->m_BoatName) size++;
 		}
 		m_pctrlBoatPolarName->setText(QString("Polar %1").arg(size+1));

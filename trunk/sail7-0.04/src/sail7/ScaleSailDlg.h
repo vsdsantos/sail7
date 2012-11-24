@@ -36,7 +36,7 @@ private slots:
 
 private:
 	void SetupLayout();
-	void InitDialog(CSail *pSail);
+	void InitDialog(QSail *pSail);
 	void EnableControls();
 	void keyPressEvent(QKeyEvent *event);
 
@@ -52,7 +52,7 @@ private:
 private:
 	void *m_pSailDlg;
 	double m_XFactor, m_YFactor, m_ZFactor;
-	CSail * m_pSail;
+	QSail * m_pSail;
 };
 
 

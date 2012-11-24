@@ -1,6 +1,6 @@
 /****************************************************************************
 
-	CBoatOpp Class
+	BoatOpp Class
 		 Copyright (C) 2011-2012 Andre Deperrois sail7@xflr5.com
 		 All rights reserved
 
@@ -19,12 +19,14 @@
 
 
 
-class CBoatOpp
+class BoatOpp
 {
 	friend class MainFrame;
 	friend class QSail7;
+	friend class BoatPolar;
+
 public:
-	CBoatOpp();
+	BoatOpp();
 	bool SerializeBoatOpp(QDataStream &ar, bool bIsStoring);
 	void GetBoatOppProperties(QString &BOppProperties);
 	CVector GetWindDirection();
@@ -53,7 +55,7 @@ private:
 	double m_Weight;
 
 
-public:
+private:
 
 	int m_NVLMPanels;	// number of VLMpanels
 	int m_AnalysisMethod;	//1=LLT, 2=VLM, 3=3D Panels
@@ -69,6 +71,8 @@ public:
 	double m_Phi;//bank angle, degrees
 	double m_Ctrl;		//control variable - converged value
 	double m_SailAngle[MAXSAILS];// Sail rotation around the mast, degrees
+
+	double m_Lift, m_Drag;
 
 	CVector F;  // resulting force from panel force Summation
 	CVector M;  // resulting moment from panel force Summation w.r.t. CoG

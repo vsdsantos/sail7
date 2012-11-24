@@ -263,7 +263,7 @@ bool NURBSSail::SerializeSail(QDataStream &ar, bool bIsStoring)
 	}
  }
 
-void NURBSSail::Duplicate(CSail *pSail)
+void NURBSSail::Duplicate(QSail *pSail)
 {
 	m_SailName        = pSail->m_SailName;
 	m_SailDescription = pSail->m_SailDescription;

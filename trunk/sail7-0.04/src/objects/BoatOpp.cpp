@@ -1,6 +1,6 @@
 /****************************************************************************
 
-		 CBoatOpp Class
+		 BoatOpp Class
 		 Copyright (C) 2011-2012 Andre Deperrois sail7@xflr5.com
 		 All rights reserved
 
@@ -14,11 +14,11 @@
 #include "BoatOpp.h"
 #include <QtDebug>
 
-void *CBoatOpp::s_pMainFrame = NULL;
-void *CBoatOpp::s_pSail7 = NULL;
+void *BoatOpp::s_pMainFrame = NULL;
+void *BoatOpp::s_pSail7 = NULL;
 
 
-CBoatOpp::CBoatOpp()
+BoatOpp::BoatOpp()
 {
 	m_bVLM1        = true;
 
@@ -54,7 +54,7 @@ CBoatOpp::CBoatOpp()
 
 
 
-bool CBoatOpp::SerializeBoatOpp(QDataStream &ar, bool bIsStoring)
+bool BoatOpp::SerializeBoatOpp(QDataStream &ar, bool bIsStoring)
 {
 	int ArchiveFormat;
 	int a,p,j, k,l;
@@ -165,7 +165,7 @@ bool CBoatOpp::SerializeBoatOpp(QDataStream &ar, bool bIsStoring)
 
 
 
-void CBoatOpp::GetBoatOppProperties(QString &BOppProperties)
+void BoatOpp::GetBoatOppProperties(QString &BOppProperties)
 {
 	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 	QString strong, lenunit, forceunit, momentunit, speedunit;
@@ -224,7 +224,7 @@ void CBoatOpp::GetBoatOppProperties(QString &BOppProperties)
 
 
 
-CVector CBoatOpp::GetWindDirection()
+CVector BoatOpp::GetWindDirection()
 {
 	return CVector(cos(m_Beta*PI/180.0), sin(m_Beta*PI/180.0), 0.0);
 }

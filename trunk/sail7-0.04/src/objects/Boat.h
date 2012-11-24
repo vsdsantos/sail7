@@ -18,13 +18,13 @@ class CBoat
 public:
     CBoat();
 
-	CSail* GetSail(QString const &SailName);
+	QSail* GetSail(QString const &SailName);
 	CBody* GetBody(QString const &BodyName);
 	void DuplicateBoat(CBoat *pBoat);
 	bool SerializeBoat(QDataStream &ar, bool bIsStoring);
 	double Height();
 
-	QList <CSail*> m_poaSail;
+	QList <QSail*> m_poaSail;
 	QList <CBody*> m_poaHull;
 
 	QString m_BoatName;

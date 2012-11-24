@@ -17,10 +17,10 @@
 #include "Sail.h"
 
 
-void * CSail::s_pBoatAnalysisDlg;
-void * CSail::s_pMainFrame;
+void * QSail::s_pBoatAnalysisDlg;
+void * QSail::s_pMainFrame;
 
-CSail::CSail()
+QSail::QSail()
 {
 	m_pPanel     = NULL;
 
@@ -42,7 +42,7 @@ CSail::CSail()
 }
 
 
-void CSail::PanelTrefftz(CVector VInf, double *Mu, double *Sigma, int pos, CVector &FFForce, CBoatPolar *pBoatPolar)
+void QSail::PanelTrefftz(CVector VInf, double *Mu, double *Sigma, int pos, CVector &FFForce, BoatPolar *pBoatPolar)
 {
 	// calculates the induced lift and drag from the vortices or wake panels strength
 	// using a farfield method
@@ -103,9 +103,9 @@ void CSail::PanelTrefftz(CVector VInf, double *Mu, double *Sigma, int pos, CVect
 
 
 
-void CSail::PanelComputeOnBody(CVector VInf, double *Cp, double *Gamma,
+void QSail::PanelComputeOnBody(CVector VInf, double *Cp, double *Gamma,
 							   CVector &SailForce, CVector &SailMoment,
-							   CBoatPolar *pBoatPolar, CVector CoG)
+							   BoatPolar *pBoatPolar, CVector CoG)
 {
 	CVector ForcePt, LeverArmPanelCoG;
 	CVector Force, PanelForce;
@@ -145,7 +145,7 @@ void CSail::PanelComputeOnBody(CVector VInf, double *Cp, double *Gamma,
 
 
 
-bool CSail::IsSailPanel(int nPanel)
+bool QSail::IsSailPanel(int nPanel)
 {
 	for(int p=0; p<m_NElements; p++)
 	{
@@ -155,7 +155,7 @@ bool CSail::IsSailPanel(int nPanel)
 }
 
 
-bool CSail::IsSailNode(int nNode)
+bool QSail::IsSailNode(int nNode)
 {
 	for(int p=0; p<m_NElements; p++)
 	{
@@ -169,21 +169,21 @@ bool CSail::IsSailNode(int nNode)
 
 
 
-void CSail::SetLuffAngle()
+void QSail::SetLuffAngle()
 {
 	SetLuffAngle(m_LuffAngle);
 }
 
 
 
-void CSail::SetLuffAngle(double Angle)
+void QSail::SetLuffAngle(double Angle)
 {
 	m_LuffAngle = Angle;
 	SplineSurface();
 }
 
 
-void CSail::SortSections()
+void QSail::SortSections()
 {
 	// bubble sort
 	// derived from http://www.concentric.net/~ttwang/sort/sort.htm
@@ -213,7 +213,7 @@ void CSail::SortSections()
 
 
 
-void CSail::InsertSection(SailSection *pSection)
+void QSail::InsertSection(SailSection *pSection)
 {
 	for(int is=0; is<m_oaSection.size(); is++)
 	{
@@ -228,7 +228,7 @@ void CSail::InsertSection(SailSection *pSection)
 
 
 
-void CSail::CreateSection(int iSection)
+void QSail::CreateSection(int iSection)
 {
 	SailSection *pNewSection = new SailSection(this);
 
@@ -266,7 +266,7 @@ void CSail::CreateSection(int iSection)
 }
 
 
-void CSail::DeleteSection(int iSection)
+void QSail::DeleteSection(int iSection)
 {
 	m_oaSection.removeAt(iSection);
 	SplineSurface();

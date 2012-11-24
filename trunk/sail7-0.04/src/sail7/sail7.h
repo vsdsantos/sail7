@@ -42,6 +42,8 @@
 
 
 
+
+
 class QSail7 : public QWidget
 {
 	friend class MainFrame;
@@ -52,8 +54,8 @@ class QSail7 : public QWidget
 	friend class SailPolarDlg;
 	friend class BoatDlg;
 	friend class BoatAnalysisDlg;
-	friend class CSailPolar;
-	friend class CSail;
+	friend class QSailPolar;
+	friend class QSail;
 	friend class CBoat;
 	friend class DisplaySettingsDlg;
 	friend class SailDlg;
@@ -170,8 +172,8 @@ public:
 	void GLDraw3D();
 	void GLRenderView();
 	void GLCreateVortices();
-	void GLCreateCp(CBoatOpp *pBoatOpp);
-	void GLCreatePanelForces(CBoatOpp *pBoatOpp);
+	void GLCreateCp(BoatOpp *pBoatOpp);
+	void GLCreatePanelForces(BoatOpp *pBoatOpp);
 	void GLDrawPanelForceLegend(void *pMainFrame, double rmin, double rmax);
 	void GLCreateCpLegendClr(QRect rect, double LegendMin, double LegendMax);
 	void GLDrawCpLegend(void *pGLWidget, QRect rect, double LegendMin, double LegendMax, QFont &TextFont, QColor TextColor);
@@ -179,7 +181,7 @@ public:
 
 	void SetScale();
 	void SetBoat(QString BoatName="");
-	void SetBoatPolar(CBoatPolar *pBoatPolar=NULL, QString BoatPlrName = "");
+	void SetBoatPolar(BoatPolar *pBoatPolar=NULL, QString BoatPlrName = "");
 	bool SetBoatOpp(bool bCurrent=true, double x=0);
 
 	void GetDistrib(int const &NPanels, const int &DistType, const int &k, double &tau1, double &tau2);
@@ -199,7 +201,7 @@ public:
 	void FillComboBoxes(bool bEnable = true);
 	void UpdateCurve();
 
-	CBoatOpp* GetBoatOpp(double x);
+	BoatOpp* GetBoatOpp(double x);
 
 
 	void LoadSettings(QSettings *pSettings);
@@ -209,12 +211,12 @@ public:
 	void Set2DScale();
 	void Set3DScale();
 
-	int CreateSailElements(CSail *pSail);
+	int CreateSailElements(QSail *pSail);
 	int CreateBodyElements(CBody *pBody);
 	int IsNode(CVector &Pt);
 
 	bool SetModBoat(CBoat *pModBoat);
-	bool SetModBoatPolar(CBoatPolar *pModBoatPolar);
+	bool SetModBoatPolar(BoatPolar *pModBoatPolar);
 
 
 	QGraph* GetGraph(QPoint &pt);
@@ -223,7 +225,7 @@ public:
 	void GLCreateBodyLists();
 	void GLCallViewLists();
 	void GLCreateSailMesh(CVector *pNode, CPanel *pPanel);
-	void GLCreateSailGeom(int GLList, CSail *pSail, CVector Position);
+	void GLCreateSailGeom(int GLList, QSail *pSail, CVector Position);
 	void GLCreateWaterList();
 	void GLCreateWindList();
 	void GLCreateStreamLines();
@@ -238,15 +240,15 @@ public:
 	void RotatePanelsX(double const &Angle, CVector const &P);
 	void RotatePanelsZ(double const &Angle, CVector const &P);
 	void CreateBoatPolarCurves();
-	void FillBoatPlrCurve(CCurve *pCurve, CBoatPolar *pBoatPolar, int XVar, int YVar);
+	void FillBoatPlrCurve(CCurve *pCurve, BoatPolar *pBoatPolar, enumPolarVar XVar, enumPolarVar YVar);
 	void SetAnalysisParams();
 	void SetCurveParams();
 	void SetBoatPlrLegendPos();
 
 	CBoat* AddBoat(CBoat *pNewBoat);
 	CBoat* GetBoat(QString BoatName);
-	CBoatPolar* AddBoatPolar(CBoatPolar *pBoatPolar);
-	CBoatPolar* GetBoatPolar(QString BoatPolarName);
+	BoatPolar* AddBoatPolar(BoatPolar *pBoatPolar);
+	BoatPolar* GetBoatPolar(QString BoatPolarName);
 
 	void AddBoatOpp(double *Cp, double *Gamma, double *Sigma, CVector const &F, CVector const &M, CVector const& ForceTrefftz);
 
@@ -264,8 +266,8 @@ private:
 	QList<void *> *m_poaBoatOpp;		// a pointer to the boat OpPoint array
 
 	CBoat *m_pCurBoat;
-	CBoatPolar *m_pCurBoatPolar;
-	CBoatOpp *m_pCurBoatOpp;
+	BoatPolar *m_pCurBoatPolar;
+	BoatOpp *m_pCurBoatOpp;
 
 	BoatAnalysisDlg m_PanelDlg;              // the dialog class which manages the Panel calculations
 //	CSurface *m_pSurface[MAXSAILS];	// An array with the pointers to the sails surfaces

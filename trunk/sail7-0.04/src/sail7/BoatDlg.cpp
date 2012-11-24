@@ -603,7 +603,7 @@ void BoatDlg::OnDeleteSail()
 {
 	int iSelect = m_pctrlSailTable->currentIndex().row();
 	if(iSelect<0 || iSelect>=m_pBoat->m_poaSail.size()) return;
-	CSail *pCurSail = (CSail*)m_pBoat->m_poaSail.at(iSelect);
+	QSail *pCurSail = (QSail*)m_pBoat->m_poaSail.at(iSelect);
 	if(!pCurSail) return;
 
 	QString strange = tr("Are you sure you want to delete the sail")+" "+pCurSail->m_SailName+"?";
@@ -612,7 +612,7 @@ void BoatDlg::OnDeleteSail()
 	if(resp != QMessageBox::Yes) return;
 	for(int is=m_pBoat->m_poaSail.size()-1;is>=0;is--)
 	{
-		CSail* pSail = (CSail*)m_pBoat->m_poaSail.at(is);
+		QSail* pSail = (QSail*)m_pBoat->m_poaSail.at(is);
 		if(is==iSelect)
 		{
 			//delete
@@ -632,10 +632,10 @@ void BoatDlg::OnDuplicateSail()
 {
 	int iSelect = m_pctrlSailTable->currentIndex().row();
 	if(iSelect<0 || iSelect>=m_pBoat->m_poaSail.size()) return;
-	CSail *pCurSail = m_pBoat->m_poaSail.at(iSelect);
+	QSail *pCurSail = m_pBoat->m_poaSail.at(iSelect);
 	if(!pCurSail) return;
 
-	CSail *pNewSail = NULL;
+	QSail *pNewSail = NULL;
 	if(pCurSail->IsNURBSSail())        pNewSail = new NURBSSail;
 	else if(pCurSail->IsSailcutSail()) pNewSail = new SailcutSail;
 	if(pNewSail)
@@ -658,8 +658,8 @@ void BoatDlg::OnEditSail()
 	int iSelect = m_pctrlSailTable->currentIndex().row();
 	if(iSelect<0 || iSelect>=m_pBoat->m_poaSail.size()) return;
 
-	CSail *pMemSail = NULL;
-	CSail *pSail = m_pBoat->m_poaSail.at(iSelect);
+	QSail *pMemSail = NULL;
+	QSail *pSail = m_pBoat->m_poaSail.at(iSelect);
 	if(pSail->IsNURBSSail())        pMemSail = new NURBSSail;
 	else if(pSail->IsSailcutSail()) pMemSail = new SailcutSail;
 
@@ -686,7 +686,7 @@ void BoatDlg::OnExportSail()
 {
 	int iSelect = m_pctrlSailTable->currentIndex().row();
 	if(iSelect<0 || iSelect>=m_pBoat->m_poaSail.size()) return;
-	CSail *pCurSail = (CSail*)m_pBoat->m_poaSail.at(iSelect);
+	QSail *pCurSail = (QSail*)m_pBoat->m_poaSail.at(iSelect);
 	if(!pCurSail) return;
 	pCurSail->Export();
 }
@@ -705,7 +705,7 @@ void BoatDlg::OnImportSail()
 		CBoat *pBoat = (CBoat*)pSail7->m_poaBoat->at(k);
 		for(int j=0; j<pBoat->m_poaSail.size(); j++)
 		{
-			CSail *pSail = (CSail*)pBoat->m_poaSail.at(j);
+			QSail *pSail = (QSail*)pBoat->m_poaSail.at(j);
 			NameList.append(pBoat->m_BoatName + " / " + pSail->m_SailName);
 		}
 	}
@@ -723,10 +723,10 @@ void BoatDlg::OnImportSail()
 			CBoat *pBoat = pSail7->GetBoat(BoatName);
 			if(!pBoat) return;
 
-			CSail *pSail = pBoat->GetSail(SailName);
+			QSail *pSail = pBoat->GetSail(SailName);
 			if(!pSail) return;
 
-			CSail *pNewSail = NULL;
+			QSail *pNewSail = NULL;
 			if(pSail->IsNURBSSail())        pNewSail = new NURBSSail;
 			else if(pSail->IsSailcutSail()) pNewSail = new SailcutSail;
 			if(pNewSail)
@@ -802,7 +802,7 @@ void BoatDlg::ReadData()
 
 	for(int is=0; is<m_pSailModel->rowCount(); is++)
 	{
-		CSail *pSail = (CSail*)m_pBoat->m_poaSail.at(is);
+		QSail *pSail = (QSail*)m_pBoat->m_poaSail.at(is);
 		if(pSail)
 		{
 			QModelIndex index = m_pSailModel->index(is, 0, QModelIndex());
@@ -871,7 +871,7 @@ void BoatDlg::FillSailList()
 	m_pSailModel->setRowCount(m_pBoat->m_poaSail.size());
 	for(int is=0; is<m_pBoat->m_poaSail.size(); is++)
 	{
-		CSail *pSail = (CSail*)m_pBoat->m_poaSail.at(is);
+		QSail *pSail = (QSail*)m_pBoat->m_poaSail.at(is);
 		if(pSail)
 		{
 			ind = m_pSailModel->index(is, 0, QModelIndex());

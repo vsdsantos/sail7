@@ -283,20 +283,24 @@ void GraphDlg::FillVariableList()
 		m_pctrlXSel->addItem("VInf");            //  1
 		m_pctrlXSel->addItem("Beta");            //  2
 		m_pctrlXSel->addItem("Phi");             //  3
-		m_pctrlXSel->addItem("Far Field Fx");    //  4
-		m_pctrlXSel->addItem("Far Field Fy");    //  5
-		m_pctrlXSel->addItem("Far Field Fz");    //  6
-		m_pctrlXSel->addItem("Fx");              //  7
-		m_pctrlXSel->addItem("Fy");              //  8
-		m_pctrlXSel->addItem("Fz");              //  9
-		m_pctrlXSel->addItem("Mx");              // 10
-		m_pctrlXSel->addItem("My");              // 11
-		m_pctrlXSel->addItem("Mz");              // 12
+		m_pctrlXSel->addItem("Lift");            //  4
+		m_pctrlXSel->addItem("Drag");            //  5
+		m_pctrlXSel->addItem("Far Field Fx");    //  6
+		m_pctrlXSel->addItem("Far Field Fy");    //  7
+		m_pctrlXSel->addItem("Far Field Fz");    //  8
+		m_pctrlXSel->addItem("Fx");              //  9
+		m_pctrlXSel->addItem("Fy");              // 10
+		m_pctrlXSel->addItem("Fz");              // 11
+		m_pctrlXSel->addItem("Mx");              // 12
+		m_pctrlXSel->addItem("My");              // 13
+		m_pctrlXSel->addItem("Mz");              // 14
 
 		m_pctrlYSel->addItem("Ctrl");
 		m_pctrlYSel->addItem("VInf");
 		m_pctrlYSel->addItem("Beta");
 		m_pctrlYSel->addItem("Phi");
+		m_pctrlYSel->addItem("Lift");
+		m_pctrlYSel->addItem("Drag");
 		m_pctrlYSel->addItem("Far Field Fx");
 		m_pctrlYSel->addItem("Far Field Fy");
 		m_pctrlYSel->addItem("Far Field Fz");
@@ -566,6 +570,8 @@ void GraphDlg::OnOK()
 
 	accept();
 }
+
+
 
 void GraphDlg::OnRestoreParams()
 {

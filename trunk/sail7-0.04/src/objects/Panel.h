@@ -37,7 +37,7 @@ class CPanel
 	friend class CSurface;
 	friend class QSail7;
 	friend class BoatAnalysisDlg;
-	friend class CSail;
+	friend class QSail;
 	friend class CBody;
 
 public:
