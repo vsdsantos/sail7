@@ -51,7 +51,7 @@ public:
 	void GLCreateSectionHighlight();
 	void GLCreateSailMesh();
 	void GLCreateCtrlPoints();
-	void InitDialog(CSail *pSail);
+	void InitDialog(QSail *pSail);
 	void Set3DRotationCenter();
 	void Set3DRotationCenter(QPoint point);
 	void Set3DScale();
@@ -96,7 +96,7 @@ public:
 	CVector m_RealPopUp;
 
 
-	CSail *m_pSail;
+	QSail *m_pSail;
 
 	int m_GLList;
 

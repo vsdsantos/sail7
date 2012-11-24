@@ -127,7 +127,7 @@ void SailDlg::OnUpdateLeechRound()
 }
 
 
-bool SailDlg::InitDialog(CSail *pSail)
+bool SailDlg::InitDialog(QSail *pSail)
 {
 	if(!pSail) return false;
 
@@ -216,7 +216,7 @@ bool SailDlg::InitDialog(CSail *pSail)
 }
 
 
-void SailDlg::SetSailData(CSail* pSail)
+void SailDlg::SetSailData(QSail* pSail)
 {
 	m_pctrlSailName->setText(m_pSail->m_SailName);
 	m_pctrlSailColor->SetColor(m_pSail->m_SailColor);

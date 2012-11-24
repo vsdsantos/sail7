@@ -13,10 +13,11 @@
 #include "BoatPolar.h"
 
 
-void *CBoatPolar::s_pMainFrame;
-void *CBoatPolar::s_pSail7;
+void *BoatPolar::s_pMainFrame;
+void *BoatPolar::s_pSail7;
 
-CBoatPolar::CBoatPolar()
+
+BoatPolar::BoatPolar()
 {
 	m_BoatPolarName.clear();
 	m_BoatName.clear();
@@ -60,21 +61,12 @@ CBoatPolar::CBoatPolar()
 
 	m_AMem = 0.0;
 
-	m_Ctrl.clear();
-	m_FFFx.clear();
-	m_FFFy.clear();
-	m_FFFz.clear();
-	m_Fx.clear();
-	m_Fy.clear();
-	m_Fz.clear();
-	m_Mx.clear();
-	m_My.clear();
-	m_Mz.clear();
+	ResetBoatPlr();
 }
 
 
 
-void CBoatPolar::DuplicateSpec(CBoatPolar *pBoatPolar)
+void BoatPolar::DuplicateSpec(BoatPolar *pBoatPolar)
 {
 	m_AnalysisMethod  = pBoatPolar->m_AnalysisMethod;
 
@@ -113,7 +105,7 @@ void CBoatPolar::DuplicateSpec(CBoatPolar *pBoatPolar)
 }
 
 
-void CBoatPolar::AddPoint(CBoatOpp *pBOpp)
+void BoatPolar::AddPoint(BoatOpp *pBOpp)
 {
 	bool bInserted = false;
 	int i=0;
@@ -126,6 +118,8 @@ void CBoatPolar::AddPoint(CBoatOpp *pBOpp)
 			{
 				// then erase former result
 				m_Ctrl[i]    =  pBOpp->m_Ctrl;
+				m_Lift[i]    =  pBOpp->m_Lift;
+				m_Drag[i]    =  pBOpp->m_Drag;
 				m_FFFx[i]    =  pBOpp->ForceTrefftz.x;
 				m_FFFy[i]    =  pBOpp->ForceTrefftz.y;
 				m_FFFz[i]    =  pBOpp->ForceTrefftz.z;
@@ -140,8 +134,10 @@ void CBoatPolar::AddPoint(CBoatOpp *pBOpp)
 			}
 			else if (pBOpp->m_Ctrl < m_Ctrl[i])
 			{
-				// sort by crescending alphas
+				// sort by crescending control values
 				m_Ctrl.insert(i, pBOpp->m_Ctrl);
+				m_Lift.insert(i, pBOpp->m_Lift);
+				m_Drag.insert(i, pBOpp->m_Drag);
 				m_FFFx.insert(i, pBOpp->ForceTrefftz.x);
 				m_FFFy.insert(i, pBOpp->ForceTrefftz.y);
 				m_FFFz.insert(i, pBOpp->ForceTrefftz.z);
@@ -160,6 +156,8 @@ void CBoatPolar::AddPoint(CBoatOpp *pBOpp)
 	{
 		// data is appended at the end
 		m_Ctrl.append(pBOpp->m_Ctrl);
+		m_Lift.append(pBOpp->m_Lift);
+		m_Drag.append(pBOpp->m_Drag);
 		m_FFFx.append( pBOpp->ForceTrefftz.x);
 		m_FFFy.append( pBOpp->ForceTrefftz.y);
 		m_FFFz.append( pBOpp->ForceTrefftz.z);
@@ -174,7 +172,7 @@ void CBoatPolar::AddPoint(CBoatOpp *pBOpp)
 
 
 
-bool CBoatPolar::SerializeBoatPlr(QDataStream &ar, bool bIsStoring)
+bool BoatPolar::SerializeBoatPlr(QDataStream &ar, bool bIsStoring)
 {
 	int n;
 	float f,g,h;
@@ -184,10 +182,10 @@ bool CBoatPolar::SerializeBoatPlr(QDataStream &ar, bool bIsStoring)
 	QSail7 *pSail7 = (QSail7*)s_pSail7;
 	CBoat *pBoat = pSail7->GetBoat(m_BoatName);
 
-	 int PolarFormat = 100390;
-
-	// 100389 : v0.00
+	int PolarFormat = 100391;
+	// 100391 : added Lift and Drag
 	// 100390 : added wind gradient
+	// 100389 : v0.00
 
 	if(bIsStoring)
 	{
@@ -225,6 +223,7 @@ bool CBoatPolar::SerializeBoatPlr(QDataStream &ar, bool bIsStoring)
 		for (i=0; i<m_Ctrl.size(); i++)
 		{
 			ar << (float)m_Ctrl[i];
+			ar << (float)m_Lift[i] << (float)m_Drag[i];
 			ar << (float)m_FFFx[i] << (float)m_FFFy[i] << (float)m_FFFz[i];
 			ar << (float)m_Fx[i]   << (float)m_Fy[i]   << (float)m_Fz[i];
 			ar << (float)m_Mx[i]   << (float)m_My[i]   << (float)m_Mz[i];
@@ -299,6 +298,14 @@ bool CBoatPolar::SerializeBoatPlr(QDataStream &ar, bool bIsStoring)
 		for (i=0; i<n; i++)
 		{
 			ar >> f;                m_Ctrl.append(f);
+			if(PolarFormat>=100391)
+			{
+				ar >> f >> g;       m_Lift.append(f); m_Drag.append(g);
+			}
+			else
+			{
+				m_Lift.append(0.0); m_Drag.append(0.0);
+			}
 			ar >>f>>g>>h; 			m_FFFx.append(f);  m_FFFy.append(g);  m_FFFz.append(h);
 			ar >>f>>g>>h; 			m_Fx.append(f);  m_Fy.append(g);  m_Fz.append(h);
 			ar >>f>>g>>h; 			m_Mx.append(f);  m_My.append(g);  m_Mz.append(h);
@@ -310,49 +317,55 @@ bool CBoatPolar::SerializeBoatPlr(QDataStream &ar, bool bIsStoring)
 
 
 
-void * CBoatPolar::GetBoatPlrVariable(int iVar)
+void * BoatPolar::GetBoatPlrVariable(enumPolarVar iVar)
 {
 	// returns a pointer to the variable array defined by its index iVar
 	void * pVar;
 	switch (iVar)
 	{
-		case 0:
+		case CTRL:
 			pVar = &m_Ctrl;
 			break;
-		case 1:
+		case VINF:
 			pVar = NULL;//QInf
 			break;
-		case 2:
+		case BETA:
 			pVar = NULL;//Beta
 			break;
-		case 3:
+		case PHI:
 			pVar = NULL;//PHi
 			break;
-		case 4:
+		case LIFT:
+			pVar = &m_Lift;
+			break;
+		case DRAG:
+			pVar = &m_Drag;
+			break;
+		case FFFX:
 			pVar = &m_FFFx;
 			break;
-		case 5:
+		case FFFY:
 			pVar = &m_FFFy;
 			break;
-		case 6:
+		case FFFZ:
 			pVar = &m_FFFz;
 			break;
-		case 7:
+		case FX:
 			pVar = &m_Fx;
 			break;
-		case 8:
+		case FY:
 			pVar = &m_Fy;
 			break;
-		case 9:
+		case FZ:
 			pVar = &m_Fz;
 			break;
-		case 10:
+		case MX:
 			pVar = &m_Mx;
 			break;
-		case 11:
+		case MY:
 			pVar = &m_My;
 			break;
-		case 12:
+		case MZ:
 			pVar = &m_Mz;
 			break;
 		default:
@@ -363,7 +376,70 @@ void * CBoatPolar::GetBoatPlrVariable(int iVar)
 }
 
 
-void CBoatPolar::GetPolarProperties(QString &PolarProperties, bool bData)
+
+QString BoatPolar::GetPolarVariableName(int iVar)
+{
+	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
+	QString StrForce;
+	QString StrSpeed;
+	QString StrMoment;
+	GetForceUnit(StrForce, pMainFrame->m_ForceUnit);
+	GetSpeedUnit(StrSpeed, pMainFrame->m_SpeedUnit);
+	GetMomentUnit(StrMoment, pMainFrame->m_MomentUnit);
+
+	switch (iVar)
+	{
+		case 0:
+			return QObject::tr("Ctrl");
+			break;
+		case 1:
+			return QObject::tr("VInf") + " ("+StrSpeed+")";
+			break;
+		case 2:
+			return QObject::tr("Beta") + QString::fromUtf8(" (°)");
+			break;
+		case 3:
+			return QObject::tr("Phi") + QString::fromUtf8(" (°)");
+			break;
+		case 4:
+			return QObject::tr("Lift") + " ("+StrForce+")";
+			break;
+		case 5:
+			return QObject::tr("Drag") + " ("+StrForce+")";
+			break;
+		case 6:
+			return QObject::tr("FF_Fx") + " ("+StrForce+")";
+			break;
+		case 7:
+			return QObject::tr("FF_Fy") + " ("+StrForce+")";
+			break;
+		case 8:
+			return QObject::tr("FF_Fz") + " ("+StrForce+")";
+			break;
+		case 9:
+			return QObject::tr("Fx") + " ("+StrForce+")";
+			break;
+		case 10:
+			return QObject::tr("Fy") + " ("+StrForce+")";
+			break;
+		case 11:
+			return QObject::tr("Fz") + " ("+StrForce+")";
+			break;
+		case 12:
+			return QObject::tr("Mx") + " ("+StrMoment+")";
+			break;
+		case 13:
+			return QObject::tr("My") + " ("+StrMoment+")";
+			break;
+		case 14:
+			return QObject::tr("Mz") + "("+StrMoment+")";
+			break;
+	}
+}
+
+
+
+void BoatPolar::GetPolarProperties(QString &PolarProperties, bool bData)
 {
 	QSail7 *pSail7 = (QSail7*)s_pSail7;
 	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
@@ -391,7 +467,7 @@ void CBoatPolar::GetPolarProperties(QString &PolarProperties, bool bData)
 
 	for(int is=0; is<pBoat->m_poaSail.size();is++)
 	{
-		CSail*pSail =(CSail*)pBoat->m_poaSail.at(is);
+		QSail*pSail =(QSail*)pBoat->m_poaSail.at(is);
 		strong  = "  "+QString(pSail->m_SailName + QString::fromUtf8(" = %1° / %2°"))
 							   .arg(-m_SailAngleMin[is],5,'f',1)
 							   .arg(-m_SailAngleMax[is],5,'f',1);
@@ -447,7 +523,7 @@ void CBoatPolar::GetPolarProperties(QString &PolarProperties, bool bData)
 }
 
 
-void CBoatPolar::Export(QTextStream &out, int FileType, bool bDataOnly)
+void BoatPolar::Export(QTextStream &out, int FileType, bool bDataOnly)
 {
 	MainFrame* pMainFrame = (MainFrame*)s_pMainFrame;
 	int j;
@@ -469,13 +545,15 @@ void CBoatPolar::Export(QTextStream &out, int FileType, bool bDataOnly)
 		}
 
 
-		Header = "   Ctrl      FFFx         FFFy      FFFz       Fx         Fy         Fz         Mx         My         Mz    \n";
+		Header = "   Ctrl      Lift       Drag       FFFx         FFFy      FFFz       Fx         Fy         Fz         Mx         My         Mz    \n";
 		out << Header;
 		for (j=0; j<m_Ctrl.size(); j++)
 		{
-			strong = QString(" %1  %2  %3  %4  %5  %6  %7  %8  %9  %10\n")
+			strong = QString(" %1  %2  %3  %4  %5  %6  %7  %8  %9  %10  %11  %12\n")
 					 .arg(m_Ctrl[j],8,'f',3)
-					 .arg(m_FFFx[j], 9,'f',6)
+					.arg(m_Lift[j], 9,'f',6)
+					.arg(m_Drag[j], 9,'f',6)
+					.arg(m_FFFx[j], 9,'f',6)
 					 .arg(m_FFFy[j],9,'f',6)
 					 .arg(m_FFFz[j],9,'f',6)
 					 .arg(m_Fx[j],9,'f',6)
@@ -503,8 +581,10 @@ void CBoatPolar::Export(QTextStream &out, int FileType, bool bDataOnly)
 		for (j=0; j<m_Ctrl.size(); j++)
 		{
 //			strong.Format(" %8.3f,  %9.6f,  %9.6f,  %9.6f,  %9.6f,  %9.6f,  %9.6f,  %9.6f,  %8.4f,  %9.4f\n",
-			strong = QString(" %1,  %2,  %3,  %4,  %5,  %6,  %7,  %8,  %9,  %10\n")
+			strong = QString(" %1,  %2,  %3,  %4,  %5,  %6,  %7,  %8,  %9,  %10,  %11,  %12\n")
 					   .arg(m_Ctrl[j],8,'f',3)
+					   .arg(m_Lift[j], 9,'f',6)
+					   .arg(m_Drag[j], 9,'f',6)
 					   .arg(m_FFFx[j], 9,'f',6)
 					   .arg(m_FFFy[j],9,'f',6)
 					   .arg(m_FFFz[j],9,'f',6)
@@ -523,9 +603,11 @@ void CBoatPolar::Export(QTextStream &out, int FileType, bool bDataOnly)
 }
 
 
-void CBoatPolar::ResetBoatPlr()
+void BoatPolar::ResetBoatPlr()
 {
 	m_Ctrl.clear(); // The main parameter for the polar
+	m_Lift.clear();
+	m_Drag.clear();
 	m_FFFx.clear();    // resulting force in the far field
 	m_FFFy.clear();
 	m_FFFz.clear();
@@ -539,7 +621,7 @@ void CBoatPolar::ResetBoatPlr()
 
 
 
-double CBoatPolar::WindFactor(double z)
+double BoatPolar::WindFactor(double z)
 {
 	if(z>m_WindGradient[1][0]) return 1.0;
 	else

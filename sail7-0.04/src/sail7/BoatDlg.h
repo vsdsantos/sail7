@@ -34,7 +34,7 @@ class BoatDlg : public QDialog
 	friend class MainFrame;
 	friend class QSail7;
 	friend class CBoatDef;
-	friend class CSail;
+	friend class QSail;
 
 
 public:

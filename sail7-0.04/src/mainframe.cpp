@@ -448,8 +448,8 @@ void MainFrame::CreateDockWindows()
 	GraphDlg::s_pMainFrame             = this;
 	BoatDlg::s_pMainFrame              = this;
 	BoatPolarDlg::s_pMainFrame         = this;
-	CBoatPolar::s_pMainFrame           = this;
-	CBoatOpp::s_pMainFrame             = this;
+	BoatPolar::s_pMainFrame           = this;
+	BoatOpp::s_pMainFrame             = this;
 	BoatAnalysisDlg::s_pMainFrame      = this;
 	GL3DScales::s_pMainFrame           = this;
 	DisplaySettingsDlg::s_pMainFrame   = this;
@@ -457,7 +457,7 @@ void MainFrame::CreateDockWindows()
 	SailDlg::s_pMainFrame              = this;
 	GL3dBodyDlg::s_pMainFrame          = this;
 	SectionViewWidget::s_pMainFrame    = this;
-	CSail::s_pMainFrame                = this;
+	QSail::s_pMainFrame                = this;
 	SailViewWidget::s_pMainFrame       = this;
 
 	m_pctrlSail7Widget = new QDockWidget("Sail7", this);
@@ -516,8 +516,8 @@ void MainFrame::CreateDockWindows()
 	BoatDlg::s_pSail7            = m_pSail7;
 	BoatPolarDlg::s_pSail7       = m_pSail7;
 	BoatAnalysisDlg::s_pSail7    = m_pSail7;
-	CBoatPolar::s_pSail7         = m_pSail7;
-	CBoatOpp::s_pSail7           = m_pSail7;
+	BoatPolar::s_pSail7         = m_pSail7;
+	BoatOpp::s_pSail7           = m_pSail7;
 	DisplaySettingsDlg::s_pSail7 = m_pSail7;
 	GL3DScales::s_pSail7         = m_pSail7;
 
@@ -868,10 +868,10 @@ void MainFrame::DeleteBoat(void *pObj, bool bResultsOnly)
 	QSail7 *pSail7 = (QSail7*)m_pSail7;
 
 	//first remove all BoatOpps associated to the Boat
-	CBoatOpp * pBoatOpp;
+	BoatOpp * pBoatOpp;
 	for (i=m_oaBoatOpp.size()-1; i>=0; i--)
 	{
-		pBoatOpp = (CBoatOpp*)m_oaBoatOpp.at(i);
+		pBoatOpp = (BoatOpp*)m_oaBoatOpp.at(i);
 		if(pBoatOpp->m_BoatName == pThisBoat->m_BoatName)
 		{
 			m_oaBoatOpp.removeAt(i);
@@ -882,10 +882,10 @@ void MainFrame::DeleteBoat(void *pObj, bool bResultsOnly)
 	}
 
 	//next remove all BoatPolars associated to the Boat
-	CBoatPolar* pBoatPolar;
+	BoatPolar* pBoatPolar;
 	for (i=m_oaBoatPolar.size()-1; i>=0; i--)
 	{
-		pBoatPolar = (CBoatPolar*)m_oaBoatPolar.at(i);
+		pBoatPolar = (BoatPolar*)m_oaBoatPolar.at(i);
 		if (pBoatPolar->m_BoatName == pThisBoat->m_BoatName)
 		{
 			if(!bResultsOnly)
@@ -938,13 +938,13 @@ void MainFrame::DeleteProject()
 	{
 		pObj = m_oaBoatPolar.at(i);
 		m_oaBoatPolar.removeAt(i);
-		delete (CBoatPolar*)pObj;
+		delete (BoatPolar*)pObj;
 	}
 	for (i=m_oaBoatOpp.size()-1; i>=0; i--)
 	{
 		pObj = m_oaBoatOpp.at(i);
 		m_oaBoatOpp.removeAt(i);
-		delete (CBoatOpp*)pObj; //TODO : cast
+		delete (BoatOpp*)pObj; //TODO : cast
 	}
 
 
@@ -977,12 +977,12 @@ QColor MainFrame::GetColor(int type)
 	{
 		case 0:
 		{
-			CBoatPolar *pBoatPolar;
+			BoatPolar *pBoatPolar;
 			for (int j=0; j<MAXCOLORS; j++)
 			{
 				for (int i=0; i<m_oaBoatPolar.size(); i++)
 				{
-					pBoatPolar = (CBoatPolar*)m_oaBoatPolar.at(i);
+					pBoatPolar = (BoatPolar*)m_oaBoatPolar.at(i);
 					bFound = false;
 					if(pBoatPolar->m_Color == m_crColors[j])
 					{
@@ -998,12 +998,12 @@ QColor MainFrame::GetColor(int type)
 		}
 		case 1:
 		{
-			CBoatOpp *pBoatOpp;
+			BoatOpp *pBoatOpp;
 			for (int j=0; j<MAXCOLORS; j++)
 			{
 				for (int i=0; i<m_oaBoatOpp.size(); i++)
 				{
-					pBoatOpp = (CBoatOpp*)m_oaBoatOpp.at(i);
+					pBoatOpp = (BoatOpp*)m_oaBoatOpp.at(i);
 					bFound = false;
 					if(pBoatOpp->m_Color == m_crColors[j])
 					{
@@ -1921,7 +1921,7 @@ bool MainFrame::SerializeProject(QDataStream &ar, bool bIsStoring)
 		ar << m_oaBoatPolar.size();
 		for(int ib=0; ib<m_oaBoatPolar.size(); ib++)
 		{
-			CBoatPolar* pBoatPolar=(CBoatPolar*)m_oaBoatPolar.at(ib);
+			BoatPolar* pBoatPolar=(BoatPolar*)m_oaBoatPolar.at(ib);
 			if(!pBoatPolar->SerializeBoatPlr(ar, true)) return false;
 		}
 
@@ -1929,7 +1929,7 @@ bool MainFrame::SerializeProject(QDataStream &ar, bool bIsStoring)
 		ar << m_oaBoatOpp.size();
 		for(int ib=0; ib<m_oaBoatOpp.size(); ib++)
 		{
-			CBoatOpp* pBoatOpp=(CBoatOpp*)m_oaBoatOpp.at(ib);
+			BoatOpp* pBoatOpp=(BoatOpp*)m_oaBoatOpp.at(ib);
 			if(!pBoatOpp->SerializeBoatOpp(ar, true)) return false;
 		}
 
@@ -1969,7 +1969,7 @@ bool MainFrame::SerializeProject(QDataStream &ar, bool bIsStoring)
 			ar >> n ;
 			for(int ib=0; ib<n; ib++)
 			{
-				CBoatPolar* pBoatPolar= new CBoatPolar;
+				BoatPolar* pBoatPolar= new BoatPolar;
 				if(!pBoatPolar->SerializeBoatPlr(ar, false)) return false;
 				m_oaBoatPolar.append(pBoatPolar);
 			}
@@ -1977,7 +1977,7 @@ bool MainFrame::SerializeProject(QDataStream &ar, bool bIsStoring)
 			ar >> n ;
 			for(int ib=0; ib<n; ib++)
 			{
-				CBoatOpp* pBoatOpp= new CBoatOpp;
+				BoatOpp* pBoatOpp= new BoatOpp;
 				if(!pBoatOpp->SerializeBoatOpp(ar, false)) return false;
 				m_oaBoatOpp.append(pBoatOpp);
 			}
@@ -2137,14 +2137,14 @@ void MainFrame::UpdateBoatPolars()
 	//	then selects Sail7 current BoatPolar if any, else selects the first, if any
 	//	else disables the combobox
 		QSail7 * pSail7 = (QSail7*)m_pSail7;
-		CBoatPolar *pBoatPolar;
+		BoatPolar *pBoatPolar;
 		QString BoatName;
 		int i;
 
 		m_pctrlBoatPolar->clear();
 
 		CBoat  *pCurBoat = pSail7->m_pCurBoat;
-		CBoatPolar *pCurBoatPolar  = pSail7->m_pCurBoatPolar;
+		BoatPolar *pCurBoatPolar  = pSail7->m_pCurBoatPolar;
 
 		if(pCurBoat)      BoatName = pCurBoat->m_BoatName;
 		else              BoatName = "";
@@ -2162,7 +2162,7 @@ void MainFrame::UpdateBoatPolars()
 		//count the number of BoatPolars associated to the current Wing
 		for (i=0; i<m_oaBoatPolar.size(); i++)
 		{
-			pBoatPolar = (CBoatPolar*)m_oaBoatPolar[i];
+			pBoatPolar = (BoatPolar*)m_oaBoatPolar[i];
 			if(pBoatPolar->m_BoatName == BoatName) size++;
 		}
 		if(size)
@@ -2171,7 +2171,7 @@ void MainFrame::UpdateBoatPolars()
 			m_pctrlBoatPolar->setEnabled(true);
 			for (i=0; i<m_oaBoatPolar.size(); i++)
 			{
-				pBoatPolar = (CBoatPolar*)m_oaBoatPolar[i];
+				pBoatPolar = (BoatPolar*)m_oaBoatPolar[i];
 				if(pBoatPolar->m_BoatName == BoatName)
 				{
 					m_pctrlBoatPolar->addItem(pBoatPolar->m_BoatPolarName);
@@ -2217,13 +2217,13 @@ void MainFrame::UpdateBoatOpps()
 	// else disables the combobox
 	QSail7* pSail7 = (QSail7*)m_pSail7;
 
-	CBoatOpp *pBoatOpp = NULL;
+	BoatOpp *pBoatOpp = NULL;
 
 	QString str;
 	m_pctrlBoatOpp->clear();
 
 	CBoat   *pCurBoat= pSail7->m_pCurBoat;
-	CBoatPolar *pCurBoatPlr    = pSail7->m_pCurBoatPolar;
+	BoatPolar *pCurBoatPlr    = pSail7->m_pCurBoatPolar;
 
 	if (!pCurBoat || !pCurBoat->m_BoatName.length() || !pCurBoatPlr || !pCurBoatPlr->m_BoatPolarName.length())
 	{
@@ -2234,7 +2234,7 @@ void MainFrame::UpdateBoatOpps()
 
 	for (int i=0; i<m_oaBoatOpp.size(); i++)
 	{
-		pBoatOpp = (CBoatOpp*)m_oaBoatOpp[i];
+		pBoatOpp = (BoatOpp*)m_oaBoatOpp[i];
 		if (pBoatOpp->m_BoatName == pCurBoat->m_BoatName && pBoatOpp->m_BoatPolarName == pCurBoatPlr->m_BoatPolarName)
 		{
 			str = QString("%1").arg(pBoatOpp->m_Ctrl,8,'f',3);

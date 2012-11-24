@@ -76,12 +76,12 @@ public:
 	void ReadData();
 	void ReadSectionData();
 	void ReadPointData();
-	void SetSailData(CSail *pSail);
+	void SetSailData(QSail *pSail);
 	void UpdateSailDataOutput();
 	void UpdateView();
 	void UpdateSailView();
 
-	bool InitDialog(CSail *pSail);
+	bool InitDialog(QSail *pSail);
 	bool eventFilter( QObject* o, QEvent* e );
 
 	static void *s_pMainFrame;
@@ -133,7 +133,7 @@ public:
 	QAction *m_pUndo, *m_pRedo;
 	QAction *m_pResetXScale;
 
-	CSail *m_pSail;
+	QSail *m_pSail;
 	bool m_bChanged;
 
 

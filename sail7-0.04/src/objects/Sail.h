@@ -21,7 +21,7 @@
 typedef enum {NURBSSAIL, SAILCUTSAIL} enumSailType;// the type of sail definition
 
 
-class CSail
+class QSail
 {
 	friend class MainFrame;
 	friend class QSail7;
@@ -31,29 +31,29 @@ class CSail
 	friend class BoatDlg;
 	friend class BoatPolarDlg;
 	friend class BoatAnalysisDlg;
-	friend class CBoatPolar;
-	friend class CBoatOpp;
+	friend class BoatPolar;
+	friend class BoatOpp;
 	friend class SectionViewWidget;
 	friend class NURBSSail;
 	friend class SailcutSail;
 	friend class SailDomDoc;
 
 public:
-    CSail();
+	QSail();
 
 	bool IsSailPanel(int nPanel);
 	bool IsSailNode(int nNode);
 	bool IsSailcutSail() {return m_SailType==SAILCUTSAIL;};
 	bool IsNURBSSail()  {return m_SailType==NURBSSAIL;};
 
-	void PanelTrefftz(CVector VInf, double *Mu, double *Sigma, int pos, CVector &FFForce, CBoatPolar *pBoatPolar);
-	void PanelComputeOnBody(CVector VInf, double *Cp, double *Gamma, CVector &F, CVector &M, CBoatPolar *pBoatPolar, CVector CoG);
+	void PanelTrefftz(CVector VInf, double *Mu, double *Sigma, int pos, CVector &FFForce, BoatPolar *pBoatPolar);
+	void PanelComputeOnBody(CVector VInf, double *Cp, double *Gamma, CVector &F, CVector &M, BoatPolar *pBoatPolar, CVector CoG);
 	void SortSections();
 	void SetLuffAngle(double Angle);
 	void SetLuffAngle();
 	virtual void ScaleSail(double XFactor, double YFactor, double ZFactor)=0;
 
-	virtual void Duplicate(CSail *pSail)=0;
+	virtual void Duplicate(QSail *pSail)=0;
 	virtual bool Import(QFile *pFile)=0;
 	virtual void Export()=0;
 

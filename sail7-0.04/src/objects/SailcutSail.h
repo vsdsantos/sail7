@@ -14,7 +14,7 @@
 #include <QDomNode>
 #include "Sail.h"
 
-class SailcutSail : public CSail
+class SailcutSail : public QSail
 {
 public:
 	SailcutSail();
@@ -31,7 +31,7 @@ public:
 
 	bool Import(QFile *pFile);
 	void Export();
-	void Duplicate(CSail *pSail);
+	void Duplicate(QSail *pSail);
 	void ScaleSail(double XFactor, double YFactor, double ZFactor);
 
 	void SetLeechRoundEquation();

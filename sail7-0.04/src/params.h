@@ -90,14 +90,7 @@
 #define LIGHTSPHERE             9876
 
 
-#define SOLIDLINE           0
-#define DASHLINE            1
-#define DOTLINE             2
-#define DASHDOTLINE         3
-#define DASHDOTDOTLINE      4
-
-
-#define IBX  604	//600 number of buffer airfoil nodes = 2*IQX
+typedef enum {CTRL, VINF, BETA, PHI, LIFT, DRAG, FFFX, FFFY, FFFZ, FX, FY, FZ, MX, MY, MZ} enumPolarVar;
 
 
 #define QUESTION (BB || !BB) //Shakespeare

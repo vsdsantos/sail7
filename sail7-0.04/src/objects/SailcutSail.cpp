@@ -54,7 +54,7 @@ SailcutSail::SailcutSail()
 }
 
 
-void SailcutSail::Duplicate(CSail *pSail)
+void SailcutSail::Duplicate(QSail *pSail)
 {
 	m_SailName        = pSail->m_SailName;
 	m_SailDescription = pSail->m_SailDescription;

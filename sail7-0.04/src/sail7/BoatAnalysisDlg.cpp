@@ -559,27 +559,6 @@ void BoatAnalysisDlg::ComputeBoat()
 }
 
 
-void BoatAnalysisDlg::GetVortexCp(const int &p, double *Gamma, double *Cp, CVector &VInf)
-{
-	static CVector PanelForce, Force;
-	// for each panel along the chord, add the lift coef
-	//TODO :  has already been calculated in CSail::PanelComputeOnBody()
-	PanelForce  = VInf * s_pPanel[p].Vortex;
-	PanelForce *= Gamma[p] * m_pBoatPolar->m_Density;                 //Newtons
-
-	if(!m_pBoatPolar->m_bVLM1 && !s_pPanel[p].m_bIsLeading)
-	{
-		Force       = VInf* s_pPanel[p].Vortex;
-		Force      *= Gamma[p+1] * m_pBoatPolar->m_Density;       //Newtons
-		PanelForce -= Force;
-	}
-
-	PanelForce *= m_pBoatPolar->WindFactor(s_pPanel[p].VortexPos.z);
-
-	Cp[p]  = -2.0 * PanelForce.dot(s_pPanel[p].Normal) /s_pPanel[p].Area/m_pBoatPolar->m_Density;
-}
-
-
 void BoatAnalysisDlg::GetDoubletDerivative(const int &p, double *Mu, double &Cp, CVector &VLocal, double const &QInf, double Vx, double Vy, double Vz)
 {
 	static int PL,PR, PU, PD;
@@ -737,15 +716,16 @@ void BoatAnalysisDlg::GetDoubletDerivative(const int &p, double *Mu, double &Cp,
 
 
 
-void BoatAnalysisDlg::ComputeOnBodyCp()
+void BoatAnalysisDlg::ComputeOnBody()
 {
 	//following VSAERO theory manual
 	//the on-body tangential perturbation speed is the derivative of the doublet strength
-	static CVector VLocal, VInf;
+	static CVector VLocal;
+	static CVector PanelForce, Force;
 	double Speed2;
 
 	//______________________________________________________________________________________
-	AddString(tr("      Computing On-Body Speeds...")+"\n");
+	AddString(tr("      Computing On-Body...")+"\n");
 
 	for(int p=0; p<m_MatSize; p++)
 	{
@@ -757,7 +737,24 @@ void BoatAnalysisDlg::ComputeOnBodyCp()
 			Speed2 = VLocal.x*VLocal.x + VLocal.y*VLocal.y;
 			m_Cp[p]  = 1.0-Speed2/m_QInf/m_QInf/factor/factor;                  //We normalize Cp by QInf, without wind factor
 		}
-		else GetVortexCp(p, m_Mu, m_Cp, m_VInf);
+		else
+		{
+			// for each panel along the chord, add the lift coef
+
+			PanelForce  = m_VInf * s_pPanel[p].Vortex;
+			PanelForce *= m_Mu[p] * m_pBoatPolar->m_Density;                 //Newtons
+
+			if(!m_pBoatPolar->m_bVLM1 && !s_pPanel[p].m_bIsLeading)
+			{
+				Force       = m_VInf* s_pPanel[p].Vortex;
+				Force      *= m_Mu[p+1] * m_pBoatPolar->m_Density;       //Newtons
+				PanelForce -= Force;
+			}
+
+			PanelForce *= m_pBoatPolar->WindFactor(s_pPanel[p].VortexPos.z);
+
+			m_Cp[p]  = -2.0 * PanelForce.dot(s_pPanel[p].Normal) /s_pPanel[p].Area/m_pBoatPolar->m_Density;
+		}
 
 		if(m_bCancel) return;
 	}
@@ -783,6 +780,8 @@ void BoatAnalysisDlg::ComputeSurfSpeeds(double *Mu, double *Sigma)
 		m_Speed[p] += m_VInf * m_pBoatPolar->WindFactor(C.z);
 	}
 }
+
+
 
 
 
@@ -1136,15 +1135,6 @@ void BoatAnalysisDlg::StartAnalysis()
 }
 
 
-void BoatAnalysisDlg::SumPanelForces(double *Cp, CVector Force)
-{
-	int p;
-
-	for(p=0; p<m_MatSize; p++)
-	{
-		Force += s_pPanel[p].Normal * (-Cp[p]) * s_pPanel[p].Area;
-	}
-}
 
 
 void BoatAnalysisDlg::SetWindAxis(double const Beta)
@@ -1163,7 +1153,7 @@ void BoatAnalysisDlg::SetWindAxis(double const Beta)
 }
 
 
-void BoatAnalysisDlg::SetAngles(CBoatPolar *pBoatPolar, double Ctrl, bool bBCOnly)
+void BoatAnalysisDlg::SetAngles(BoatPolar *pBoatPolar, double Ctrl, bool bBCOnly)
 {
 	// Rotate the panels by the bank angle
 	// (and translate the wake to the new T.E. position - thin surfaces, no wake)
@@ -1187,7 +1177,7 @@ void BoatAnalysisDlg::SetAngles(CBoatPolar *pBoatPolar, double Ctrl, bool bBCOnl
 	CVector Mast;
 	for(int is=0; is<m_pBoat->m_poaSail.size(); is++)
 	{
-		CSail *pSail = (CSail*)m_pBoat->m_poaSail.at(is);
+		QSail *pSail = (QSail*)m_pBoat->m_poaSail.at(is);
 		Mast.Set(sin(pSail->m_LuffAngle*PI/180.0), 0.0, cos(pSail->m_LuffAngle*PI/180.0));
 //		Mast.RotateX(pSail->m_LEPosition, m_Phi);
 
@@ -1304,7 +1294,7 @@ bool BoatAnalysisDlg::UnitLoop()
 		ComputeFarField();
 		if (m_bCancel) return true;
 
-		ComputeOnBodyCp();
+		ComputeOnBody();
 		if (m_bCancel) return true;
 
 		ComputeBoat();
@@ -1445,7 +1435,7 @@ void BoatAnalysisDlg::Forces(double *Mu, double *Sigma, double alpha, double *VI
 
 	for(j=0; j<m_pBoat->m_poaSail.size(); j++)
 	{
-		CSail *pSail = (CSail*)m_pBoat->m_poaSail.at(j);
+		QSail *pSail = (QSail*)m_pBoat->m_poaSail.at(j);
 		for(k=0; k<pSail->m_NZPanels; k++)
 		{
 			//Get the strip area

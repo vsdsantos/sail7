@@ -28,7 +28,7 @@ class BoatPolarDlg : public QDialog
 	Q_OBJECT
 	friend class QSail7;
 	friend class CBoatDef;
-	friend class CSail;
+	friend class QSail;
 	friend class MainFrame;
 
 public:
@@ -39,7 +39,7 @@ private:
 
 	void SetupLayout();
 	void Connect();
-	void InitDialog(CBoat *pBoat, CBoatPolar *pBoatPolar=NULL);
+	void InitDialog(CBoat *pBoat, BoatPolar *pBoatPolar=NULL);
 	void SetDensity();
 	void FillVariableList();
 	void ReadData();
@@ -53,7 +53,7 @@ private:
 	//Variables
 	static void *s_pMainFrame;
 	static void* s_pSail7;
-	static CBoatPolar s_BoatPolar;
+	static BoatPolar s_BoatPolar;
 
 	QString m_BoatPolarName;
 

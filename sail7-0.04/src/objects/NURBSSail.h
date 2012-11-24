@@ -13,7 +13,7 @@
 #include "Sail.h"
 #include "NURBSSurface.h"
 
-class NURBSSail : public CSail
+class NURBSSail : public QSail
 {
 public:
 	NURBSSail();
@@ -27,7 +27,7 @@ public:
 	void CreateSection(int iSection);
 	void DeleteSection(int iSection);
 
-	void Duplicate(CSail *pSail);
+	void Duplicate(QSail *pSail);
 	bool Import(QFile *pFile);
 	void Export();
 	void ScaleSail(double XFactor, double YFactor, double ZFactor);

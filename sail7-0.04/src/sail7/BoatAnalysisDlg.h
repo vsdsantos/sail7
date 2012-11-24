@@ -34,7 +34,7 @@ class BoatAnalysisDlg : public QDialog
 	friend class QSail7;
 	friend class MainFrame;
 	friend class CBoatDef;
-	friend class CSail;
+	friend class QSail;
 
 public:
 	BoatAnalysisDlg();
@@ -60,7 +60,7 @@ private:
 	void AddString(QString strong);
 	void BuildInfluenceMatrix();
 
-	void ComputeOnBodyCp();
+	void ComputeOnBody();
 	void ComputeBoat();
 	void ComputeSurfSpeeds(double *Mu, double *Sigma);
 	void ComputeFarField();
@@ -74,17 +74,15 @@ private:
 	void GetSpeedVector(CVector const &C, double *Mu, double *Sigma, CVector &VT, bool bAll=true, bool bTrace=false);
 	void SetFileHeader();
 	void SourceNASA4023(CVector const &C, CPanel *pPanel, CVector &V, double &phi);
-	void SetAngles(CBoatPolar *pBoatPolar, double Ctrl, bool bBCOnly=true);
+	void SetAngles(BoatPolar *pBoatPolar, double Ctrl, bool bBCOnly=true);
 	void SetupLayout();
 	void SetWindAxis(double const Beta);
 	void StartAnalysis();
-	void SumPanelForces(double *Cp, CVector Force);
 	void UpdateView();
 	void WriteString(QString strong);
 	void VLMGetVortexInfluence(CPanel *pPanel, const CVector &C, CVector &V, bool bAll);
 
 	void GetDoubletDerivative(const int &p, double *Mu, double &Cp, CVector &VTotl, double const &QInf, double Vx, double Vy, double Vz);
-	void GetVortexCp(const int &p, double *Gamma, double *Cp, CVector &VInf);
 
 	void ComputeResults();
 	void Forces(double *Mu, double *Sigma, double alpha, double *VInf, CVector &Force, CVector &Moment, bool bTilted, bool bTrace=false);
@@ -153,7 +151,7 @@ private:
 	QString m_VersionName;
 	
 	
-	CBoatPolar *m_pBoatPolar;
+	BoatPolar *m_pBoatPolar;
 	CBoat *m_pBoat;
 
 	//temp data
@@ -167,8 +165,8 @@ private:
 public:
 	CVector m_Vd[ 4*VLMMAXRHS * MAXSAILSTATIONS];
 	CVector m_SailForce[4*VLMMAXRHS];
-//	CSail *m_pSail; //pointer to the geometry class of the Sail
-	CSail* m_pSailList[MAXSAILS]; //pointer to the boat's sails
+	CVector m_SailCP[4*VLMMAXRHS];
+	QSail* m_pSailList[MAXSAILS]; //pointer to the boat's sails
 
 };
 

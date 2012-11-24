@@ -45,7 +45,7 @@ SectionViewWidget::SectionViewWidget(QWidget *parent) :QWidget(parent)
 	m_bNeutralLine = true;
 
 	m_NeutralColor= QColor(255, 255, 255);
-	m_NeutralStyle = DASHDOTLINE;
+	m_NeutralStyle = Qt::DashDotLine;
 	m_NeutralWidth = 1;
 	m_StackPos = -1;
 
@@ -73,7 +73,6 @@ void SectionViewWidget::OnCurrentSectionOnly()
 	m_pCurrentOnly->setChecked(s_bCurrentOnly);
 	UpdateView();
 }
-
 
 
 
@@ -347,7 +346,7 @@ void SectionViewWidget::OnZoomYScale()
 }
 
 
-void SectionViewWidget::Initialize(CSail *pSail, SailSection *pSection)
+void SectionViewWidget::Initialize(QSail *pSail, SailSection *pSection)
 {
 	m_pSail = pSail;
 	m_pSailSection = pSection;

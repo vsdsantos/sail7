@@ -22,11 +22,11 @@ CBoat::CBoat()
 
 
 
-CSail *CBoat::GetSail(const QString &SailName)
+QSail *CBoat::GetSail(const QString &SailName)
 {
 	for(int is=0; is<m_poaSail.size(); is++)
 	{
-		CSail* pSail = (CSail*)m_poaSail.at(is);
+		QSail* pSail = (QSail*)m_poaSail.at(is);
 		if(pSail->m_SailName==SailName) return pSail;
 	}
 	return NULL;
@@ -64,7 +64,7 @@ bool CBoat::SerializeBoat(QDataStream &ar, bool bIsStoring)
 		ar << m_poaSail.size();
 		for(int is=0; is<m_poaSail.size(); is++)
 		{
-			CSail *pSail = (CSail*)m_poaSail.at(is);
+			QSail *pSail = (QSail*)m_poaSail.at(is);
 			if(!pSail) return false;
 			if(pSail->IsNURBSSail()) ar<<1;
 			else                     ar<<2;
@@ -125,8 +125,8 @@ void CBoat::DuplicateBoat(CBoat*pBoat)
 {
 	for(int is=0; is<pBoat->m_poaSail.size(); is++)
 	{
-		CSail *pNewSail = NULL;
-		CSail *pSail = pBoat->m_poaSail.at(is);
+		QSail *pNewSail = NULL;
+		QSail *pSail = pBoat->m_poaSail.at(is);
 		if(pSail->IsNURBSSail())        pNewSail = new NURBSSail;
 		else if(pSail->IsSailcutSail()) pNewSail = new SailcutSail;
 

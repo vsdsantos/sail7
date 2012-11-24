@@ -42,8 +42,8 @@ private:
 	void SetupLayout();
 
 	QTextEdit *m_pctrlDescription;
-	CBoatOpp *m_pBoatOpp;
-	CBoatPolar *m_pBoatPolar;
+	BoatOpp *m_pBoatOpp;
+	BoatPolar *m_pBoatPolar;
 
 	static void *s_pMainFrame;
 };
