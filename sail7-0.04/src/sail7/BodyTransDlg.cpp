@@ -32,7 +32,7 @@
 void *BodyTransDlg::s_pMainFrame = NULL;
 
 
-BodyTransDlg::BodyTransDlg()
+BodyTransDlg::BodyTransDlg(QWidget *pParent) : QDialog(pParent)
 {
 	setWindowTitle(tr("Body Translation"));
 	m_XTrans = m_YTrans = m_ZTrans = 0.0;

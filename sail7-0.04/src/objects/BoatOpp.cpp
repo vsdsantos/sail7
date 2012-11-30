@@ -36,7 +36,6 @@ BoatOpp::BoatOpp()
 
 	m_NStation     = 0;
 	m_NVLMPanels   = 0;
-	m_AnalysisMethod = VLMMETHOD;
 
 	m_Weight = 0.0;
 
@@ -75,7 +74,7 @@ bool BoatOpp::SerializeBoatOpp(QDataStream &ar, bool bIsStoring)
 
 		ar << m_Style<<m_Width<<m_Color.red()<<m_Color.green()<<m_Color.blue();
 
-		ar << m_AnalysisMethod;
+		ar << 1;
 		ar << m_nWakeNodes << m_NXWakePanels;
 		ar << m_FirstWakePanel << m_WakeFactor;
 		ar << m_Weight;
@@ -122,7 +121,7 @@ bool BoatOpp::SerializeBoatOpp(QDataStream &ar, bool bIsStoring)
 		ar >> j>>k>>l;
 		m_Color = QColor(j,k,l);
 
-		ar >> m_AnalysisMethod;
+		ar >> j;//m_AnalysisMethod;
 		ar >> m_nWakeNodes >> m_NXWakePanels;
 		ar >> m_FirstWakePanel >> m_WakeFactor;
 		ar >> m_Weight;

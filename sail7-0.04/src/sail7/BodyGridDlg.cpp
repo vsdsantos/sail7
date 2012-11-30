@@ -34,7 +34,7 @@
 
 void *BodyGridDlg::s_pMainFrame;
 
-BodyGridDlg::BodyGridDlg()
+BodyGridDlg::BodyGridDlg(QWidget *pParent):QDialog(pParent)
 {
 	setWindowTitle(tr("Body Grid Dialog"));
 	m_bScale = false;
@@ -48,6 +48,7 @@ BodyGridDlg::BodyGridDlg()
 	m_MinStyle=2; m_MinWidth =1;
 	m_MinColor=QColor(75,75,75);
 	m_MinorUnit=0.05;
+
 
 	m_bGrid2 = false;
 	m_Style2 = 1; m_Width2 =1;
@@ -250,7 +251,7 @@ void BodyGridDlg::OnMinGrid2()
 
 void BodyGridDlg::OnLineStyle()
 {
-	LinePickerDlg dlg;
+    LinePickerDlg dlg(this);
 	dlg.InitDialog(m_Style, m_Width, m_Color);
 
 	if(QDialog::Accepted==dlg.exec())
@@ -267,7 +268,7 @@ void BodyGridDlg::OnLineStyle()
 
 void BodyGridDlg::OnLine2Style()
 {
-	LinePickerDlg dlg;
+    LinePickerDlg dlg(this);
 	dlg.InitDialog(m_Style2, m_Width2, m_Color2);
 
 	if(QDialog::Accepted==dlg.exec())
@@ -284,7 +285,7 @@ void BodyGridDlg::OnLine2Style()
 
 void BodyGridDlg::OnMinLineStyle()
 {
-	LinePickerDlg dlg;
+    LinePickerDlg dlg(this);
 	dlg.InitDialog(m_MinStyle, m_MinWidth, m_MinColor);
 
 	if(QDialog::Accepted==dlg.exec())
@@ -301,7 +302,7 @@ void BodyGridDlg::OnMinLineStyle()
 
 void BodyGridDlg::OnMinLine2Style()
 {
-	LinePickerDlg dlg;
+    LinePickerDlg dlg(this);
 	dlg.InitDialog(m_MinStyle2, m_MinWidth2, m_MinColor2);
 
 	if(QDialog::Accepted==dlg.exec())

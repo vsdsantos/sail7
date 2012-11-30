@@ -1085,11 +1085,10 @@ void BoatAnalysisDlg::StartAnalysis()
 	m_pctrlCancel->setText(tr("Cancel"));
 	m_bIsFinished = false;
 
-	if(m_pBoatPolar->m_AnalysisMethod==VLMMETHOD)
-	{
-		if(m_pBoatPolar->m_bVLM1) strong = tr("Launching VLM1 Analysis....")+"\n";
-		else                      strong = tr("Launching VLM2 Analysis....")+"\n";
-	}
+
+	if(m_pBoatPolar->m_bVLM1) strong = tr("Launching VLM1 Analysis....")+"\n";
+	else                      strong = tr("Launching VLM2 Analysis....")+"\n";
+
 	AddString(strong);
 
 

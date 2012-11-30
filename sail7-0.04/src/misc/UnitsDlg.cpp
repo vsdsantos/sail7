@@ -24,7 +24,7 @@
 #include <QGridLayout>
 #include <QVBoxLayout>
 
-UnitsDlg::UnitsDlg()
+UnitsDlg::UnitsDlg(QWidget *pParent) : QDialog(pParent)
 {
 	m_Length  = 0;
 	m_Area    = 1;

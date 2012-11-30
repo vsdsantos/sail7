@@ -58,7 +58,6 @@ private:
 private:
 
 	int m_NVLMPanels;	// number of VLMpanels
-	int m_AnalysisMethod;	//1=LLT, 2=VLM, 3=3D Panels
 	int m_Type;		// Polar Analysis Type
 	int m_NStation;		// number of stations along wing span
 

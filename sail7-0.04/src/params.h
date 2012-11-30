@@ -39,9 +39,6 @@
 #define REFLENGTH   10.0
 
 
-// 3D Analysis methods
-#define VLMMETHOD           2
-#define PANELMETHOD         3
 
 //3D analysis parameters
 #define MAXCHORDPANELS	   50

@@ -279,7 +279,7 @@ void SailDlg::SetControls()
 		NURBSSail * pNSail = (NURBSSail*)m_pSail;
 		m_pctrlNXDegree->SetValue(pNSail->m_SplineSurface.m_ivDegree);
 		m_pctrlNZDegree->SetValue(pNSail->m_SplineSurface.m_iuDegree);
-		QString str = QString("(<%1)").arg(pNSail->m_SplineSurface.m_nvLines);
+		QString str = QString("(<%1)").arg(pNSail->m_SplineSurface.FramePointCount());
 		m_pctrlNXDegMin->setText(str);
 		str = QString("(<%1)").arg(pNSail->m_SplineSurface.m_pFrame.size());
 		m_pctrlNZDegMin->setText(str);

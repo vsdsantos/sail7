@@ -159,8 +159,7 @@ void GLCreateBody3DSplines(void *pParent, int iList, CBody *pBody, int nx, int n
 		// sides
 		for (i=0; i<pBody->FrameSize(); i++)
 		{
-			u = pBody->Getu(pBody->Frame(i)->m_Position.x);
-
+			u = pBody->Getu(pBody->Frame(i)->m_Position.x, i==3);
 			glBegin(GL_LINE_STRIP);
 			{
 				v = 0.0;
@@ -249,7 +248,7 @@ void GLCreateBody3DFlatPanels(void *pParent, int iList, CBody *pBody)
 		glDisable(GL_LINE_STIPPLE);
 		glLineWidth(1.0);
 
-		for (k=0; k<pBody->m_NSideLines-1;k++)
+		for (k=0; k<pBody->SideLineCount()-1;k++)
 		{
 			for (j=0; j<pBody->FrameSize()-1;j++)
 			{
@@ -316,7 +315,7 @@ void GLCreateBody3DFlatPanels(void *pParent, int iList, CBody *pBody)
 
 		glColor3d(color.redF(), color.greenF(), color.blueF());
 
-		for (k=0; k<pBody->m_NSideLines-1;k++)
+		for (k=0; k<pBody->SideLineCount()-1;k++)
 		{
 			for (j=0; j<pBody->FrameSize()-1;j++)
 			{
@@ -408,7 +407,7 @@ void GLCreateBodyMesh(void *pParent, int iList, CBody *pBody)
 					dj1 = (double)(j+1)/(double)(pBody->m_xPanels[i]);
 
 					//body left side
-					for (k=0; k<pBody->m_NSideLines-1; k++)
+					for (k=0; k<pBody->SideLineCount()-1; k++)
 					{
 						//build the four corner points of the strips
 						PLB.x =  (1.0- dj) * pBody->Frame(i)->m_Position.x       +  dj * pBody->Frame(i+1)->m_Position.x;
@@ -457,7 +456,7 @@ void GLCreateBodyMesh(void *pParent, int iList, CBody *pBody)
 						glEnd();
 					}
 					//body right side
-					for (k=pBody->m_NSideLines-2; k>=0; k--)
+					for (k=pBody->SideLineCount()-2; k>=0; k--)
 					{
 						//build the four corner points of the strips
 						PLA.x = (1.0- dj) * pBody->Frame(i)->m_Position.x     +  dj * pBody->Frame(i+1)->m_Position.x;
@@ -534,7 +533,7 @@ void GLCreateBodyMesh(void *pParent, int iList, CBody *pBody)
 					dj1 = (double)(j+1)/(double)(pBody->m_xPanels[i]);
 
 					//body left side
-					for (k=0; k<pBody->m_NSideLines-1; k++)
+					for (k=0; k<pBody->SideLineCount()-1; k++)
 					{
 						//build the four corner points of the strips
 						PLB.x =  (1.0- dj) * pBody->Frame(i)->m_Position.x        +  dj * pBody->Frame(i+1)->m_Position.x;
@@ -583,7 +582,7 @@ void GLCreateBodyMesh(void *pParent, int iList, CBody *pBody)
 						glEnd();
 					}
 					//body right side
-					for (k=pBody->m_NSideLines-2; k>=0; k--)
+					for (k=pBody->SideLineCount()-2; k>=0; k--)
 					{
 						//build the four corner points of the strips
 						PLA.x = (1.0- dj) * pBody->Frame(i)->m_Position.x        +  dj * pBody->Frame(i+1)->m_Position.x;

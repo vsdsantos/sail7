@@ -522,7 +522,7 @@ void BoatDlg::OnEditHull()
 	CBody memBody;
 	memBody.Duplicate(pCurHull);
 
-	GL3dBodyDlg dlg;
+	GL3dBodyDlg dlg(this);
 	dlg.m_bEnableName = false;
 	if(!dlg.InitDialog(pCurHull)) return;
 

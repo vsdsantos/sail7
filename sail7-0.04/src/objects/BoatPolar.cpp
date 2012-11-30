@@ -22,7 +22,6 @@ BoatPolar::BoatPolar()
 	m_BoatPolarName.clear();
 	m_BoatName.clear();
 
-	m_AnalysisMethod=VLMMETHOD;
 
 	m_bVLM1 = false;
 	m_bGround     = false;
@@ -68,7 +67,6 @@ BoatPolar::BoatPolar()
 
 void BoatPolar::DuplicateSpec(BoatPolar *pBoatPolar)
 {
-	m_AnalysisMethod  = pBoatPolar->m_AnalysisMethod;
 
 	m_bVLM1           = pBoatPolar->m_bVLM1;
 	m_bGround         = pBoatPolar->m_bGround;

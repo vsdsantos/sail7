@@ -182,7 +182,7 @@ void NURBSSail::SplineSurface()
 	peak.RotateY(m_oaSection.last()->m_Position, m_oaSection.last()->m_Angle);
 
 	//Set the number of control points in each direction
-	m_SplineSurface.m_nvLines = m_oaSection.first()->m_CtrlPoint.size();//assumes all sections have the same number of control points--> TODO force
+//	m_SplineSurface.m_nvLines = m_oaSection.first()->m_CtrlPoint.size();//assumes all sections have the same number of control points--> TODO force
 
 	m_SplineSurface.m_pFrame.clear();
 	for(int is=0; is<m_oaSection.size(); is++)

@@ -48,7 +48,6 @@ private:
 	QString m_BoatName;
 
 //	int m_UnitType;//1= International, 2= English
-	int m_AnalysisMethod;
 
 	bool m_bGround;
 	bool m_bVLM1;

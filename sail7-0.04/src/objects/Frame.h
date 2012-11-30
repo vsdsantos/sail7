@@ -50,7 +50,7 @@ public:
 
 	void RotateFrameY(double Angle);
 
-	int PointSize() {return m_CtrlPoint.size();};
+	int PointCount() {return m_CtrlPoint.size();};
 
 	double Height();
 	double zPos();

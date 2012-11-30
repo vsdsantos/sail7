@@ -38,7 +38,7 @@ class BodyGridDlg : public QDialog
 	friend class MainFrame;
 
 public:
-	BodyGridDlg();
+	BodyGridDlg(QWidget *pParent);
 
 private slots:
 	void OnOK();

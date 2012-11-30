@@ -10,8 +10,6 @@ QT       += xml
 TARGET = sail7
 TEMPLATE = app
 
-#INCLUDEPATH += "/home/windsoarer/Qt/xflr5-6.07/src/objects"
-
 
 SOURCES += \
     src/twodwidget.cpp \
