@@ -39,7 +39,7 @@ class UnitsDlg : public QDialog
 
 
 public:
-    UnitsDlg();
+	UnitsDlg(QWidget *pParent=NULL);
 
 private slots:
 	void OnSelChanged(const QString &strong);

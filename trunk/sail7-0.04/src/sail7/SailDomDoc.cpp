@@ -198,7 +198,7 @@ void SailDomDoc::Export(QFile *pFile)
 				pSection->m_SCSpline.GetCamber(c, xc);
 				data = createElement("real");
 				data.setAttribute("name", "depth");
-				data.setAttribute("value", round(c,3));
+				data.setAttribute("value", c);
 				profile.appendChild(data);
 
 				data = createElement("real");

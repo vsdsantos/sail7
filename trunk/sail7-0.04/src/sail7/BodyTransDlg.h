@@ -37,7 +37,7 @@ class BodyTransDlg : public QDialog
 	friend class GL3dBodyDlg;
 
 public:
-    BodyTransDlg();
+	BodyTransDlg(QWidget*pParent=NULL);
 	void InitDialog();
 
 private slots:

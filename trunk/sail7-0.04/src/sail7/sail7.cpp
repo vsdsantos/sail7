@@ -695,7 +695,7 @@ void QSail7::keyPressEvent(QKeyEvent *event)
 		}
 		case Qt::Key_F5:
 		{
-			GL3dBodyDlg dlg;
+			GL3dBodyDlg dlg(pMainFrame);
 			CBody Hull;
 			dlg.m_bEnableName = false;
 			if(!dlg.InitDialog(&Hull)) return;
@@ -713,7 +713,7 @@ void QSail7::keyPressEvent(QKeyEvent *event)
 		}
 		case Qt::Key_F7:
 		{
-			GL3dBodyDlg dlg;
+			GL3dBodyDlg dlg(pMainFrame);
 			CBody Body;
 			dlg.InitDialog(&Body);
 			dlg.move(GL3dBodyDlg::s_WindowPos);
@@ -1369,7 +1369,7 @@ int QSail7::CreateBodyElements(CBody *pBody)
 		nx = 0;
 		for(i=0; i<pBody->FrameSize()-1; i++) nx+=pBody->m_xPanels[i];
 		nh = 0;
-		for(i=0; i<pBody->m_NSideLines-1; i++) nh+=pBody->m_hPanels[i];
+		for(i=0; i<pBody->FramePointCount()-1; i++) nh+=pBody->m_hPanels[i];
 		FullSize = nx*nh*2;
 		pBody->m_nxPanels = nx;
 		pBody->m_nhPanels = nh;
@@ -1383,7 +1383,7 @@ int QSail7::CreateBodyElements(CBody *pBody)
 
 				//body left side
 				lnh = 0;
-				for (k=0; k<pBody->m_NSideLines-1; k++)
+				for (k=0; k<pBody->FramePointCount()-1; k++)
 				{
 					//build the four corner points of the strips
 					PLB.x =  (1.0- dj) * pBody->Frame(i)->m_Position.x       +  dj * pBody->Frame(i+1)->m_Position.x      +pBody->m_LEPosition.x;
@@ -4848,7 +4848,6 @@ void QSail7::AddBoatOpp(double *Cp, double *Gamma, double *Sigma, CVector const 
 		pNewPoint->m_BoatName =  m_pCurBoat->m_BoatName;
 
 		pNewPoint->m_BoatPolarName       = m_pCurBoatPolar->m_BoatPolarName;
-		pNewPoint->m_AnalysisMethod      = m_pCurBoatPolar->m_AnalysisMethod;
 		pNewPoint->m_bVLM1               = m_pCurBoatPolar->m_bVLM1;
 
 		pNewPoint->m_NVLMPanels          = m_PanelDlg.m_MatSize;
@@ -5650,8 +5649,8 @@ void QSail7::GLCreatePanelForces(BoatOpp *pBoatOpp)
 				glColor3d(GLGetRed(color),GLGetGreen(color),GLGetBlue(color));
 				force *= m_LiftScale *coef;
 
-				if(m_pCurBoatPolar->m_AnalysisMethod==VLMMETHOD) O = pPanel->CtrlPt;
-				else                                             O = pPanel->CollPt;
+				O = pPanel->CtrlPt;
+
 
 				// Rotate the reference arrow to align it with the panel normal
 

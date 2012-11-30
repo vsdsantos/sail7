@@ -19,12 +19,11 @@
 
 *****************************************************************************/
 
-
 #include "Frame.h"
 #include <math.h>
-#include <QtDebug>
+#include "../params.h"
 
-#define REFLENGTH 10.0
+
 
 CFrame::CFrame(int nCtrlPts)
 {
@@ -50,7 +49,7 @@ int CFrame::IsPoint(const CVector &Point, const double &ZoomFactor)
 	{
 		if(sqrt(  (Point.x-m_CtrlPoint[l].x)*(Point.x-m_CtrlPoint[l].x)
 				+ (Point.y-m_CtrlPoint[l].y)*(Point.y-m_CtrlPoint[l].y)
-				+ (Point.z-m_CtrlPoint[l].z)*(Point.z-m_CtrlPoint[l].z))<0.005*REFLENGTH/ZoomFactor)
+				+ (Point.z-m_CtrlPoint[l].z)*(Point.z-m_CtrlPoint[l].z))<0.05*Height()/ZoomFactor)
 			  return l;
 //        if (fabs(Point.x-m_CtrlPoint[l].y)<0.005/ZoomFactor && fabs(Point.y-m_CtrlPoint[l].z)<0.005/ZoomFactor) return l;
 	}
@@ -159,11 +158,11 @@ int CFrame::InsertPoint(const CVector &Real, int iAxis)
 	}
 	else if(iAxis==3)
 	{
-		if(Real.z>m_CtrlPoint.first().z)
+		if(Real.z>m_CtrlPoint.last().z)
 		{
 			for(k=0; k<m_CtrlPoint.size()-1; k++)
 			{
-				if(m_CtrlPoint[k].z<=Real.z && Real.z <m_CtrlPoint[k+1].z)
+				if(m_CtrlPoint[k].z>=Real.z && Real.z >m_CtrlPoint[k+1].z)
 				{
 					break;
 				}
@@ -177,16 +176,19 @@ int CFrame::InsertPoint(const CVector &Real, int iAxis)
 	return k+1;
 }
 
+
+
 double CFrame::Height()
 {
-	double hmin	=  10.0;
+	return (m_CtrlPoint.last() - m_CtrlPoint.first()).VAbs();
+/*	double hmin	=  10.0;
 	double hmax = -10.0;
 	for(int k=0; k<m_CtrlPoint.size(); k++)
 	{
 		if(m_CtrlPoint[k].z<hmin) hmin = m_CtrlPoint[k].z;
 		if(m_CtrlPoint[k].z>hmax) hmax = m_CtrlPoint[k].z;
 	}
-	return fabs(hmax-hmin);
+	return fabs(hmax-hmin);*/
 }
 
 

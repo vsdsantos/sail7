@@ -57,8 +57,8 @@ class GL3dBodyDlg : public QDialog
 	friend class PlaneDlg;
 
 public:
-	GL3dBodyDlg(void *pParent = NULL);
-
+    GL3dBodyDlg(QWidget *pParent);
+    ~GL3dBodyDlg();
 
 private slots:
 	void OnAxes();
@@ -209,8 +209,6 @@ private:
 	QAction *m_pExportBodyDef, *m_pImportBodyDef, *m_pExportBodyGeom, *m_pTranslateBody;// *m_pSetupLight;
 	QAction *m_pGrid;
 
-//	double m_RefLength;//Order of magnitude for the body's length
-
 	CBody m_TmpPic;
 	CBody m_UndoPic[20];
 	int m_StackPos, m_StackSize;// undo : current stack position and current stack size
@@ -229,7 +227,7 @@ private:
 	CPanel *m_pPanel;
 	CVector *m_pNode;
 
-	BodyGridDlg m_BodyGridDlg;
+    BodyGridDlg *m_BodyGridDlg;
 
 	static QList<void*> *s_poaBody;
 

@@ -1707,32 +1707,27 @@ double SplineBlend(int const &index, int const &p, double const &t, double *knot
 //	   t       is the spline parameter
 //
 	static double eps = 1.e-6;
-	double value;
 
 	if(p==0)
 	{
-		if ((knots[index] <= t) && (t <= knots[index+1]) ) value = 1.0;
-//		else if (abs(knots[index]-knots[index+1])<pres)   value = 0.0;
-		else                                              value = 0.0;
+		if ((knots[index] <= t) && (t < knots[index+1]) ) return 1.0;
+		else                                              return 0.0;
 	}
 	else
 	{
 		if (fabs(knots[index+p] - knots[index])<eps && fabs(knots[index+p+1] - knots[index+1])<eps)
-			value = 0.0;
-		else if (fabs(knots[index+p] - knots[index])<eps)
-			value = (knots[index+p+1]-t) / (knots[index+p+1]-knots[index+1])  * SplineBlend(index+1, p-1, t, knots);
-		else if (fabs(knots[index+p+1] - knots[index+1])<eps)
-			value = (t-knots[index])     / (knots[index+p] - knots[index])    * SplineBlend(index,   p-1, t, knots);
-		else
-			value = (t-knots[index])     / (knots[index+p]  -knots[index])    * SplineBlend(index,   p-1, t, knots) +
-					(knots[index+p+1]-t) / (knots[index+p+1]-knots[index+1])  * SplineBlend(index+1 ,p-1, t, knots);
-	}
-	return value;
-}
+			return 0.0;
 
-double round(double d, int n)
-{
-	return qRound(d*pow(10,n))/pow(10, n);
+		else if (fabs(knots[index+p] - knots[index])<eps)
+			return (knots[index+p+1]-t) / (knots[index+p+1]-knots[index+1])  * SplineBlend(index+1, p-1, t, knots);
+
+		else if (fabs(knots[index+p+1] - knots[index+1])<eps)
+			return (t-knots[index])     / (knots[index+p] - knots[index])    * SplineBlend(index,   p-1, t, knots);
+
+		else
+			return (t-knots[index])     / (knots[index+p]  -knots[index])    * SplineBlend(index,   p-1, t, knots) +
+				   (knots[index+p+1]-t) / (knots[index+p+1]-knots[index+1])  * SplineBlend(index+1 ,p-1, t, knots);
+	}
 }
 
 

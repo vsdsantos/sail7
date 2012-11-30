@@ -40,7 +40,7 @@ public:
 	bool IntersectNURBS(CVector A, CVector B, CVector &I, bool bRight);
 	bool SerializeBody(QDataStream &ar, bool bIsStoring, int ProjectFormat=5);
 	bool ImportDefinition(QTextStream &inStream, double mtoUnit);
-	bool ExportDefinition(QTextStream &outStream, double mtoUnit) ;
+	bool ExportDefinition() ;
 
 
 	int InsertFrame(CVector Real);
@@ -50,13 +50,13 @@ public:
 	int ReadFrame(QTextStream &in, int &Line, CFrame *pFrame, double const &Unit);
 
 	double Length();
-	double Getu(double x);
+	double Getu(double x, bool bTrace=false);
 	double Getv(double u, CVector r, bool bRight);
 	double GetSectionArcLength(double x);
 
 	CVector LeadingPoint();
 
-	void ComputeAero(double *Cp, double &XCP, double &YCP,
+    void ComputeAero(double *Cp, double &XCP, double &YCP, double &ZCP,
 					 double &GCm, double &GRm, double &GYm, double &Alpha, CVector &CoG);
 //	void ComputeCenterLine();
 	void Duplicate(CBody *pBody);
@@ -77,8 +77,10 @@ public:
 	CFrame *Frame(int k);
 	CFrame *ActiveFrame();
 	void SetActiveFrame(CFrame *pFrame);
-	int FrameSize(){return m_SplineSurface.m_pFrame.size();};
 	double FramePosition(int iFrame);
+	int FrameSize()       {return m_SplineSurface.FrameSize();};
+	int FramePointCount() {return m_SplineSurface.FramePointCount();};
+	int SideLineCount()   {return m_SplineSurface.FramePointCount();};// same as FramePointCount();
 
 	void ComputeBodyAxisInertia();
 	void ComputeVolumeInertia(CVector &CoG, double &CoGIxx, double &CoGIyy, double &CoGIzz, double &CoGIxz);
@@ -86,10 +88,11 @@ public:
 
 
 	//____________________VARIABLES_____________________________________________
+	static void* s_pMainFrame;		//pointer to the Frame window
 
 	NURBSSurface m_SplineSurface;
 
-	int m_NSideLines;
+//	int m_NSideLines;
 //	int m_NStations;			// the number of stations along x-axis where frames are defined
 	int m_iActiveFrame;		// the currently selected frame for display
 	int m_iHighlight;		// the currently selected frame for display
@@ -103,10 +106,10 @@ public:
 
 	CVector m_CoG;
 	double m_VolumeMass, m_TotalMass;	    //for inertia calculations
-	double m_MassValue[MAXMASSES];
-	int m_NMass; //number of point mass values
-	CVector m_MassPosition[MAXMASSES];
-	QString m_MassTag[MAXMASSES];
+//	int m_NMass; //number of point mass values
+	QList<double> m_MassValue;
+	QList<CVector> m_MassPosition;
+	QStringList m_MassTag;
 	double m_CoGIxx,m_CoGIyy,m_CoGIzz,m_CoGIxz;
 
 	QString m_BodyName;
