@@ -1696,37 +1696,37 @@ bool Invert44(double*ain, double *aout)
 
 
 
-double SplineBlend(int const &index, int const &p, double const &t, double *knots)
+double SplineBlend(int const &index, int const &degree, double const &t, double *knots)
 {
 //	Calculate the blending value, this is done recursively.
 //	If the numerator and denominator are 0 the expression is 0.
 //	If the denominator is 0 the expression is 0
 //
-//	   index   is the control point's index
-//	   p       is the spline's degree
-//	   t       is the spline parameter
+//	   index    is the control point's index
+//	   degree   is the spline's degree
+//	   t        is the spline parameter
 //
 	static double eps = 1.e-6;
 
-	if(p==0)
+	if(degree==0)
 	{
 		if ((knots[index] <= t) && (t < knots[index+1]) ) return 1.0;
 		else                                              return 0.0;
 	}
 	else
 	{
-		if (fabs(knots[index+p] - knots[index])<eps && fabs(knots[index+p+1] - knots[index+1])<eps)
+		if (fabs(knots[index+degree] - knots[index])<eps && fabs(knots[index+degree+1] - knots[index+1])<eps)
 			return 0.0;
 
-		else if (fabs(knots[index+p] - knots[index])<eps)
-			return (knots[index+p+1]-t) / (knots[index+p+1]-knots[index+1])  * SplineBlend(index+1, p-1, t, knots);
+		else if (fabs(knots[index+degree] - knots[index])<eps)
+			return (knots[index+degree+1]-t) / (knots[index+degree+1]-knots[index+1])  * SplineBlend(index+1, degree-1, t, knots);
 
-		else if (fabs(knots[index+p+1] - knots[index+1])<eps)
-			return (t-knots[index])     / (knots[index+p] - knots[index])    * SplineBlend(index,   p-1, t, knots);
+		else if (fabs(knots[index+degree+1] - knots[index+1])<eps)
+			return (t-knots[index])     / (knots[index+degree] - knots[index])    * SplineBlend(index,   degree-1, t, knots);
 
 		else
-			return (t-knots[index])     / (knots[index+p]  -knots[index])    * SplineBlend(index,   p-1, t, knots) +
-				   (knots[index+p+1]-t) / (knots[index+p+1]-knots[index+1])  * SplineBlend(index+1 ,p-1, t, knots);
+			return (t-knots[index])     / (knots[index+degree]  -knots[index])    * SplineBlend(index,   degree-1, t, knots) +
+				   (knots[index+degree+1]-t) / (knots[index+degree+1]-knots[index+1])  * SplineBlend(index+1 ,degree-1, t, knots);
 	}
 }
 

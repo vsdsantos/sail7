@@ -93,6 +93,6 @@ void VLMQmn(CVector const &LA, CVector const &LB, CVector const &TA, CVector con
 
 bool Intersect(CVector const &LA, CVector const &LB, CVector const &TA, CVector const &TB, CVector const &Normal, CVector const &A,  CVector const &U,  CVector &I, double &dist);
 
-double SplineBlend(int const &index, int const &p, double const &t, double *knots);
+double SplineBlend(int const &index, int const &degree, double const &t, double *knots);
 
 #endif // FUNCTIONS_H

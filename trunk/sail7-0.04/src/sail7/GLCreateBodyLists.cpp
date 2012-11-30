@@ -159,7 +159,7 @@ void GLCreateBody3DSplines(void *pParent, int iList, CBody *pBody, int nx, int n
 		// sides
 		for (i=0; i<pBody->FrameSize(); i++)
 		{
-			u = pBody->Getu(pBody->Frame(i)->m_Position.x, i==3);
+			u = pBody->Getu(pBody->Frame(i)->m_Position.x);
 			glBegin(GL_LINE_STRIP);
 			{
 				v = 0.0;
