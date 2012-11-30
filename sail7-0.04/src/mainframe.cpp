@@ -448,8 +448,9 @@ void MainFrame::CreateDockWindows()
 	GraphDlg::s_pMainFrame             = this;
 	BoatDlg::s_pMainFrame              = this;
 	BoatPolarDlg::s_pMainFrame         = this;
-	BoatPolar::s_pMainFrame           = this;
-	BoatOpp::s_pMainFrame             = this;
+	BoatPolar::s_pMainFrame            = this;
+	BoatOpp::s_pMainFrame              = this;
+	CBody::s_pMainFrame                = this;
 	BoatAnalysisDlg::s_pMainFrame      = this;
 	GL3DScales::s_pMainFrame           = this;
 	DisplaySettingsDlg::s_pMainFrame   = this;
