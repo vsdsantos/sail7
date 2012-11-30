@@ -56,7 +56,7 @@ NURBSSurface::NURBSSurface(int iAxis)
 
 
 
-double NURBSSurface::Getu(double pos, double v, bool bTrace)
+double NURBSSurface::Getu(double pos, double v)
 {
 	if(pos<=m_pFrame.first()->m_Position[m_uAxis]) return 0.0;
 	if(pos>=m_pFrame.last()->m_Position[m_uAxis])  return 1.0;
@@ -80,7 +80,6 @@ double NURBSSurface::Getu(double pos, double v, bool bTrace)
 			}
 			zz += zh * SplineBlend(iu, m_iuDegree, u, m_uKnots);
 		}
-//if(bTrace)		qDebug("%3d     pos=%11.7f     zz=%11.7f      u=%11.7f   u1=%11.7f   u2=%11.7f   ",iter, pos, zz,u,u1,u2);
 		if(zz>pos) u2 = u;
 		else       u1 = u;
 		iter++;

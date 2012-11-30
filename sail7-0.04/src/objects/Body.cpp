@@ -484,9 +484,9 @@ void CBody::GetPoint(double u, double v, bool bRight, CVector &Pt)
 
 
 
-double CBody::Getu(double x, bool bTrace)
+double CBody::Getu(double x)
 {
-	return m_SplineSurface.Getu(x,0.0, bTrace);
+	return m_SplineSurface.Getu(x,0.0);
 }
 
 

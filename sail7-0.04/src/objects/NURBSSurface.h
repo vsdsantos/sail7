@@ -23,7 +23,7 @@ class NURBSSurface
 public:
 	NURBSSurface(int iAxis=0);
 	void SetKnots();
-	double Getu(double pos, double v, bool bTrace=false);
+	double Getu(double pos, double v);
 	double Getv(double u, CVector r);
 	void GetPoint(double u, double v, CVector &Pt);
 	bool IntersectNURBS(CVector A, CVector B, CVector &I);
