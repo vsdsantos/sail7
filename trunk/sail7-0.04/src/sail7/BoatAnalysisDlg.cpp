@@ -1136,7 +1136,8 @@ void BoatAnalysisDlg::StartAnalysis()
 
 
 
-void BoatAnalysisDlg::SetWindAxis(double const Beta)
+void BoatAnalysisDlg::SetWindAxis(double const Beta,
+								  CVector &WindDirection, CVector & WindNormal, CVector &WindSide)
 {
 	double cosb, sinb;
 
@@ -1144,11 +1145,10 @@ void BoatAnalysisDlg::SetWindAxis(double const Beta)
 	sinb = sin(Beta*PI/180.0);
 
 	//   Define wind (stability) axis
-	m_WindDirection.Set(cosb, sinb, 0.0);
-	m_WindNormal.Set(-sinb,cosb,0);
-	m_WindSide      = m_WindNormal * m_WindDirection;
+	WindDirection.Set(cosb, sinb, 0.0);
+	WindNormal.Set(-sinb,cosb,0);
+	WindSide      = WindNormal * WindDirection;
 
-	m_VInf.Set(m_QInf*cosb, m_QInf*sinb, 0.0);
 }
 
 
@@ -1168,7 +1168,9 @@ void BoatAnalysisDlg::SetAngles(BoatPolar *pBoatPolar, double Ctrl, bool bBCOnly
 	m_QInf = (1.0-Ctrl) * pBoatPolar->m_QInfMin + Ctrl * pBoatPolar->m_QInfMax;
 	m_Phi  = (1.0-Ctrl) * pBoatPolar->m_PhiMin  + Ctrl * pBoatPolar->m_PhiMax;
 	m_Beta = (1.0-Ctrl) * pBoatPolar->m_BetaMin + Ctrl * pBoatPolar->m_BetaMax;
-	SetWindAxis(m_Beta);
+
+	SetWindAxis(m_Beta, m_WindDirection, m_WindNormal, m_WindSide);
+	m_VInf = m_WindDirection * m_QInf;
 
 
 	//rotate the sails around the masts
