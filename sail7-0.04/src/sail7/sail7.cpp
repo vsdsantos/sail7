@@ -108,7 +108,7 @@ QSail7::QSail7(QWidget *parent)
 	m_bSequence      = false;
 	m_bLogFile       = false;
 	m_bStoreOpp      = true;
-	m_bAutoCpScale   = true;
+
 	m_bTransGraph    = false;
 	m_bAnimateBoatOpp = false;
 	m_bAnimateBoatOppPlus = true;
@@ -125,10 +125,8 @@ QSail7::QSail7(QWidget *parent)
 
 	m_glScaled = 1.0;
 	m_GLScale = 1.0;
-	m_LegendMin = -1.0;
-	m_LegendMax =  1.0;
 	m_ForceMin = m_ForceMax = 0.0;
-	m_LiftScale = m_DragScale = m_VelocityScale = 1.0;
+
 
 	m_ControlMin = 0.0;
 	m_ControlMax = 1.0;
@@ -1012,7 +1010,7 @@ void QSail7::GLDraw3D()
 		}
 		if(m_pCurBoatOpp)
 		{
-			GLCreateCpLegendClr(m_r3DCltRect, m_LegendMin, m_LegendMax);
+			GLCreateCpLegendClr(m_r3DCltRect, GL3DScales::s_LegendMin, GL3DScales::s_LegendMax);
 			m_GLList++;
 		}
 		m_bResetglLegend = false;
@@ -1171,7 +1169,7 @@ void QSail7::GLRenderView()
 		glDisable(GL_CLIP_PLANE1);
 		if (m_b3DCp && m_pCurBoatOpp)
 		{
-			GLDrawCpLegend(s_p3DWidget, m_r3DCltRect, m_LegendMin, m_LegendMax, pMainFrame->m_TextFont, pMainFrame->m_TextColor);
+			GLDrawCpLegend(s_p3DWidget, m_r3DCltRect, GL3DScales::s_LegendMin, GL3DScales::s_LegendMax, pMainFrame->m_TextFont, pMainFrame->m_TextColor);
 			//glCallList(WOPPCPLEGENDTXT);
 			glCallList(PANELCPLEGENDCOLOR);
 		}
@@ -3760,10 +3758,6 @@ void QSail7::LoadSettings(QSettings *pSettings)
 		m_ControlMin    = pSettings->value("ControlMin", 0.0).toDouble();
 		m_ControlMax    = pSettings->value("ControlMax", 1.0).toDouble();
 		m_ControlDelta  = pSettings->value("ControlDelta", 0.25).toDouble();
-		m_bAutoCpScale  = pSettings->value("AutoCpScale", true).toBool();
-
-		m_LegendMin     = pSettings->value("LegendMin",-1.0).toDouble();
-		m_LegendMax     = pSettings->value("LegendMax",1.0).toDouble();
 
 		m_bWater         = pSettings->value("bWater", false).toBool();
 		m_bWindDirection = pSettings->value("bWindDir", false).toBool();
@@ -3777,8 +3771,8 @@ void QSail7::LoadSettings(QSettings *pSettings)
 		m_b3DCp          = pSettings->value("b3DCp", false).toBool();
 		m_bDownwash      = pSettings->value("bDownwash", false).toBool();
 		m_bMoments       = pSettings->value("bMoments", false).toBool();
-		m_bAutoCpScale   = pSettings->value("bAutoCpScale", true).toBool();
 		m_bglLight       = pSettings->value("bLight", true).toBool();
+
 		SailViewWidget::s_bAxes      = m_bAxes;
 		SailViewWidget::s_bOutline   = m_bOutline;
 		SailViewWidget::s_bSurfaces  = m_bSurfaces;
@@ -3841,11 +3835,6 @@ void QSail7::SaveSettings(QSettings *pSettings)
 		pSettings->setValue("ControlMin", m_ControlMin );
 		pSettings->setValue("ControlMax", m_ControlMax );
 		pSettings->setValue("ControlDelta", m_ControlDelta );
-		pSettings->setValue("AutoCpScale", m_bAutoCpScale);
-
-		pSettings->setValue("LegendMin", m_LegendMin);
-		pSettings->setValue("LegendMax", m_LegendMax);
-
 		pSettings->setValue("bWater", m_bWater);
 		pSettings->setValue("bWindDir", m_bWindDirection);
 		pSettings->setValue("bForce", m_bForce);
@@ -5647,7 +5636,7 @@ void QSail7::GLCreatePanelForces(BoatOpp *pBoatOpp)
 				force = 0.5*m_pCurBoatPolar->m_Density *pBoatOpp->m_QInf*pBoatOpp->m_QInf *pBoatOpp->m_Cp[pp]*pPanel->GetArea();
 				color = (force-m_ForceMin)/range;
 				glColor3d(GLGetRed(color),GLGetGreen(color),GLGetBlue(color));
-				force *= m_LiftScale *coef;
+				force *= GL3DScales::s_LiftScale *coef;
 
 				O = pPanel->CtrlPt;
 
@@ -5740,7 +5729,7 @@ void QSail7::GLCreatePanelForces(BoatOpp *pBoatOpp)
 				force = 0.5*m_pCurBoatPolar->m_Density *pBoatOpp->m_QInf*pBoatOpp->m_QInf *pBoatOpp->m_Cp[pp]*pPanel->GetArea();
 				color = (force-m_ForceMin)/range;
 				glColor3d(GLGetRed(color),GLGetGreen(color),GLGetBlue(color));
-				force *= m_LiftScale *coef;
+				force *= GL3DScales::s_LiftScale *coef;
 
 				O = pPanel->CollPt;
 
@@ -6067,15 +6056,15 @@ void QSail7::GLCreateCp(BoatOpp *pBoatOpp)
 		}
 	}
 
-	if(m_bAutoCpScale)
+	if(GL3DScales::s_bAutoCpScale)
 	{
-		m_LegendMin = lmin;
-		m_LegendMax = lmax;
+		GL3DScales::s_LegendMin = lmin;
+		GL3DScales::s_LegendMax = lmax;
 	}
 	else
 	{
-		lmin = m_LegendMin;
-		lmax = m_LegendMax;
+		lmin = GL3DScales::s_LegendMin;
+		lmax = GL3DScales::s_LegendMax;
 	}
 	range = lmax - lmin;
 
@@ -6759,7 +6748,7 @@ void QSail7::GLCreateSurfSpeeds()
 	double x1, x2, y1, y2, z1, z2, xe, ye, ze, dlx, dlz;
 	CVector C, V, VT, VInf;
 
-	factor = m_VelocityScale/100.0;
+	factor = GL3DScales::s_VelocityScale/100.0;
 
 	Mu    = m_pCurBoatOpp->m_G;
 	Sigma = m_pCurBoatOpp->m_Sigma;
@@ -6904,10 +6893,12 @@ void QSail7::OnBoatOppProps()
 }
 
 
-
 void QSail7::GLCreateForce()
 {
+	if(!m_pCurBoatOpp) return;
+	CVector WindDir, WindNormal, WindSide;
 	int style=W3dPrefsDlg::s_XCPStyle;
+	BoatAnalysisDlg::SetWindAxis(m_pCurBoatOpp->m_Beta, WindDir, WindNormal, WindSide);
 
 	glNewList(LIFTFORCE, GL_COMPILE);
 	{
@@ -6924,19 +6915,12 @@ void QSail7::GLCreateForce()
 		else if(style == Qt::DashDotDotLine) glLineStipple (1, 0x7E66);
 		else                                 glLineStipple (1, 0xFFFF);
 
-		double coef = 1./200.0;
-		double force;
-	//	CVector Force = m_pCurBoatOpp->F * -m_LiftScale/50.0;
-		CVector FN = m_pCurBoatOpp->F;
-		FN.Normalize();
+		double coef = 1./200.0 *GL3DScales::s_LiftScale;
 
-		force = m_pCurBoatOpp->F.VAbs();
-		force *= m_LiftScale *coef;
-
-		// Rotate the reference arrow to align it with the panel normal
 
 		ThreeDWidget *p3DWidget = (ThreeDWidget*)s_p3DWidget;
-		p3DWidget->GLDrawArrow(m_pCurBoatPolar->m_CoG, FN, force);
+		p3DWidget->GLDrawArrow(m_pCurBoatPolar->m_CoG, WindNormal, m_pCurBoatOpp->m_Lift * coef);
+		p3DWidget->GLDrawArrow(m_pCurBoatPolar->m_CoG, WindDir,    m_pCurBoatOpp->m_Drag * coef);
 
 
 		glDisable (GL_LINE_STIPPLE);

@@ -229,6 +229,8 @@ public:
 	void GLCreateWaterList();
 	void GLCreateWindList();
 	void GLCreateStreamLines();
+
+	/** Creates the OpenGl list for lift and drag arrows.  Uses the force calculed in the Trefftz plane.*/
 	void GLCreateForce();
 	void GLDrawBoatLegend();
 	void GLDrawBoatOppLegend();
@@ -278,9 +280,9 @@ private:
 	int m_iBoatPlrView;
 	int m_GLList;
 	bool m_bArcball, m_bCrossPoint, m_bPickCenter;
-	bool m_b3DCp;                      // true if the Cp Colors are to be displayed on the 3D openGl view
-	bool m_bDownwash;                  // true if the arrows represeting downwash are to be displayed on the 3D openGl view
-	bool m_bMoments;                   // true if the arrows representing moments are to be displayed on the 3D openGl view
+	bool m_b3DCp;                      /** true if the Cp Colors are to be displayed on the 3D openGl view */
+	bool m_bDownwash;                  /** true if the arrows represeting downwash are to be displayed on the 3D openGl view */
+	bool m_bMoments;                   /** true if the arrows representing moments are to be displayed on the 3D openGl view */
 	bool m_bVortices;
 	bool m_bForce;
 	bool m_bPanelForce;
@@ -290,12 +292,11 @@ private:
 	bool m_bSequence;
 	bool m_bTrefftz;
 	bool m_bLogFile;
-	bool m_bAutoCpScale;
 	bool m_bTransGraph;
 	bool m_bAnimateBoatOpp;
 	bool m_bAnimateBoatOppPlus;
 
-	bool m_bSurfaces, m_bOutline, m_bAxes, m_bVLMPanels; // true if the surfaces, outline, axes or panels are to be displayed
+	bool m_bSurfaces, m_bOutline, m_bAxes, m_bVLMPanels; /** true if the surfaces, outline, axes or panels are to be displayed */
 	bool m_bTrans;
 	bool m_bResetglBoat;
 	bool m_bResetglBody;
@@ -312,8 +313,6 @@ private:
 	bool m_bXPressed, m_bYPressed;
 	bool m_bWindFront, m_bWindRear;
 
-	double m_LiftScale, m_DragScale, m_VelocityScale;  //maximum value of hte Cp scale in 3D view
-	double m_LegendMin, m_LegendMax;
 	double m_ForceMin, m_ForceMax;
 	double m_ClipPlanePos;
 	double m_glScaled;

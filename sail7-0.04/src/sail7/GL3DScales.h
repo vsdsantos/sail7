@@ -31,7 +31,7 @@ class GL3DScales : public QWidget
 {
 	Q_OBJECT
 	friend class MainFrame;
-//	friend class QSail7;
+	friend class QSail7;
 
 public:
 	GL3DScales(QWidget *parent = NULL);
@@ -74,8 +74,11 @@ private:
 	static void *s_pSail7;
 	static void *s_pMainFrame;
 
-	
-public:
+	static 	bool s_bAutoCpScale;
+
+	static double s_LiftScale, s_DragScale, s_VelocityScale;
+	static double s_LegendMin, s_LegendMax;
+
 	static enumStreamLine s_pos;
 	static int s_NX, s_NStreamLines;
 	static double s_StreamlineSpacing;

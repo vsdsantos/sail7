@@ -63,7 +63,8 @@ bool BoatOpp::SerializeBoatOpp(QDataStream &ar, bool bIsStoring)
 
 	if(bIsStoring)
 	{
-		ar << 100001;
+		ar << 100002;
+		//100002 : added lift and drag
 		//100001 : first file format
 
 		WriteCString(ar, m_BoatName);
@@ -95,9 +96,10 @@ bool BoatOpp::SerializeBoatOpp(QDataStream &ar, bool bIsStoring)
 		for (p=0; p<m_NVLMPanels;p++)	ar << (float)m_G[p] ;
 		for (p=0; p<m_NVLMPanels;p++)	ar << (float)m_Sigma[p] ;
 
+		ar << (float)m_Lift << (float)m_Drag;
 		//provision
 		{
-			for(int i=1; i<20; i++) ar<<(float)0.0f;
+			for(int i=3; i<20; i++) ar<<(float)0.0f;
 			for(int i=0; i<20; i++) ar<<0;
 		}
 	}
@@ -154,8 +156,11 @@ bool BoatOpp::SerializeBoatOpp(QDataStream &ar, bool bIsStoring)
 			ar >> f; m_Sigma[p] = f;
 		}
 
+		ar >> f; m_Lift=f;
+		ar >> f; m_Drag=f;
+
 		//provision
-		for(int i=1; i<20; i++) ar>>f;
+		for(int i=3; i<20; i++) ar>>f;
 		for(int i=0; i<20; i++) ar>>k;
 
 	}

@@ -76,7 +76,7 @@ private:
 	void SourceNASA4023(CVector const &C, CPanel *pPanel, CVector &V, double &phi);
 	void SetAngles(BoatPolar *pBoatPolar, double Ctrl, bool bBCOnly=true);
 	void SetupLayout();
-	void SetWindAxis(double const Beta);
+	static void SetWindAxis(double const Beta, CVector &WindDirection, CVector & WindNormal, CVector &WindSide);
 	void StartAnalysis();
 	void UpdateView();
 	void WriteString(QString strong);
