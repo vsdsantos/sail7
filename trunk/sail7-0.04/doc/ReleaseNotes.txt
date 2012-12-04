@@ -15,9 +15,10 @@
 *******************************************************************************
 
 
-sail7 v0.04 November 30th, 2012
+sail7 v0.04 December 30th, 2012
 	- Added lift and drag to the graphic results
 	- Corrected a bug in the display of bodies
+	- Improved the selection of points in the sail section view
 
 
 

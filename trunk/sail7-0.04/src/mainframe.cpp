@@ -48,7 +48,7 @@ QPointer<MainFrame> MainFrame::_self = 0L;
 MainFrame::MainFrame(QWidget *parent, Qt::WFlags flags)
 	: QMainWindow(parent, flags)
 {
-	m_VersionName = QString::fromLatin1("sail7 v0.03 alpha");
+	m_VersionName = QString::fromLatin1("sail7 v0.04 alpha");
 	QString jpegPluginPath;
 
 	//Jpeg format requires a specific plugin to be loaded dynmically at run time
