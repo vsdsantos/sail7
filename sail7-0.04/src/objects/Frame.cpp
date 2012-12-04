@@ -23,7 +23,7 @@
 #include <math.h>
 #include "../params.h"
 
-
+#include <QtDebug>
 
 CFrame::CFrame(int nCtrlPts)
 {
@@ -47,9 +47,11 @@ int CFrame::IsPoint(const CVector &Point, const double &ZoomFactor)
     int l;
 	for(l=0; l<m_CtrlPoint.size(); l++)
 	{
+
 		if(sqrt(  (Point.x-m_CtrlPoint[l].x)*(Point.x-m_CtrlPoint[l].x)
 				+ (Point.y-m_CtrlPoint[l].y)*(Point.y-m_CtrlPoint[l].y)
-				+ (Point.z-m_CtrlPoint[l].z)*(Point.z-m_CtrlPoint[l].z))<0.05*Height()/ZoomFactor)
+				+ (Point.z-m_CtrlPoint[l].z)*(Point.z-m_CtrlPoint[l].z))<0.05/ZoomFactor)
+//			+ (Point.z-m_CtrlPoint[l].z)*(Point.z-m_CtrlPoint[l].z))<0.05*Height()/ZoomFactor)
 			  return l;
 //        if (fabs(Point.x-m_CtrlPoint[l].y)<0.005/ZoomFactor && fabs(Point.y-m_CtrlPoint[l].z)<0.005/ZoomFactor) return l;
 	}
