@@ -363,7 +363,7 @@ void SailDlg::SetupLayout()
 						QGridLayout *pSailShapeLayout = new QGridLayout;
 						{
 							m_pctrlLuffAngle     = new FloatEdit(0,1);
-							m_pctrlGaffTwist  = new FloatEdit(0.0,1);
+							m_pctrlGaffTwist     = new FloatEdit(0.0,1);
 							m_pctrlLeechRound    = new FloatEdit(0.0,2);
 							m_pctrlLeechRoundPos = new FloatEdit(40,1);
 							QLabel *labLuff = new QLabel("Luff angle =");
@@ -783,16 +783,17 @@ void SailDlg::FillSectionTable()
 
 void SailDlg::ReadData()
 {
+	if(!m_pSail) return;
 	m_pSail->m_SailName = m_pctrlSailName->text();
 
 	m_pSail->m_NXPanels = m_pctrlNXPanels->Value();
 	m_pSail->m_NZPanels = m_pctrlNZPanels->Value();
 
-	m_pSail->m_LuffAngle = m_pctrlLuffAngle->Value();
 
 	if(m_pSail->IsSailcutSail())
 	{
 		SailcutSail *pSCSail = (SailcutSail*)m_pSail;
+		pSCSail->m_LuffAngle = m_pctrlLuffAngle->Value();
 		pSCSail->m_Twist = m_pctrlGaffTwist->Value();
 		pSCSail->m_LeechRound = m_pctrlLeechRound->Value();
 		pSCSail->m_LeechRoundPos = m_pctrlLeechRoundPos->Value()/100.0;
@@ -800,6 +801,12 @@ void SailDlg::ReadData()
 
 		ReadSectionData();
 		pSCSail->SplineSurface();
+	}
+	else
+	{
+		NURBSSail *pNSail =(NURBSSail*)m_pSail;
+		CVector LE = pNSail->m_SplineSurface.LeadingEdgeAxis();
+		pNSail->m_LuffAngle = atan2(LE.x, LE.z) * 180./PI;
 	}
 }
 

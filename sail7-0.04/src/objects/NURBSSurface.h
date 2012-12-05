@@ -35,6 +35,8 @@ public:
 	void InsertFrame(CFrame *pNewFrame);
 	CFrame *AppendFrame();
 
+	CVector LeadingEdgeAxis();
+
 	double Weight(const double &d, int const &i, int const &N);
 
 	int FrameSize() {return m_pFrame.size();};

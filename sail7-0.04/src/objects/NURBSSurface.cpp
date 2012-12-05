@@ -351,3 +351,10 @@ CFrame * NURBSSurface::AppendFrame()
 	m_pFrame.append(new CFrame);
 	return m_pFrame.last();
 }
+
+
+
+CVector NURBSSurface::LeadingEdgeAxis()
+{
+	return (m_pFrame.last()->m_CtrlPoint.first() - m_pFrame.first()->m_CtrlPoint.first());
+}

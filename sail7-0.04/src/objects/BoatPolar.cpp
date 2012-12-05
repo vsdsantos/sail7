@@ -437,7 +437,7 @@ QString BoatPolar::GetPolarVariableName(int iVar)
 
 
 
-void BoatPolar::GetPolarProperties(QString &PolarProperties, bool bData)
+void BoatPolar::GetPolarProperties(QString &PolarProperties, int FileType, bool bData)
 {
 	QSail7 *pSail7 = (QSail7*)s_pSail7;
 	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
@@ -516,7 +516,7 @@ void BoatPolar::GetPolarProperties(QString &PolarProperties, bool bData)
 	QTextStream out;
 	strong.clear();
 	out.setString(&strong);
-	Export(out, pMainFrame->m_ExportFileType, true);
+	Export(out, FileType, true);
 	PolarProperties += "\n"+strong;
 }
 
@@ -543,23 +543,23 @@ void BoatPolar::Export(QTextStream &out, int FileType, bool bDataOnly)
 		}
 
 
-		Header = "   Ctrl      Lift       Drag       FFFx         FFFy      FFFz       Fx         Fy         Fz         Mx         My         Mz    \n";
+		Header = "     Ctrl      Lift       Drag       FFFx         FFFy      FFFz       Fx         Fy         Fz         Mx         My         Mz    \n";
 		out << Header;
 		for (j=0; j<m_Ctrl.size(); j++)
 		{
 			strong = QString(" %1  %2  %3  %4  %5  %6  %7  %8  %9  %10  %11  %12\n")
 					 .arg(m_Ctrl[j],8,'f',3)
-					.arg(m_Lift[j], 9,'f',6)
-					.arg(m_Drag[j], 9,'f',6)
-					.arg(m_FFFx[j], 9,'f',6)
-					 .arg(m_FFFy[j],9,'f',6)
-					 .arg(m_FFFz[j],9,'f',6)
-					 .arg(m_Fx[j],9,'f',6)
-					 .arg(m_Fy[j] ,9,'f',6)
-					 .arg(m_Fz[j],9,'f',6)
-					 .arg(m_Mx[j],9,'f',6)
-					 .arg(m_My[j],9,'f',6)
-					 .arg(m_Mz[j],9,'f',6);
+					 .arg(m_Lift[j], 9,'f',3)
+					 .arg(m_Drag[j], 9,'f',3)
+					 .arg(m_FFFx[j], 9,'f',3)
+					 .arg(m_FFFy[j],9,'f',3)
+					 .arg(m_FFFz[j],9,'f',3)
+					 .arg(m_Fx[j],9,'f',3)
+					 .arg(m_Fy[j] ,9,'f',3)
+					 .arg(m_Fz[j],9,'f',3)
+					 .arg(m_Mx[j],9,'f',3)
+					 .arg(m_My[j],9,'f',3)
+					 .arg(m_Mz[j],9,'f',3);
 
 			out << strong;
 		}
@@ -581,17 +581,17 @@ void BoatPolar::Export(QTextStream &out, int FileType, bool bDataOnly)
 //			strong.Format(" %8.3f,  %9.6f,  %9.6f,  %9.6f,  %9.6f,  %9.6f,  %9.6f,  %9.6f,  %8.4f,  %9.4f\n",
 			strong = QString(" %1,  %2,  %3,  %4,  %5,  %6,  %7,  %8,  %9,  %10,  %11,  %12\n")
 					   .arg(m_Ctrl[j],8,'f',3)
-					   .arg(m_Lift[j], 9,'f',6)
-					   .arg(m_Drag[j], 9,'f',6)
-					   .arg(m_FFFx[j], 9,'f',6)
-					   .arg(m_FFFy[j],9,'f',6)
-					   .arg(m_FFFz[j],9,'f',6)
-					   .arg(m_Fx[j],9,'f',6)
-					   .arg(m_Fy[j] ,9,'f',6)
-					   .arg(m_Fz[j],9,'f',6)
-					   .arg(m_Mx[j],9,'f',6)
-					   .arg(m_My[j],9,'f',6)
-					   .arg(m_Mz[j],9,'f',6);
+					   .arg(m_Lift[j], 9,'f',3)
+					   .arg(m_Drag[j], 9,'f',3)
+					   .arg(m_FFFx[j], 9,'f',3)
+					   .arg(m_FFFy[j],9,'f',3)
+					   .arg(m_FFFz[j],9,'f',3)
+					   .arg(m_Fx[j],9,'f',3)
+					   .arg(m_Fy[j] ,9,'f',3)
+					   .arg(m_Fz[j],9,'f',3)
+					   .arg(m_Mx[j],9,'f',3)
+					   .arg(m_My[j],9,'f',3)
+					   .arg(m_Mz[j],9,'f',3);
 
 			out << strong;
 
