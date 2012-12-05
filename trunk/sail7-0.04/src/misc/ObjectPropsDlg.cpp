@@ -77,7 +77,7 @@ void ObjectPropsDlg::InitDialog()
 
 	if(m_pBoatPolar)
 	{
-		m_pBoatPolar->GetPolarProperties(strange, true);
+		m_pBoatPolar->GetPolarProperties(strange, 1, true);
 		setWindowTitle(tr("Polar Properties"));
 	}
 	else if(m_pBoatOpp)

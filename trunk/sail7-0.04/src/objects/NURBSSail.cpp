@@ -173,6 +173,7 @@ void NURBSSail::SplineSurface()
 {
 	if(!m_oaSection.size()) return;
 	if(! m_oaSection.first()->m_CtrlPoint.size()) return;
+
 	// set unused corner points
 	tack = m_oaSection.first()->m_CtrlPoint.first();
 	clew = m_oaSection.first()->m_CtrlPoint.last();
@@ -262,6 +263,8 @@ bool NURBSSail::SerializeSail(QDataStream &ar, bool bIsStoring)
 		return true;
 	}
  }
+
+
 
 void NURBSSail::Duplicate(QSail *pSail)
 {
