@@ -257,6 +257,19 @@ void SectionViewWidget::PaintLegend(QPainter &painter)
 		painter.drawText(Place.x(), Place.y() + 5*dD, strtwist);
 	}
 
+	//right side legend
+
+	if(m_pSail->IsNURBSSail())
+	{
+		int YPos = rect().bottom()- dD;
+		int XPos = rect().right() -5;
+
+		NURBSSail *pNSail =(NURBSSail*)m_pSail;
+		CVector LE = pNSail->m_SplineSurface.LeadingEdgeAxis();
+		QString strLuffAngle = QString("Luff Angle = %1").arg(atan2(LE.x, LE.z) * 180./PI, 5,'f',1) + QString::fromUtf8("°");
+		painter.drawText(XPos-fm.width(strLuffAngle), YPos, strLuffAngle);
+	}
+
 	painter.restore();
 }
 

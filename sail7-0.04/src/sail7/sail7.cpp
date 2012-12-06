@@ -711,13 +711,9 @@ void QSail7::keyPressEvent(QKeyEvent *event)
 		}
 		case Qt::Key_F7:
 		{
-			GL3dBodyDlg dlg(pMainFrame);
-			CBody Body;
-			dlg.InitDialog(&Body);
-			dlg.move(GL3dBodyDlg::s_WindowPos);
-			dlg.resize(GL3dBodyDlg::s_WindowSize);
-			if(GL3dBodyDlg::s_bWindowMaximized) dlg.setWindowState(Qt::WindowMaximized);
-
+			NURBSSail *pNewSail = new NURBSSail;
+			SailDlg dlg;
+			dlg.InitDialog(pNewSail);
 			dlg.exec();
 			break;
 		}
@@ -7088,7 +7084,7 @@ void QSail7::GLDrawBoatOppLegend()
 		YPos += dD;
 		p3DWidget->renderText(XPos-fm.width(Result), YPos, Result, pMainFrame->m_TextFont);
 	}
-		//glEndList();
+	//glEndList();
 }
 
 

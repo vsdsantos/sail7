@@ -93,6 +93,51 @@ CVector NURBSSail::GetSectionPoint(int iSection, double xrel)
 	//middle section, needs interpolation
 	SailSection *pSection = m_oaSection.at(iSection);
 
+	double z = pSection->m_Position.z + xrel*pSection->Chord() *sin(-pSection->m_Angle*PI/180.0);
+	double u=0.5, u0=0.0, u1=1.0, ulast=0.0;
+	double dmax=1000.0;
+	int iter=0;
+	CVector Pt, Pt0, Pt1;
+	Pt0 = GetPoint(xrel, u0);
+	Pt1 = GetPoint(xrel, u1);
+	//todo : use u from previous calculation to speed up
+	u = u0 + (u1-u0)/(Pt1.z -Pt0.z) * (z-u0);
+
+	while (dmax>.01  && iter<10)
+	{
+		Pt = GetPoint(xrel, u);
+		if(Pt.z<=z)
+		{
+			u0 = u;
+			Pt0 = Pt;
+		}
+		else
+		{
+			u1 = u;
+			Pt1 = Pt;
+		}
+		ulast = u;
+		u = u0 + (u1-u0) / (Pt1.z -Pt0.z) * (z-Pt0.z);
+		dmax = fabs(u-ulast);
+		iter++;
+//		qDebug("%3d    %13.6f    %13.6f    %13.6f", iter , u0 , u1 , u);
+	}
+//	qDebug()<<"_____________";
+	return Pt;
+}
+
+
+/*
+CVector NURBSSail::GetSectionPoint(int iSection, double xrel)
+{
+	if(iSection>=m_oaSection.size()) return CVector(0.0,0.0,0.0);
+
+	if(iSection==0)	                         return GetPoint(xrel, 0.0);
+	else if(iSection==m_oaSection.size()-1)  return GetPoint(xrel, 1.0);
+
+	//middle section, needs interpolation
+	SailSection *pSection = m_oaSection.at(iSection);
+
 
 	double z = pSection->m_Position.z + xrel*pSection->Chord() *sin(-pSection->m_Angle*PI/180.0);
 	double u=0.5, u0=0.0, u1=1.0;
@@ -109,11 +154,11 @@ CVector NURBSSail::GetSectionPoint(int iSection, double xrel)
 		if(Pt.z<=z)  u0 = u;	else u1 = u;
 		dmax = fabs(u0-u1);
 		iter++;
+		qDebug("%3d    %13.6f    %13.6f    %13.6f", iter , u0 , u1 , u);
 	}
-//	qDebug()<<"cv"<<xrel<<iter<<dmax;
+	qDebug()<<"_____________";
 	return Pt;
-}
-
+}*/
 
 
 void NURBSSail::CreateSection(int iSection)
