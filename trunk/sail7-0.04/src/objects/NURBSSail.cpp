@@ -256,7 +256,9 @@ bool NURBSSail::SerializeSail(QDataStream &ar, bool bIsStoring)
 
 	if(bIsStoring)
 	{	// storing code
-		ar << 133303;
+		ar << 133304;
+		//133304 : no change, but does not require luff angle calc for NURBS sails
+		//133303 : first operational release- requires luff angle calculation for NURBS sails
 		//133302 : twist data
 		//133301 : initial format
 
@@ -294,7 +296,6 @@ bool NURBSSail::SerializeSail(QDataStream &ar, bool bIsStoring)
 		ar >> d;
 		ar >> m_LEPosition.x >> m_LEPosition.z;
 
-
 		ar >> l;
 		m_oaSection.clear();
 		for(int is=0; is<l; is++)
@@ -305,6 +306,13 @@ bool NURBSSail::SerializeSail(QDataStream &ar, bool bIsStoring)
 		}
 
 		SplineSurface();
+
+		if (ArchiveFormat<133304 && IsNURBSSail())
+		{
+			// compute luff angle
+			CVector LE = m_SplineSurface.LeadingEdgeAxis();
+			m_LuffAngle = atan2(LE.x, LE.z) * 180./PI;
+		}
 		return true;
 	}
  }

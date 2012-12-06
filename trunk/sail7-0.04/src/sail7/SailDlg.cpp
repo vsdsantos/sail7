@@ -835,7 +835,7 @@ void SailDlg::OnUpdate()
 	else if(m_pSail->IsSailcutSail())
 	{
 		SailcutSail *pSCSail = (SailcutSail*)m_pSail;
-		m_pSail->SetLuffAngle(m_pctrlLuffAngle->Value());
+		pSCSail->SetLuffAngle(m_pctrlLuffAngle->Value());
 	}
 
 	UpdateSailDataOutput();

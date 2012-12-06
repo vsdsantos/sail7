@@ -46,7 +46,7 @@ public:
 
 private slots:
 	void On3DAxis();
-	void OnWingColor();
+	void OnOutlineColor();
 	void OnXCP();
 	void OnMoments();
 	void OnIDrag();

@@ -429,6 +429,7 @@ void ThreeDWidget::GLDrawAxes(double length, QColor AxisColor, int AxisStyle, in
 	else if(AxisStyle == Qt::DashDotDotLine) glLineStipple(1, 0x7E66);
 	else                                     glLineStipple(1, 0xFFFF);//Solid
 
+
 	// X axis____________
 	glBegin(GL_LINES);
 		glVertex3d(-l, 0.0, 0.0);

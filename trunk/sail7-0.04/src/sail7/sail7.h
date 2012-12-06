@@ -121,6 +121,7 @@ private slots:
 	void OnShowCurve();
 	void OnPanelForce();
 	void OnShowLift();
+	void OnShowBodyForces();
 	void OnShowWind();
 	void OnShowWater();
 	void On3DCp();
@@ -231,7 +232,7 @@ public:
 	void GLCreateStreamLines();
 
 	/** Creates the OpenGl list for lift and drag arrows.  Uses the force calculed in the Trefftz plane.*/
-	void GLCreateForce();
+	void GLDrawForces();
 	void GLDrawBoatLegend();
 	void GLDrawBoatOppLegend();
 	void GLCreateBodyMesh(CVector* pNode, CPanel *pPanel);
@@ -284,7 +285,7 @@ private:
 	bool m_bDownwash;                  /** true if the arrows represeting downwash are to be displayed on the 3D openGl view */
 	bool m_bMoments;                   /** true if the arrows representing moments are to be displayed on the 3D openGl view */
 	bool m_bVortices;
-	bool m_bForce;
+	bool m_bLift, m_bBodyForces;
 	bool m_bPanelForce;
 	bool m_bICd, m_bStream, m_bSpeeds;
 	bool m_bWindDirection, m_bWater;
@@ -342,10 +343,11 @@ private:
 
 	GLLightDlg m_GLLightDlg;
 
-	QCheckBox *m_pctrlPanelForce, *m_pctrlLift, *m_pctrlBOppAnimate;
-	QSlider *m_pctrlAnimateBOppSpeed;
 	QCheckBox *m_pctrlMoment, *m_pctrlCp,*m_pctrlSurfVel, *m_pctrlStream;
 	QCheckBox *m_pctrlWindDirection, *m_pctrlWater;
+	QCheckBox *m_pctrlPanelForce, *m_pctrlLift, *m_pctrlBodyForces;
+	QCheckBox *m_pctrlBOppAnimate;
+	QSlider *m_pctrlAnimateBOppSpeed;
 
 	QAction *m_pXView, *m_pYView, *m_pZView, *m_pIsoView;
 	QToolButton *m_pctrlX, *m_pctrlY, *m_pctrlZ, *m_pctrlIso;
