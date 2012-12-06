@@ -73,7 +73,7 @@ W3dPrefsDlg::W3dPrefsDlg()
 	SetupLayout();
 
 	connect(m_pctrlAxis, SIGNAL(clicked()), SLOT(On3DAxis()));
-	connect(m_pctrlOutline, SIGNAL(clicked()), SLOT(OnWingColor()));
+	connect(m_pctrlOutline, SIGNAL(clicked()), SLOT(OnOutlineColor()));
 	connect(m_pctrlVLMMesh, SIGNAL(clicked()), SLOT(OnVLMMesh()));
 	connect(m_pctrlLift, SIGNAL(clicked()), SLOT(OnXCP()));
 	connect(m_pctrlMoments, SIGNAL(clicked()), SLOT(OnMoments()));
@@ -184,7 +184,7 @@ void W3dPrefsDlg::SetupLayout()
 }
 
 
-void W3dPrefsDlg::OnWingColor()
+void W3dPrefsDlg::OnOutlineColor()
 {
 	LinePickerDlg LPdlg;
 	LPdlg.SetColor(s_OutlineColor);
@@ -199,6 +199,8 @@ void W3dPrefsDlg::OnWingColor()
 	}
 	repaint();
 }
+
+
 
 void W3dPrefsDlg::On3DAxis()
 {

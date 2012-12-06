@@ -258,6 +258,7 @@ void QSail7::SetupLayout()
 			m_pctrlPanelForce = new QCheckBox(tr("Panel Forces"));
 			m_pctrlPanelForce->setToolTip(tr("Display the force 1/2.rho.V2.S.Cp acting on the panel"));
 			m_pctrlLift           = new QCheckBox(tr("Lift"));
+			m_pctrlBodyForces     = new QCheckBox(tr("Body Forces"));
 			m_pctrlMoment         = new QCheckBox(tr("Moment"));
 			m_pctrlCp             = new QCheckBox(tr("Cp"));
 			m_pctrlSurfVel        = new QCheckBox(tr("Surf. Vel."));
@@ -277,7 +278,7 @@ void QSail7::SetupLayout()
 			CheckDispLayout->addWidget(m_pctrlCp,       1,1);
 			CheckDispLayout->addWidget(m_pctrlPanelForce, 1, 2);
 			CheckDispLayout->addWidget(m_pctrlLift,     2, 1);
-			CheckDispLayout->addWidget(m_pctrlMoment,   2, 2);
+			CheckDispLayout->addWidget(m_pctrlBodyForces,   2, 2);
 			CheckDispLayout->addWidget(m_pctrlSurfVel,  4, 1);
 			CheckDispLayout->addWidget(m_pctrlStream,   4, 2);
 			CheckDispLayout->addWidget(m_pctrlWater,  5, 1);
@@ -492,6 +493,7 @@ void QSail7::Connect()
 
 	connect(m_pctrlPanelForce, SIGNAL(clicked()), this, SLOT(OnPanelForce()));
 	connect(m_pctrlLift, SIGNAL(clicked()), this, SLOT(OnShowLift()));
+	connect(m_pctrlBodyForces, SIGNAL(clicked()), this, SLOT(OnShowBodyForces()));
 	connect(m_pctrlCp, SIGNAL(clicked()),this, SLOT(On3DCp()));
 	connect(m_pctrlMoment, SIGNAL(clicked()), this, SLOT(OnMoment()));
 	connect(m_pctrlStream, SIGNAL(clicked()), this, SLOT(OnStreamlines()));
@@ -978,7 +980,7 @@ void QSail7::GLDraw3D()
 		}
 		if(m_pCurBoat && m_pCurBoatPolar && m_pCurBoatOpp)
 		{
-			GLCreateForce();
+//			GLCreateForce();
 			m_bResetglLift = false;
 		}
 	}
@@ -1150,7 +1152,7 @@ void QSail7::GLRenderView()
 		{
 			glDisable(GL_LIGHTING);
 			glDisable(GL_LIGHT0);
-			if(m_bForce)  glCallList(LIFTFORCE);
+			if(m_bBodyForces || m_bLift )  GLDrawForces();
 			if(m_bStream) glCallList(STREAMLINES);
 			if(m_bSpeeds) glCallList(SURFACESPEEDS);
 		}
@@ -2851,7 +2853,8 @@ void QSail7::SetControls()
 	m_pctrlCp->setChecked(m_b3DCp);
 	m_pctrlPanelForce->setChecked(m_bPanelForce);
 	m_pctrlMoment->setChecked(m_bMoments);
-	m_pctrlLift->setChecked(m_bForce);
+	m_pctrlLift->setChecked(m_bLift);
+	m_pctrlBodyForces->setChecked(m_bBodyForces);
 	m_pctrlWindDirection->setChecked(m_bWindDirection);
 	m_pctrlWater->setChecked(m_bWater);
 	m_pctrlAxes->setChecked(m_bAxes);
@@ -2866,6 +2869,7 @@ void QSail7::SetControls()
 	m_pctrlPanelForce->setEnabled(m_pCurBoatOpp);
 	m_pctrlMoment->setEnabled(m_pCurBoatOpp);
 	m_pctrlLift->setEnabled(m_pCurBoatOpp);
+	m_pctrlBodyForces->setEnabled(m_pCurBoatOpp);
 	m_pctrlWindDirection->setEnabled(m_pCurBoatOpp);
 	m_pctrlStream->setEnabled(m_pCurBoatOpp);
 	m_pctrlSurfVel->setEnabled(m_pCurBoatOpp);
@@ -3757,7 +3761,8 @@ void QSail7::LoadSettings(QSettings *pSettings)
 
 		m_bWater         = pSettings->value("bWater", false).toBool();
 		m_bWindDirection = pSettings->value("bWindDir", false).toBool();
-		m_bForce         = pSettings->value("bForce", false).toBool();
+		m_bLift          = pSettings->value("bLift", false).toBool();
+		m_bBodyForces    = pSettings->value("bBodyForces", false).toBool();
 		m_bPanelForce    = pSettings->value("bPanelForce", true).toBool();
 		m_bICd           = pSettings->value("bICd", true).toBool();
 		m_bSurfaces      = pSettings->value("bSurfaces", true).toBool();
@@ -3833,7 +3838,8 @@ void QSail7::SaveSettings(QSettings *pSettings)
 		pSettings->setValue("ControlDelta", m_ControlDelta );
 		pSettings->setValue("bWater", m_bWater);
 		pSettings->setValue("bWindDir", m_bWindDirection);
-		pSettings->setValue("bForce", m_bForce);
+		pSettings->setValue("bLift", m_bLift);
+		pSettings->setValue("bBodyForces", m_bBodyForces);
 		pSettings->setValue("bPanelForce", m_bPanelForce);
 		pSettings->setValue("bICd", m_bICd);
 		pSettings->setValue("bSurfaces", m_bSurfaces);
@@ -5262,11 +5268,20 @@ void QSail7::OnShowCurve()
 	UpdateCurve();
 }
 
+
 void QSail7::OnShowLift()
 {
-	m_bForce = m_pctrlLift->isChecked();
+	m_bLift = m_pctrlLift->isChecked();
 	UpdateView();
 }
+
+
+void QSail7::OnShowBodyForces()
+{
+	m_bBodyForces = m_pctrlBodyForces->isChecked();
+	UpdateView();
+}
+
 
 
 void QSail7::OnShowWater()
@@ -6889,18 +6904,28 @@ void QSail7::OnBoatOppProps()
 }
 
 
-void QSail7::GLCreateForce()
+void QSail7::GLDrawForces()
 {
 	if(!m_pCurBoatOpp) return;
-	CVector WindDir, WindNormal, WindSide;
+	CVector WindDir, WindNormal, WindSide, Pt;
 	int style=W3dPrefsDlg::s_XCPStyle;
-	BoatAnalysisDlg::SetWindAxis(m_pCurBoatOpp->m_Beta, WindDir, WindNormal, WindSide);
 
-	glNewList(LIFTFORCE, GL_COMPILE);
+	ThreeDWidget *p3DWidget = (ThreeDWidget*)s_p3DWidget;
+	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
+	QString strForce, strForceUnit;
+
+	GetForceUnit(strForceUnit, pMainFrame->m_ForceUnit);
+
+	glEnable (GL_LINE_STIPPLE);
+	glPolygonMode(GL_FRONT,GL_LINE);
+
+
+	double coef = 1./200.0 *GL3DScales::s_LiftScale;
+
+
+	if(m_bLift)
 	{
-		m_GLList++;
-		glEnable (GL_LINE_STIPPLE);
-		glPolygonMode(GL_FRONT,GL_LINE);
+		BoatAnalysisDlg::SetWindAxis(m_pCurBoatOpp->m_Beta, WindDir, WindNormal, WindSide);
 
 		glColor3d(W3dPrefsDlg::s_XCPColor.redF(),W3dPrefsDlg::s_XCPColor.greenF(),W3dPrefsDlg::s_XCPColor.blueF());
 		glLineWidth(W3dPrefsDlg::s_XCPWidth*3);
@@ -6911,19 +6936,57 @@ void QSail7::GLCreateForce()
 		else if(style == Qt::DashDotDotLine) glLineStipple (1, 0x7E66);
 		else                                 glLineStipple (1, 0xFFFF);
 
-		double coef = 1./200.0 *GL3DScales::s_LiftScale;
-
-
-		ThreeDWidget *p3DWidget = (ThreeDWidget*)s_p3DWidget;
 		p3DWidget->GLDrawArrow(m_pCurBoatPolar->m_CoG, WindNormal, m_pCurBoatOpp->m_Lift * coef);
 		p3DWidget->GLDrawArrow(m_pCurBoatPolar->m_CoG, WindDir,    m_pCurBoatOpp->m_Drag * coef);
 
+		glColor3d(pMainFrame->m_TextColor.redF(), pMainFrame->m_TextColor.greenF(), pMainFrame->m_TextColor.blueF());
 
-		glDisable (GL_LINE_STIPPLE);
+		Pt = m_pCurBoatPolar->m_CoG +  WindNormal * m_pCurBoatOpp->m_Lift * coef;
+		strForce = QString("Lift=%1").arg(m_pCurBoatOpp->m_Lift*pMainFrame->m_NtoUnit,7,'f',1);
+		strForce += strForceUnit;
+		p3DWidget->renderText(Pt.x, Pt.y, Pt.z+.11, strForce, pMainFrame->m_TextFont);
+
+		Pt = m_pCurBoatPolar->m_CoG +  WindDir * m_pCurBoatOpp->m_Drag * coef;
+		strForce = QString("Drag=%1").arg(m_pCurBoatOpp->m_Drag*pMainFrame->m_NtoUnit,7,'f',1);
+		strForce += strForceUnit;
+		p3DWidget->renderText(Pt.x, Pt.y, Pt.z+.11, strForce, pMainFrame->m_TextFont);
 	}
-	glEndList();
-}
 
+	if(m_bBodyForces)
+	{
+		glColor3d(W3dPrefsDlg::s_XCPColor.redF(),W3dPrefsDlg::s_XCPColor.greenF(),W3dPrefsDlg::s_XCPColor.blueF());
+		glLineWidth(W3dPrefsDlg::s_XCPWidth*3);
+
+		if     (style == Qt::DashLine)       glLineStipple (1, 0xCFCF);
+		else if(style == Qt::DotLine)        glLineStipple (1, 0x6666);
+		else if(style == Qt::DashDotLine)    glLineStipple (1, 0xFF18);
+		else if(style == Qt::DashDotDotLine) glLineStipple (1, 0x7E66);
+		else                                 glLineStipple (1, 0xFFFF);
+
+		p3DWidget->GLDrawArrow(m_pCurBoatPolar->m_CoG, CVector(1.0,0.0,0.0), m_pCurBoatOpp->F.x* coef);
+		p3DWidget->GLDrawArrow(m_pCurBoatPolar->m_CoG, CVector(0.0,1.0,0.0), m_pCurBoatOpp->F.y * coef);
+		p3DWidget->GLDrawArrow(m_pCurBoatPolar->m_CoG, CVector(0.0,0.0,1.0), m_pCurBoatOpp->F.z * coef);
+
+		glColor3d(pMainFrame->m_TextColor.redF(), pMainFrame->m_TextColor.greenF(), pMainFrame->m_TextColor.blueF());
+
+		Pt = m_pCurBoatPolar->m_CoG +  CVector(1.0,0.0,0.0) * m_pCurBoatOpp->F.x * coef;
+		strForce = QString("Fx=%1").arg(m_pCurBoatOpp->F.x*pMainFrame->m_NtoUnit,7,'f',1);
+		strForce += strForceUnit;
+		p3DWidget->renderText(Pt.x, Pt.y, Pt.z+.11, strForce, pMainFrame->m_TextFont);
+
+		Pt = m_pCurBoatPolar->m_CoG +  CVector(0.0, 1.0, 0.0) * m_pCurBoatOpp->F.y * coef;
+		strForce = QString("Fy=%1").arg(m_pCurBoatOpp->F.y*pMainFrame->m_NtoUnit, 7, 'f', 1);
+		strForce += strForceUnit;
+		p3DWidget->renderText(Pt.x, Pt.y, Pt.z+.11, strForce, pMainFrame->m_TextFont);
+
+		Pt = m_pCurBoatPolar->m_CoG +  CVector(0.0, 0.0, 1.0) * m_pCurBoatOpp->F.z * coef;
+		strForce = QString("Fz=%1").arg(m_pCurBoatOpp->F.z*pMainFrame->m_NtoUnit, 7, 'f', 1);
+		strForce += strForceUnit;
+		p3DWidget->renderText(Pt.x, Pt.y, Pt.z+.11, strForce, pMainFrame->m_TextFont);
+	}
+
+	glDisable (GL_LINE_STIPPLE);
+}
 
 
 void QSail7::GLDrawBoatLegend()

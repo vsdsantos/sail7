@@ -17,11 +17,13 @@
 
 sail7 v0.04 December 30th, 2012
 	- Added display of Luff angle to NURBS section view
+	- Added a 3D display of lift and drag alongside with body forces
 	- Improved the calculation and display of NURBS sections
 	- Corrected the rotation of the NURBS type sails around the sail's leading edge
 	- Improved the formatting of polar data points in the polar properties window
 	- Added lift and drag to the graphic results
 	- Corrected a bug in the display of bodies
+	- Corrected the style of lines
 	- Improved the selection of points in the sail section view
 
 

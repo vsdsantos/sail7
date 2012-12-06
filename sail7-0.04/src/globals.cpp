@@ -357,11 +357,11 @@ bool IsBetween(int f, double f1, double f2)
 
 Qt::PenStyle GetStyle(int s)
 {
-	if(s==0)      return Qt::SolidLine;
-	else if(s==1) return Qt::DashLine;
-	else if(s==2) return Qt::DotLine;
-	else if(s==3) return Qt::DashDotLine;
-	else if(s==4) return Qt::DashDotDotLine;
+	if(s==1)      return Qt::SolidLine;
+	else if(s==2) return Qt::DashLine;
+	else if(s==3) return Qt::DotLine;
+	else if(s==4) return Qt::DashDotLine;
+	else if(s==5) return Qt::DashDotDotLine;
 	return Qt::SolidLine;
 }
 
