@@ -83,8 +83,7 @@ QSail7::QSail7(QWidget *parent)
 	m_BoatPlrLegendOffset.setX(0);
 	m_BoatPlrLegendOffset.setY(0);
 
-
-	m_bArcball      = m_bCrossPoint =  m_bPickCenter = m_bTrans = false;
+	m_bArcball = m_bCrossPoint = m_bPickCenter = m_bTrans = false;
 	m_bResetglSailGeom  = m_bResetglMesh = m_bResetglLegend = m_bResetglOpp = m_bResetglWake = m_bResetglFlow = true;
 	m_bResetglStream = true;
 	m_bResetglSpeeds = true;
@@ -6928,7 +6927,7 @@ void QSail7::GLDrawForces()
 		BoatAnalysisDlg::SetWindAxis(m_pCurBoatOpp->m_Beta, WindDir, WindNormal, WindSide);
 
 		glColor3d(W3dPrefsDlg::s_XCPColor.redF(),W3dPrefsDlg::s_XCPColor.greenF(),W3dPrefsDlg::s_XCPColor.blueF());
-		glLineWidth(W3dPrefsDlg::s_XCPWidth*3);
+		glLineWidth(W3dPrefsDlg::s_XCPWidth);
 
 		if     (style == Qt::DashLine)       glLineStipple (1, 0xCFCF);
 		else if(style == Qt::DotLine)        glLineStipple (1, 0x6666);
@@ -6941,12 +6940,12 @@ void QSail7::GLDrawForces()
 
 		glColor3d(pMainFrame->m_TextColor.redF(), pMainFrame->m_TextColor.greenF(), pMainFrame->m_TextColor.blueF());
 
-		Pt = m_pCurBoatPolar->m_CoG +  WindNormal * m_pCurBoatOpp->m_Lift * coef;
+		Pt = m_pCurBoatPolar->m_CoG +  WindNormal * m_pCurBoatOpp->ForceTrefftz.dot(WindNormal) * coef;
 		strForce = QString("Lift=%1").arg(m_pCurBoatOpp->m_Lift*pMainFrame->m_NtoUnit,7,'f',1);
 		strForce += strForceUnit;
 		p3DWidget->renderText(Pt.x, Pt.y, Pt.z+.11, strForce, pMainFrame->m_TextFont);
 
-		Pt = m_pCurBoatPolar->m_CoG +  WindDir * m_pCurBoatOpp->m_Drag * coef;
+		Pt = m_pCurBoatPolar->m_CoG +  WindDir * m_pCurBoatOpp->ForceTrefftz.dot(WindDir) * coef;
 		strForce = QString("Drag=%1").arg(m_pCurBoatOpp->m_Drag*pMainFrame->m_NtoUnit,7,'f',1);
 		strForce += strForceUnit;
 		p3DWidget->renderText(Pt.x, Pt.y, Pt.z+.11, strForce, pMainFrame->m_TextFont);
@@ -6954,14 +6953,27 @@ void QSail7::GLDrawForces()
 
 	if(m_bBodyForces)
 	{
-		glColor3d(W3dPrefsDlg::s_XCPColor.redF(),W3dPrefsDlg::s_XCPColor.greenF(),W3dPrefsDlg::s_XCPColor.blueF());
-		glLineWidth(W3dPrefsDlg::s_XCPWidth*3);
+		glColor3d(W3dPrefsDlg::s_MomentColor.redF(),W3dPrefsDlg::s_MomentColor.greenF(),W3dPrefsDlg::s_MomentColor.blueF());
+		glLineWidth(W3dPrefsDlg::s_MomentWidth);
 
-		if     (style == Qt::DashLine)       glLineStipple (1, 0xCFCF);
-		else if(style == Qt::DotLine)        glLineStipple (1, 0x6666);
-		else if(style == Qt::DashDotLine)    glLineStipple (1, 0xFF18);
-		else if(style == Qt::DashDotDotLine) glLineStipple (1, 0x7E66);
-		else                                 glLineStipple (1, 0xFFFF);
+		switch(W3dPrefsDlg::s_MomentStyle)
+		{
+			case Qt::DashLine:
+				 glLineStipple (1, 0xCFCF);
+				 break;
+			case Qt::DotLine:
+				 glLineStipple (1, 0x6666);
+				 break;
+			case Qt::DashDotLine:
+				 glLineStipple (1, 0xFF18);
+				 break;
+			case Qt::DashDotDotLine:
+				 glLineStipple (1, 0x7E66);
+				 break;
+			default:
+				 glLineStipple (1, 0xFFFF);
+				 break;
+		}
 
 		p3DWidget->GLDrawArrow(m_pCurBoatPolar->m_CoG, CVector(1.0,0.0,0.0), m_pCurBoatOpp->F.x* coef);
 		p3DWidget->GLDrawArrow(m_pCurBoatPolar->m_CoG, CVector(0.0,1.0,0.0), m_pCurBoatOpp->F.y * coef);
@@ -6969,18 +6981,18 @@ void QSail7::GLDrawForces()
 
 		glColor3d(pMainFrame->m_TextColor.redF(), pMainFrame->m_TextColor.greenF(), pMainFrame->m_TextColor.blueF());
 
-		Pt = m_pCurBoatPolar->m_CoG +  CVector(1.0,0.0,0.0) * m_pCurBoatOpp->F.x * coef;
-		strForce = QString("Fx=%1").arg(m_pCurBoatOpp->F.x*pMainFrame->m_NtoUnit,7,'f',1);
+		Pt = m_pCurBoatPolar->m_CoG +  CVector(1.0,0.0,0.0) * m_pCurBoatOpp->ForceTrefftz.x * coef;
+		strForce = QString("FF_Fx=%1").arg(m_pCurBoatOpp->F.x*pMainFrame->m_NtoUnit,7,'f',1);
 		strForce += strForceUnit;
 		p3DWidget->renderText(Pt.x, Pt.y, Pt.z+.11, strForce, pMainFrame->m_TextFont);
 
-		Pt = m_pCurBoatPolar->m_CoG +  CVector(0.0, 1.0, 0.0) * m_pCurBoatOpp->F.y * coef;
-		strForce = QString("Fy=%1").arg(m_pCurBoatOpp->F.y*pMainFrame->m_NtoUnit, 7, 'f', 1);
+		Pt = m_pCurBoatPolar->m_CoG +  CVector(0.0, 1.0, 0.0) * m_pCurBoatOpp->ForceTrefftz.y * coef;
+		strForce = QString("FF_Fy=%1").arg(m_pCurBoatOpp->F.y*pMainFrame->m_NtoUnit, 7, 'f', 1);
 		strForce += strForceUnit;
 		p3DWidget->renderText(Pt.x, Pt.y, Pt.z+.11, strForce, pMainFrame->m_TextFont);
 
-		Pt = m_pCurBoatPolar->m_CoG +  CVector(0.0, 0.0, 1.0) * m_pCurBoatOpp->F.z * coef;
-		strForce = QString("Fz=%1").arg(m_pCurBoatOpp->F.z*pMainFrame->m_NtoUnit, 7, 'f', 1);
+		Pt = m_pCurBoatPolar->m_CoG +  CVector(0.0, 0.0, 1.0) * m_pCurBoatOpp->ForceTrefftz.z * coef;
+		strForce = QString("FF_Fz=%1").arg(m_pCurBoatOpp->F.z*pMainFrame->m_NtoUnit, 7, 'f', 1);
 		strForce += strForceUnit;
 		p3DWidget->renderText(Pt.x, Pt.y, Pt.z+.11, strForce, pMainFrame->m_TextFont);
 	}
