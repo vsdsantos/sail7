@@ -95,4 +95,7 @@ bool Intersect(CVector const &LA, CVector const &LB, CVector const &TA, CVector 
 
 double SplineBlend(int const &index, int const &degree, double const &t, double *knots);
 
+void SetWindAxis(double const Beta, CVector &WindDirection, CVector & WindNormal, CVector &WindSide);
+
+
 #endif // FUNCTIONS_H

@@ -29,7 +29,11 @@ public:
 	BoatOpp();
 	bool SerializeBoatOpp(QDataStream &ar, bool bIsStoring);
 	void GetBoatOppProperties(QString &BOppProperties);
-	CVector GetWindDirection();
+
+	void GetLiftDrag(double &Lift, double &Drag, CVector &WindDirection, CVector &WindNormal, CVector &WindSide);
+
+	double Lift();
+	double Drag();
 
 	static void *s_pMainFrame;
 	static void *s_pSail7;
@@ -71,7 +75,6 @@ private:
 	double m_Ctrl;		//control variable - converged value
 	double m_SailAngle[MAXSAILS];// Sail rotation around the mast, degrees
 
-	double m_Lift, m_Drag;
 
 	CVector F;  // resulting force from panel force Summation
 	CVector M;  // resulting moment from panel force Summation w.r.t. CoG

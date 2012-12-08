@@ -762,8 +762,8 @@ void BoatDlg::OnCancel()
 		QString strange = tr("Discard the changes ?");
 		int resp = QMessageBox::question(this, tr("Cancel"), strange, QMessageBox::Yes|QMessageBox::No, QMessageBox::No);
 		if(resp != QMessageBox::Yes) return;
-		reject();
 	}
+	reject();
 }
 
 

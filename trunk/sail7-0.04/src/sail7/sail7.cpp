@@ -4854,19 +4854,15 @@ void QSail7::AddBoatOpp(double *Cp, double *Gamma, double *Sigma, CVector const 
 			pNewPoint->m_SailAngle[is] = m_pCurBoatPolar->m_SailAngleMin[is] * (1.0-Ctrl) + m_pCurBoatPolar->m_SailAngleMax[is] * Ctrl;
 		}
 
-		CVector WindDirection, WindNormal, WindSide;
-		double cosb = cos(pNewPoint->m_Beta*PI/180.0);
-		double sinb = sin(pNewPoint->m_Beta*PI/180.0);
-		WindDirection.Set(cosb, sinb, 0.0);
-		WindNormal.Set(-sinb,cosb,0);
-		WindSide = WindNormal * WindDirection;
 
 		pNewPoint->F  = F;
 		pNewPoint->M  = M;
 		pNewPoint->ForceTrefftz = ForceTrefftz;
-		pNewPoint->m_Lift = pNewPoint->ForceTrefftz.dot(WindNormal);
-		pNewPoint->m_Drag = pNewPoint->ForceTrefftz.dot(WindDirection);
 
+/*		CVector WindDirection, WindNormal, WindSide;
+		SetWindAxis(pNewPoint->m_Beta, WindDirection, WindNormal, WindSide);
+		pNewPoint->m_Lift = pNewPoint->ForceTrefftz.dot(WindNormal);
+		pNewPoint->m_Drag = pNewPoint->ForceTrefftz.dot(WindDirection);*/
 
 
 		memcpy(pNewPoint->m_Cp,    Cp,    m_MatSize*sizeof(double));
@@ -6906,7 +6902,9 @@ void QSail7::OnBoatOppProps()
 void QSail7::GLDrawForces()
 {
 	if(!m_pCurBoatOpp) return;
-	CVector WindDir, WindNormal, WindSide, Pt;
+	CVector WindDirection, WindNormal, WindSide, Pt;
+	double Lift, Drag;
+
 	int style=W3dPrefsDlg::s_XCPStyle;
 
 	ThreeDWidget *p3DWidget = (ThreeDWidget*)s_p3DWidget;
@@ -6924,8 +6922,6 @@ void QSail7::GLDrawForces()
 
 	if(m_bLift)
 	{
-		BoatAnalysisDlg::SetWindAxis(m_pCurBoatOpp->m_Beta, WindDir, WindNormal, WindSide);
-
 		glColor3d(W3dPrefsDlg::s_XCPColor.redF(),W3dPrefsDlg::s_XCPColor.greenF(),W3dPrefsDlg::s_XCPColor.blueF());
 		glLineWidth(W3dPrefsDlg::s_XCPWidth);
 
@@ -6935,18 +6931,20 @@ void QSail7::GLDrawForces()
 		else if(style == Qt::DashDotDotLine) glLineStipple (1, 0x7E66);
 		else                                 glLineStipple (1, 0xFFFF);
 
-		p3DWidget->GLDrawArrow(m_pCurBoatPolar->m_CoG, WindNormal, m_pCurBoatOpp->m_Lift * coef);
-		p3DWidget->GLDrawArrow(m_pCurBoatPolar->m_CoG, WindDir,    m_pCurBoatOpp->m_Drag * coef);
+		m_pCurBoatOpp->GetLiftDrag(Lift, Drag, WindDirection, WindNormal, WindSide);
+
+		p3DWidget->GLDrawArrow(m_pCurBoatPolar->m_CoG, WindNormal,    Lift * coef);
+		p3DWidget->GLDrawArrow(m_pCurBoatPolar->m_CoG, WindDirection, Drag * coef);
 
 		glColor3d(pMainFrame->m_TextColor.redF(), pMainFrame->m_TextColor.greenF(), pMainFrame->m_TextColor.blueF());
 
 		Pt = m_pCurBoatPolar->m_CoG +  WindNormal * m_pCurBoatOpp->ForceTrefftz.dot(WindNormal) * coef;
-		strForce = QString("Lift=%1").arg(m_pCurBoatOpp->m_Lift*pMainFrame->m_NtoUnit,7,'f',1);
+		strForce = QString("Lift=%1").arg(Lift*pMainFrame->m_NtoUnit,7,'f',1);
 		strForce += strForceUnit;
 		p3DWidget->renderText(Pt.x, Pt.y, Pt.z+.11, strForce, pMainFrame->m_TextFont);
 
-		Pt = m_pCurBoatPolar->m_CoG +  WindDir * m_pCurBoatOpp->ForceTrefftz.dot(WindDir) * coef;
-		strForce = QString("Drag=%1").arg(m_pCurBoatOpp->m_Drag*pMainFrame->m_NtoUnit,7,'f',1);
+		Pt = m_pCurBoatPolar->m_CoG +  WindDirection * m_pCurBoatOpp->ForceTrefftz.dot(WindDirection) * coef;
+		strForce = QString("Drag=%1").arg(Drag*pMainFrame->m_NtoUnit,7,'f',1);
 		strForce += strForceUnit;
 		p3DWidget->renderText(Pt.x, Pt.y, Pt.z+.11, strForce, pMainFrame->m_TextFont);
 	}
