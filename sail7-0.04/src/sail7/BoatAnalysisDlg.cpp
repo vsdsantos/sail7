@@ -1135,23 +1135,6 @@ void BoatAnalysisDlg::StartAnalysis()
 
 
 
-
-void BoatAnalysisDlg::SetWindAxis(double const Beta,
-								  CVector &WindDirection, CVector & WindNormal, CVector &WindSide)
-{
-	double cosb, sinb;
-
-	cosb = cos(Beta*PI/180.0);
-	sinb = sin(Beta*PI/180.0);
-
-	//   Define wind (stability) axis
-	WindDirection.Set(cosb, sinb, 0.0);
-	WindNormal.Set(-sinb,cosb,0);
-	WindSide      = WindNormal * WindDirection;
-
-}
-
-
 void BoatAnalysisDlg::SetAngles(BoatPolar *pBoatPolar, double Ctrl, bool bBCOnly)
 {
 	// Rotate the panels by the bank angle

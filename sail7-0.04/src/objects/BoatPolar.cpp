@@ -116,8 +116,8 @@ void BoatPolar::AddPoint(BoatOpp *pBOpp)
 			{
 				// then erase former result
 				m_Ctrl[i]    =  pBOpp->m_Ctrl;
-				m_Lift[i]    =  pBOpp->m_Lift;
-				m_Drag[i]    =  pBOpp->m_Drag;
+				m_Lift[i]    =  pBOpp->Lift();
+				m_Drag[i]    =  pBOpp->Drag();
 				m_FFFx[i]    =  pBOpp->ForceTrefftz.x;
 				m_FFFy[i]    =  pBOpp->ForceTrefftz.y;
 				m_FFFz[i]    =  pBOpp->ForceTrefftz.z;
@@ -134,8 +134,8 @@ void BoatPolar::AddPoint(BoatOpp *pBOpp)
 			{
 				// sort by crescending control values
 				m_Ctrl.insert(i, pBOpp->m_Ctrl);
-				m_Lift.insert(i, pBOpp->m_Lift);
-				m_Drag.insert(i, pBOpp->m_Drag);
+				m_Lift.insert(i, pBOpp->Lift());
+				m_Drag.insert(i, pBOpp->Drag());
 				m_FFFx.insert(i, pBOpp->ForceTrefftz.x);
 				m_FFFy.insert(i, pBOpp->ForceTrefftz.y);
 				m_FFFz.insert(i, pBOpp->ForceTrefftz.z);
@@ -154,8 +154,8 @@ void BoatPolar::AddPoint(BoatOpp *pBOpp)
 	{
 		// data is appended at the end
 		m_Ctrl.append(pBOpp->m_Ctrl);
-		m_Lift.append(pBOpp->m_Lift);
-		m_Drag.append(pBOpp->m_Drag);
+		m_Lift.append(pBOpp->Lift());
+		m_Drag.append(pBOpp->Drag());
 		m_FFFx.append( pBOpp->ForceTrefftz.x);
 		m_FFFy.append( pBOpp->ForceTrefftz.y);
 		m_FFFz.append( pBOpp->ForceTrefftz.z);
