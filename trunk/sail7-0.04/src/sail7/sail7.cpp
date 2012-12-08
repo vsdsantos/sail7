@@ -256,8 +256,8 @@ void QSail7::SetupLayout()
 		{
 			m_pctrlPanelForce = new QCheckBox(tr("Panel Forces"));
 			m_pctrlPanelForce->setToolTip(tr("Display the force 1/2.rho.V2.S.Cp acting on the panel"));
-			m_pctrlLift           = new QCheckBox(tr("Lift"));
-			m_pctrlBodyForces     = new QCheckBox(tr("Body Forces"));
+			m_pctrlLift           = new QCheckBox(tr("Lift and Drag"));
+			m_pctrlBodyForces     = new QCheckBox(tr("Body Axis Forces"));
 			m_pctrlMoment         = new QCheckBox(tr("Moment"));
 			m_pctrlCp             = new QCheckBox(tr("Cp"));
 			m_pctrlSurfVel        = new QCheckBox(tr("Surf. Vel."));
