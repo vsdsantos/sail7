@@ -432,6 +432,9 @@ QString BoatPolar::GetPolarVariableName(int iVar)
 		case 14:
 			return QObject::tr("Mz") + "("+StrMoment+")";
 			break;
+		default:
+			return QObject::tr("Ctrl");
+			break;
 	}
 }
 
