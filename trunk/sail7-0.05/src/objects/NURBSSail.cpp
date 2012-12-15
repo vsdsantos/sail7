@@ -307,7 +307,7 @@ bool NURBSSail::SerializeSail(QDataStream &ar, bool bIsStoring)
 
 		SplineSurface();
 
-		if (ArchiveFormat<133304 && IsNURBSSail())
+		if (IsNURBSSail())
 		{
 			// compute luff angle
 			CVector LE = m_SplineSurface.LeadingEdgeAxis();
