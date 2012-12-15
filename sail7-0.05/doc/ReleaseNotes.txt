@@ -15,8 +15,8 @@
 *******************************************************************************
 
 
-sail7 v0.05 December xxxth, 2012
-
+sail7 v0.05 December 15th, 2012
+	- Corrected the issue of missing luff angle of NURBS type sails in save/load operations
 
 
 sail7 v0.04 December 8th, 2012
