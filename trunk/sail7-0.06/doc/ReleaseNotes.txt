@@ -7,7 +7,7 @@
                           A tool for the design of sails and boats
                             Program based on xflr5 source code
 
-                                    Copyright (C) 2012
+									Copyright (C) 2012-2013
 
                                      Andre Deperrois
 
@@ -15,8 +15,13 @@
 *******************************************************************************
 
 
+sail7 v0.06 January 4th, 2013
+	- Added an option to export OpPoint data to a text file
+
+
 sail7 v0.05 December 15th, 2012
 	- Corrected the issue of missing luff angle of NURBS type sails in save/load operations
+
 
 
 sail7 v0.04 December 8th, 2012

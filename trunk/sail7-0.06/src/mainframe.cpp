@@ -17,6 +17,7 @@
 #include "./sail7/GL3DScales.h"
 #include "./sail7/GL3dBodyDlg.h"
 #include "./sail7/SailDlg.h"
+
 #include "./sail7/BodyTransDlg.h"
 #include "./misc/AboutS7.h"
 #include "./misc/ObjectPropsDlg.h"
@@ -41,6 +42,8 @@
 #ifdef Q_WS_MAC
 	#include <CoreFoundation/CoreFoundation.h>
 #endif
+
+
 
 
 QPointer<MainFrame> MainFrame::_self = 0L;
@@ -635,6 +638,10 @@ void MainFrame::CreateSail7Actions()
 	resetCurBoatPolar->setStatusTip(tr("Delete the currently selected polar"));
 	connect(resetCurBoatPolar, SIGNAL(triggered()), pSail7, SLOT(OnResetCurBoatPolar()));
 
+	exportCurBoatOpp= new QAction(tr("Export"), this);
+	exportCurBoatOpp->setStatusTip(tr("Export the currently selected operating point to a text file"));
+	connect(exportCurBoatOpp, SIGNAL(triggered()), pSail7, SLOT(OnExportCurBoatOpp()));
+
 	exportCurBoatPolar= new QAction(tr("Export"), this);
 	exportCurBoatPolar->setStatusTip(tr("Export the currently selected polar to a text file"));
 	connect(exportCurBoatPolar, SIGNAL(triggered()), pSail7, SLOT(OnExportCurBoatPolar()));
@@ -753,6 +760,7 @@ void MainFrame::CreateSail7Menus()
 		CurBoatOppMenu = Sail7OppMenu->addMenu(tr("Current OpPoint"));
 		CurBoatOppMenu->addAction(deleteCurBoatOpp);
 		CurBoatOppMenu->addAction(showBoatOppProperties);
+		CurBoatOppMenu->addAction(exportCurBoatOpp);
 		Sail7OppMenu->addAction(viewLogFile);
 	}
 

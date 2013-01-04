@@ -83,6 +83,7 @@ private slots:
 	void OnDefineBoatPolar();
 	void OnEditBoatPolar();
 	void OnResetCurBoatPolar();
+	void OnExportCurBoatOpp();
 	void OnExportCurBoatPolar();
 
 	void OnHideCurBoatPolars();
