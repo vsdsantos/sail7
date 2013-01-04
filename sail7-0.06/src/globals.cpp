@@ -10,7 +10,6 @@
 #include "globals.h"
 #include "params.h"
 
-#include <QtDebug>
 
 #include <QVector3D>
 #include <QPen>

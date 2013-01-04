@@ -248,3 +248,6 @@ void BoatOpp::GetLiftDrag(double &Lift, double &Drag, CVector &WindDirection, CV
 	Drag = ForceTrefftz.dot(WindDirection);
 }
 
+
+
+

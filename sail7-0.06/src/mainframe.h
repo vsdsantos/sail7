@@ -193,7 +193,8 @@ private:
 	QAction *renameCurBoat, *deleteCurBoat, *duplicateCurBoat;
 	QAction *deleteCurBoatOpp, *deleteAllBoatOpps, * deleteAllBoatPolarOpps;
 	QAction *showBoatOppProperties, *showBoatPolarProperties;
-	QAction *defineBoatPolar, *editBoatPolar, *renameCurBoatPolar,*deleteCurBoatPolar, *resetCurBoatPolar, *exportCurBoatPolar;
+	QAction *defineBoatPolar, *editBoatPolar, *renameCurBoatPolar,*deleteCurBoatPolar, *resetCurBoatPolar;
+	QAction *exportCurBoatPolar, *exportCurBoatOpp;
 	QAction *hideAllBoatPlrs, *showAllBoatPlrs;
 	QAction *hideCurBoatPlrs, *showCurBoatPlrs, *deleteCurBoatPlrs;
 	QToolButton *m_pctrlBoat3dView, *m_pctrlBoatPolarView;

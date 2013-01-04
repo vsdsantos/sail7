@@ -7515,6 +7515,60 @@ void QSail7::GLDrawCpLegend(void *p3DWidget, QRect rect, double LegendMin, doubl
 }
 
 
+void QSail7::OnExportCurBoatOpp()
+{
+	if(!m_pCurBoatOpp) return;
+
+	QString Header, strong, Format;
+	int k;
+	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
+	QString FileName, filter;
+
+	if(pMainFrame->m_ExportFileType==1) filter = "Text File (*.txt)";
+	else                                filter = "Comma Separated Values (*.csv)";
+
+	FileName = m_pCurBoatOpp->m_BoatName+"_"+m_pCurBoatOpp->m_BoatPolarName+QString("_Ctrl=%1").arg(m_pCurBoatOpp->m_Ctrl,5,'f',2);
+	FileName.replace("/", " ");
+	FileName = QFileDialog::getSaveFileName(this, tr("Export Boat Opp"),
+											pMainFrame->m_LastDirName + "/"+FileName,
+											tr("Text File (*.txt);;Comma Separated Values (*.csv)"),
+											&filter);
+
+	if(!FileName.length()) return;
+	int pos = FileName.lastIndexOf("/");
+	if(pos>0) pMainFrame->m_LastDirName = FileName.left(pos);
+	pos = FileName.lastIndexOf(".csv");
+	if (pos>0) pMainFrame->m_ExportFileType = 2;
+	else       pMainFrame->m_ExportFileType = 1;
+
+
+	QFile XFile(FileName);
+	if (!XFile.open(QIODevice::WriteOnly | QIODevice::Text)) return ;
+
+	QTextStream out(&XFile);
+
+
+	if(pMainFrame->m_ExportFileType==1) Header = "       x           y            z          Cp \n";
+	else                                Header = "  x,y,z,Cp\n";
+	out << Header;
+
+	if(pMainFrame->m_ExportFileType==1) Format = "%1  %2   %3   %4\n";
+	else                                Format = "%1,%2,%3,%4\n";
+
+	for (k=0; k<m_MatSize; k++)
+	{
+		strong = QString(Format)
+			.arg(s_pPanel[k].CtrlPt.x,10,'f',4).arg(s_pPanel[k].CtrlPt.y,10,'f',4).arg(s_pPanel[k].CtrlPt.z,10,'f',4)
+			.arg(m_pCurBoatOpp->m_Cp[k],9,'f',4);
+		out << strong;
+	}
+	out << "\n\n";
+
+	XFile.close();
+}
+
+
+
 void QSail7::OnExportCurBoatPolar()
 {
 	if(!m_pCurBoatPolar) return;
