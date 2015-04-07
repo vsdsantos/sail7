@@ -38,7 +38,6 @@ void ExpFormat(double &f, int &exp)
 		exp = (int)log10(f1);
 
 	f = f/pow(10.0,exp);
-
 }
 
 
@@ -233,6 +232,8 @@ void GetForceUnit(QString &str, int unit)
 		}
 	}
 }
+
+
 
 void GetMomentUnit(QString &str, int unit)
 {
@@ -732,7 +733,7 @@ void WriteCString(QDataStream &ar, QString const &strong)
 
 	QByteArray textline;
 	char *text;
-	textline = strong.toAscii();
+	textline = strong.toLatin1();
 	text = textline.data();
 	ar << qi;
 	ar.writeRawData(text, qi);

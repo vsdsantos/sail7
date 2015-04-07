@@ -21,7 +21,7 @@
 *****************************************************************************/
 
 
-#include <QtGui/QApplication>
+#include <QApplication>
 #include "sail7Application.h"
 #include "mainframe.h"
 #include <QDate>

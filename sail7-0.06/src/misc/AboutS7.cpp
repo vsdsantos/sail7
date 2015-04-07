@@ -11,7 +11,7 @@
 #include "AboutS7.h"
 #include "../mainframe.h"
 #include <QBitmap>
-
+#include <QGridLayout>
 
 AboutS7::AboutS7(void *parent)
 {

@@ -48,7 +48,7 @@
 
 QPointer<MainFrame> MainFrame::_self = 0L;
 
-MainFrame::MainFrame(QWidget *parent, Qt::WFlags flags)
+MainFrame::MainFrame(QWidget *parent, Qt::WindowFlags flags)
 	: QMainWindow(parent, flags)
 {
 	m_VersionName = QString::fromLatin1("sail7 v0.06 alpha");
@@ -67,7 +67,7 @@ MainFrame::MainFrame(QWidget *parent, Qt::WFlags flags)
 	QDir dir(qApp->applicationDirPath());
 	jpegPluginPath = dir.canonicalPath() + "/imageformats/qjpeg4.dll";
 #endif
-#ifdef Q_WS_X11
+#ifdef Q_OS_LINUX
 	QDir dir(qApp->applicationDirPath());
 	jpegPluginPath = dir.canonicalPath() + "/imageformats/libqjpeg.so";
 #endif
@@ -1376,8 +1376,10 @@ void MainFrame::OnLoadFile()
 void MainFrame::OnLogFile()
 {
 	QString FileName = QDir::tempPath() + "/sail7.log";
+	qDebug()<< FileName;
 	// 20090605 Francesco Meschia
-	QDesktopServices::openUrl(QUrl::fromLocalFile(FileName));
+	qDebug()<<QDesktopServices::openUrl(QUrl::fromLocalFile(FileName));
+	qDebug()<<QDesktopServices::openUrl(QUrl(FileName, QUrl::TolerantMode));
 }
 
 
