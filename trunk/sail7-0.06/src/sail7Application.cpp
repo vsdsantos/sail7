@@ -21,7 +21,7 @@
 *****************************************************************************/
 
 #include <QFileOpenEvent>
-#include <QtGui/QApplication>
+#include <QApplication>
 #include <QSplashScreen>
 #include <QMessageBox>
 #include <QDateTime>

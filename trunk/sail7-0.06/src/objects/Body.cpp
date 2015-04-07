@@ -569,7 +569,7 @@ bool CBody::ImportDefinition(QTextStream &inStream, double mtoUnit)
 			bRead  = ReadAVLString(inStream, Line, strong);
 			if(!bRead) break;
 
-			textline = strong.toAscii();
+			textline = strong.toLatin1();
 			text = textline.constData();
 			res = sscanf(text, "%lf  %lf  %lf", &xo, &yo, &zo);
 

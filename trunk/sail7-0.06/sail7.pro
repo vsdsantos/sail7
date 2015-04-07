@@ -3,11 +3,8 @@
 # Project created by QtCreator
 #
 #-------------------------------------------------
-
-QT       += opengl
-QT       += xml
-
-TARGET = sail7
+CONFIG += qt
+QT += opengl xml
 TEMPLATE = app
 
 
