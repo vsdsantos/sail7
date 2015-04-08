@@ -113,6 +113,7 @@ QSail7::QSail7(QWidget *parent)
 	m_bAnimateBoatOppPlus = true;
 	m_bWindFront =  m_bWindRear = false;
 
+	m_bResetTextLegend = true;
 
 	m_CurveStyle = 0;
 	m_CurveWidth = 1;
@@ -180,9 +181,14 @@ QSail7::QSail7(QWidget *parent)
 	m_pTimerBoatOpp = new QTimer(this);
 	m_posAnimateBOpp         = 0;
 
+
+	//create a default pix from a random image - couldn't find a better way to do this
+	m_PixText = QPixmap(":/images/sail7_512.png");
+	m_PixText.fill(Qt::transparent);
+
+
 	SetupLayout();
 	Connect();
-
 }
 
 
@@ -820,7 +826,7 @@ void QSail7::UpdateView()
 	ThreeDWidget * p3DWidget = (ThreeDWidget*)s_p3DWidget;
 	if(m_iView==SAIL3DVIEW)
 	{
-		if(p3DWidget) p3DWidget->updateGL();
+		if(p3DWidget) p3DWidget->update();
 	}
 	else
 	{
@@ -1007,7 +1013,7 @@ void QSail7::GLDraw3D()
 		}
 		if(m_pCurBoatOpp)
 		{
-			GLCreateCpLegendClr(m_r3DCltRect, GL3DScales::s_LegendMin, GL3DScales::s_LegendMax);
+			GLCreateCpLegendClr(m_r3DCltRect);
 			m_GLList++;
 		}
 		m_bResetglLegend = false;
@@ -1051,7 +1057,6 @@ void QSail7::GLDraw3D()
 		m_bResetglCPForces = false;
 	}
 
-
 	m_bResetglOpp = false;
 }
 
@@ -1070,6 +1075,9 @@ void QSail7::GLRenderView()
 	if(m_ClipPlanePos>4.9999) 	glDisable(GL_CLIP_PLANE1);
 	else						glEnable(GL_CLIP_PLANE1);
 
+	// Clear the viewport
+	glFlush();
+	glEnable(GL_DEPTH_TEST);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	p3DWidget->GLSetupLight(&m_GLLightDlg, m_ObjectOffset.y, 1.0f);
@@ -1160,19 +1168,17 @@ void QSail7::GLRenderView()
 
 		glLoadIdentity();
 
-		GLDrawBoatLegend();
-		if(m_pCurBoatOpp) GLDrawBoatOppLegend();
+//		GLDrawBoatLegend();
+//		if(m_pCurBoatOpp) GLDrawBoatOppLegend();
 
 		glDisable(GL_CLIP_PLANE1);
 		if (m_b3DCp && m_pCurBoatOpp)
 		{
-			GLDrawCpLegend(s_p3DWidget, m_r3DCltRect, GL3DScales::s_LegendMin, GL3DScales::s_LegendMax, pMainFrame->m_TextFont, pMainFrame->m_TextColor);
 			//glCallList(WOPPCPLEGENDTXT);
 			glCallList(PANELCPLEGENDCOLOR);
 		}
 		if (m_bPanelForce && m_pCurBoatOpp)
 		{
-			GLDrawPanelForceLegend(s_pMainFrame, m_ForceMin, m_ForceMax);
 			glCallList(PANELCPLEGENDCOLOR);
 		}
 	}
@@ -3028,6 +3034,8 @@ void QSail7::SetBoat(QString BoatName)
 
 	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 
+
+
 	if(!BoatName.length())
 	{
 		if(m_pCurBoat) BoatName = m_pCurBoat->m_BoatName;
@@ -3062,6 +3070,7 @@ void QSail7::SetBoat(QString BoatName)
 		return;
 	}
 
+	m_bResetTextLegend = true;
 
 	m_bResetglBoat   = true;
 	m_bResetglSailGeom = true;
@@ -3733,7 +3742,7 @@ void QSail7::GLCallViewLists()
 			if(m_bVLMPanels)
 			{
 				glCallList(SAILMESHBASE+is);
-//				glCallList(SAILMESHBASE+MAXSAILS+is);
+				glCallList(SAILMESHBASE+MAXSAILS+is);
 			}
 		}
 	}
@@ -4488,6 +4497,7 @@ void QSail7::SetBoatPolar(BoatPolar *pBoatPolar, QString BoatPolarName)
 	int i;
 
 	if(!m_pCurBoat) return;
+	m_bResetTextLegend = true;
 
 	if(!BoatPolarName.length() && m_pCurBoatPolar)	BoatPolarName = m_pCurBoatPolar->m_BoatPolarName;
 
@@ -4601,6 +4611,8 @@ bool QSail7::SetBoatOpp(bool bCurrent, double x)
 	m_bResetglLegend = true;
 	m_bResetglLift   = true;
 	m_bResetglCPForces = true;
+
+	m_bResetTextLegend = true;
 
 	// first restore the panel geometry
 	memcpy(s_pPanel, s_pMemPanel, m_MatSize* sizeof(CPanel));
@@ -5252,6 +5264,8 @@ void QSail7::OnPanelForce()
 	{
 //		if(!m_bAnimateWOpp) UpdateView();
 	}
+
+	m_bResetTextLegend = true;
 	UpdateView();
 }
 
@@ -5309,6 +5323,9 @@ void QSail7::On3DCp()
 //		m_bVLMPanels = false;
 //		m_pctrlPanels->setChecked(false);
 	}
+
+	m_bResetTextLegend = true;
+
 	UpdateView();
 }
 
@@ -5896,9 +5913,6 @@ void QSail7::GLCreateSailGeom(int GLList, QSail*pSail, CVector Position)
 
 
 
-
-
-
 	glNewList(GLList+MAXSAILS, GL_COMPILE);
 	{
 		//remove
@@ -5925,11 +5939,20 @@ void QSail7::GLCreateSailGeom(int GLList, QSail*pSail, CVector Position)
 		}*/
 
 		m_GLList++;
-		glDisable(GL_BLEND);
-		glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+
+		glEnable(GL_DEPTH_TEST);
+		glEnable (GL_LINE_STIPPLE);
 
 		glColor3d(W3dPrefsDlg::s_OutlineColor.redF(), W3dPrefsDlg::s_OutlineColor.greenF(), W3dPrefsDlg::s_OutlineColor.blueF());
 		glLineWidth(W3dPrefsDlg::s_OutlineWidth);
+
+
+		if     (W3dPrefsDlg::s_OutlineStyle == 1) glLineStipple (1, 0xCFCF);
+		else if(W3dPrefsDlg::s_OutlineStyle == 2) glLineStipple (1, 0x6666);
+		else if(W3dPrefsDlg::s_OutlineStyle == 3) glLineStipple (1, 0xFF18);
+		else if(W3dPrefsDlg::s_OutlineStyle == 4) glLineStipple (1, 0x7E66);
+		else                                      glLineStipple (1, 0xFFFF);
+
 		CVector PtA;
 
 		//Sections
@@ -6999,168 +7022,6 @@ void QSail7::GLDrawForces()
 }
 
 
-void QSail7::GLDrawBoatLegend()
-{
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
-	ThreeDWidget *p3DWidget = (ThreeDWidget*)s_p3DWidget;
-	static int dD, ZPos, LeftPos, total;
-	QString  strong, str1;
-	QString length, surface;
-
-	if(!m_pCurBoat) return;
-
-	QFontMetrics fm(pMainFrame->m_TextFont);
-	dD = fm.height();//pixels
-
-	// Write boat data
-
-	total = 4;
-	ZPos = p3DWidget->geometry().bottom()- total * dD ;
-	LeftPos = p3DWidget->geometry().left() +15;
-
-	int a,b;
-	a=8; b=3;
-
-	QSail *pSail =NULL;
-	if(m_pCurBoat->m_poaSail.size())
-	{
-		pSail = (QSail*)m_pCurBoat->m_poaSail.at(0);
-	}
-	//glNewList(WINGLEGEND,GL_COMPILE);
-	{
-		glDisable(GL_LIGHTING);
-		glDisable(GL_LIGHT0);
-		glColor3d(pMainFrame->m_TextColor.redF(),pMainFrame->m_TextColor.greenF(),pMainFrame->m_TextColor.blueF());
-
-		GetLengthUnit(length,pMainFrame->m_LengthUnit);
-		GetAreaUnit(surface,pMainFrame->m_AreaUnit);
-
-		p3DWidget->renderText(LeftPos, ZPos, m_pCurBoat->m_BoatName, pMainFrame->m_TextFont);
-		ZPos +=dD;
-
-		if(pSail)
-		{
-			str1 = QString(QObject::tr("Luff Length  = %1 ")).arg(pSail->LuffLength()*pMainFrame->m_mtoUnit, a,'f',b);
-			strong = str1 + length;
-			p3DWidget->renderText(LeftPos, ZPos, QString(strong), pMainFrame->m_TextFont);
-			ZPos +=dD;
-			str1 = QString(QObject::tr("Leech Length = %1 ")).arg(pSail->LeechLength()*pMainFrame->m_mtoUnit, a,'f',b);
-			strong = str1 + length;
-			p3DWidget->renderText(LeftPos, ZPos, QString(strong), pMainFrame->m_TextFont);
-			ZPos +=dD;
-			str1 = QString(QObject::tr("Foot Length  = %1 ")).arg(pSail->FootLength()*pMainFrame->m_mtoUnit, a,'f',b);
-			strong = str1 + length;
-			p3DWidget->renderText(LeftPos, ZPos, QString(strong), pMainFrame->m_TextFont);
-			ZPos +=dD;
-		}
-
-	}
-	//glEndList();
-}
-
-
-
-void QSail7::GLDrawBoatOppLegend()
-{
-	if(!m_pCurBoat || !m_pCurBoatOpp) return;
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
-	ThreeDWidget *p3DWidget = (ThreeDWidget*)s_p3DWidget;
-	int dD, YPos, XPos;
-	QString Result, strLength, strSpeed, strForce, strMoment;
-	int l;
-	GetLengthUnit(strLength, pMainFrame->m_LengthUnit);
-	GetSpeedUnit(strSpeed, pMainFrame->m_SpeedUnit);
-	GetForceUnit(strForce, pMainFrame->m_ForceUnit);
-	GetMomentUnit(strMoment, pMainFrame->m_MomentUnit);
-
-	QFontMetrics fm(pMainFrame->m_TextFont);
-	dD = fm.height();//pixels
-
-	int nSails = m_pCurBoat->m_poaSail.size();
-	YPos = p3DWidget->geometry().bottom()- 12*dD - nSails*dD;
-	XPos = p3DWidget->geometry().right() - 10 ;
-
-	//glNewList(BOATOPPLEGEND,GL_COMPILE);
-	{
-		glDisable(GL_LIGHTING);
-		glDisable(GL_LIGHT0);
-		glColor3d(pMainFrame->m_TextColor.redF(),pMainFrame->m_TextColor.greenF(),pMainFrame->m_TextColor.blueF());
-
-		Result = QString("Control pos. = %1    ").arg(m_pCurBoatOpp->m_Ctrl, 6,'f',2);
-		YPos += dD;
-		p3DWidget->renderText(XPos-fm.width(Result), YPos, Result, pMainFrame->m_TextFont);
-
-		l = strSpeed.length();
-		if     (l==2) Result = QString(QObject::tr("V = %1 ")).arg(m_pCurBoatOpp->m_QInf*pMainFrame->m_mstoUnit,7,'f',3);
-		else if(l==3) Result = QString(QObject::tr("V = %1 ")).arg(m_pCurBoatOpp->m_QInf*pMainFrame->m_mstoUnit,6,'f',2);
-		else if(l==4) Result = QString(QObject::tr("V = %1 ")).arg(m_pCurBoatOpp->m_QInf*pMainFrame->m_mstoUnit,5,'f',1);
-		Result += strSpeed;
-		YPos += dD;
-		p3DWidget->renderText(XPos-fm.width(Result), YPos, Result, pMainFrame->m_TextFont);
-
-		Result = QString("Beta = %1").arg(m_pCurBoatOpp->m_Beta,6,'f',2);
-		Result += QString::fromUtf8("°   ");
-		YPos += dD;
-		p3DWidget->renderText(XPos-fm.width(Result), YPos, Result, pMainFrame->m_TextFont);
-
-		Result = QString("Phi = %1").arg(m_pCurBoatOpp->m_Phi, 6,'f',2);
-		Result += QString::fromUtf8("°   ");
-		YPos += dD;
-		p3DWidget->renderText(XPos-fm.width(Result), YPos, Result, pMainFrame->m_TextFont);
-
-		for(int is=0; is<nSails; is++)
-		{
-			QSail *pSail = m_pCurBoat->m_poaSail.at(is);
-			Result = pSail->m_SailName+ QString(" angle = %1").arg(m_pCurBoatOpp->m_SailAngle[is], 6,'f',2);
-			Result += QString::fromUtf8("°   ");
-			YPos += dD;
-			p3DWidget->renderText(XPos-fm.width(Result), YPos, Result, pMainFrame->m_TextFont);
-		}
-
-		QSail *pSail = m_pCurBoat->m_poaSail.at(0);
-		if(pSail)
-		{
-			ReynoldsFormat(Result, pSail->FootLength() * m_pCurBoatOpp->m_QInf /m_pCurBoatPolar->m_Viscosity);
-			Result = QObject::tr("Foot Re = ") + Result +" ";
-			YPos += dD;
-			p3DWidget->renderText(XPos-fm.width(Result), YPos, Result, pMainFrame->m_TextFont);
-		}
-
-
-		Result = QString("Fx = %1 ").arg(m_pCurBoatOpp->F.x, 7,'f',2);
-		Result += strForce+" ";
-		YPos += dD;
-		p3DWidget->renderText(XPos-fm.width(Result), YPos, Result, pMainFrame->m_TextFont);
-
-		Result = QString("Fy = %1 ").arg(m_pCurBoatOpp->F.y, 7,'f',2);
-		Result += strForce+" ";
-		YPos += dD;
-		p3DWidget->renderText(XPos-fm.width(Result), YPos, Result, pMainFrame->m_TextFont);
-
-		Result = QString("Fz = %1 ").arg(m_pCurBoatOpp->F.z, 7,'f',2);
-		Result += strForce +" ";
-		YPos += dD;
-		p3DWidget->renderText(XPos-fm.width(Result), YPos, Result, pMainFrame->m_TextFont);
-
-		Result = QString("Mx = %1 ").arg(m_pCurBoatOpp->M.x*pMainFrame->m_NmtoUnit, 6, 'f', 1);
-		Result += strMoment;
-		YPos += dD;
-		p3DWidget->renderText(XPos-fm.width(Result), YPos, Result, pMainFrame->m_TextFont);
-
-		Result = QString("My = %1 ").arg(m_pCurBoatOpp->M.y*pMainFrame->m_NmtoUnit, 6, 'f', 1);
-		Result += strMoment;
-		YPos += dD;
-		p3DWidget->renderText(XPos-fm.width(Result), YPos, Result, pMainFrame->m_TextFont);
-
-		Result = QString("Mz = %1 ").arg(m_pCurBoatOpp->M.z*pMainFrame->m_NmtoUnit, 6, 'f', 1);
-		Result += strMoment;
-		YPos += dD;
-		p3DWidget->renderText(XPos-fm.width(Result), YPos, Result, pMainFrame->m_TextFont);
-	}
-	//glEndList();
-}
-
-
 
 
 void QSail7::SnapClient(QString const &FileName)
@@ -7250,269 +7111,6 @@ void QSail7::UpdateUnits()
 
 }
 
-
-void QSail7::GLCreateCpLegendClr(QRect rect, double LegendMin, double LegendMax)
-{
-	int i;
-
-//	double ClientToGL;
-
-	double fi, ZPos,dz,Right1, Right2;
-	double color = 0.0;
-
-	double w = (double)rect.width();
-	double h = (double)rect.height();
-	double XPos;
-
-	if(w>h)
-	{
-		XPos  = 1.0;
-		//		ZPos  = h/w * (-1.0 + 2.0/3.0);
-		dz    = h/w*1.0/20.0;
-		ZPos  = h/w - 23.0*dz;
-//		ClientToGL = 2.0/w;
-	}
-	else
-	{
-		XPos = w/h;
-		//		ZPos  = (-1.0 + 2.0/3.0);
-		dz    = 1.0/20.0;
-		ZPos  = 1.0 - 23.0*dz;
-//		ClientToGL = 2.0/h;
-	}
-
-//	dD      = 12.0/w*2.0;
-
-	Right1  = .94*XPos;
-	Right2  = .98*XPos;
-
-//	range = (LegendMax - LegendMin);
-//	delta = range / 20;
-
-
-	glNewList(PANELCPLEGENDCOLOR,GL_COMPILE);
-	{
-		glDisable(GL_LIGHTING);
-		glDisable(GL_LIGHT0);
-
-		glPolygonMode(GL_FRONT,GL_FILL);
-
-		glBegin(GL_QUAD_STRIP);
-		{
-			for (i=0; i<=20; i++)
-			{
-				fi = (double)i*dz;
-				color += 0.05;
-
-				glColor3d(GLGetRed(color),GLGetGreen(color),GLGetBlue(color));
-				glVertex3d(Right1, ZPos+fi, 0.0);
-				glVertex3d(Right2, ZPos+fi, 0.0);
-			}
-		}
-		glEnd();
-	}
-	glEndList();
-}
-
-
-void QSail7::GLDrawPanelForceLegend(void *pMainFrame, double rmin, double rmax)
-{
-	MainFrame *pMF = (MainFrame*)pMainFrame;
-	ThreeDWidget *p3DWidget = (ThreeDWidget*)pMF->Get3DWidget();
-	int i;
-	double labellength, ClientToGL;
-	double f, fi, ZPos,dz,Right1;
-	double range, delta;
-	double XPos, w, h;
-	QString strong, strForce;
-	QFontMetrics fm(pMF->m_TextFont);
-
-	w = (double)p3DWidget->geometry().width();
-	h = (double)p3DWidget->geometry().height();
-
-	GetForceUnit(strForce, pMF->m_ForceUnit);
-
-	range = rmax - rmin;
-
-	if(w>h)
-	{
-			XPos  = 1.0;
-			dz    = h/w*1.0/20.0;
-			ZPos  = h/w - 23.0*dz;
-			ClientToGL = 2.0/w;
-	}
-	else
-	{
-			XPos = w/h;
-			dz    = 1.0/20.0;
-			ZPos  = 1.0 - 23.0*dz;
-			ClientToGL = 2.0/h;
-	}
-
-	Right1  = .94*XPos;
-//	Right2  = .98*XPos;
-
-	delta = range / 20.0;
-
-	glColor3d(pMF->m_TextColor.redF(), pMF->m_TextColor.greenF(), pMF->m_TextColor.blueF());
-
-	// Draw the labels
-	for (i=0; i<=20; i ++)
-	{
-		f = rmin + (double)i * delta;
-		fi = (double)i*dz ;
-		strong = QString("%1").arg(f, 5,'g',3);
-		labellength = (fm.width(strong)+5) * ClientToGL;
-		p3DWidget->renderText(Right1-labellength, ZPos+fi, 0.0, strong, pMF->m_TextFont);
-	}
-	labellength = (fm.width(strForce)+5) * ClientToGL;
-	p3DWidget->renderText(Right1-labellength, ZPos+21.0*dz,  0.0, strForce, pMF->m_TextFont);
-}
-
-
-void GLDrawCpLegend(void *p3DWidget, QRect rect, double LegendMin, double LegendMax, QFont &TextFont, QColor TextColor)
-{
-	int i;
-	ThreeDWidget *pOGL = (ThreeDWidget*)p3DWidget;
-	QString strong;
-
-	double labellength, ClientToGL;
-
-	double f, fi, ZPos,dz,Right1;
-	double range, delta;
-
-	QFontMetrics fm(TextFont);
-
-	double w = (double)rect.width();
-	double h = (double)rect.height();
-	double XPos;
-
-	if(w>h)
-	{
-		XPos  = 1.0;
-//		ZPos  = h/w * (-1.0 + 2.0/3.0);
-		dz    = h/w*1.0/20.0;
-		ZPos  = h/w - 23.0*dz;
-		ClientToGL = 2.0/w;
-	}
-	else
-	{
-		XPos = w/h;
-//		ZPos  = (-1.0 + 2.0/3.0);
-		dz    = 1.0/20.0;
-		ZPos  = 1.0 - 23.0*dz;
-		ClientToGL = 2.0/h;
-	}
-
-//	dD      = 12.0/w*2.0;
-
-	Right1  = .94*XPos;
-//	Right2  = .98*XPos;
-
-	range = (LegendMax - LegendMin);
-	delta = range / 20;
-
-
-		//glNewList(WOPPCPLEGENDTXT,GL_COMPILE);
-	{
-		glDisable(GL_LIGHTING);
-		glDisable(GL_LIGHT0);
-//		glBegin(GL_LINES);
-//		glVertex3d(-1.0, h/w, 0.0);
-//		glVertex3d(0.0, 0.0, 0.0);
-//		glEnd();
-
-		glPolygonMode(GL_FRONT,GL_LINE);
-
-		glColor3d(TextColor.redF(), TextColor.greenF(), TextColor.blueF());
-		// Draw the labels
-		for (i=0; i<=20; i ++)
-		{
-			f = LegendMin + (double)i * delta;
-			fi = (double)i*dz;
-			strong = QString("%1").arg(f, 5,'f',2);
-			labellength = (fm.width(strong)+5) * ClientToGL;
-			pOGL->renderText(Right1-labellength, ZPos+fi, 0.0, strong, TextFont);
-		}
-		strong = "Cp";
-		labellength = (fm.width(strong)+5) * ClientToGL;
-		pOGL->renderText(Right1-labellength, ZPos+21.0*dz,  0.0, strong, TextFont);
-	}
-		//glEndList();
-}
-
-
-
-void QSail7::GLDrawCpLegend(void *p3DWidget, QRect rect, double LegendMin, double LegendMax, QFont &TextFont, QColor TextColor)
-{
-	int i;
-	ThreeDWidget *pOGL = (ThreeDWidget*)p3DWidget;
-	QString strong;
-
-	double labellength, ClientToGL;
-
-	double f, fi, ZPos,dz,Right1;
-	double range, delta;
-
-	QFontMetrics fm(TextFont);
-
-	double w = (double)rect.width();
-	double h = (double)rect.height();
-	double XPos;
-
-	if(w>h)
-	{
-		XPos  = 1.0;
-//		ZPos  = h/w * (-1.0 + 2.0/3.0);
-		dz    = h/w*1.0/20.0;
-		ZPos  = h/w - 23.0*dz;
-		ClientToGL = 2.0/w;
-	}
-	else
-	{
-		XPos = w/h;
-//		ZPos  = (-1.0 + 2.0/3.0);
-		dz    = 1.0/20.0;
-		ZPos  = 1.0 - 23.0*dz;
-		ClientToGL = 2.0/h;
-	}
-
-//	dD      = 12.0/w*2.0;
-
-	Right1  = .94*XPos;
-//	Right2  = .98*XPos;
-
-	range = (LegendMax - LegendMin);
-	delta = range / 20;
-
-
-		//glNewList(WOPPCPLEGENDTXT,GL_COMPILE);
-	{
-		glDisable(GL_LIGHTING);
-		glDisable(GL_LIGHT0);
-//		glBegin(GL_LINES);
-//		glVertex3d(-1.0, h/w, 0.0);
-//		glVertex3d(0.0, 0.0, 0.0);
-//		glEnd();
-
-		glPolygonMode(GL_FRONT,GL_LINE);
-
-		glColor3d(TextColor.redF(), TextColor.greenF(), TextColor.blueF());
-		// Draw the labels
-		for (i=0; i<=20; i ++)
-		{
-			f = LegendMin + (double)i * delta;
-			fi = (double)i*dz;
-			strong = QString("%1").arg(f, 5,'f',2);
-			labellength = (fm.width(strong)+5) * ClientToGL;
-			pOGL->renderText(Right1-labellength, ZPos+fi, 0.0, strong, TextFont);
-		}
-		strong = "Cp";
-		labellength = (fm.width(strong)+5) * ClientToGL;
-		pOGL->renderText(Right1-labellength, ZPos+21.0*dz,  0.0, strong, TextFont);
-	}
-		//glEndList();
-}
 
 
 void QSail7::OnExportCurBoatOpp()
@@ -7874,10 +7472,391 @@ void QSail7::OnResetGraphLegend()
 
 
 
+void QSail7::PaintBoatOppLegend(QPainter &painter, QRect rect)
+{
+	if(!m_pCurBoat || !m_pCurBoatOpp) return;
+
+	painter.save();
+
+	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
+
+	int dD, dheight, dwidth, YPos, XPos;
+	QString Result, strLength, strSpeed, strForce, strMoment;
+	int l;
+	int margin = 10;
+
+	GetLengthUnit(strLength, pMainFrame->m_LengthUnit);
+	GetSpeedUnit(strSpeed, pMainFrame->m_SpeedUnit);
+	GetForceUnit(strForce, pMainFrame->m_ForceUnit);
+	GetMomentUnit(strMoment, pMainFrame->m_MomentUnit);
+
+
+	QPen textPen(pMainFrame->m_TextColor);
+	painter.setPen(textPen);
+	painter.setFont(pMainFrame->m_TextFont);
+	painter.setRenderHint(QPainter::Antialiasing);
+
+	QFontMetrics fm(pMainFrame->m_TextFont);
+	dheight = fm.height();
+	dwidth = fm.averageCharWidth()*50;
+
+	int D = 0;
+	int RightPos = rect.right()-margin - dwidth;
+	int ZPos     = rect.height()-14*dheight;
+
+
+	int nSails = m_pCurBoat->m_poaSail.size();
+//	YPos = p3DWidget->geometry().bottom()- 12*dD - nSails*dD;
+//	XPos = p3DWidget->geometry().right() - 10 ;
+
+	//glNewList(BOATOPPLEGEND,GL_COMPILE);
+	{
+		Result = QString("Control pos. = %1    ").arg(m_pCurBoatOpp->m_Ctrl, 7,'f',2);
+		painter.drawText(RightPos, ZPos+D, dwidth, dheight, Qt::AlignRight | Qt::AlignTop, Result);
+		D+=dheight;
+
+		l = strSpeed.length();
+		if     (l==2) Result = QString(QObject::tr("V = %1 ")).arg(m_pCurBoatOpp->m_QInf*pMainFrame->m_mstoUnit,8,'f',3);
+		else if(l==3) Result = QString(QObject::tr("V = %1 ")).arg(m_pCurBoatOpp->m_QInf*pMainFrame->m_mstoUnit,7,'f',2);
+		else if(l==4) Result = QString(QObject::tr("V = %1 ")).arg(m_pCurBoatOpp->m_QInf*pMainFrame->m_mstoUnit,6,'f',1);
+		Result += strSpeed;
+		painter.drawText(RightPos, ZPos+D, dwidth, dheight, Qt::AlignRight | Qt::AlignTop, Result);
+		D+=dheight;
+
+		Result = QString("Beta = %1").arg(m_pCurBoatOpp->m_Beta,7,'f',2);
+		Result += QString::fromUtf8("°   ");
+		painter.drawText(RightPos, ZPos+D, dwidth, dheight, Qt::AlignRight | Qt::AlignTop, Result);
+		D+=dheight;
+
+		Result = QString("Phi = %1").arg(m_pCurBoatOpp->m_Phi, 7,'f',2);
+		Result += QString::fromUtf8("°   ");
+		painter.drawText(RightPos, ZPos+D, dwidth, dheight, Qt::AlignRight | Qt::AlignTop, Result);
+		D+=dheight;
+
+		for(int is=0; is<nSails; is++)
+		{
+			QSail *pSail = m_pCurBoat->m_poaSail.at(is);
+			Result = pSail->m_SailName+ QString(" angle = %1").arg(m_pCurBoatOpp->m_SailAngle[is], 7,'f',2);
+			Result += QString::fromUtf8("°   ");
+			painter.drawText(RightPos, ZPos+D, dwidth, dheight, Qt::AlignRight | Qt::AlignTop, Result);
+			D+=dheight;
+		}
+
+		QSail *pSail = m_pCurBoat->m_poaSail.at(0);
+		if(pSail)
+		{
+			ReynoldsFormat(Result, pSail->FootLength() * m_pCurBoatOpp->m_QInf /m_pCurBoatPolar->m_Viscosity);
+			Result = QObject::tr("Foot Re = ") + Result +" ";
+			painter.drawText(RightPos, ZPos+D, dwidth, dheight, Qt::AlignRight | Qt::AlignTop, Result);
+			D+=dheight;
+		}
+
+
+		Result = QString("Fx = %1 ").arg(m_pCurBoatOpp->F.x, 8,'f',2);
+		Result += strForce+" ";
+		painter.drawText(RightPos, ZPos+D, dwidth, dheight, Qt::AlignRight | Qt::AlignTop, Result);
+		D+=dheight;
+
+		Result = QString("Fy = %1 ").arg(m_pCurBoatOpp->F.y, 8,'f',2);
+		Result += strForce+" ";
+		painter.drawText(RightPos, ZPos+D, dwidth, dheight, Qt::AlignRight | Qt::AlignTop, Result);
+		D+=dheight;
+
+		Result = QString("Fz = %1 ").arg(m_pCurBoatOpp->F.z, 8,'f',2);
+		Result += strForce +" ";
+		painter.drawText(RightPos, ZPos+D, dwidth, dheight, Qt::AlignRight | Qt::AlignTop, Result);
+		D+=dheight;
+
+		Result = QString("Mx = %1 ").arg(m_pCurBoatOpp->M.x*pMainFrame->m_NmtoUnit, 7, 'f', 1);
+		Result += strMoment;
+		painter.drawText(RightPos, ZPos+D, dwidth, dheight, Qt::AlignRight | Qt::AlignTop, Result);
+		D+=dheight;
+
+		Result = QString("My = %1 ").arg(m_pCurBoatOpp->M.y*pMainFrame->m_NmtoUnit, 7, 'f', 1);
+		Result += strMoment;
+		painter.drawText(RightPos, ZPos+D, dwidth, dheight, Qt::AlignRight | Qt::AlignTop, Result);
+		D+=dheight;
+
+		Result = QString("Mz = %1 ").arg(m_pCurBoatOpp->M.z*pMainFrame->m_NmtoUnit, 7, 'f', 1);
+		Result += strMoment;
+		painter.drawText(RightPos, ZPos+D, dwidth, dheight, Qt::AlignRight | Qt::AlignTop, Result);
+		D+=dheight;
+	}
+	painter.restore();
+}
+
+
+
+void QSail7::PaintBoatLegend(QPainter &painter, QRect rect)
+{
+	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
+
+	QString  strong, str1;
+	QString length, surface;
+
+	if(!m_pCurBoat) return;
+	painter.save();
+
+	static int margin,dheight;
+
+	QPen textPen(pMainFrame->m_TextColor);
+	painter.setPen(textPen);
+	painter.setFont(pMainFrame->m_TextFont);
+	painter.setRenderHint(QPainter::Antialiasing);
+
+	margin = 10;
+
+	QFontMetrics fm(pMainFrame->m_TextFont);
+	dheight = fm.height();
+	int D = 0;
+	int LeftPos = margin;
+	int ZPos    = rect.height()-5*dheight;
+
+
+	D+=dheight;
+
+	int a,b;
+	a=8; b=3;
+
+	QSail *pSail =NULL;
+	if(m_pCurBoat->m_poaSail.size())
+	{
+		pSail = (QSail*)m_pCurBoat->m_poaSail.at(0);
+	}
+
+	GetLengthUnit(length,pMainFrame->m_LengthUnit);
+	GetAreaUnit(surface,pMainFrame->m_AreaUnit);
+
+	painter.drawText(LeftPos,ZPos+D, m_pCurBoat->m_BoatName);
+	ZPos +=dheight;
+
+	if(pSail)
+	{
+		str1 = QString(QObject::tr("Luff Length  = %1 ")).arg(pSail->LuffLength()*pMainFrame->m_mtoUnit, a,'f',b);
+		strong = str1 + length;
+		painter.drawText(LeftPos,ZPos+D, strong);
+		D+=dheight;
+
+		str1 = QString(QObject::tr("Leech Length = %1 ")).arg(pSail->LeechLength()*pMainFrame->m_mtoUnit, a,'f',b);
+		strong = str1 + length;
+		painter.drawText(LeftPos,ZPos+D, strong);
+		ZPos +=dheight;
+
+		str1 = QString(QObject::tr("Foot Length  = %1 ")).arg(pSail->FootLength()*pMainFrame->m_mtoUnit, a,'f',b);
+		strong = str1 + length;
+		painter.drawText(LeftPos,ZPos+D, strong);
+		ZPos +=dheight;
+	}
+	painter.restore();
+}
+
+
+
+void QSail7::GLCreateCpLegendClr(QRect cltRect)
+{
+	int i;
+	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
+	QFont fnt(pMainFrame->m_TextFont); //valgrind
+	QFontMetrics fm(fnt);
+	double fmw = (double) fm.averageCharWidth();
+
+	double fi, ZPos,dz,Right1, Right2;
+	double color = 0.0;
+
+	double w = (double)cltRect.width();
+	double h = (double)cltRect.height();
+	double XPos;
+
+	if(w>h)
+	{
+		XPos  = 1.0;
+		dz    = h/w /40.0;
+		ZPos  = h/w/10 - 12.0*dz;
+	}
+	else
+	{
+		XPos  = w/h;
+		dz    = 1. /40.0;
+		ZPos  = 1./10 - 12.0*dz;
+	}
+
+	Right1  = XPos - 8 * fmw/w;
+	Right2  = XPos - 3 * fmw/w;
+
+	glNewList(PANELCPLEGENDCOLOR,GL_COMPILE);
+	{
+		m_GLList++;
+		glDisable(GL_LIGHTING);
+		glDisable(GL_LIGHT0);
+
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+		glBegin(GL_QUAD_STRIP);
+		{
+			for (i=0; i<=20; i++)
+			{
+				fi = (double)i*dz;
+				color += 0.05;
+
+				glColor3d(GLGetRed(color),GLGetGreen(color),GLGetBlue(color));
+				glVertex3d(Right1, ZPos+fi*2, 0.0);
+				glVertex3d(Right2, ZPos+fi*2, 0.0);
+			}
+		}
+		glEnd();
+	}
+	glEndList();
+}
+
+
+/**
+ * Paints and overlays the labels associated to the Cp color scale in the 3D view
+ * @param painter the painter associated to the 3D widget
+ */
+void QSail7::PaintCpLegendText(QPainter &painter)
+{
+	if (!m_b3DCp || !m_pCurBoatOpp ) return;
+	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
+
+	int i;
+	QString strong;
+
+	double labellength;
+
+	double f;
+	double range, delta;
+
+	painter.save();
+
+	painter.setFont(pMainFrame->m_TextFont);
+	painter.setRenderHint(QPainter::Antialiasing);
+
+	QFontMetrics fm(pMainFrame->m_TextFont);
+	int back = fm.averageCharWidth() * 5;
+
+	double h = m_r3DCltRect.height();
+	double y0 = 2.*h/5.0;
+
+
+	int ixPos, iyPos, dy;
+
+	ixPos  = m_r3DCltRect.width()-back;
+
+	dy     = (int) (h/40.0);
+	iyPos  = (int) (y0 - 12.0*dy);
+
+
+	range = GL3DScales::s_LegendMax - GL3DScales::s_LegendMin;
+	delta = range / 20;
+
+
+	QPen textPen(pMainFrame->m_TextColor);
+	painter.setPen(textPen);
+	painter.setRenderHint(QPainter::Antialiasing);
+
+	strong = "Cp";
+	labellength = fm.width(strong)+5;
+	painter.drawText(ixPos-labellength, iyPos-dy, strong);
+
+	for (i=0; i<=20; i ++)
+	{
+		f = GL3DScales::s_LegendMax - (double)i * delta;
+		strong = QString("%1").arg(f, 5,'f',2);
+		labellength = (fm.width(strong)+5);
+		painter.drawText(ixPos-labellength, iyPos+i*dy, strong);
+	}
+
+	painter.restore();
+}
+
+
+
+/**
+ * Paints the labels associated to the Panel forces color scale in the 3D view
+ * @param painter the painter to write on
+ */
+void QSail7::PaintPanelForceLegendText(QPainter &painter, double rmin, double rmax)
+{
+	if(!m_pCurBoatPolar || !m_pCurBoatOpp) return;
+	if(!m_bPanelForce) return;
+
+	QString strForce, strong;
+	int p, i;
+	int labellength;
+	double f;
+	double range, delta;
+
+	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
+	GetForceUnit(strForce, pMainFrame->m_ForceUnit);
+
+
+	painter.save();
+	painter.setFont(pMainFrame->m_TextFont);
+	painter.setRenderHint(QPainter::Antialiasing);
+	QPen textPen(pMainFrame->m_TextColor);
+	painter.setPen(textPen);
+
+
+	//define the range of values to set the colors in accordance
+	range = rmax - rmin;
+
+
+	QFontMetrics fm(pMainFrame->m_TextFont);
+	int back = fm.averageCharWidth() * 5;
+
+	double h = (double)m_r3DCltRect.height();
+	double y0 = 2.*h/5.0;
+
+
+	int ixPos, iyPos, dy;
+
+	ixPos  = m_r3DCltRect.width()-back;
+
+	dy     = (int) (h/40.0);
+	iyPos  = (int) (y0 - 12.0*dy);
+
+	delta = range / 20.0;
+
+
+	labellength = fm.width(strForce)+5;
+	painter.drawText(ixPos-labellength, iyPos-dy, strForce);
+
+
+	for (i=0; i<=20; i++)
+	{
+		f = rmin + (double)i * delta;
+		strong = QString("%1").arg(f, 5,'f',2);
+		labellength = (fm.width(strong)+5);
+		painter.drawText(ixPos-labellength, iyPos+i*dy, strong);
+	}
+
+	painter.restore();
+}
 
 
 
 
 
+/**
+ * Creates the offscreen pixmap with the text legend which will be overlayed on the 3D or 2D view
+ */
+void QSail7::DrawTextLegend()
+{
+	m_PixText = m_PixText.scaled(m_r3DCltRect.size());
+	m_PixText.fill(Qt::transparent);
+	QPainter paint(&m_PixText);
+
+	PaintBoatLegend(paint, m_r3DCltRect);
+	if(m_pCurBoatOpp)
+	{
+		PaintBoatOppLegend(paint, m_r3DCltRect);
+		if(m_iView==SAIL3DVIEW)
+		{
+			if(m_b3DCp)       PaintCpLegendText(paint);
+			if(m_bPanelForce) PaintPanelForceLegendText(paint, m_ForceMin, m_ForceMax);
+		}
+	}
+	m_bResetTextLegend = false;
+}
 
 
