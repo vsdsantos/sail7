@@ -2,7 +2,7 @@
 
     CArcBall Class
 	Copyright (C)  Bradley Smith, March 24, 2006
-	Hideously modified in 2008-2009 by Andre Deperrois sail7@xflr5.com for miserable selfish purposes
+	Hideously modified in 2008-2009 by Andre Deperrois adeperrois@xflr5.com for miserable selfish purposes
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -57,18 +57,37 @@
  */
 
 
-#ifndef ARCALL_H
-#define ARCALL_H
+
+/**
+ *@file
+ * This file contains the description of the Arcball class used for the calculation of rotations in 3D display.
+ * Based on the code provided by Bradley Smith http://rainwarrior.ca/dragon/arcball.html
+ *
+ */
+
+
+#ifndef ARBCALL_H
+#define ARBCALL_H
+
+
 
 #include "../objects/CVector.h"
 #include "../objects/Quaternion.h"
 #include <QRect>
 
+
+
+/**
+*@class ArcBall
+*@brief
+ * This class defines the Arcball object used for the calculation of rotations in 3D display.
+ *
+   Based on the code provided by Bradley Smith http://rainwarrior.ca/dragon/arcball.html
+*/
 class ArcBall
 {
 public:
 	ArcBall(void);
-
 
 	void SetQuat(Quaternion Qt);
 	void SetQuat(double r, double qx, double qy, double qz);
@@ -118,13 +137,14 @@ public:
 	Quaternion Quat;
 	double angle, cosa2, sina2, cosa;
 
-	double ab_glp[16];
-	double ab_glm[16];
-	int ab_glv[4];
+//	double ab_glp[16];
+//	double ab_glm[16];
+//	int ab_glv[4];
 
 	//	object offset
 	double *m_pOffx, *m_pOffy;
 	double *m_pTransx, *m_pTransy;
+	QRect *m_pRect;
 
 	//avoid lengthy recurring memory allocations
 	CVector aa, c, m, ec, sc, p, d;
