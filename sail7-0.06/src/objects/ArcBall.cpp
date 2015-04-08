@@ -2,7 +2,7 @@
 
 	ArcBall Class
 	Copyright (C)  Bradley Smith, March 24, 2006
-	Hideously modified in 2008 by Andre Deperrois sail7@xflr5.com for miserable selfish purposes
+	Hideously modified in 2008 by Andre Deperrois adeperrois@xflr5.com for miserable selfish purposes
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -27,7 +27,6 @@
 #include "math.h"
 
 
-
 ArcBall::ArcBall(void)
 {
 	m_p3dWidget = NULL;
@@ -35,6 +34,7 @@ ArcBall::ArcBall(void)
 	m_pOffy     = NULL;
 	m_pTransx   = NULL;
 	m_pTransy   = NULL;
+	m_pRect     = NULL;
 
 	angle = 0.0;
 	Quat.a  = 0.0;
@@ -60,8 +60,8 @@ ArcBall::ArcBall(void)
 	ab_quat[14]	=  0.0f;
 	ab_quat[15]	=  1.0f;
 
-	memcpy(ab_last, ab_quat, 16*sizeof(double));
-	memcpy(ab_next, ab_quat, 16*sizeof(double));
+	memcpy(ab_last, ab_quat, 16*sizeof(float));
+	memcpy(ab_next, ab_quat, 16*sizeof(float));
 
 	// the distance from the origin to the eye
 	ab_zoom  = 1.0;
@@ -83,7 +83,7 @@ ArcBall::ArcBall(void)
 	ab_up.Set(0.0,1.0,0.0);
 	ab_out.Set(1.0,0.0,0.0);
 
-	ab_glp[0]  = 1.0; ab_glp[1]  = 0.0; ab_glp[2]  = 0.0; ab_glp[3]  = 0.0; 
+/*	ab_glp[0]  = 1.0; ab_glp[1]  = 0.0; ab_glp[2]  = 0.0; ab_glp[3]  = 0.0;
 	ab_glp[4]  = 0.0; ab_glp[5]  = 1.0; ab_glp[6]  = 0.0; ab_glp[7]  = 0.0; 
 	ab_glp[8]  = 0.0; ab_glp[9]  = 0.0; ab_glp[10] = 1.0; ab_glp[11] = 0.0; 
 	ab_glp[12] = 0.0; ab_glp[13] = 0.0; ab_glp[14] = 0.0; ab_glp[15] = 1.0; 
@@ -94,7 +94,7 @@ ArcBall::ArcBall(void)
 	ab_glv[1] = 0;
 	ab_glv[2] = 640;
 	ab_glv[3] = 480;
-
+*/
 	sc.Set(0.0,0.0,1.0);
 	ec.Set(0.0,0.0,1.0);
 
@@ -102,14 +102,15 @@ ArcBall::ArcBall(void)
 }
 
 
+
 void ArcBall::GetMatrix()
 {
-	glGetDoublev(GL_PROJECTION_MATRIX,ab_glp);
-	glGetIntegerv(GL_VIEWPORT,ab_glv);
+//	glGetDoublev(GL_PROJECTION_MATRIX,ab_glp);
+//	glGetIntegerv(GL_VIEWPORT,ab_glv);
 }
 
 
-// find the intersection with the plane through the visible edge
+/** find the intersection with the plane through the visible edge*/
 void ArcBall::EdgeCoords(CVector m, CVector &V)
 {
 	// find the intersection of the edge plane and the ray
@@ -129,7 +130,7 @@ void ArcBall::EdgeCoords(CVector m, CVector &V)
 }
 
 
-// update current arcball rotation
+/** update current arcball rotation*/
 void ArcBall::Move(int mx, int my)
 {
 	if(ab_planar)
@@ -187,7 +188,7 @@ void ArcBall::Move(int mx, int my)
 
 
 
-// reset the rotation matrix
+/** reset the rotation matrix*/
 void ArcBall::QuatIdentity(float* q)
 {
 	q[0] =1; q[1] =0; q[2] =0; q[3] =0;
@@ -197,7 +198,7 @@ void ArcBall::QuatIdentity(float* q)
 }
 
 
-// copy a rotation matrix
+/** copy a rotation matrix*/
 void ArcBall::QuatCopy(float* dst, float* src)
 {
 	dst[0]=src[0]; dst[1]=src[1]; dst[2] =src[2];
@@ -206,7 +207,7 @@ void ArcBall::QuatCopy(float* dst, float* src)
 }
 
 
-// convert the quaternion into a rotation matrix
+/** convert the quaternion into a rotation matrix*/
 void ArcBall::QuattoMatrix(float* q, Quaternion Qt)
 {
 	x2 = Qt.qx*Qt.qx;
@@ -232,7 +233,7 @@ void ArcBall::QuattoMatrix(float* q, Quaternion Qt)
 	q[10]= (float)(1 - 2*x2 - 2*y2);
 }
 
-// multiply two rotation matrices
+/** multiply two rotation matrices*/
 void ArcBall::QuatNext(float* dest, float* left, float* right)
 {
 	dest[0] = left[0]*right[0] + left[1]*right[4] + left[2] *right[8];
@@ -247,7 +248,7 @@ void ArcBall::QuatNext(float* dest, float* left, float* right)
 }
 
 
-// reset the arcball
+/** reset the arcball*/
 void ArcBall::Reset()
 {
 	QuatIdentity(ab_quat);
@@ -255,7 +256,7 @@ void ArcBall::Reset()
 }
 
 
-// affect the arcball's orientation on openGL
+/** affect the arcball's orientation on openGL*/
 void ArcBall::Rotate()
 {
 	glMultMatrixf(ab_quat);
@@ -278,7 +279,7 @@ void ArcBall::RotateCrossPoint()
 
 void ArcBall::SetQuat(Quaternion Qt)
 {
-	if(fabs(Qt.a)<=1.0) angle = 2.0*acos(Qt.a) *  180.0/PI;
+	if(qAbs(Qt.a)<=1.0) angle = 2.0*acos(Qt.a) *  180.0/PI;
 	Quat.a  = Qt.a;
 
 	Quat.qx = Qt.qx;
@@ -291,9 +292,7 @@ void ArcBall::SetQuat(Quaternion Qt)
 
 void ArcBall::SetQuat(double r, double qx, double qy, double qz)
 {
-	if(fabs(r)<=1.0) angle = 2.0*acos(r) *  180.0/PI;
-	else return;//issue angle
-
+	if(qAbs(r)<=1.0) angle = 2.0*acos(r) *  180.0/PI;
 	Quat.a  = r;
 
 	Quat.qx = qx;
@@ -328,8 +327,6 @@ void ArcBall::SetZoom(double radius, CVector eye, CVector up)
 
 void ArcBall::PlanarCoords(int const &mx, int const &my, CVector &V)
 {
-//	gluUnProject(mx,my,0,ab_glm,ab_glp,ab_glv,&ax,&ay,&az);
-
 	ClientToGL(mx, my, ax, ay);
 
 	m.Set(ax- ab_eye.x, ay- ab_eye.y, az- ab_eye.z);
@@ -344,7 +341,6 @@ void ArcBall::PlanarCoords(int const &mx, int const &my, CVector &V)
 void ArcBall::SphereCoords(int const &mx, int const &my, CVector &V)
 {
 	// find the intersection with the sphere
-//	gluUnProject(mx, my, 0.0, ab_glm, ab_glp, ab_glv, &ax,&ay);
 
 	ClientToGL(mx, my, ax, ay);
 
@@ -360,7 +356,7 @@ void ArcBall::SphereCoords(int const &mx, int const &my, CVector &V)
 
 
 
-// begin arcball rotation
+/** begin arcball rotation*/
 void ArcBall::Start(int mx, int my)
 {
 	// saves a copy of the current rotation for comparison
@@ -373,16 +369,16 @@ void ArcBall::Start(int mx, int my)
 }
 
 
-
+/** Convert screen coordinates to GL view coordinates*/
 void ArcBall::ClientToGL(int const &x, int const &y, double &glx, double &gly)
 {
 	double h2, w2;
 
 	if(!m_p3dWidget) return;
-	ThreeDWidget *p3DWidget = (ThreeDWidget*)m_p3dWidget;
+	ThreeDWidget *p3dWidget = (ThreeDWidget*)m_p3dWidget;
 
-	h2 = (double)p3DWidget->geometry().height() /2.0;
-	w2 = (double)p3DWidget->geometry().width()  /2.0;
+	h2 = (double)p3dWidget->rect().height() /2.0;
+	w2 = (double)p3dWidget->rect().width()  /2.0;
 
 	if(w2>h2)
 	{
