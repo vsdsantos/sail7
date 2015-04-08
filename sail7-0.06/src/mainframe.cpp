@@ -52,6 +52,8 @@ MainFrame::MainFrame(QWidget *parent, Qt::WindowFlags flags)
 	: QMainWindow(parent, flags)
 {
 	m_VersionName = QString::fromLatin1("sail7 v0.06 alpha");
+
+/*
 	QString jpegPluginPath;
 
 	//Jpeg format requires a specific plugin to be loaded dynmically at run time
@@ -82,6 +84,7 @@ MainFrame::MainFrame(QWidget *parent, Qt::WindowFlags flags)
 			QMessageBox::information(window(), tr("Info"), errorMessage);
 		}
 	}
+	*/
 
 	setWindowTitle(m_VersionName);
 	setWindowIcon(QIcon(":/images/sail7_512.png"));
