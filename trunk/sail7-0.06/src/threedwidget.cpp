@@ -230,15 +230,47 @@ void ThreeDWidget::keyReleaseEvent(QKeyEvent *event)
 }
 
 
-void ThreeDWidget::paintGL()
+/**
+* Overrides the virtual paintEvent method of the base class.
+* Calls the paintGL() method, then overlays the text using the widget's QPainter
+* @param event
+*/
+void ThreeDWidget::paintEvent(QPaintEvent *event)
 {
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
-	glColor3d(pMainFrame->m_TextColor.redF(),pMainFrame->m_TextColor.greenF(),pMainFrame->m_TextColor.blueF());
-	QSail7* pSail7 = (QSail7*)s_pSail7;
+	paintGL();
+	QPainter painter(this);
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	if(m_iView==GLSAIL7VIEW)
 	{
+		QSail7* pSail7 = (QSail7*)s_pSail7;
+
+		if(pSail7->m_bResetTextLegend)
+		{
+			pSail7->DrawTextLegend();
+		}
+
+//		painter.setBackgroundMode(Qt::TransparentMode);
+//		painter.setCompositionMode(QPainter::CompositionMode_DestinationOver);
+//		painter.setOpacity(1);
+		painter.drawPixmap(0,0, pSail7->m_PixText);
+	}
+
+	event->accept();
+}
+
+
+
+void ThreeDWidget::paintGL()
+{
+	qreal pixelRatio = 1;
+#if QT_VERSION >= 0x050000
+	pixelRatio = devicePixelRatio();
+#endif
+	setupViewPort(width() * pixelRatio, height() * pixelRatio);
+
+	if(m_iView==GLSAIL7VIEW)
+	{
+		QSail7* pSail7 = (QSail7*)s_pSail7;
 		pSail7->GLDraw3D();
 		if(pSail7->m_iView==SAIL3DVIEW) pSail7->GLRenderView();
 	}
@@ -260,8 +292,33 @@ void ThreeDWidget::paintGL()
 }
 
 
+
+
+void ThreeDWidget::setupViewPort(int width, int height)
+{
+	makeCurrent();
+	int side = qMax(width, height);
+#ifdef Q_WS_MAC
+	glViewport(0,0, width, height);
+#else
+	glViewport((width - side) / 2, (height - side) / 2, side, side);
+#endif
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	double s = 1.0;
+#ifdef Q_WS_MAC
+	glOrtho(-s,s,-(height*s)/width,(height*s)/width,-100.0*s,100.0*s);
+#else
+	glOrtho(-s,s,-s,s,-100.0*s,100.0*s);
+#endif
+	glMatrixMode(GL_MODELVIEW);
+}
+
+
 void ThreeDWidget::resizeGL(int width, int height)
 {	
+	/*
 	double w, h;
 //	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 	int side = qMax(width, height);
@@ -281,7 +338,20 @@ void ThreeDWidget::resizeGL(int width, int height)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	if(w>h)	m_GLViewRect.SetRect(-s, s*h/w, s, -s*h/w);
+	else    m_GLViewRect.SetRect(-s*w/h, s, s*w/h, -s*h/w);*/
+
+	double w, h, s;
+	w = (double)width;
+	h = (double)height;
+	s = 1.0;
+
+
+	setupViewPort(width, height);
+
+	glLoadIdentity();
+	if(w>h)	m_GLViewRect.SetRect(-s, s*h/w, s, -s*h/w);
 	else    m_GLViewRect.SetRect(-s*w/h, s, s*w/h, -s*h/w);
+
 
 	if(m_iView == GLSAIL7VIEW)
 	{

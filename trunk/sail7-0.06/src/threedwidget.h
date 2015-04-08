@@ -32,7 +32,7 @@ public:
 
 
 private:
-
+	void paintEvent(QPaintEvent *event);
 	void initializeGL();
 	void keyPressEvent(QKeyEvent *event);
 	void keyReleaseEvent(QKeyEvent *event);
@@ -60,6 +60,7 @@ private:
 	void GLDrawAxes(double length, QColor AxisColor, int AxisStyle, int AxisWidth);
 	void CreateArcballList(ArcBall &ArcBall, double GLScale);
 	void NormalVector(GLdouble p1[3], GLdouble p2[3],  GLdouble p3[3], GLdouble n[3]);
+	void setupViewPort(int width, int height);
 
 private slots:
 

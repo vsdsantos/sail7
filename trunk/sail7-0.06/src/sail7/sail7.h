@@ -176,15 +176,18 @@ public:
 	void GLCreateVortices();
 	void GLCreateCp(BoatOpp *pBoatOpp);
 	void GLCreatePanelForces(BoatOpp *pBoatOpp);
-	void GLDrawPanelForceLegend(void *pMainFrame, double rmin, double rmax);
-	void GLCreateCpLegendClr(QRect rect, double LegendMin, double LegendMax);
-	void GLDrawCpLegend(void *pGLWidget, QRect rect, double LegendMin, double LegendMax, QFont &TextFont, QColor TextColor);
 	void GLCreateSurfSpeeds();
+	void GLCreateCpLegendClr(QRect cltRect);
+
+	void PaintPanelForceLegendText(QPainter &painter, double rmin, double rmax);
+	void PaintCpLegendText(QPainter &painter);
 
 	void SetScale();
 	void SetBoat(QString BoatName="");
 	void SetBoatPolar(BoatPolar *pBoatPolar=NULL, QString BoatPlrName = "");
 	bool SetBoatOpp(bool bCurrent=true, double x=0);
+
+	void DrawTextLegend();
 
 	void GetDistrib(int const &NPanels, const int &DistType, const int &k, double &tau1, double &tau2);
 	void PanelAnalyze(double V0, double VMax, double VDelta, bool bSequence);
@@ -234,10 +237,11 @@ public:
 
 	/** Creates the OpenGl list for lift and drag arrows.  Uses the force calculed in the Trefftz plane.*/
 	void GLDrawForces();
-	void GLDrawBoatLegend();
-	void GLDrawBoatOppLegend();
 	void GLCreateBodyMesh(CVector* pNode, CPanel *pPanel);
 	void GLCreatePanelNormals();
+
+	void PaintBoatLegend(QPainter &painter, QRect rect);
+	void PaintBoatOppLegend(QPainter &painter, QRect rect);
 
 	void DrawBoatPolarLegend(QPainter &painter, QPoint place, int bottom);
 
@@ -277,6 +281,10 @@ private:
 //	CSurface *m_pSurface[MAXSAILS];	// An array with the pointers to the sails surfaces
 
 	QPoint m_BoatPlrLegendOffset;		// client offset position for wing polar legend
+
+
+	bool m_bResetTextLegend;
+	QPixmap m_PixText;
 
 	int m_iView;
 	int m_iBoatPlrView;
