@@ -43,9 +43,10 @@ QSize  SailDlg::s_WindowSize;
 bool SailDlg::s_bWindowMaximized;
 
 
-SailDlg::SailDlg()
+SailDlg::SailDlg(QWidget *pParent) : QDialog(pParent)
 {
 	setWindowTitle("Sail Edition");
+	setWindowFlags(Qt::Window);
 
 	SailViewWidget::s_pSailDlg = this;
 
