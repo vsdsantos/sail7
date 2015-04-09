@@ -16,8 +16,8 @@
 #include "sail7/GL3dBodyDlg.h"
 #include "threedwidget.h"
 
-void *ThreeDWidget::s_pSail7;
-void *ThreeDWidget::s_pMainFrame;
+void *ThreeDWidget::s_pSail7 = NULL;
+void *ThreeDWidget::s_pMainFrame = NULL;
 
 
 ThreeDWidget::ThreeDWidget(QWidget *parent)
@@ -353,7 +353,7 @@ void ThreeDWidget::resizeGL(int width, int height)
 	else    m_GLViewRect.SetRect(-s*w/h, s, s*w/h, -s*h/w);
 
 
-	if(m_iView == GLSAIL7VIEW)
+	if(s_pSail7 && m_iView == GLSAIL7VIEW)
 	{
 		QSail7* pSail7 = (QSail7*)s_pSail7;
 		pSail7->m_ArcBall.GetMatrix();
