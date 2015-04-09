@@ -667,7 +667,7 @@ void BoatDlg::OnEditSail()
 
 	pMemSail->Duplicate(pSail);
 
-	SailDlg dlg;
+	SailDlg dlg(this);
 	if(dlg.InitDialog(pMemSail))
 	{
 		if(dlg.exec())

@@ -57,7 +57,7 @@ private slots:
 
 
 public:
-	SailDlg();
+	SailDlg(QWidget *pParent=NULL);
 	void showEvent(QShowEvent *event);
 	void resizeEvent(QResizeEvent *event);
 	void closeEvent(QCloseEvent *event);

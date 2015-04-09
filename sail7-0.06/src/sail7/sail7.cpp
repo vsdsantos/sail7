@@ -666,7 +666,7 @@ void QSail7::keyPressEvent(QKeyEvent *event)
 		}
 		case Qt::Key_F1:
 		{
-/*			if(bShift)
+			if(bShift)
 			{
 				SailcutSail *pSail = new SailcutSail;
 				SailDlg dlg;
@@ -679,7 +679,7 @@ void QSail7::keyPressEvent(QKeyEvent *event)
 				SailDlg dlg;
 				if(dlg.InitDialog(pSail)) dlg.exec();
 
-			}*/
+			}
 			break;
 		}
 		case Qt::Key_F2:
