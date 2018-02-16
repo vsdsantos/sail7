@@ -28,7 +28,7 @@
 #include <QFile>
 #include <QTextStream>
 #include "./Spline.h"
-#include "./CVector.h"
+#include "./Vector3d.h"
 #include "../params.h"
 
 class BSpline : public Spline
@@ -45,7 +45,7 @@ public:
 	double GetY(double const &x);
 	void GetSlopes(double &s0, double &s1);
 	bool Serialize(QDataStream &ar, bool bIsStoring);
-	CVector GetNormal(double const &x);
+	Vector3d GetNormal(double const &x);
 
 	void DrawOutputPoints(QPainter & painter, double const &scalex, double const &scaley, QPoint const &Offset);
 
@@ -59,7 +59,7 @@ public:
 	int m_iKnots;
 	int m_iDegree;
 	double m_knots[SPLINECONTROLSIZE];
-	CVector m_Output[SPLINEOUTPUTRES*2];
+	Vector3d m_Output[SPLINEOUTPUTRES*2];
 
 
 };

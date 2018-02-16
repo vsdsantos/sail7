@@ -1249,7 +1249,7 @@ double GetInterpolation(double t, double *y, int m, double *a, double *b, double
 
 
 
-void VLMCmn(CVector const &A, CVector const &B, CVector const &WindDirection, CVector const &C, CVector &V, bool const &bAll, double const &CoreSize)
+void VLMCmn(Vector3d const &A, Vector3d const &B, Vector3d const &WindDirection, Vector3d const &C, Vector3d &V, bool const &bAll, double const &CoreSize)
 {
 	// CLASSIC VLM FORMULATION/
 	//
@@ -1269,7 +1269,7 @@ void VLMCmn(CVector const &A, CVector const &B, CVector const &WindDirection, CV
 	// -->longer code, but 4x more efficient....
 
 	static double Omega, ftmp;
-	static CVector h, r0,r1, r2, Psi, Far, t;
+	static Vector3d h, r0,r1, r2, Psi, Far, t;
 
 	V.x = 0.0;
 	V.y = 0.0;
@@ -1411,7 +1411,7 @@ void VLMCmn(CVector const &A, CVector const &B, CVector const &WindDirection, CV
 
 
 
-void VLMQmn(CVector const &LA, CVector const &LB, CVector const &TA, CVector const &TB, CVector const &C, CVector &V, double const &CoreSize)
+void VLMQmn(Vector3d const &LA, Vector3d const &LB, Vector3d const &TA, Vector3d const &TB, Vector3d const &C, Vector3d &V, double const &CoreSize)
 {
 	//Quadrilateral VLM FORMULATION
 	// LA, LB, TA, TB are the vortex's four corners
@@ -1434,8 +1434,8 @@ void VLMQmn(CVector const &LA, CVector const &LB, CVector const &TA, CVector con
 	//
 	// Vectorial operations are written explicitly to save computing times (4x more efficient)
 	//
-	static CVector R[5];
-	static CVector r0, r1, r2, Psi, t;
+	static Vector3d R[5];
+	static Vector3d r0, r1, r2, Psi, t;
 	static double ftmp, r1v, r2v, Omega;
 	V.x = 0.0;
 	V.y = 0.0;
@@ -1500,8 +1500,8 @@ void VLMQmn(CVector const &LA, CVector const &LB, CVector const &TA, CVector con
 
 
 
-bool Intersect(CVector const &LA, CVector const &LB, CVector const &TA, CVector const &TB, CVector const &Normal,
-			   CVector const &A,  CVector const &U,  CVector &I, double &dist)
+bool Intersect(Vector3d const &LA, Vector3d const &LB, Vector3d const &TA, Vector3d const &TB, Vector3d const &Normal,
+			   Vector3d const &A,  Vector3d const &U,  Vector3d &I, double &dist)
 {
 	//
 	// Returns the intersection of a ray with the object's panels
@@ -1514,7 +1514,7 @@ bool Intersect(CVector const &LA, CVector const &LB, CVector const &TA, CVector 
 	//	dist = |AI|
 	//	The return value is true if intersection inside the quadrangle, false otherwise
 	//
-	static CVector P, W, V, T;
+	static Vector3d P, W, V, T;
 	bool b1, b2, b3, b4;
 	double r,s;
 
@@ -1731,7 +1731,7 @@ double SplineBlend(int const &index, int const &degree, double const &t, double 
 }
 
 
-void SetWindAxis(double const Beta, CVector &WindDirection, CVector &WindNormal, CVector &WindSide)
+void SetWindAxis(double const Beta, Vector3d &WindDirection, Vector3d &WindNormal, Vector3d &WindSide)
 {
 	double cosb = cos(Beta*PI/180.0);
 	double sinb = sin(Beta*PI/180.0);

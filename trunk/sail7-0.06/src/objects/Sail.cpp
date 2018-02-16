@@ -42,14 +42,14 @@ QSail::QSail()
 }
 
 
-void QSail::PanelTrefftz(CVector VInf, double *Mu, double *Sigma, int pos, CVector &FFForce, BoatPolar *pBoatPolar)
+void QSail::PanelTrefftz(Vector3d VInf, double *Mu, double *Sigma, int pos, Vector3d &FFForce, BoatPolar *pBoatPolar)
 {
 	// calculates the induced lift and drag from the vortices or wake panels strength
 	// using a farfield method
 	// Downwash is evaluated at a distance 1km downstream (i.e. infinite)
 
 	int l, p;
-	CVector C, Wg, dF, StripForce, WindDirection, WindNormal;
+	Vector3d C, Wg, dF, StripForce, WindDirection, WindNormal;
 	BoatAnalysisDlg *pPanelDlg = (BoatAnalysisDlg*)s_pBoatAnalysisDlg;
 
 
@@ -103,12 +103,12 @@ void QSail::PanelTrefftz(CVector VInf, double *Mu, double *Sigma, int pos, CVect
 
 
 
-void QSail::PanelComputeOnBody(CVector VInf, double *Cp, double *Gamma,
-							   CVector &SailForce, CVector &SailMoment,
-							   BoatPolar *pBoatPolar, CVector CoG)
+void QSail::PanelComputeOnBody(Vector3d VInf, double *Cp, double *Gamma,
+							   Vector3d &SailForce, Vector3d &SailMoment,
+							   BoatPolar *pBoatPolar, Vector3d CoG)
 {
-	CVector ForcePt, LeverArmPanelCoG;
-	CVector Force, PanelForce;
+	Vector3d ForcePt, LeverArmPanelCoG;
+	Vector3d Force, PanelForce;
 
 	//initialize
 	SailMoment.Set(0.0,0.0,0.0);

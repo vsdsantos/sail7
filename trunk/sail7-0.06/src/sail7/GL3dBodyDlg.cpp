@@ -494,7 +494,7 @@ void GL3dBodyDlg::GLCreateBody2DBodySection()
 		}
 		else
 		{
-			CVector Point;
+			Vector3d Point;
 			double xinc, u, v;
 
 			int nh = 50;
@@ -642,7 +642,7 @@ void GL3dBodyDlg::GLCreateBodyPoints()
 void GL3dBodyDlg::GLCreateBodyFrames()
 {
 	int j,k;
-	CVector Point;
+	Vector3d Point;
 	double hinc, u, v;
 	int nh,style, width;
 	QColor color;
@@ -1422,8 +1422,8 @@ void GL3dBodyDlg::GLDraw3D()
 	if(m_bResetglBody )
 	{
 		m_ArcBall.GetMatrix();
-		CVector eye(0.0,0.0,1.0);
-		CVector up(0.0,1.0,0.0);
+		Vector3d eye(0.0,0.0,1.0);
+		Vector3d up(0.0,1.0,0.0);
 		m_ArcBall.SetZoom(0.3,eye,up);
 
 		if(glIsList(ARCBALL))
@@ -1503,7 +1503,7 @@ void GL3dBodyDlg::GLDrawBodyLegend()
 		glDisable(GL_LIGHT0);
 
 		// Draw the labels
-		CVector real;
+		Vector3d real;
 		m_3dWidget.ClientToGL(m_MousePos, real);
 		QFontMetrics fm(pMainFrame->m_TextFont);
 		int dD = fm.height();
@@ -1857,7 +1857,7 @@ void GL3dBodyDlg::mouseDoubleClickEvent(QMouseEvent *event)
 {
 	QPoint point(event->pos().x(), event->pos().y());
 
-	CVector Real;
+	Vector3d Real;
 //	bool bCtrl = false;
 //	if(event->modifiers() & Qt::ControlModifier) bCtrl =true;
 
@@ -1874,7 +1874,7 @@ void GL3dBodyDlg::mouseDoubleClickEvent(QMouseEvent *event)
 void GL3dBodyDlg::mouseMoveEvent(QMouseEvent *event)
 {
 	static int n;
-	static CVector Real;
+	static Vector3d Real;
 	static QPoint Delta, point;
 
 	point = event->pos();
@@ -2042,7 +2042,7 @@ void GL3dBodyDlg::mousePressEvent(QMouseEvent *event)
 	int iF;
 	QPoint point(event->pos().x(), event->pos().y());
 
-	CVector Real;
+	Vector3d Real;
 	bool bCtrl = false;
 	bool bShift = false;
 	if(event->modifiers() & Qt::ControlModifier) bCtrl =true;
@@ -2559,9 +2559,9 @@ void GL3dBodyDlg::OnInsert()
 
 
 
-void GL3dBodyDlg::Insert(CVector Pt)
+void GL3dBodyDlg::Insert(Vector3d Pt)
 {
-	CVector Real;
+	Vector3d Real;
 	m_bChanged = true;
 	int FrameSel = 0;
 	if(m_BodyLineRect.contains(m_ptPopUp))
@@ -2746,10 +2746,10 @@ void GL3dBodyDlg::OnRemove()
 }
 
 
-void GL3dBodyDlg::Remove(CVector Pt)
+void GL3dBodyDlg::Remove(Vector3d Pt)
 {
 	int i,n;
-	CVector Real;
+	Vector3d Real;
 
 	CFrame *pBodyFrame;
 
@@ -3104,7 +3104,7 @@ void GL3dBodyDlg::Set3DRotationCenter(QPoint point)
 	//and changes the rotation vector and viewport translation
 
 	int  i, j;
-	CVector  A, B, AA, BB, PP, U;
+	Vector3d  A, B, AA, BB, PP, U;
 
 	i=-1;
 
@@ -3294,7 +3294,7 @@ void GL3dBodyDlg::SetFrameScale()
 
 void GL3dBodyDlg::SetRectangles()
 {
-	CVector V1, V2;
+	Vector3d V1, V2;
 	QPoint P1, P2;
 
 	m_glTop = m_3dWidget.m_GLViewRect.top;
@@ -3342,8 +3342,8 @@ void GL3dBodyDlg::SetBodyScale()
 	m_glScaled = (GLfloat)(3./4.* (m_VerticalSplit+1.0) / m_pBody->Length());
 
 	m_ArcBall.GetMatrix();
-	CVector eye(0.0,0.0,1.0);
-	CVector up(0.0,1.0,0.0);
+	Vector3d eye(0.0,0.0,1.0);
+	Vector3d up(0.0,1.0,0.0);
 	m_ArcBall.SetZoom(0.3,eye,up);
 
 	Set3DRotationCenter();

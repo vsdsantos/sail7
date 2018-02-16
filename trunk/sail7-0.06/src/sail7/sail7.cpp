@@ -46,16 +46,16 @@
 #include "../graph/graphdlg.h"
 
 
-void *QSail7::s_pMainFrame;
+MainFrame *QSail7::s_pMainFrame;
 void *QSail7::s_p2DWidget;
 void *QSail7::s_p3DWidget;
 
 
 CPanel* QSail7::s_pPanel;		// the panel array for the currently loaded UFO
-CVector* QSail7::s_pNode;		// the node array for the currently loaded UFO
-CVector* QSail7::s_pMemNode;         // used if the analysis should be performed on the tilted geometry
-CVector* QSail7::s_pWakeNode;        // the reference current wake node array
-CVector* QSail7::s_pRefWakeNode;     // the reference wake node array if wake needs to be reset
+Vector3d* QSail7::s_pNode;		// the node array for the currently loaded UFO
+Vector3d* QSail7::s_pMemNode;         // used if the analysis should be performed on the tilted geometry
+Vector3d* QSail7::s_pWakeNode;        // the reference current wake node array
+Vector3d* QSail7::s_pRefWakeNode;     // the reference wake node array if wake needs to be reset
 CPanel* QSail7::s_pMemPanel;           // used if the analysis should be performed on the tilted geometry
 CPanel* QSail7::s_pWakePanel;          // the reference current wake panel array
 CPanel* QSail7::s_pRefWakePanel;       // the reference wake panel array if wake needs to be reset
@@ -544,7 +544,6 @@ void QSail7::keyPressEvent(QKeyEvent *event)
 	if(event->modifiers() & Qt::ShiftModifier)   bShift =true;
 	if(event->modifiers() & Qt::ControlModifier) bCtrl =true;
 
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 	switch (event->key())
 	{
 		case Qt::Key_Return:
@@ -570,7 +569,7 @@ void QSail7::keyPressEvent(QKeyEvent *event)
 		case Qt::Key_Escape:
 		{
 			if(m_GLLightDlg.isVisible())m_GLLightDlg.hide();
-			else if(pMainFrame->m_pctrl3DScalesWidget->isVisible()) pMainFrame->m_pctrl3DScalesWidget->hide();
+            else if(s_pMainFrame->m_pctrl3DScalesWidget->isVisible()) s_pMainFrame->m_pctrl3DScalesWidget->hide();
 			else
 			{
 				StopAnimate();
@@ -661,7 +660,7 @@ void QSail7::keyPressEvent(QKeyEvent *event)
 		}
 		case Qt::Key_L:
 		{
-			pMainFrame->OnLogFile();
+            s_pMainFrame->OnLogFile();
 			break;
 		}
 		case Qt::Key_F1:
@@ -700,7 +699,7 @@ void QSail7::keyPressEvent(QKeyEvent *event)
 		}
 		case Qt::Key_F5:
 		{
-			GL3dBodyDlg dlg(pMainFrame);
+            GL3dBodyDlg dlg(s_pMainFrame);
 			CBody Hull;
 			dlg.m_bEnableName = false;
 			if(!dlg.InitDialog(&Hull)) return;
@@ -735,12 +734,11 @@ void QSail7::keyPressEvent(QKeyEvent *event)
 			if(bShift) pSCSail->Export();
 			else
 			{
-				MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
-				QString filePath = QFileDialog::getOpenFileName(this, tr("Open File"),pMainFrame->m_XMLPath,
+                QString filePath = QFileDialog::getOpenFileName(this, tr("Open File"),s_pMainFrame->m_XMLPath,
 																tr("Sailcut files (*.saildef *.xml)"));
 				if (!filePath.isEmpty())
 				{
-					pMainFrame->m_XMLPath = filePath;
+                    s_pMainFrame->m_XMLPath = filePath;
 					QFile file(filePath);
 					pSCSail->Import(&file);
 					SailDlg dlg;
@@ -769,7 +767,6 @@ void QSail7::OnSail3DView()
 
 	// The user has requested a switch to the OpenGL 3D view
 	//
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 	ThreeDWidget* p3DWidget = (ThreeDWidget*)s_p3DWidget;
 	p3DWidget->GLSetupLight(&m_GLLightDlg, m_ObjectOffset.y, 1.0f);
 
@@ -783,7 +780,7 @@ void QSail7::OnSail3DView()
 
 	m_bIs3DScaleSet = false;
 	m_iView = SAIL3DVIEW;
-	pMainFrame->SetCentralWidget();
+    s_pMainFrame->SetCentralWidget();
 
 	SetControls();
 	UpdateView();
@@ -795,7 +792,6 @@ void QSail7::OnSail3DView()
 
 void QSail7::OnSailPolarView()
 {
-	MainFrame* pMainFrame = (MainFrame*)s_pMainFrame;
 //	if (m_bAnimateWOpp) StopAnimate();
 
 	if(m_iView==SAILPOLARVIEW)
@@ -808,7 +804,7 @@ void QSail7::OnSailPolarView()
 	m_iView=SAILPOLARVIEW;
 	m_pCurGraph = m_BoatGraph;
 
-	pMainFrame->SetCentralWidget();
+    s_pMainFrame->SetCentralWidget();
 
 	SetBoatPlrLegendPos();
 
@@ -841,7 +837,6 @@ void QSail7::PaintView(QPainter &painter)
 	static int h,w,w2,h2, h23, w3,w23;
 	static QRect Rect1, Rect2, Rect3, Rect4, r2DCltRect;
 
-	MainFrame* pMainFrame = (MainFrame*)s_pMainFrame;
 	TwoDWidget *p2DWidget = (TwoDWidget*)s_p2DWidget;
 
 	r2DCltRect = p2DWidget->geometry();
@@ -859,7 +854,7 @@ void QSail7::PaintView(QPainter &painter)
 //	h38 = (int)(3*h/8);
 
 	//Refresh the active view
-	painter.fillRect(r2DCltRect, pMainFrame->m_BackgroundColor);
+    painter.fillRect(r2DCltRect, s_pMainFrame->m_BackgroundColor);
 
 	if(r2DCltRect.width()<200 || r2DCltRect.height()<200)
 	{
@@ -1066,7 +1061,6 @@ void QSail7::GLRenderView()
 	//
 	// Renders the OpenGl 3D view
 	//
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 	ThreeDWidget *p3DWidget = (ThreeDWidget*)s_p3DWidget;
 	static GLdouble pts[4];
 
@@ -1226,7 +1220,7 @@ int QSail7::CreateSailElements(QSail *pSail)
 	int k,l;
 	int n0, n1, n2, n3;
 	double tau, tau1, x, x1;
-	CVector LA, LB, TA, TB;
+	Vector3d LA, LB, TA, TB;
 
 	int InitialSize = m_MatSize;
 	pSail->m_FirstPanel = m_MatSize;
@@ -1350,9 +1344,9 @@ int QSail7::CreateBodyElements(CBody *pBody)
 	if(!pBody) return 0;
 	int i,j,k,l;
 	double uk, uk1, v, dj, dj1, dl1;
-	CVector LATB, TALB;
-	CVector LA, LB, TA, TB;
-	CVector PLA, PTA, PLB, PTB;
+	Vector3d LATB, TALB;
+	Vector3d LA, LB, TA, TB;
+	Vector3d PLA, PTA, PLB, PTB;
 
 	int n0, n1, n2, n3, lnx, lnh;
 	int nx = pBody->m_nxPanels;
@@ -1703,7 +1697,7 @@ void QSail7::GLCreateWindList()
 {
 	ThreeDWidget *p3DWidget = (ThreeDWidget*)s_p3DWidget;
 	double s, h, height;
-	CVector w(1.0,0.0,0.0);
+	Vector3d w(1.0,0.0,0.0);
 	s=1.0;
 
 	if(!m_pCurBoat || !m_pCurBoatPolar) return;
@@ -1722,7 +1716,7 @@ void QSail7::GLCreateWindList()
 			s = m_pCurBoatPolar->WindFactor(h);
 //			p3DWidget->GLDrawCylinder(QColor(150,150,150), 0.13*s, 0.13*s, 0.0*s, 1.5*s, 31, 11);
 //			p3DWidget->GLDrawCylinder(QColor(150,150,150), 0.31*s, 0.00*s, 1.5*s, 2.5*s, 31, 11);
-			p3DWidget->GLDrawArrow(CVector(0.0, 0.0, iw*height/10.0), w, s*2.0);
+			p3DWidget->GLDrawArrow(Vector3d(0.0, 0.0, iw*height/10.0), w, s*2.0);
 
 //			glTranslated(0.0, 0.0, height/10.0);
 		}
@@ -1801,9 +1795,6 @@ void QSail7::GLCreateWaterList()
 
 void QSail7::OnNewBoat()
 {
-	MainFrame* pMainFrame = (MainFrame*)s_pMainFrame;
-
-
 	//Define a Boat from scratch using the default values
 	//On exit, check if the Boat's name is already used
 	int i;
@@ -1813,11 +1804,11 @@ void QSail7::OnNewBoat()
 	BoatDlg dlg;
 	dlg.InitDialog(pNewBoat);
 	//	BoatDlg.m_bAcceptName= true;
-	dlg.move(pMainFrame->m_DlgPos);
+    dlg.move(s_pMainFrame->m_DlgPos);
 
 	if(QDialog::Accepted == dlg.exec())
 	{
-		pMainFrame->SetSaveState(false);
+        s_pMainFrame->SetSaveState(false);
 		bool bExists = false;
 		for(i=0; i<m_poaBoat->size(); i++)
 		{
@@ -1840,9 +1831,9 @@ void QSail7::OnNewBoat()
 		}
 
 		m_pCurBoat = AddBoat(pNewBoat);
-		pMainFrame->SetSaveState(false);
+        s_pMainFrame->SetSaveState(false);
 		SetBoat();
-		pMainFrame->UpdateBoats();
+        s_pMainFrame->UpdateBoats();
 //		m_bIs2DScaleSet = false;
 		SetScale();
 		UpdateView();
@@ -1852,14 +1843,13 @@ void QSail7::OnNewBoat()
 		delete pNewBoat;
 	}
 	SetControls();
-	pMainFrame->m_DlgPos = dlg.pos();
+    s_pMainFrame->m_DlgPos = dlg.pos();
 }
 
 
 void QSail7::OnEditCurBoat()
 {
 	if(!m_pCurBoat) return;
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 	BoatDlg dlg;
 	BoatOpp *pBoatOpp;
 	bool bHasResults = false;
@@ -1877,18 +1867,18 @@ void QSail7::OnEditCurBoat()
 	CBoat *pModBoat = new CBoat;
 	pModBoat->DuplicateBoat(m_pCurBoat);
 	dlg.InitDialog(pModBoat);
-	dlg.move(pMainFrame->m_DlgPos);
+    dlg.move(s_pMainFrame->m_DlgPos);
 	if (dlg.exec()==QDialog::Accepted)
 	{
 		// we returned from the dialog with an 'OK',
-		pMainFrame->SetSaveState(false);
+        s_pMainFrame->SetSaveState(false);
 		//convert form to object
 		if(dlg.m_bChanged)
 		{
 			if(bHasResults)
 			{
 				ModDlg Mdlg;
-				Mdlg.move(pMainFrame->m_DlgPos);
+                Mdlg.move(s_pMainFrame->m_DlgPos);
 				Mdlg.m_Question = tr("The modification will erase all results associated to this Wing.\nContinue ?");
 				Mdlg.InitDialog();
 				int Ans = Mdlg.exec();
@@ -1910,14 +1900,14 @@ void QSail7::OnEditCurBoat()
 						m_pCurBoat = AddBoat(pModBoat);
 					}
 					SetBoat();
-					pMainFrame->UpdateBoats();
+                    s_pMainFrame->UpdateBoats();
 					UpdateView();
 					return;
 				}
 				else
 				{
 					//user wants to overwrite
-					pMainFrame->DeleteBoat(m_pCurBoat,true);
+                    s_pMainFrame->DeleteBoat(m_pCurBoat,true);
 					*m_pCurBoat = *pModBoat;
 				}
 			}
@@ -1946,7 +1936,7 @@ void QSail7::OnEditCurBoat()
 
 		SetBoat();
 
-		pMainFrame->UpdateBoats();
+        s_pMainFrame->UpdateBoats();
 		SetScale();
 		UpdateView();
 	}
@@ -1954,14 +1944,13 @@ void QSail7::OnEditCurBoat()
 	{
 		delete pModBoat; // clean up
 	}
-	pMainFrame->m_DlgPos=dlg.pos();
+    s_pMainFrame->m_DlgPos=dlg.pos();
 }
 
 
 void QSail7::OnRenameCurBoat()
 {
 	//Rename the currently selected Boat
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 
 	if(!m_pCurBoat)	return;
 
@@ -1992,7 +1981,7 @@ void QSail7::OnRenameCurBoat()
 		}
 	}
 
-	pMainFrame->UpdateBoats();
+    s_pMainFrame->UpdateBoats();
 	SetBoatPolar();
 	UpdateView();
 }
@@ -2001,8 +1990,6 @@ void QSail7::OnRenameCurBoat()
 void QSail7::OnDuplicateCurBoat()
 {
 	if(!m_pCurBoat) return;
-
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 
 	CBoat* pNewBoat= new CBoat;
 	pNewBoat->DuplicateBoat(m_pCurBoat);
@@ -2016,7 +2003,7 @@ void QSail7::OnDuplicateCurBoat()
 	{
 		m_pCurBoat = AddBoat(pNewBoat);
 		SetBoat();
-		pMainFrame->UpdateBoats();
+        s_pMainFrame->UpdateBoats();
 		OnEditCurBoat();
 	}
 }
@@ -2031,14 +2018,13 @@ void QSail7::OnDeleteCurBoat()
 	if(!m_pCurBoat) return;
 	m_bAnimateBoatOpp = false;
 
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 	QString strong = tr("Are you sure you want to delete the boat :\n") +  m_pCurBoat->m_BoatName +"?\n";
-	if (QMessageBox::Yes != QMessageBox::question(pMainFrame, tr("Question"), strong, QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel)) return;
+    if (QMessageBox::Yes != QMessageBox::question(s_pMainFrame, tr("Question"), strong, QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel)) return;
 
-	pMainFrame->DeleteBoat(m_pCurBoat);
+    s_pMainFrame->DeleteBoat(m_pCurBoat);
 
 	SetBoat();
-	pMainFrame->UpdateBoats();
+    s_pMainFrame->UpdateBoats();
 	SetControls();
 	UpdateView();
 }
@@ -2049,7 +2035,6 @@ void QSail7::OnDeleteCurBoatOpp()
 	// The user has requested a deletion of the current operating point
 	//
 
-	MainFrame* pMainFrame = (MainFrame*)s_pMainFrame;
 	int i;
 	if(!m_pCurBoatOpp) return;
 
@@ -2066,14 +2051,14 @@ void QSail7::OnDeleteCurBoatOpp()
 			break;
 		}
 	}
-	pMainFrame->UpdateBoatOpps();
+    s_pMainFrame->UpdateBoatOpps();
 	SetBoatOpp(true);
-	if(pMainFrame->m_pctrlBoatOpp->count())
+    if(s_pMainFrame->m_pctrlBoatOpp->count())
 	{
 		QString strong;
 		double x;
-		pMainFrame->m_pctrlBoatOpp->setCurrentIndex(0);
-		strong = pMainFrame->m_pctrlBoatOpp->itemText(0);
+        s_pMainFrame->m_pctrlBoatOpp->setCurrentIndex(0);
+        strong = s_pMainFrame->m_pctrlBoatOpp->itemText(0);
 		bool bRes;
 		x = strong.toDouble(&bRes);
 		if(bRes)
@@ -2086,7 +2071,7 @@ void QSail7::OnDeleteCurBoatOpp()
 	{
 		m_pCurBoatOpp = NULL;
 	}
-	pMainFrame->SetSaveState(false);
+    s_pMainFrame->SetSaveState(false);
 
 	UpdateView();
 
@@ -2101,10 +2086,9 @@ void QSail7::OnDeleteCurBoatPolar()
 
 	if(!m_pCurBoatPolar) return;
 	int i;
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 
 	QString strong = tr("Are you sure you want to delete the polar :\n") +  m_pCurBoatPolar->m_BoatPolarName +"?\n";
-	if (QMessageBox::Yes != QMessageBox::question(pMainFrame, tr("Question"), strong,
+    if (QMessageBox::Yes != QMessageBox::question(s_pMainFrame, tr("Question"), strong,
 												  QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel)) return;
 
 	//first remove all BoatOpps associated to the Wing Polar
@@ -2135,10 +2119,10 @@ void QSail7::OnDeleteCurBoatPolar()
 
 	m_pCurBoatOpp = NULL;
 	m_pCurBoatPolar = NULL;
-	pMainFrame->SetSaveState(false);
+    s_pMainFrame->SetSaveState(false);
 	SetBoatPolar();
 
-	pMainFrame->UpdateBoatPolars();
+    s_pMainFrame->UpdateBoatPolars();
 	SetControls();
 	UpdateView();
 }
@@ -2152,8 +2136,7 @@ void QSail7::OnDeleteAllBoatPolarOpps()
 
 	if(!m_pCurBoatPolar) return;
 
-	MainFrame* pMainFrame = (MainFrame*)s_pMainFrame;
-	pMainFrame->SetSaveState(false);
+    s_pMainFrame->SetSaveState(false);
 	BoatOpp* pBoatOpp;
 	int i;
 
@@ -2171,7 +2154,7 @@ void QSail7::OnDeleteAllBoatPolarOpps()
 
 	m_pCurBoatOpp = NULL;
 	m_bResetglMesh = true;
-	pMainFrame->UpdateBoatOpps();
+    s_pMainFrame->UpdateBoatOpps();
 	SetBoatOpp(true);
 	SetControls();
 	UpdateView();
@@ -2184,8 +2167,7 @@ void QSail7::OnDeleteAllBoatOpps()
 	// The user has requested a deletion of all the BoatOpps or POpps
 	//
 
-	MainFrame* pMainFrame = (MainFrame*)s_pMainFrame;
-	pMainFrame->SetSaveState(false);
+    s_pMainFrame->SetSaveState(false);
 	BoatOpp* pBoatOpp;
 
 	int i;
@@ -2198,7 +2180,7 @@ void QSail7::OnDeleteAllBoatOpps()
 
 
 	m_pCurBoatOpp = NULL;
-	pMainFrame->UpdateBoatOpps();
+    s_pMainFrame->UpdateBoatOpps();
 	SetBoatOpp(true);
 
 	SetControls();
@@ -2212,17 +2194,16 @@ void QSail7::wheelEvent(QWheelEvent *event)
 {
 	//The mouse button has been wheeled
 	//Process the message
-	MainFrame * pMainFrame = (MainFrame*)s_pMainFrame;
 	QPoint pt(event->x(), event->y()); //client coordinates
 	static double ZoomFactor;
 	if(event->delta()>0)
 	{
-		if(!pMainFrame->m_bReverseZoom) ZoomFactor = 1./1.06;
+        if(!s_pMainFrame->m_bReverseZoom) ZoomFactor = 1./1.06;
 		else                            ZoomFactor = 1.06;
 	}
 	else
 	{
-		if(!pMainFrame->m_bReverseZoom) ZoomFactor = 1.06;
+        if(!s_pMainFrame->m_bReverseZoom) ZoomFactor = 1.06;
 		else                            ZoomFactor = 1./1.06;
 	}
 
@@ -2272,7 +2253,6 @@ void QSail7::mousePressEvent(QMouseEvent *event)
 	//
 	// capture and dispatch user mouse input
 	//
-//	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 
 	if(m_iView==SAIL3DVIEW && (event->buttons() & Qt::MidButton))
 	{
@@ -2292,7 +2272,7 @@ void QSail7::mousePressEvent(QMouseEvent *event)
 			ThreeDWidget *p3DWidget = (ThreeDWidget*)s_p3DWidget;
 			//	point is in client coordinates
 
-			CVector Real;
+			Vector3d Real;
 			bool bCtrl = false;
 			if(event->modifiers() & Qt::ControlModifier)
 			{
@@ -2412,7 +2392,7 @@ void QSail7::Set3DRotationCenter(QPoint point)
 	//finds the closest panel under the point,
 	//and changes the rotation vector and viewport translation
 	int  i, j, p;
-	CVector I, A, B, AA, BB, PP, U;
+	Vector3d I, A, B, AA, BB, PP, U;
 	double dmin, dist;
 	ThreeDWidget* p3DWidget = (ThreeDWidget*)s_p3DWidget;
 
@@ -2517,7 +2497,7 @@ void QSail7::mouseDoubleClickEvent (QMouseEvent * event)
 
 		ThreeDWidget *p3DWidget = (ThreeDWidget*)s_p3DWidget;
 
-		CVector Real;
+		Vector3d Real;
 		p3DWidget->ClientToGL(point, Real);
 		if(m_r3DCltRect.contains(point)) p3DWidget->setFocus();
 
@@ -2576,7 +2556,7 @@ void QSail7::mouseMoveEvent(QMouseEvent *event)
 	//
 
 	if(!hasFocus()) setFocus();
-	static CVector Real;
+	static Vector3d Real;
 	static bool bCtrl;
 	static QPoint Delta, point;
 	static double xu, yu, x1, y1, xmin, xmax, ymin, ymax;
@@ -2674,8 +2654,7 @@ void QSail7::mouseMoveEvent(QMouseEvent *event)
 		}
 		else if(m_pCurGraph && m_pCurGraph->IsInDrawRect(point))
 		{
-			MainFrame* pMainFrame = (MainFrame*)s_pMainFrame;
-			pMainFrame->statusBar()->showMessage(QString("X =%1, Y = %2").arg(m_pCurGraph->ClientTox(event->x())).arg(m_pCurGraph->ClientToy(event->y())));
+            s_pMainFrame->statusBar()->showMessage(QString("X =%1, Y = %2").arg(m_pCurGraph->ClientTox(event->x())).arg(m_pCurGraph->ClientToy(event->y())));
 		}
 	}
 	m_LastPoint = point;
@@ -2779,7 +2758,7 @@ void QSail7::On3DWindFront()
 	if(!m_pCurBoatOpp)	m_ArcBall.SetQuat(Qt1 * Qt2);
 	else
 	{
-		CVector R(0.0, 0.0, 1.0);
+		Vector3d R(0.0, 0.0, 1.0);
 		Quaternion Qt3(-m_pCurBoatOpp->m_Beta, R);// rotate by beta around z
 		m_ArcBall.SetQuat((Qt1 * Qt2) * Qt3);
 	}
@@ -2803,7 +2782,7 @@ void QSail7::On3DWindRear()
 	if(!m_pCurBoatOpp)	m_ArcBall.SetQuat(Qt1 * Qt2);
 	else
 	{
-		CVector R(0.0, 0.0, 1.0);
+		Vector3d R(0.0, 0.0, 1.0);
 		Quaternion Qt3(-m_pCurBoatOpp->m_Beta+180.0, R);// rotate by beta around z
 		m_ArcBall.SetQuat((Qt1 * Qt2) * Qt3);
 	}
@@ -2845,7 +2824,6 @@ void QSail7::OnSetupLight()
 
 void QSail7::SetControls()
 {
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 	if(m_iView==SAILPOLARVIEW)  m_pctrlMiddleControls->setCurrentIndex(1);
 	else                        m_pctrlMiddleControls->setCurrentIndex(0);
 
@@ -2884,37 +2862,37 @@ void QSail7::SetControls()
 
 	m_pctrlWater->setEnabled(m_pCurBoatPolar && m_pCurBoatPolar->m_bGround);
 
-	pMainFrame->Sail7EditBoatAct->setEnabled(m_pCurBoat);
-	pMainFrame->renameCurBoat->setEnabled(m_pCurBoat);
-	pMainFrame->deleteCurBoat->setEnabled(m_pCurBoat);
-	pMainFrame->duplicateCurBoat->setEnabled(m_pCurBoat);
-	pMainFrame->deleteAllBoatOpps->setEnabled(m_pCurBoat);
-	pMainFrame->showCurBoatPlrs->setEnabled(m_pCurBoat);
-	pMainFrame->hideCurBoatPlrs->setEnabled(m_pCurBoat);
-	pMainFrame->deleteCurBoatPlrs->setEnabled(m_pCurBoat);
+    s_pMainFrame->Sail7EditBoatAct->setEnabled(m_pCurBoat);
+    s_pMainFrame->renameCurBoat->setEnabled(m_pCurBoat);
+    s_pMainFrame->deleteCurBoat->setEnabled(m_pCurBoat);
+    s_pMainFrame->duplicateCurBoat->setEnabled(m_pCurBoat);
+    s_pMainFrame->deleteAllBoatOpps->setEnabled(m_pCurBoat);
+    s_pMainFrame->showCurBoatPlrs->setEnabled(m_pCurBoat);
+    s_pMainFrame->hideCurBoatPlrs->setEnabled(m_pCurBoat);
+    s_pMainFrame->deleteCurBoatPlrs->setEnabled(m_pCurBoat);
 
-	pMainFrame->defineBoatPolar->setEnabled(m_pCurBoat);
-	pMainFrame->editBoatPolar->setEnabled(m_pCurBoatPolar);
-	pMainFrame->deleteCurBoatPolar->setEnabled(m_pCurBoatPolar);
-	pMainFrame->renameCurBoatPolar->setEnabled(m_pCurBoatPolar);
-	pMainFrame->deleteAllBoatPolarOpps->setEnabled(m_pCurBoatPolar);
-	pMainFrame->resetCurBoatPolar->setEnabled(m_pCurBoatPolar);
-	pMainFrame->showBoatPolarProperties->setEnabled(m_pCurBoatPolar);
+    s_pMainFrame->defineBoatPolar->setEnabled(m_pCurBoat);
+    s_pMainFrame->editBoatPolar->setEnabled(m_pCurBoatPolar);
+    s_pMainFrame->deleteCurBoatPolar->setEnabled(m_pCurBoatPolar);
+    s_pMainFrame->renameCurBoatPolar->setEnabled(m_pCurBoatPolar);
+    s_pMainFrame->deleteAllBoatPolarOpps->setEnabled(m_pCurBoatPolar);
+    s_pMainFrame->resetCurBoatPolar->setEnabled(m_pCurBoatPolar);
+    s_pMainFrame->showBoatPolarProperties->setEnabled(m_pCurBoatPolar);
 
-	pMainFrame->deleteCurBoatOpp->setEnabled(m_pCurBoat);
-	pMainFrame->showBoatOppProperties->setEnabled(m_pCurBoat);
+    s_pMainFrame->deleteCurBoatOpp->setEnabled(m_pCurBoat);
+    s_pMainFrame->showBoatOppProperties->setEnabled(m_pCurBoat);
 
-	pMainFrame->BoatPolarAct->setChecked(m_iView==SAILPOLARVIEW);
-	pMainFrame->Boat3DAct->setChecked(m_iView==SAIL3DVIEW);
+    s_pMainFrame->BoatPolarAct->setChecked(m_iView==SAILPOLARVIEW);
+    s_pMainFrame->Boat3DAct->setChecked(m_iView==SAIL3DVIEW);
 
-	pMainFrame->Sail73DLightAct->setChecked(m_bglLight);
+    s_pMainFrame->Sail73DLightAct->setChecked(m_bglLight);
 
-	pMainFrame->Graph1->setChecked(m_iBoatPlrView==1 && (m_pCurGraph == m_BoatGraph));
-	pMainFrame->Graph2->setChecked(m_iBoatPlrView==1 && (m_pCurGraph == m_BoatGraph+1));
-	pMainFrame->Graph3->setChecked(m_iBoatPlrView==1 && (m_pCurGraph == m_BoatGraph+2));
-	pMainFrame->Graph4->setChecked(m_iBoatPlrView==1 && (m_pCurGraph == m_BoatGraph+3));
-	pMainFrame->twoGraphs->setChecked(m_iBoatPlrView==2);
-	pMainFrame->fourGraphs->setChecked(m_iBoatPlrView==4);
+    s_pMainFrame->Graph1->setChecked(m_iBoatPlrView==1 && (m_pCurGraph == m_BoatGraph));
+    s_pMainFrame->Graph2->setChecked(m_iBoatPlrView==1 && (m_pCurGraph == m_BoatGraph+1));
+    s_pMainFrame->Graph3->setChecked(m_iBoatPlrView==1 && (m_pCurGraph == m_BoatGraph+2));
+    s_pMainFrame->Graph4->setChecked(m_iBoatPlrView==1 && (m_pCurGraph == m_BoatGraph+3));
+    s_pMainFrame->twoGraphs->setChecked(m_iBoatPlrView==2);
+    s_pMainFrame->fourGraphs->setChecked(m_iBoatPlrView==4);
 
 	if(m_pCurBoatPolar)
 	{
@@ -2941,11 +2919,10 @@ void QSail7::SetViewControls()
 
 void QSail7::contextMenuEvent (QContextMenuEvent * event)
 {
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 	TwoDWidget *p2DWidget = (TwoDWidget*)s_p2DWidget;
 	ThreeDWidget *p3DWidget = (ThreeDWidget*)s_p3DWidget;
 
-	if(pMainFrame->m_pctrlCentralWidget->currentIndex()==0) p2DWidget->contextMenuEvent(event);
+    if(s_pMainFrame->m_pctrlCentralWidget->currentIndex()==0) p2DWidget->contextMenuEvent(event);
 	else                                                    p3DWidget->contextMenuEvent(event);
 }
 
@@ -2969,7 +2946,6 @@ CBoat* QSail7::AddBoat(CBoat *pNewBoat)
 	bool bInserted = false;
 	CBoat *pOldBoat;
 
-//	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 	if(pNewBoat->m_BoatName.length())
 	{
 		for (i=0; i<m_poaBoat->size(); i++)
@@ -3032,10 +3008,6 @@ void QSail7::SetBoat(QString BoatName)
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 	CBoat* pBoat;
 
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
-
-
-
 	if(!BoatName.length())
 	{
 		if(m_pCurBoat) BoatName = m_pCurBoat->m_BoatName;
@@ -3079,8 +3051,8 @@ void QSail7::SetBoat(QString BoatName)
 	m_bResetglStream = true;
 	m_bResetglSpeeds = true;
 
-	memset(s_pPanel, 0, sizeof(pMainFrame->m_Panel));
-	memset(s_pNode,  0, sizeof(pMainFrame->m_Node));
+    memset(s_pPanel, 0, sizeof(s_pMainFrame->m_Panel));
+    memset(s_pNode,  0, sizeof(s_pMainFrame->m_Node));
 
 	m_NSurfaces = 0;
 	m_MatSize = 0;
@@ -3107,7 +3079,7 @@ void QSail7::SetBoat(QString BoatName)
 	}
 
 	memcpy(s_pMemPanel, s_pPanel, m_MatSize* sizeof(CPanel));
-	memcpy(s_pMemNode,  s_pNode,  m_nNodes * sizeof(CVector));
+	memcpy(s_pMemNode,  s_pNode,  m_nNodes * sizeof(Vector3d));
 
 	if (m_pCurBoatPolar)
 	{
@@ -3132,7 +3104,6 @@ void QSail7::SetBoat(QString BoatName)
 
 bool QSail7::SetModBoat(CBoat *pModBoat)
 {
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 	if(!pModBoat) pModBoat = m_pCurBoat;
 	CBoat *pBoat, *pOldBoat;
 
@@ -3147,7 +3118,7 @@ bool QSail7::SetModBoat(CBoat *pModBoat)
 	}
 
 	RenameDlg dlg;
-	dlg.move(pMainFrame->m_DlgPos);
+    dlg.move(s_pMainFrame->m_DlgPos);
 	dlg.m_pstrArray = & NameList;
 	dlg.m_strQuestion = tr("Enter the new name for the Boat :");
 	dlg.m_strName = pModBoat->m_BoatName;
@@ -3156,7 +3127,7 @@ bool QSail7::SetModBoat(CBoat *pModBoat)
 	while (bExists)
 	{
 		resp = dlg.exec();
-		pMainFrame->m_DlgPos = dlg.pos();
+        s_pMainFrame->m_DlgPos = dlg.pos();
 		if(resp==QDialog::Accepted)
 		{
 			//Is the new name already used ?
@@ -3200,7 +3171,7 @@ bool QSail7::SetModBoat(CBoat *pModBoat)
 						break;
 					}
 				}
-				pMainFrame->SetSaveState(false);
+                s_pMainFrame->SetSaveState(false);
 				return true;
 			}
 		}
@@ -3250,7 +3221,7 @@ bool QSail7::SetModBoat(CBoat *pModBoat)
 			m_pCurBoatOpp = NULL;
 			m_pCurBoat = pModBoat;
 
-			pMainFrame->SetSaveState(false);
+            s_pMainFrame->SetSaveState(false);
 			return true;
 		}
 		else
@@ -3267,7 +3238,6 @@ void QSail7::OnRenameCurBoatPolar()
 {
 	//Rename the currently selected Wing Polar
 
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 	if(!m_pCurBoatPolar) return;
 
 	int resp, k;
@@ -3285,7 +3255,7 @@ void QSail7::OnRenameCurBoatPolar()
 	}
 
 	RenameDlg dlg;
-	dlg.move(pMainFrame->m_DlgPos);
+    dlg.move(s_pMainFrame->m_DlgPos);
 	dlg.m_pstrArray = & NameList;
 
 	dlg.m_strQuestion = tr("Enter the new name for the boat polar :");
@@ -3297,7 +3267,7 @@ void QSail7::OnRenameCurBoatPolar()
 	while (bExists)
 	{
 		resp = dlg.exec();
-		pMainFrame->m_DlgPos = dlg.pos();
+        s_pMainFrame->m_DlgPos = dlg.pos();
 		if(resp==QDialog::Accepted)
 		{
 			if (OldName == dlg.m_strName) return;
@@ -3353,7 +3323,7 @@ void QSail7::OnRenameCurBoatPolar()
 				}
 			}
 
-			pMainFrame->SetSaveState(false);
+            s_pMainFrame->SetSaveState(false);
 		}
 		else if(resp ==10)
 		{
@@ -3401,7 +3371,7 @@ void QSail7::OnRenameCurBoatPolar()
 			}
 
 			bExists = false;
-			pMainFrame->SetSaveState(false);
+            s_pMainFrame->SetSaveState(false);
 		}
 		else
 		{
@@ -3409,14 +3379,13 @@ void QSail7::OnRenameCurBoatPolar()
 		}
 	}
 	SetBoatPolar();
-	pMainFrame->UpdateBoatPolars();
+    s_pMainFrame->UpdateBoatPolars();
 	UpdateView();
 }
 
 
 bool QSail7::SetModBoatPolar(BoatPolar *pModBoatPolar)
 {
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 	if(!pModBoatPolar) pModBoatPolar = m_pCurBoatPolar;
 	BoatPolar *pBoatPolar, *pOldBoatPolar;
 
@@ -3431,7 +3400,7 @@ bool QSail7::SetModBoatPolar(BoatPolar *pModBoatPolar)
 	}
 
 	RenameDlg dlg;
-	dlg.move(pMainFrame->m_DlgPos);
+    dlg.move(s_pMainFrame->m_DlgPos);
 	dlg.m_pstrArray = & NameList;
 	dlg.m_strQuestion = tr("Enter the new name for the Boat Polar:");
 	dlg.m_strName = pModBoatPolar->m_BoatPolarName;
@@ -3440,7 +3409,7 @@ bool QSail7::SetModBoatPolar(BoatPolar *pModBoatPolar)
 	while (bExists)
 	{
 		resp = dlg.exec();
-		pMainFrame->m_DlgPos = dlg.pos();
+        s_pMainFrame->m_DlgPos = dlg.pos();
 		if(resp==QDialog::Accepted)
 		{
 			//Is the new name already used ?
@@ -3473,7 +3442,7 @@ bool QSail7::SetModBoatPolar(BoatPolar *pModBoatPolar)
 					}
 				}
 				if(!bInserted)	m_poaBoatPolar->append(pModBoatPolar);
-				pMainFrame->SetSaveState(false);
+                s_pMainFrame->SetSaveState(false);
 				return true;
 			}
 		}
@@ -3510,7 +3479,7 @@ bool QSail7::SetModBoatPolar(BoatPolar *pModBoatPolar)
 			pModBoatPolar->m_BoatPolarName = dlg.m_strName;
 			m_pCurBoatPolar = pModBoatPolar;
 
-			pMainFrame->SetSaveState(false);
+            s_pMainFrame->SetSaveState(false);
 			return true;
 		}
 		else
@@ -3680,7 +3649,7 @@ void QSail7::GLCallViewLists()
 		if(m_pCurBoatOpp)
 		{
 			QSail *pSail = (QSail*)m_pCurBoat->m_poaSail.at(is);
-			CVector LE = pSail->m_LEPosition;
+			Vector3d LE = pSail->m_LEPosition;
 //			LE.RotateX(m_pCurBoatOpp->m_Phi);
 
 			glPushMatrix();
@@ -3755,7 +3724,6 @@ void QSail7::LoadSettings(QSettings *pSettings)
 	//
 	// Loads the user's saved settings for 3D analysis
 	//
-//	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 	QString strange;
 	pSettings->beginGroup("Sail7");
 	{
@@ -3831,7 +3799,6 @@ void QSail7::LoadSettings(QSettings *pSettings)
 
 void QSail7::SaveSettings(QSettings *pSettings)
 {
-//	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 	QString strange;
 	OnReadAnalysisData();
 
@@ -3896,7 +3863,7 @@ void QSail7::SaveSettings(QSettings *pSettings)
 }
 
 
-int QSail7::IsNode(CVector &Pt)
+int QSail7::IsNode(Vector3d &Pt)
 {
 	//
 	// returns the index of a node if found, else returns NULL
@@ -3915,15 +3882,14 @@ int QSail7::IsNode(CVector &Pt)
 
 
 
-void QSail7::GLCreateSailMesh(CVector *pNode, CPanel *pPanel)
+void QSail7::GLCreateSailMesh(Vector3d *pNode, CPanel *pPanel)
 {
 	if(!m_pCurBoat) return;
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 
 	QColor color;
 	int iLA, iLB, iTA, iTB;
 	int p;
-	CVector  N;
+	Vector3d  N;
 	N.Set(0.0, 0.0, 0.0);
 
 	for(int is=0; is<m_pCurBoat->m_poaSail.size(); is++)
@@ -3977,7 +3943,7 @@ void QSail7::GLCreateSailMesh(CVector *pNode, CPanel *pPanel)
 			glEnable(GL_POLYGON_OFFSET_FILL);
 			glPolygonOffset(1.0, 1.0);
 
-			color = pMainFrame->m_BackgroundColor;
+            color = s_pMainFrame->m_BackgroundColor;
 //			style = W3dPrefsDlg::s_VLMStyle;
 //			width = W3dPrefsDlg::s_VLMWidth;
 
@@ -4012,15 +3978,14 @@ void QSail7::GLCreateSailMesh(CVector *pNode, CPanel *pPanel)
 
 
 
-void QSail7::GLCreateBodyMesh(CVector *pNode, CPanel *pPanel)
+void QSail7::GLCreateBodyMesh(Vector3d *pNode, CPanel *pPanel)
 {
 	if(!m_pCurBoat) return;
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 
 	QColor color;
 	int iLA, iLB, iTA, iTB;
 	int p;
-	CVector  N;
+	Vector3d  N;
 	N.Set(0.0, 0.0, 0.0);
 
 	for(int ib=0; ib<m_pCurBoat->m_poaHull.size(); ib++)
@@ -4074,7 +4039,7 @@ void QSail7::GLCreateBodyMesh(CVector *pNode, CPanel *pPanel)
 			glEnable(GL_POLYGON_OFFSET_FILL);
 			glPolygonOffset(1.0, 1.0);
 
-			color = pMainFrame->m_BackgroundColor;
+            color = s_pMainFrame->m_BackgroundColor;
 //			style = W3dPrefsDlg::s_VLMStyle;
 //			width = W3dPrefsDlg::s_VLMWidth;
 
@@ -4113,7 +4078,7 @@ void QSail7::GLCreateBodyMesh(CVector *pNode, CPanel *pPanel)
 void QSail7::GLCreateVortices()
 {
 	int p;
-	CVector A, B, C, D, AC, BD;
+	Vector3d A, B, C, D, AC, BD;
 	glEnable (GL_LINE_STIPPLE);
 	glLineStipple (1, 0xFFFF);
 
@@ -4219,7 +4184,7 @@ void QSail7::GLCreateVortices()
 void QSail7::GLCreatePanelNormals()
 {
 	int p;
-	CVector C;
+	Vector3d C;
 	glEnable (GL_LINE_STIPPLE);
 	glLineStipple (1, 0xFFFF);
 
@@ -4315,7 +4280,6 @@ void QSail7::On3DPickCenter()
 
 void QSail7::OnDefineBoatPolar()
 {
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 	BoatPolarDlg PlrDlg;
 
 	if(!m_pCurBoat) return;
@@ -4324,27 +4288,27 @@ void QSail7::OnDefineBoatPolar()
 	{
 		QString strong = tr("Please add at least one sail to the boat definition before defining a polar");
 
-		QMessageBox::warning(pMainFrame, tr("Question"), strong);
+        QMessageBox::warning(s_pMainFrame, tr("Question"), strong);
 		return;
 	}
 
 	PlrDlg.InitDialog(m_pCurBoat);
-	PlrDlg.move(pMainFrame->m_DlgPos);
+    PlrDlg.move(s_pMainFrame->m_DlgPos);
 	if(PlrDlg.exec()==QDialog::Accepted)
 	{
-		pMainFrame->SetSaveState(false);
+        s_pMainFrame->SetSaveState(false);
 		//Then create and add a BoatPolar to the array
 		BoatPolar *pNewBoatPolar = new BoatPolar;
 
 		pNewBoatPolar->m_BoatName   = m_pCurBoat->m_BoatName;
 		pNewBoatPolar->m_BoatPolarName   = PlrDlg.m_BoatPolarName;
 		pNewBoatPolar->DuplicateSpec(&BoatPolarDlg::s_BoatPolar);
-		pNewBoatPolar->m_Color = pMainFrame->GetColor(0);
+        pNewBoatPolar->m_Color = s_pMainFrame->GetColor(0);
 		pNewBoatPolar->m_bIsVisible = true;
 
 		m_pCurBoatPolar = AddBoatPolar(pNewBoatPolar);
 		SetBoatPolar(pNewBoatPolar);
-		pMainFrame->UpdateBoatPolars();
+        s_pMainFrame->UpdateBoatPolars();
 
 		m_pCurBoatOpp = NULL;
 		m_bResetglSailGeom = true;
@@ -4356,7 +4320,7 @@ void QSail7::OnDefineBoatPolar()
 		m_pctrlAnalyze->setFocus();
 	}
 
-	pMainFrame->m_DlgPos = PlrDlg.pos();
+    s_pMainFrame->m_DlgPos = PlrDlg.pos();
 }
 
 
@@ -4365,15 +4329,13 @@ void QSail7::OnEditBoatPolar()
 {
 	if(!m_pCurBoat || !m_pCurBoatPolar) return;
 
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
-
 	BoatPolarDlg PlrDlg;
 	PlrDlg.InitDialog(m_pCurBoat, m_pCurBoatPolar);
-	PlrDlg.move(pMainFrame->m_DlgPos);
+    PlrDlg.move(s_pMainFrame->m_DlgPos);
 
 	if(PlrDlg.exec()==QDialog::Accepted)
 	{
-		pMainFrame->SetSaveState(false);
+        s_pMainFrame->SetSaveState(false);
 		for(int iopp=m_poaBoatOpp->size()-1; iopp>=0; iopp--)
 		{
 			BoatOpp *pBOpp = (BoatOpp*)m_poaBoatOpp->at(iopp);
@@ -4390,10 +4352,10 @@ void QSail7::OnEditBoatPolar()
 		pNewBoatPolar->m_BoatPolarName   = m_pCurBoatPolar->m_BoatPolarName;
 		pNewBoatPolar->DuplicateSpec(&BoatPolarDlg::s_BoatPolar);
 		pNewBoatPolar->ResetBoatPlr();
-		pNewBoatPolar->m_Color = pMainFrame->GetColor(0);
+        pNewBoatPolar->m_Color = s_pMainFrame->GetColor(0);
 		SetModBoatPolar(pNewBoatPolar);
 		SetBoatPolar(pNewBoatPolar);
-		pMainFrame->UpdateBoatPolars();
+        s_pMainFrame->UpdateBoatPolars();
 
 
 		CreateBoatPolarCurves();
@@ -4406,7 +4368,7 @@ void QSail7::OnEditBoatPolar()
 		m_pctrlAnalyze->setFocus();
 	}
 
-	pMainFrame->m_DlgPos = PlrDlg.pos();
+    s_pMainFrame->m_DlgPos = PlrDlg.pos();
 }
 
 
@@ -4492,7 +4454,6 @@ BoatPolar* QSail7::GetBoatPolar(QString BoatPolarName)
 
 void QSail7::SetBoatPolar(BoatPolar *pBoatPolar, QString BoatPolarName)
 {
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 	BoatPolar *pOldBoatPolar = NULL;
 	int i;
 
@@ -4544,14 +4505,14 @@ void QSail7::SetBoatPolar(BoatPolar *pBoatPolar, QString BoatPolarName)
 
 	if(m_pCurBoatPolar)
 	{
-		int pos = pMainFrame->m_pctrlBoatPolar->findText(m_pCurBoatPolar->m_BoatPolarName);
-		if (pos>=0)		pMainFrame->m_pctrlBoatPolar->setCurrentIndex(pos);
+        int pos = s_pMainFrame->m_pctrlBoatPolar->findText(m_pCurBoatPolar->m_BoatPolarName);
+        if (pos>=0)		s_pMainFrame->m_pctrlBoatPolar->setCurrentIndex(pos);
 	}
 
 
 	if(m_pCurBoatPolar && m_pCurBoatPolar->m_BoatName==m_pCurBoat->m_BoatName)
 	{
-		pMainFrame->UpdateBoatOpps();
+        s_pMainFrame->UpdateBoatOpps();
 
 		double Ctrl = 0.0;
 		if(m_pCurBoatOpp) Ctrl= m_pCurBoatOpp->m_Ctrl;
@@ -4585,7 +4546,7 @@ void QSail7::SetBoatPolar(BoatPolar *pBoatPolar, QString BoatPolarName)
 	if(m_iView==SAILPOLARVIEW)	CreateBoatPolarCurves();
 
 
-	pMainFrame->UpdateBoatOpps();
+    s_pMainFrame->UpdateBoatOpps();
 	SetAnalysisParams();
 	SetCurveParams();
 	m_bResetglLegend = true;
@@ -4616,7 +4577,7 @@ bool QSail7::SetBoatOpp(bool bCurrent, double x)
 
 	// first restore the panel geometry
 	memcpy(s_pPanel, s_pMemPanel, m_MatSize* sizeof(CPanel));
-	memcpy(s_pNode,  s_pMemNode,  m_nNodes * sizeof(CVector));
+	memcpy(s_pNode,  s_pMemNode,  m_nNodes * sizeof(Vector3d));
 
 	if(!m_pCurBoat|| !m_pCurBoatPolar)
 	{
@@ -4625,7 +4586,6 @@ bool QSail7::SetBoatOpp(bool bCurrent, double x)
 		return false;
 	}
 
-	MainFrame* pMainFrame = (MainFrame*)s_pMainFrame;
 	// set set the current BoatOpp, if any
 	// else set the comboBox's first, if any
 	// else set it to NULL
@@ -4661,7 +4621,7 @@ bool QSail7::SetBoatOpp(bool bCurrent, double x)
 			pBoatOpp = (BoatOpp*)m_poaBoatOpp->at(ibo);
 			if(pBoatOpp->m_BoatName==m_pCurBoat->m_BoatName && pBoatOpp->m_BoatPolarName==m_pCurBoatPolar->m_BoatPolarName)
 			{
-				pMainFrame->SelectBoatOpp(pBoatOpp->m_Ctrl);
+                s_pMainFrame->SelectBoatOpp(pBoatOpp->m_Ctrl);
 				m_pCurBoatOpp = pBoatOpp;
 				break;
 			}
@@ -4680,7 +4640,7 @@ bool QSail7::SetBoatOpp(bool bCurrent, double x)
 //		m_WakePanelFactor =		m_pCurBoatOpp->m_WakeFactor;
 
 		//select m_pCurBoatOpp in the listbox
-		pMainFrame->SelectBoatOpp(m_pCurBoatOpp->m_Ctrl);
+        s_pMainFrame->SelectBoatOpp(m_pCurBoatOpp->m_Ctrl);
 	}
 
 	if(!m_pCurBoatOpp) return false;
@@ -4733,7 +4693,6 @@ void QSail7::FillBoatPlrCurve(CCurve *pCurve, BoatPolar *pBoatPolar, enumPolarVa
 	//
 	int i;
 	double x,y;
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 	static QList <double> *pX, *pY;
 
 	pX = (QList <double> *) pBoatPolar->GetBoatPlrVariable(XVar);
@@ -4747,30 +4706,30 @@ void QSail7::FillBoatPlrCurve(CCurve *pCurve, BoatPolar *pBoatPolar, enumPolarVa
 		if(XVar==VINF)
 		{
 			x=(1.0 - pBoatPolar->m_Ctrl.at(i)) * pBoatPolar->m_QInfMin + pBoatPolar->m_Ctrl.at(i) * pBoatPolar->m_QInfMax;
-			x *=pMainFrame->m_mstoUnit;
+            x *=s_pMainFrame->m_mstoUnit;
 		}
 		else if(XVar==BETA) x=(1.0 - pBoatPolar->m_Ctrl.at(i)) * pBoatPolar->m_BetaMin + pBoatPolar->m_Ctrl.at(i) * pBoatPolar->m_BetaMax;
 		else if(XVar==PHI)  x=(1.0 - pBoatPolar->m_Ctrl.at(i)) * pBoatPolar->m_PhiMin + pBoatPolar->m_Ctrl.at(i) * pBoatPolar->m_PhiMax;
 		else if(pX)
 		{
 			x = (*pX)[i];
-			if(XVar>=LIFT && XVar<=FZ)  x*= pMainFrame->m_NtoUnit;
-			if(XVar>=MX   && XVar==MZ)  x*= pMainFrame->m_NmtoUnit;
+            if(XVar>=LIFT && XVar<=FZ)  x*= s_pMainFrame->m_NtoUnit;
+            if(XVar>=MX   && XVar==MZ)  x*= s_pMainFrame->m_NmtoUnit;
 		}
 		else return;
 
 		if(YVar==VINF)
 		{
 			y=(1.0 - pBoatPolar->m_Ctrl.at(i)) * pBoatPolar->m_QInfMin + pBoatPolar->m_Ctrl.at(i) * pBoatPolar->m_QInfMax;
-			y *= pMainFrame->m_mstoUnit;
+            y *= s_pMainFrame->m_mstoUnit;
 		}
 		else if(YVar==BETA) y=(1.0 - pBoatPolar->m_Ctrl.at(i)) * pBoatPolar->m_BetaMin + pBoatPolar->m_Ctrl.at(i) * pBoatPolar->m_BetaMax;
 		else if(YVar==PHI)  y=(1.0 - pBoatPolar->m_Ctrl.at(i)) * pBoatPolar->m_PhiMin + pBoatPolar->m_Ctrl.at(i) * pBoatPolar->m_PhiMax;
 		else if(pY)
 		{
 			y = (*pY)[i];
-			if(YVar>=LIFT && YVar<=FZ)  x*= pMainFrame->m_NtoUnit;
-			if(YVar>=MX   && YVar==MZ)  x*= pMainFrame->m_NmtoUnit;
+            if(YVar>=LIFT && YVar<=FZ)  x*= s_pMainFrame->m_NtoUnit;
+            if(YVar>=MX   && YVar==MZ)  x*= s_pMainFrame->m_NmtoUnit;
 		}
 		else return;
 
@@ -4781,15 +4740,14 @@ void QSail7::FillBoatPlrCurve(CCurve *pCurve, BoatPolar *pBoatPolar, enumPolarVa
 
 void QSail7::SetBoatPolarGraphTitles(Graph* pGraph)
 {
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 	QString StrLength;
 	QString StrSpeed;
 	QString StrMoment;
 	QString StrForce;
-	GetLengthUnit(StrLength, pMainFrame->m_LengthUnit);
-	GetSpeedUnit(StrSpeed, pMainFrame->m_SpeedUnit);
-	GetMomentUnit(StrMoment, pMainFrame->m_MomentUnit);
-	GetForceUnit(StrForce, pMainFrame->m_ForceUnit);
+    GetLengthUnit(StrLength, s_pMainFrame->m_LengthUnit);
+    GetSpeedUnit(StrSpeed, s_pMainFrame->m_SpeedUnit);
+    GetMomentUnit(StrMoment, s_pMainFrame->m_MomentUnit);
+    GetForceUnit(StrForce, s_pMainFrame->m_ForceUnit);
 
 	pGraph->SetXTitle(BoatPolar::GetPolarVariableName(pGraph->GetXVariable()));
 	pGraph->SetYTitle(BoatPolar::GetPolarVariableName(pGraph->GetYVariable()));
@@ -4797,7 +4755,7 @@ void QSail7::SetBoatPolarGraphTitles(Graph* pGraph)
 
 
 
-void QSail7::AddBoatOpp(double *Cp, double *Gamma, double *Sigma, CVector const &F, CVector const &M, CVector const& ForceTrefftz)
+void QSail7::AddBoatOpp(double *Cp, double *Gamma, double *Sigma, Vector3d const &F, Vector3d const &M, Vector3d const& ForceTrefftz)
 {
 	//
 	// Creates the wing's operating point
@@ -4814,23 +4772,22 @@ void QSail7::AddBoatOpp(double *Cp, double *Gamma, double *Sigma, CVector const 
 	// In output, fills the pBoatOpp object and returns the pointer
 	//
 
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 	int i,j;
 
-	pMainFrame->SetSaveState(false);
+    s_pMainFrame->SetSaveState(false);
 
 	BoatOpp *pBoatOpp;
 	BoatOpp * pNewPoint;
 	pNewPoint = new BoatOpp();
 	if(pNewPoint == NULL)
 	{
-		QMessageBox::warning(pMainFrame,tr("Warning"),tr("Not enough memory to store the OpPoint\n"));
+        QMessageBox::warning(s_pMainFrame,tr("Warning"),tr("Not enough memory to store the OpPoint\n"));
 		return;
 	}
 	else
 	{
 		//load BoatOpp with data
-		pNewPoint->m_Color = pMainFrame->GetColor(5);
+        pNewPoint->m_Color = s_pMainFrame->GetColor(5);
 		bool bFound;
 		for(i=0; i<30;i++)
 		{
@@ -4838,11 +4795,11 @@ void QSail7::AddBoatOpp(double *Cp, double *Gamma, double *Sigma, CVector const 
 			for (j=0; j<m_poaBoatOpp->size();j++)
 			{
 				pBoatOpp = (BoatOpp*)m_poaBoatOpp->at(j);
-				if(pBoatOpp->m_Color == pMainFrame->m_crColors[i]) bFound = true;
+                if(pBoatOpp->m_Color == s_pMainFrame->m_crColors[i]) bFound = true;
 			}
 			if(!bFound)
 			{
-				pNewPoint->m_Color = pMainFrame->m_crColors[i];
+                pNewPoint->m_Color = s_pMainFrame->m_crColors[i];
 				break;
 			}
 		}
@@ -4941,7 +4898,7 @@ void QSail7::AddBoatOpp(double *Cp, double *Gamma, double *Sigma, CVector const 
 }
 
 
-void QSail7::RotatePanelsX(double const &Angle, CVector const &P)
+void QSail7::RotatePanelsX(double const &Angle, Vector3d const &P)
 {
 	//
 	// rotates the panels around the x-axis to account for bank
@@ -4950,7 +4907,7 @@ void QSail7::RotatePanelsX(double const &Angle, CVector const &P)
 	int n, p, pw, lw;
 
 	int iLA, iLB, iTA, iTB;
-	CVector LATB, TALB, Pt, Trans;
+	Vector3d LATB, TALB, Pt, Trans;
 
 	for (n=0; n< m_nNodes; n++)
 	{
@@ -5015,7 +4972,7 @@ void QSail7::RotatePanelsX(double const &Angle, CVector const &P)
 
 
 
-void QSail7::RotatePanelsZ(double const &Angle, CVector const &P)
+void QSail7::RotatePanelsZ(double const &Angle, Vector3d const &P)
 {
 	//
 	// rotates the panels around the z-axis to account for sail angle
@@ -5024,7 +4981,7 @@ void QSail7::RotatePanelsZ(double const &Angle, CVector const &P)
 	int n, p, pw, lw;
 
 	int iLA, iLB, iTA, iTB;
-	CVector LATB, TALB, Pt, Trans;
+	Vector3d LATB, TALB, Pt, Trans;
 
 	for (n=0; n< m_nNodes; n++)
 	{
@@ -5094,16 +5051,15 @@ void QSail7::OnAnalyze()
 	//
 	// The user has requested a launch of the analysis
 	//
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 
 	if(!m_pCurBoat)
 	{
-		QMessageBox::warning(pMainFrame, tr("Warning"), tr("Please define a boat object before running a calculation"));
+        QMessageBox::warning(s_pMainFrame, tr("Warning"), tr("Please define a boat object before running a calculation"));
 		return;
 	}
 	if(!m_pCurBoatPolar)
 	{
-		QMessageBox::warning(pMainFrame, tr("Warning"), tr("Please define an analysis/polar before running a calculation"));
+        QMessageBox::warning(s_pMainFrame, tr("Warning"), tr("Please define an analysis/polar before running a calculation"));
 		return;
 	}
 
@@ -5123,7 +5079,7 @@ void QSail7::OnAnalyze()
 	if(m_iView==SAILPOLARVIEW) CreateBoatPolarCurves();
 	UpdateView();
 	SetControls();
-	pMainFrame->setFocus();
+    s_pMainFrame->setFocus();
 }
 
 
@@ -5150,7 +5106,6 @@ void QSail7::PanelAnalyze(double V0, double VMax, double VDelta, bool bSequence)
 {
 	if(!m_pCurBoat) return;
 
-	MainFrame* pMainFrame = (MainFrame*)s_pMainFrame;
 	m_PanelDlg.m_bSequence      = bSequence;
 	m_PanelDlg.m_pBoat          = m_pCurBoat;
 	m_PanelDlg.m_pBoatPolar     = m_pCurBoatPolar;
@@ -5177,7 +5132,7 @@ void QSail7::PanelAnalyze(double V0, double VMax, double VDelta, bool bSequence)
 	m_PanelDlg.m_ControlDelta  = VDelta;
 
 
-	m_PanelDlg.move(pMainFrame->m_DlgPos);
+    m_PanelDlg.move(s_pMainFrame->m_DlgPos);
 
 	m_PanelDlg.InitDialog();
 	m_PanelDlg.show();
@@ -5186,9 +5141,9 @@ void QSail7::PanelAnalyze(double V0, double VMax, double VDelta, bool bSequence)
 
 	if(!m_bLogFile || !m_PanelDlg.m_bWarning) m_PanelDlg.hide();
 
-	pMainFrame->m_DlgPos = m_PanelDlg.pos();
+    s_pMainFrame->m_DlgPos = m_PanelDlg.pos();
 
-	pMainFrame->UpdateBoatOpps();
+    s_pMainFrame->UpdateBoatOpps();
 
 	if(m_pCurBoat)     SetBoatOpp(false, m_PanelDlg.m_ControlMin);
 
@@ -5410,8 +5365,6 @@ void QSail7::OnAnimateBoatOppSingle()
 	static int size;
 	static BoatOpp *pBOpp;
 
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
-
 	if(m_iView!=SAIL3DVIEW)             return; //nothing to animate
 	if(!m_pCurBoat || !m_pCurBoatPolar) return; //nothing to animate
 
@@ -5446,7 +5399,7 @@ void QSail7::OnAnimateBoatOppSingle()
 			UpdateView();
 
 			//select current BOpp in Combobox
-			pMainFrame->SelectBoatOpp(pBOpp->m_Ctrl);
+            s_pMainFrame->SelectBoatOpp(pBOpp->m_Ctrl);
 		}
 		else if(bIsValid) bSkipOne = false;
 
@@ -5503,11 +5456,10 @@ void QSail7::OnClipPlane(int pos)
 
 void QSail7::OnLight()
 {
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 	m_bglLight = ! m_bglLight;
 	SailViewWidget::s_bglLight= m_bglLight;
 
-	pMainFrame->Sail73DLightAct->setChecked(m_bglLight);
+    s_pMainFrame->Sail73DLightAct->setChecked(m_bglLight);
 	UpdateView();
 }
 
@@ -5590,7 +5542,6 @@ void QSail7::FillComboBoxes(bool bEnable)
 
 void QSail7::UpdateCurve()
 {
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 	if(m_iView==SAILPOLARVIEW && m_pCurBoatPolar)
 	{
 		m_pCurBoatPolar->m_Color = m_CurveColor;
@@ -5601,7 +5552,7 @@ void QSail7::UpdateCurve()
 		CreateBoatPolarCurves();
 	}
 	UpdateView();
-	pMainFrame->SetSaveState(false);
+    s_pMainFrame->SetSaveState(false);
 
 }
 
@@ -5619,16 +5570,16 @@ void QSail7::GLCreatePanelForces(BoatOpp *pBoatOpp)
 	double range;
 	double coef = .1;
 	Quaternion Qt; // Quaternion operator to align the reference arrow to the panel's normal
-	CVector Omega; //rotation vector to align the reference arrow to the panel's normal
-	CVector O;
+	Vector3d Omega; //rotation vector to align the reference arrow to the panel's normal
+	Vector3d O;
 
 	//The vectors defining the reference arrow
-	CVector R(0.0,0.0,1.0);
-	CVector R1( 0.05, 0.0, -0.1);
-	CVector R2(-0.05, 0.0, -0.1);
+	Vector3d R(0.0,0.0,1.0);
+	Vector3d R1( 0.05, 0.0, -0.1);
+	Vector3d R2(-0.05, 0.0, -0.1);
 
 	//The three vectors defining the arrow on the panel
-	CVector P, P1, P2;
+	Vector3d P, P1, P2;
 
 
 	//define the range of values to set the colors in accordance
@@ -5840,16 +5791,15 @@ void QSail7::GLCreatePanelForces(BoatOpp *pBoatOpp)
 
 
 
-void QSail7::GLCreateSailGeom(int GLList, QSail*pSail, CVector Position)
+void QSail7::GLCreateSailGeom(int GLList, QSail*pSail, Vector3d Position)
 {
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 //	ThreeDWidget *p3DWidget = (ThreeDWidget*)s_p3DWidget;
 
 	glNewList(GLList, GL_COMPILE);
 	{
 		m_GLList++;
 
-		if(pMainFrame->m_bAlphaChannel && pSail->m_SailColor.alpha()<255)
+        if(s_pMainFrame->m_bAlphaChannel && pSail->m_SailColor.alpha()<255)
 		{
 			glColor4d(pSail->m_SailColor.redF(),pSail->m_SailColor.greenF(),pSail->m_SailColor.blueF(), pSail->m_SailColor.alphaF());
 			glEnable (GL_BLEND);
@@ -5865,7 +5815,7 @@ void QSail7::GLCreateSailGeom(int GLList, QSail*pSail, CVector Position)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		glPolygonOffset(1.0, 1.0);
 
-		static CVector PtA, PtB, PtA0, PtB0, LATB, TALB, PtNormal;
+		static Vector3d PtA, PtB, PtA0, PtB0, LATB, TALB, PtNormal;
 		PtNormal.Set(0.0, 1.0, 0.0);
 		for (int k=0; k<SPANPOINTS; k++)
 		{
@@ -5953,7 +5903,7 @@ void QSail7::GLCreateSailGeom(int GLList, QSail*pSail, CVector Position)
 		else if(W3dPrefsDlg::s_OutlineStyle == 4) glLineStipple (1, 0x7E66);
 		else                                      glLineStipple (1, 0xFFFF);
 
-		CVector PtA;
+		Vector3d PtA;
 
 		//Sections
 		// only top and bottom - rest is virtual
@@ -6033,7 +5983,7 @@ void QSail7::GLCreateCp(BoatOpp *pBoatOpp)
 	double color;
 	double lmin, lmax, range;
 	double CpInf[2*VLMMAXMATSIZE], CpSup[2*VLMMAXMATSIZE], Cp100[2*VLMMAXMATSIZE];
-	CVector LA,LB,TA,TB;
+	Vector3d LA,LB,TA,TB;
 	nPanels = pBoatOpp->m_NVLMPanels;
 
 	lmin = 10000.0;
@@ -6217,11 +6167,10 @@ void QSail7::GLCreateCp(BoatOpp *pBoatOpp)
 
 void QSail7::On3DPrefs()
 {
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
-	m_3DPrefsDlg.move(pMainFrame->m_DlgPos);
+    m_3DPrefsDlg.move(s_pMainFrame->m_DlgPos);
 	m_3DPrefsDlg.InitDialog();
 	m_3DPrefsDlg.exec();
-	pMainFrame->m_DlgPos = m_3DPrefsDlg.pos();
+    s_pMainFrame->m_DlgPos = m_3DPrefsDlg.pos();
 	m_bResetglMesh = m_bResetglSailGeom = true;
 	m_bResetglBody = true;
 	UpdateView();
@@ -6235,9 +6184,8 @@ void QSail7::OnGL3DScale()
 //		m_pctrl3DSettings->setChecked(false);
 		return;
 	}
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
-	if(pMainFrame->m_pctrl3DScalesWidget->isVisible()) pMainFrame->m_pctrl3DScalesWidget->hide();
-	else                                               pMainFrame->m_pctrl3DScalesWidget->show();
+    if(s_pMainFrame->m_pctrl3DScalesWidget->isVisible()) s_pMainFrame->m_pctrl3DScalesWidget->hide();
+    else                                               s_pMainFrame->m_pctrl3DScalesWidget->show();
 
 //	pMainFrame->Sail73DScalesAct->setChecked(pMainFrame->m_pctrl3DScalesWidget->isVisible());
 //	if(m_pctrl3DSettings->isChecked()) pMainFrame->m_pctrl3DScalesWidget->show();
@@ -6303,7 +6251,6 @@ void QSail7::SetBoatPlrLegendPos()
 
 void QSail7::SetCurveParams()
 {
-//	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 	if(m_iView==SAILPOLARVIEW)
 	{
 		if(m_pCurBoatPolar)
@@ -6334,19 +6281,18 @@ void QSail7::DrawBoatPolarLegend(QPainter &painter, QPoint place, int bottom)
 
 	painter.save();
 
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 	int LegendSize, LegendWidth, ypos;
 	int i,j,k,l, ny, x1;
 
 	LegendSize = 30;
 	LegendWidth = 280;
 
-	painter.setFont(pMainFrame->m_TextFont);
+    painter.setFont(s_pMainFrame->m_TextFont);
 
-	QFontMetrics fm(pMainFrame->m_TextFont);
+    QFontMetrics fm(s_pMainFrame->m_TextFont);
 	ypos = fm.height();
 
-	QPen TextPen(pMainFrame->m_TextColor);
+    QPen TextPen(s_pMainFrame->m_TextColor);
 	painter.setPen(TextPen);
 	TextPen.setWidth(1);
 
@@ -6371,7 +6317,7 @@ void QSail7::DrawBoatPolarLegend(QPainter &painter, QPoint place, int bottom)
 	int nBoats= str.size();
 
 	painter.setBackgroundMode(Qt::TransparentMode);
-	QBrush LegendBrush(pMainFrame->m_BackgroundColor);
+    QBrush LegendBrush(s_pMainFrame->m_BackgroundColor);
 	painter.setBrush(LegendBrush);
 
 	QPen LegendPen;
@@ -6475,7 +6421,6 @@ void QSail7::StopAnimate()
 	m_pctrlBOppAnimate->setChecked(false);
 	m_pTimerBoatOpp->stop();
 
-//	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 	if(!m_bAnimateBoatOpp) return;
 	SetBoatOpp(true);
 }
@@ -6484,7 +6429,6 @@ void QSail7::StopAnimate()
 
 void QSail7::OnGraphSettings()
 {
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 	QGraph *pGraph = NULL;
 
 	pGraph = m_pCurGraph;
@@ -6499,7 +6443,7 @@ void QSail7::OnGraphSettings()
 
 	QGraph graph;
 	graph.CopySettings(pGraph);
-	GDlg.move(pMainFrame->m_DlgPos);
+    GDlg.move(s_pMainFrame->m_DlgPos);
 	GDlg.m_pMemGraph = &graph;
 	GDlg.m_pGraph = pGraph;
 	GDlg.SetParams();
@@ -6522,7 +6466,7 @@ void QSail7::OnGraphSettings()
 	{
 		pGraph->CopySettings(&graph);
 	}
-	pMainFrame->m_DlgPos = GDlg.pos();
+    s_pMainFrame->m_DlgPos = GDlg.pos();
 	UpdateView();
 }
 
@@ -6536,7 +6480,6 @@ void QSail7::OnResetBoatPlrLegend()
 
 void QSail7::GLCreateStreamLines()
 {
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 	if(!m_pCurBoatOpp || !m_pCurBoatPolar || !m_pCurBoat) return;
 
 //	GL3DScales *p3DScales = (GL3DScales *)m_pGL3DScales;
@@ -6545,18 +6488,18 @@ void QSail7::GLCreateStreamLines()
 	int m, p, style, width;
 	double ds, *Mu, *Sigma;
 	QColor color;
-	CVector O(0.0,0.0,0.0);
-	CVector C, D, D1, VA, VT, VInf, TC;
+	Vector3d O(0.0,0.0,0.0);
+	Vector3d C, D, D1, VA, VT, VInf, TC;
 	D1.Set(987654321.0, 0.0, 0.0);
 
 	QList <int> iStream;
-	QList <CVector> VStream;
+	QList <Vector3d> VStream;
 
 	if(GL3DScales::s_pos==YLINE)
 	{
 		for(int iy=0; iy<GL3DScales::s_NStreamLines; iy++)
 		{
-			VStream.append(CVector(GL3DScales::s_XOffset, GL3DScales::s_YOffset + GL3DScales::s_StreamlineSpacing*(double)iy, GL3DScales::s_ZOffset));
+			VStream.append(Vector3d(GL3DScales::s_XOffset, GL3DScales::s_YOffset + GL3DScales::s_StreamlineSpacing*(double)iy, GL3DScales::s_ZOffset));
 			iStream.append(iy);
 		}
 	}
@@ -6564,7 +6507,7 @@ void QSail7::GLCreateStreamLines()
 	{
 		for(int iz=0; iz<GL3DScales::s_NStreamLines; iz++)
 		{
-			VStream.append(CVector(GL3DScales::s_XOffset, GL3DScales::s_YOffset, GL3DScales::s_ZOffset + GL3DScales::s_StreamlineSpacing*(double)iz));
+			VStream.append(Vector3d(GL3DScales::s_XOffset, GL3DScales::s_YOffset, GL3DScales::s_ZOffset + GL3DScales::s_StreamlineSpacing*(double)iz));
 			iStream.append(iz);
 		}
 	}
@@ -6637,7 +6580,7 @@ void QSail7::GLCreateStreamLines()
 	dlg.InitDialog(0, iStream.size());
 	dlg.setWindowModality(Qt::WindowModal);
 	dlg.SetValue(0);
-	dlg.move(pMainFrame->m_DlgPos);
+    dlg.move(s_pMainFrame->m_DlgPos);
 	dlg.show();
 
 	Mu    = m_pCurBoatOpp->m_G;
@@ -6751,7 +6694,7 @@ void QSail7::GLCreateStreamLines()
 
 	//restore panels.
 	memcpy(s_pPanel, s_pMemPanel, m_MatSize * sizeof(CPanel));
-	memcpy(s_pNode,  s_pMemNode,  m_nNodes  * sizeof(CVector));
+	memcpy(s_pNode,  s_pMemNode,  m_nNodes  * sizeof(Vector3d));
 	//	memcpy(s_pWakePanel, s_pRefWakePanel, m_WakeSize * sizeof(CPanel));
 	//	memcpy(s_pWakeNode,  s_pRefWakeNode,  m_nWakeNodes * sizeof(CVector));
 }
@@ -6759,12 +6702,11 @@ void QSail7::GLCreateStreamLines()
 
 void QSail7::GLCreateSurfSpeeds()
 {
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 
 	if(!m_pCurBoatOpp || !m_pCurBoatPolar || !m_pCurBoat) return;
 
 	ProgressDlg dlg;
-	dlg.move(pMainFrame->m_DlgPos);
+    dlg.move(s_pMainFrame->m_DlgPos);
 	dlg.InitDialog(0, m_MatSize);
 	dlg.setModal(true);
 	dlg.SetValue(0);
@@ -6775,7 +6717,7 @@ void QSail7::GLCreateSurfSpeeds()
 	double length, sinT, cosT, beta;
 	double *Mu, *Sigma;
 	double x1, x2, y1, y2, z1, z2, xe, ye, ze, dlx, dlz;
-	CVector C, V, VT, VInf;
+	Vector3d C, V, VT, VInf;
 
 	factor = GL3DScales::s_VelocityScale/100.0;
 
@@ -6886,7 +6828,7 @@ void QSail7::GLCreateSurfSpeeds()
 
 	//leave things as they were
 	memcpy(s_pPanel, s_pMemPanel, m_MatSize * sizeof(CPanel));
-	memcpy(s_pNode,  s_pMemNode,  m_nNodes  * sizeof(CVector));
+	memcpy(s_pNode,  s_pMemNode,  m_nNodes  * sizeof(Vector3d));
 //	memcpy(s_pWakePanel, s_pRefWakePanel, m_WakeSize * sizeof(CPanel));
 //	memcpy(s_pWakeNode,  s_pRefWakeNode,  m_nWakeNodes * sizeof(CVector));
 
@@ -6898,13 +6840,13 @@ void QSail7::GLCreateSurfSpeeds()
 void QSail7::OnBoatPolarProps()
 {
 	if(!m_pCurBoatPolar) return;
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
+
 	ObjectPropsDlg dlg;
 	dlg.m_pBoatPolar = m_pCurBoatPolar;
 	dlg.InitDialog();
-	dlg.move(pMainFrame->m_DlgPos);
+    dlg.move(s_pMainFrame->m_DlgPos);
 	dlg.exec();
-	pMainFrame->m_DlgPos = dlg.pos();
+    s_pMainFrame->m_DlgPos = dlg.pos();
 }
 
 
@@ -6912,29 +6854,27 @@ void QSail7::OnBoatPolarProps()
 void QSail7::OnBoatOppProps()
 {
 	if(!m_pCurBoatOpp) return;
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 	ObjectPropsDlg dlg;
 	dlg.m_pBoatOpp = m_pCurBoatOpp;
 	dlg.InitDialog();
-	dlg.move(pMainFrame->m_DlgPos);
+    dlg.move(s_pMainFrame->m_DlgPos);
 	dlg.exec();
-	pMainFrame->m_DlgPos = dlg.pos();
+    s_pMainFrame->m_DlgPos = dlg.pos();
 }
 
 
 void QSail7::GLDrawForces()
 {
 	if(!m_pCurBoatOpp) return;
-	CVector WindDirection, WindNormal, WindSide, Pt;
+	Vector3d WindDirection, WindNormal, WindSide, Pt;
 	double Lift, Drag;
 
 	int style=W3dPrefsDlg::s_XCPStyle;
 
 	ThreeDWidget *p3DWidget = (ThreeDWidget*)s_p3DWidget;
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 	QString strForce, strForceUnit;
 
-	GetForceUnit(strForceUnit, pMainFrame->m_ForceUnit);
+    GetForceUnit(strForceUnit, s_pMainFrame->m_ForceUnit);
 
 	glEnable (GL_LINE_STIPPLE);
 	glPolygonMode(GL_FRONT,GL_LINE);
@@ -6959,17 +6899,17 @@ void QSail7::GLDrawForces()
 		p3DWidget->GLDrawArrow(m_pCurBoatPolar->m_CoG, WindNormal,    Lift * coef);
 		p3DWidget->GLDrawArrow(m_pCurBoatPolar->m_CoG, WindDirection, Drag * coef);
 
-		glColor3d(pMainFrame->m_TextColor.redF(), pMainFrame->m_TextColor.greenF(), pMainFrame->m_TextColor.blueF());
+        glColor3d(s_pMainFrame->m_TextColor.redF(), s_pMainFrame->m_TextColor.greenF(), s_pMainFrame->m_TextColor.blueF());
 
 		Pt = m_pCurBoatPolar->m_CoG +  WindNormal * m_pCurBoatOpp->ForceTrefftz.dot(WindNormal) * coef;
-		strForce = QString("Lift=%1").arg(Lift*pMainFrame->m_NtoUnit,7,'f',1);
+        strForce = QString("Lift=%1").arg(Lift*s_pMainFrame->m_NtoUnit,7,'f',1);
 		strForce += strForceUnit;
-		p3DWidget->renderText(Pt.x, Pt.y, Pt.z+.11, strForce, pMainFrame->m_TextFont);
+        p3DWidget->renderText(Pt.x, Pt.y, Pt.z+.11, strForce, s_pMainFrame->m_TextFont);
 
 		Pt = m_pCurBoatPolar->m_CoG +  WindDirection * m_pCurBoatOpp->ForceTrefftz.dot(WindDirection) * coef;
-		strForce = QString("Drag=%1").arg(Drag*pMainFrame->m_NtoUnit,7,'f',1);
+        strForce = QString("Drag=%1").arg(Drag*s_pMainFrame->m_NtoUnit,7,'f',1);
 		strForce += strForceUnit;
-		p3DWidget->renderText(Pt.x, Pt.y, Pt.z+.11, strForce, pMainFrame->m_TextFont);
+        p3DWidget->renderText(Pt.x, Pt.y, Pt.z+.11, strForce, s_pMainFrame->m_TextFont);
 	}
 
 	if(m_bBodyForces)
@@ -6996,26 +6936,26 @@ void QSail7::GLDrawForces()
 				 break;
 		}
 
-		p3DWidget->GLDrawArrow(m_pCurBoatPolar->m_CoG, CVector(1.0,0.0,0.0), m_pCurBoatOpp->F.x* coef);
-		p3DWidget->GLDrawArrow(m_pCurBoatPolar->m_CoG, CVector(0.0,1.0,0.0), m_pCurBoatOpp->F.y * coef);
-		p3DWidget->GLDrawArrow(m_pCurBoatPolar->m_CoG, CVector(0.0,0.0,1.0), m_pCurBoatOpp->F.z * coef);
+		p3DWidget->GLDrawArrow(m_pCurBoatPolar->m_CoG, Vector3d(1.0,0.0,0.0), m_pCurBoatOpp->F.x* coef);
+		p3DWidget->GLDrawArrow(m_pCurBoatPolar->m_CoG, Vector3d(0.0,1.0,0.0), m_pCurBoatOpp->F.y * coef);
+		p3DWidget->GLDrawArrow(m_pCurBoatPolar->m_CoG, Vector3d(0.0,0.0,1.0), m_pCurBoatOpp->F.z * coef);
 
-		glColor3d(pMainFrame->m_TextColor.redF(), pMainFrame->m_TextColor.greenF(), pMainFrame->m_TextColor.blueF());
+        glColor3d(s_pMainFrame->m_TextColor.redF(), s_pMainFrame->m_TextColor.greenF(), s_pMainFrame->m_TextColor.blueF());
 
-		Pt = m_pCurBoatPolar->m_CoG +  CVector(1.0,0.0,0.0) * m_pCurBoatOpp->ForceTrefftz.x * coef;
-		strForce = QString("FF_Fx=%1").arg(m_pCurBoatOpp->F.x*pMainFrame->m_NtoUnit,7,'f',1);
+		Pt = m_pCurBoatPolar->m_CoG +  Vector3d(1.0,0.0,0.0) * m_pCurBoatOpp->ForceTrefftz.x * coef;
+        strForce = QString("FF_Fx=%1").arg(m_pCurBoatOpp->F.x*s_pMainFrame->m_NtoUnit,7,'f',1);
 		strForce += strForceUnit;
-		p3DWidget->renderText(Pt.x, Pt.y, Pt.z+.11, strForce, pMainFrame->m_TextFont);
+        p3DWidget->renderText(Pt.x, Pt.y, Pt.z+.11, strForce, s_pMainFrame->m_TextFont);
 
-		Pt = m_pCurBoatPolar->m_CoG +  CVector(0.0, 1.0, 0.0) * m_pCurBoatOpp->ForceTrefftz.y * coef;
-		strForce = QString("FF_Fy=%1").arg(m_pCurBoatOpp->F.y*pMainFrame->m_NtoUnit, 7, 'f', 1);
+		Pt = m_pCurBoatPolar->m_CoG +  Vector3d(0.0, 1.0, 0.0) * m_pCurBoatOpp->ForceTrefftz.y * coef;
+        strForce = QString("FF_Fy=%1").arg(m_pCurBoatOpp->F.y*s_pMainFrame->m_NtoUnit, 7, 'f', 1);
 		strForce += strForceUnit;
-		p3DWidget->renderText(Pt.x, Pt.y, Pt.z+.11, strForce, pMainFrame->m_TextFont);
+        p3DWidget->renderText(Pt.x, Pt.y, Pt.z+.11, strForce, s_pMainFrame->m_TextFont);
 
-		Pt = m_pCurBoatPolar->m_CoG +  CVector(0.0, 0.0, 1.0) * m_pCurBoatOpp->ForceTrefftz.z * coef;
-		strForce = QString("FF_Fz=%1").arg(m_pCurBoatOpp->F.z*pMainFrame->m_NtoUnit, 7, 'f', 1);
+		Pt = m_pCurBoatPolar->m_CoG +  Vector3d(0.0, 0.0, 1.0) * m_pCurBoatOpp->ForceTrefftz.z * coef;
+        strForce = QString("FF_Fz=%1").arg(m_pCurBoatOpp->F.z*s_pMainFrame->m_NtoUnit, 7, 'f', 1);
 		strForce += strForceUnit;
-		p3DWidget->renderText(Pt.x, Pt.y, Pt.z+.11, strForce, pMainFrame->m_TextFont);
+        p3DWidget->renderText(Pt.x, Pt.y, Pt.z+.11, strForce, s_pMainFrame->m_TextFont);
 	}
 
 	glDisable (GL_LINE_STIPPLE);
@@ -7027,7 +6967,6 @@ void QSail7::GLDrawForces()
 void QSail7::SnapClient(QString const &FileName)
 {
 	int NbBytes, bitsPerPixel;
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 
 	QSize size(m_r3DCltRect.width(),m_r3DCltRect.height());
 	ThreeDWidget * p3DWidget = (ThreeDWidget*)s_p3DWidget;
@@ -7035,7 +6974,7 @@ void QSail7::SnapClient(QString const &FileName)
 
 	if(!GLFormat.rgba())
 	{
-		QMessageBox::warning(pMainFrame,tr("Warning"),tr("OpenGL color format is not recognized... Sorry"));
+        QMessageBox::warning(s_pMainFrame,tr("Warning"),tr("OpenGL color format is not recognized... Sorry"));
 		return;
 	}
 
@@ -7045,12 +6984,12 @@ void QSail7::SnapClient(QString const &FileName)
 	{
 		case 8:
 		{
-			QMessageBox::warning(pMainFrame,tr("Warning"),tr("Cannot (yet ?) save 8 bit depth opengl screen images... Sorry"));
+            QMessageBox::warning(s_pMainFrame,tr("Warning"),tr("Cannot (yet ?) save 8 bit depth opengl screen images... Sorry"));
 			return;
 		}
 		case 16:
 		{
-			QMessageBox::warning(pMainFrame,tr("Warning"),tr("Cannot (yet ?) save 16 bit depth opengl screen images... Sorry"));
+            QMessageBox::warning(s_pMainFrame,tr("Warning"),tr("Cannot (yet ?) save 16 bit depth opengl screen images... Sorry"));
 			size.setWidth(width - size.width() % 2);
 			return;
 		}
@@ -7067,7 +7006,7 @@ void QSail7::SnapClient(QString const &FileName)
 		}
 		default:
 		{
-			QMessageBox::warning(pMainFrame,tr("Warning"),tr("Unidentified bit depth... Sorry"));
+            QMessageBox::warning(s_pMainFrame,tr("Warning"),tr("Unidentified bit depth... Sorry"));
 			return;
 		}
 	}
@@ -7088,7 +7027,7 @@ void QSail7::SnapClient(QString const &FileName)
 			  FlippedImaged = Image.mirrored();	//flip vertically
 			  FlippedImaged.save(FileName);
 #else
-			  QMessageBox::warning(pMainFrame,tr("Warning"),"The version of Qt used to compile the code is older than 4.4 and does not support 24 bit images... Sorry");
+              QMessageBox::warning(s_pMainFrame,tr("Warning"),"The version of Qt used to compile the code is older than 4.4 and does not support 24 bit images... Sorry");
 #endif
 			  break;
 		}
@@ -7119,25 +7058,24 @@ void QSail7::OnExportCurBoatOpp()
 
 	QString Header, strong, Format;
 	int k;
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 	QString FileName, filter;
 
-	if(pMainFrame->m_ExportFileType==1) filter = "Text File (*.txt)";
+    if(s_pMainFrame->m_ExportFileType==1) filter = "Text File (*.txt)";
 	else                                filter = "Comma Separated Values (*.csv)";
 
 	FileName = m_pCurBoatOpp->m_BoatName+"_"+m_pCurBoatOpp->m_BoatPolarName+QString("_Ctrl=%1").arg(m_pCurBoatOpp->m_Ctrl,5,'f',2);
 	FileName.replace("/", " ");
 	FileName = QFileDialog::getSaveFileName(this, tr("Export Boat Opp"),
-											pMainFrame->m_LastDirName + "/"+FileName,
+                                            s_pMainFrame->m_LastDirName + "/"+FileName,
 											tr("Text File (*.txt);;Comma Separated Values (*.csv)"),
 											&filter);
 
 	if(!FileName.length()) return;
 	int pos = FileName.lastIndexOf("/");
-	if(pos>0) pMainFrame->m_LastDirName = FileName.left(pos);
+    if(pos>0) s_pMainFrame->m_LastDirName = FileName.left(pos);
 	pos = FileName.lastIndexOf(".csv");
-	if (pos>0) pMainFrame->m_ExportFileType = 2;
-	else       pMainFrame->m_ExportFileType = 1;
+    if (pos>0) s_pMainFrame->m_ExportFileType = 2;
+    else       s_pMainFrame->m_ExportFileType = 1;
 
 
 	QFile XFile(FileName);
@@ -7146,11 +7084,11 @@ void QSail7::OnExportCurBoatOpp()
 	QTextStream out(&XFile);
 
 
-	if(pMainFrame->m_ExportFileType==1) Header = "       x           y            z          Cp \n";
+    if(s_pMainFrame->m_ExportFileType==1) Header = "       x           y            z          Cp \n";
 	else                                Header = "  x,y,z,Cp\n";
 	out << Header;
 
-	if(pMainFrame->m_ExportFileType==1) Format = "%1  %2   %3   %4\n";
+    if(s_pMainFrame->m_ExportFileType==1) Format = "%1  %2   %3   %4\n";
 	else                                Format = "%1,%2,%3,%4\n";
 
 	for (k=0; k<m_MatSize; k++)
@@ -7170,25 +7108,24 @@ void QSail7::OnExportCurBoatOpp()
 void QSail7::OnExportCurBoatPolar()
 {
 	if(!m_pCurBoatPolar) return;
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 	QString FileName, filter;
 
-	if(pMainFrame->m_ExportFileType==1) filter = "Text File (*.txt)";
+    if(s_pMainFrame->m_ExportFileType==1) filter = "Text File (*.txt)";
 	else                                filter = "Comma Separated Values (*.csv)";
 
 	FileName = m_pCurBoatPolar->m_BoatPolarName;
 	FileName.replace("/", " ");
 	FileName = QFileDialog::getSaveFileName(this, tr("Export Polar"),
-											pMainFrame->m_LastDirName + "/"+FileName,
+                                            s_pMainFrame->m_LastDirName + "/"+FileName,
 											tr("Text File (*.txt);;Comma Separated Values (*.csv)"),
 											&filter);
 
 	if(!FileName.length()) return;
 	int pos = FileName.lastIndexOf("/");
-	if(pos>0) pMainFrame->m_LastDirName = FileName.left(pos);
+    if(pos>0) s_pMainFrame->m_LastDirName = FileName.left(pos);
 	pos = FileName.lastIndexOf(".csv");
-	if (pos>0) pMainFrame->m_ExportFileType = 2;
-	else       pMainFrame->m_ExportFileType = 1;
+    if (pos>0) s_pMainFrame->m_ExportFileType = 2;
+    else       s_pMainFrame->m_ExportFileType = 1;
 
 
 	QFile XFile(FileName);
@@ -7196,7 +7133,7 @@ void QSail7::OnExportCurBoatPolar()
 	if (!XFile.open(QIODevice::WriteOnly | QIODevice::Text)) return ;
 
 	QTextStream out(&XFile);
-	m_pCurBoatPolar->Export(out, pMainFrame->m_ExportFileType);
+    m_pCurBoatPolar->Export(out, s_pMainFrame->m_ExportFileType);
 	XFile.close();
 
 	UpdateView();
@@ -7206,9 +7143,8 @@ void QSail7::OnExportCurBoatPolar()
 void QSail7::OnResetCurBoatPolar()
 {
 	if (!m_pCurBoatPolar) return;
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 	QString strong = tr("Are you sure you want to reset the content of the polar :\n")+  m_pCurBoatPolar->m_BoatPolarName+"?\n";
-	if (QMessageBox::Yes != QMessageBox::question(pMainFrame, tr("Question"), strong,
+    if (QMessageBox::Yes != QMessageBox::question(s_pMainFrame, tr("Question"), strong,
 												  QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel,
 												  QMessageBox::Cancel)) return;
 
@@ -7227,7 +7163,7 @@ void QSail7::OnResetCurBoatPolar()
 			}
 		}
 	}
-	pMainFrame->UpdateBoatOpps();
+    s_pMainFrame->UpdateBoatOpps();
 	m_pCurBoatOpp = NULL;
 
 	if(m_iView==SAILPOLARVIEW)
@@ -7241,7 +7177,7 @@ void QSail7::OnResetCurBoatPolar()
 		}
 	}
 
-	pMainFrame->SetSaveState(false);
+    s_pMainFrame->SetSaveState(false);
 	UpdateView();
 }
 
@@ -7251,7 +7187,6 @@ void QSail7::OnHideCurBoatPolars()
 	if(!m_pCurBoat) return;
 	int i;
 
-	MainFrame* pMainFrame = (MainFrame*)s_pMainFrame;
 	BoatPolar *pBPolar;
 	for (i=0; i<m_poaBoatPolar->size(); i++)
 	{
@@ -7261,7 +7196,7 @@ void QSail7::OnHideCurBoatPolars()
 
 	if(m_iView==SAILPOLARVIEW)		CreateBoatPolarCurves();
 	SetCurveParams();
-	pMainFrame->SetSaveState(false);
+    s_pMainFrame->SetSaveState(false);
 	UpdateView();
 }
 
@@ -7270,7 +7205,6 @@ void QSail7::OnShowCurBoatPolars()
 	if(!m_pCurBoat) return;
 	int i;
 
-	MainFrame* pMainFrame = (MainFrame*)s_pMainFrame;
 	BoatPolar *pBPolar;
 	for (i=0; i<m_poaBoatPolar->size(); i++)
 	{
@@ -7280,7 +7214,7 @@ void QSail7::OnShowCurBoatPolars()
 
 	if(m_iView==SAILPOLARVIEW)		CreateBoatPolarCurves();
 	SetCurveParams();
-	pMainFrame->SetSaveState(false);
+    s_pMainFrame->SetSaveState(false);
 	UpdateView();
 }
 
@@ -7292,12 +7226,11 @@ void QSail7::OnDeleteCurBoatPolars()
 
 	if(!m_pCurBoat) return;
 
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 	BoatPolar *pBPolar;
 	QString strong;
 
 	strong = tr("Are you sure you want to delete the polars associated to :\n") +  m_pCurBoat->m_BoatName +"?\n";
-	if (QMessageBox::Yes != QMessageBox::question(pMainFrame, tr("Question"), strong, QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel)) return;
+    if (QMessageBox::Yes != QMessageBox::question(s_pMainFrame, tr("Question"), strong, QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel)) return;
 
 	for(int j=m_poaBoatPolar->size()-1; j>=0; j--)
 	{
@@ -7323,8 +7256,8 @@ void QSail7::OnDeleteCurBoatPolars()
 	}
 	m_pCurBoatPolar = NULL;
 	SetBoatPolar();
-	pMainFrame->UpdateBoatPolars();
-	pMainFrame->SetSaveState(false);
+    s_pMainFrame->UpdateBoatPolars();
+    s_pMainFrame->SetSaveState(false);
 	SetControls();
 	UpdateView();
 }
@@ -7334,7 +7267,6 @@ void QSail7::OnDeleteCurBoatPolars()
 void QSail7::OnHideAllBoatPolars()
 {
 	int i;
-	MainFrame* pMainFrame = (MainFrame*)s_pMainFrame;
 	BoatPolar *pBPolar;
 	for (i=0; i<m_poaBoatPolar->size(); i++)
 	{
@@ -7342,7 +7274,7 @@ void QSail7::OnHideAllBoatPolars()
 		pBPolar->m_bIsVisible = false;
 	}
 	if(m_iView==SAILPOLARVIEW)		CreateBoatPolarCurves();
-	pMainFrame->SetSaveState(false);
+    s_pMainFrame->SetSaveState(false);
 	SetCurveParams();
 	UpdateView();
 }
@@ -7352,7 +7284,6 @@ void QSail7::OnHideAllBoatPolars()
 void QSail7::OnShowAllBoatPolars()
 {
 	int i;
-	MainFrame* pMainFrame = (MainFrame*)s_pMainFrame;
 	BoatPolar *pBPolar;
 	for (i=0; i<m_poaBoatPolar->size(); i++)
 	{
@@ -7360,7 +7291,7 @@ void QSail7::OnShowAllBoatPolars()
 		pBPolar->m_bIsVisible = true;
 	}
 	if(m_iView==SAILPOLARVIEW)		CreateBoatPolarCurves();
-	pMainFrame->SetSaveState(false);
+    s_pMainFrame->SetSaveState(false);
 	SetCurveParams();
 	UpdateView();
 }
@@ -7478,25 +7409,23 @@ void QSail7::PaintBoatOppLegend(QPainter &painter, QRect rect)
 
 	painter.save();
 
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
-
-	int dD, dheight, dwidth, YPos, XPos;
+    int dheight, dwidth;
 	QString Result, strLength, strSpeed, strForce, strMoment;
 	int l;
 	int margin = 10;
 
-	GetLengthUnit(strLength, pMainFrame->m_LengthUnit);
-	GetSpeedUnit(strSpeed, pMainFrame->m_SpeedUnit);
-	GetForceUnit(strForce, pMainFrame->m_ForceUnit);
-	GetMomentUnit(strMoment, pMainFrame->m_MomentUnit);
+    GetLengthUnit(strLength, s_pMainFrame->m_LengthUnit);
+    GetSpeedUnit(strSpeed, s_pMainFrame->m_SpeedUnit);
+    GetForceUnit(strForce, s_pMainFrame->m_ForceUnit);
+    GetMomentUnit(strMoment, s_pMainFrame->m_MomentUnit);
 
 
-	QPen textPen(pMainFrame->m_TextColor);
+    QPen textPen(s_pMainFrame->m_TextColor);
 	painter.setPen(textPen);
-	painter.setFont(pMainFrame->m_TextFont);
+    painter.setFont(s_pMainFrame->m_TextFont);
 	painter.setRenderHint(QPainter::Antialiasing);
 
-	QFontMetrics fm(pMainFrame->m_TextFont);
+    QFontMetrics fm(s_pMainFrame->m_TextFont);
 	dheight = fm.height();
 	dwidth = fm.averageCharWidth()*50;
 
@@ -7516,9 +7445,9 @@ void QSail7::PaintBoatOppLegend(QPainter &painter, QRect rect)
 		D+=dheight;
 
 		l = strSpeed.length();
-		if     (l==2) Result = QString(QObject::tr("V = %1 ")).arg(m_pCurBoatOpp->m_QInf*pMainFrame->m_mstoUnit,8,'f',3);
-		else if(l==3) Result = QString(QObject::tr("V = %1 ")).arg(m_pCurBoatOpp->m_QInf*pMainFrame->m_mstoUnit,7,'f',2);
-		else if(l==4) Result = QString(QObject::tr("V = %1 ")).arg(m_pCurBoatOpp->m_QInf*pMainFrame->m_mstoUnit,6,'f',1);
+        if     (l==2) Result = QString(QObject::tr("V = %1 ")).arg(m_pCurBoatOpp->m_QInf*s_pMainFrame->m_mstoUnit,8,'f',3);
+        else if(l==3) Result = QString(QObject::tr("V = %1 ")).arg(m_pCurBoatOpp->m_QInf*s_pMainFrame->m_mstoUnit,7,'f',2);
+        else if(l==4) Result = QString(QObject::tr("V = %1 ")).arg(m_pCurBoatOpp->m_QInf*s_pMainFrame->m_mstoUnit,6,'f',1);
 		Result += strSpeed;
 		painter.drawText(RightPos, ZPos+D, dwidth, dheight, Qt::AlignRight | Qt::AlignTop, Result);
 		D+=dheight;
@@ -7567,17 +7496,17 @@ void QSail7::PaintBoatOppLegend(QPainter &painter, QRect rect)
 		painter.drawText(RightPos, ZPos+D, dwidth, dheight, Qt::AlignRight | Qt::AlignTop, Result);
 		D+=dheight;
 
-		Result = QString("Mx = %1 ").arg(m_pCurBoatOpp->M.x*pMainFrame->m_NmtoUnit, 7, 'f', 1);
+        Result = QString("Mx = %1 ").arg(m_pCurBoatOpp->M.x*s_pMainFrame->m_NmtoUnit, 7, 'f', 1);
 		Result += strMoment;
 		painter.drawText(RightPos, ZPos+D, dwidth, dheight, Qt::AlignRight | Qt::AlignTop, Result);
 		D+=dheight;
 
-		Result = QString("My = %1 ").arg(m_pCurBoatOpp->M.y*pMainFrame->m_NmtoUnit, 7, 'f', 1);
+        Result = QString("My = %1 ").arg(m_pCurBoatOpp->M.y*s_pMainFrame->m_NmtoUnit, 7, 'f', 1);
 		Result += strMoment;
 		painter.drawText(RightPos, ZPos+D, dwidth, dheight, Qt::AlignRight | Qt::AlignTop, Result);
 		D+=dheight;
 
-		Result = QString("Mz = %1 ").arg(m_pCurBoatOpp->M.z*pMainFrame->m_NmtoUnit, 7, 'f', 1);
+        Result = QString("Mz = %1 ").arg(m_pCurBoatOpp->M.z*s_pMainFrame->m_NmtoUnit, 7, 'f', 1);
 		Result += strMoment;
 		painter.drawText(RightPos, ZPos+D, dwidth, dheight, Qt::AlignRight | Qt::AlignTop, Result);
 		D+=dheight;
@@ -7589,8 +7518,6 @@ void QSail7::PaintBoatOppLegend(QPainter &painter, QRect rect)
 
 void QSail7::PaintBoatLegend(QPainter &painter, QRect rect)
 {
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
-
 	QString  strong, str1;
 	QString length, surface;
 
@@ -7599,14 +7526,14 @@ void QSail7::PaintBoatLegend(QPainter &painter, QRect rect)
 
 	static int margin,dheight;
 
-	QPen textPen(pMainFrame->m_TextColor);
+    QPen textPen(s_pMainFrame->m_TextColor);
 	painter.setPen(textPen);
-	painter.setFont(pMainFrame->m_TextFont);
+    painter.setFont(s_pMainFrame->m_TextFont);
 	painter.setRenderHint(QPainter::Antialiasing);
 
 	margin = 10;
 
-	QFontMetrics fm(pMainFrame->m_TextFont);
+    QFontMetrics fm(s_pMainFrame->m_TextFont);
 	dheight = fm.height();
 	int D = 0;
 	int LeftPos = margin;
@@ -7624,25 +7551,25 @@ void QSail7::PaintBoatLegend(QPainter &painter, QRect rect)
 		pSail = (QSail*)m_pCurBoat->m_poaSail.at(0);
 	}
 
-	GetLengthUnit(length,pMainFrame->m_LengthUnit);
-	GetAreaUnit(surface,pMainFrame->m_AreaUnit);
+    GetLengthUnit(length,s_pMainFrame->m_LengthUnit);
+    GetAreaUnit(surface,s_pMainFrame->m_AreaUnit);
 
 	painter.drawText(LeftPos,ZPos+D, m_pCurBoat->m_BoatName);
 	ZPos +=dheight;
 
 	if(pSail)
 	{
-		str1 = QString(QObject::tr("Luff Length  = %1 ")).arg(pSail->LuffLength()*pMainFrame->m_mtoUnit, a,'f',b);
+        str1 = QString(QObject::tr("Luff Length  = %1 ")).arg(pSail->LuffLength()*s_pMainFrame->m_mtoUnit, a,'f',b);
 		strong = str1 + length;
 		painter.drawText(LeftPos,ZPos+D, strong);
 		D+=dheight;
 
-		str1 = QString(QObject::tr("Leech Length = %1 ")).arg(pSail->LeechLength()*pMainFrame->m_mtoUnit, a,'f',b);
+        str1 = QString(QObject::tr("Leech Length = %1 ")).arg(pSail->LeechLength()*s_pMainFrame->m_mtoUnit, a,'f',b);
 		strong = str1 + length;
 		painter.drawText(LeftPos,ZPos+D, strong);
 		ZPos +=dheight;
 
-		str1 = QString(QObject::tr("Foot Length  = %1 ")).arg(pSail->FootLength()*pMainFrame->m_mtoUnit, a,'f',b);
+        str1 = QString(QObject::tr("Foot Length  = %1 ")).arg(pSail->FootLength()*s_pMainFrame->m_mtoUnit, a,'f',b);
 		strong = str1 + length;
 		painter.drawText(LeftPos,ZPos+D, strong);
 		ZPos +=dheight;
@@ -7655,8 +7582,7 @@ void QSail7::PaintBoatLegend(QPainter &painter, QRect rect)
 void QSail7::GLCreateCpLegendClr(QRect cltRect)
 {
 	int i;
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
-	QFont fnt(pMainFrame->m_TextFont); //valgrind
+    QFont fnt(s_pMainFrame->m_TextFont); //valgrind
 	QFontMetrics fm(fnt);
 	double fmw = (double) fm.averageCharWidth();
 
@@ -7716,7 +7642,6 @@ void QSail7::GLCreateCpLegendClr(QRect cltRect)
 void QSail7::PaintCpLegendText(QPainter &painter)
 {
 	if (!m_b3DCp || !m_pCurBoatOpp ) return;
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 
 	int i;
 	QString strong;
@@ -7728,10 +7653,10 @@ void QSail7::PaintCpLegendText(QPainter &painter)
 
 	painter.save();
 
-	painter.setFont(pMainFrame->m_TextFont);
+    painter.setFont(s_pMainFrame->m_TextFont);
 	painter.setRenderHint(QPainter::Antialiasing);
 
-	QFontMetrics fm(pMainFrame->m_TextFont);
+    QFontMetrics fm(s_pMainFrame->m_TextFont);
 	int back = fm.averageCharWidth() * 5;
 
 	double h = m_r3DCltRect.height();
@@ -7750,7 +7675,7 @@ void QSail7::PaintCpLegendText(QPainter &painter)
 	delta = range / 20;
 
 
-	QPen textPen(pMainFrame->m_TextColor);
+    QPen textPen(s_pMainFrame->m_TextColor);
 	painter.setPen(textPen);
 	painter.setRenderHint(QPainter::Antialiasing);
 
@@ -7786,14 +7711,13 @@ void QSail7::PaintPanelForceLegendText(QPainter &painter, double rmin, double rm
 	double f;
 	double range, delta;
 
-	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
-	GetForceUnit(strForce, pMainFrame->m_ForceUnit);
+	GetForceUnit(strForce, s_pMainFrame->m_ForceUnit);
 
 
 	painter.save();
-	painter.setFont(pMainFrame->m_TextFont);
+	painter.setFont(s_pMainFrame->m_TextFont);
 	painter.setRenderHint(QPainter::Antialiasing);
-	QPen textPen(pMainFrame->m_TextColor);
+	QPen textPen(s_pMainFrame->m_TextColor);
 	painter.setPen(textPen);
 
 
@@ -7801,7 +7725,7 @@ void QSail7::PaintPanelForceLegendText(QPainter &painter, double rmin, double rm
 	range = rmax - rmin;
 
 
-	QFontMetrics fm(pMainFrame->m_TextFont);
+	QFontMetrics fm(s_pMainFrame->m_TextFont);
 	int back = fm.averageCharWidth() * 5;
 
 	double h = (double)m_r3DCltRect.height();

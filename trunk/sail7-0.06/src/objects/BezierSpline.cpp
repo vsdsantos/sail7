@@ -62,25 +62,25 @@ bool BezierSpline::SplineCurve()
 			m_Output[j].y +=  b *m_CtrlPoint.at(ic).y;
 		}
 	}
+    return true;
 }
 
 
 double BezierSpline::Bernstein(int const &i, int const &n, double const &u)
 {
-	static int k, fi, fni;
-	static double pui, pu1i1;
+    double pui, pu1i1;
 
-	fi  = 1;
-	fni = 1;
+    int fi  = 1;
+    int fni = 1;
 
-	for(k=2;     k<=i; k++) fi  *=k;
-	for(k=n-i+1; k<=n; k++) fni *=k;
+    for(int k=2;     k<=i; k++) fi  *=k;
+    for(int k=n-i+1; k<=n; k++) fni *=k;
 
 	pui   = 1.0;
-	for(k=0; k<i;   k++) pui*=u;
+    for(int k=0; k<i;   k++) pui*=u;
 
 	pu1i1 = 1.0;
-	for(k=0; k<n-i; k++) pu1i1*=1.0-u;
+    for(int k=0; k<n-i; k++) pu1i1*=1.0-u;
 
 	return pui * pu1i1 * (double)fni/(double)fi;
 }
@@ -131,7 +131,7 @@ void BezierSpline::Duplicate(void *pSpline)
 	{
 		m_CtrlPoint.append(pBezierSpline->m_CtrlPoint.at(ic));
 	}
-	memcpy(m_Output, pBezierSpline->m_Output, SPLINEOUTPUTRES * sizeof(CVector));
+	memcpy(m_Output, pBezierSpline->m_Output, SPLINEOUTPUTRES * sizeof(Vector3d));
 }
 
 
@@ -155,12 +155,12 @@ double BezierSpline::GetY(double const &x)
 }
 
 
-CVector BezierSpline::GetNormal(double const &x)
+Vector3d BezierSpline::GetNormal(double const &x)
 {
 	double dx, dy;
-	CVector Normal;
+	Vector3d Normal;
 
-	if(x<=0.0 || x>=1.0) return CVector(0.0, 1.0, 0.0);
+	if(x<=0.0 || x>=1.0) return Vector3d(0.0, 1.0, 0.0);
 
 	for (int i=0; i<SPLINEOUTPUTRES-1; i++)
 	{
@@ -173,7 +173,7 @@ CVector BezierSpline::GetNormal(double const &x)
 			return Normal;
 		}
 	}
-	return CVector(0.0, 1.0, 0.0);
+	return Vector3d(0.0, 1.0, 0.0);
 }
 
 
@@ -211,7 +211,7 @@ bool BezierSpline::Serialize(QDataStream &ar, bool bIsStoring)
 		for(int ic=0; ic<n;ic++)
 		{
 			ar >> x >> y;
-			m_CtrlPoint.append(CVector(x,y,0.0));
+			m_CtrlPoint.append(Vector3d(x,y,0.0));
 		}
 		SplineCurve();
 	}

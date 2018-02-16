@@ -83,9 +83,9 @@ void CCurve::GetBWStyle(QColor &color, int &style, int &width)
 }
 
 
-CVector CCurve::GetPoint(int ref)
+Vector3d CCurve::GetPoint(int ref)
 {
-	CVector r;
+	Vector3d r;
 	if(ref<0 || ref>=n){
 		r.x = 0.0;
 		r.y = 0.0;

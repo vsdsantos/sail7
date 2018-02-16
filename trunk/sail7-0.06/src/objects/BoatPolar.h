@@ -16,7 +16,7 @@
 #include <QTextStream>
 
 #include "./BoatOpp.h"
-#include "../objects/CVector.h"
+#include "../objects/Vector3d.h"
 
 class BoatPolar
 {
@@ -62,7 +62,7 @@ private:
 
 	double m_Area, m_Span;
 
-	CVector m_CoG;
+	Vector3d m_CoG;
 
 	QColor m_Color;
 	int m_Style, m_Width;

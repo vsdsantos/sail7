@@ -25,23 +25,23 @@ NURBSSail::NURBSSail()
 
 	SailSection *pSection = new SailSection(this);
 	pSection->SetSection(0, 5, 0.0, 0.0);
-	pSection->AppendPoint(CVector(0.0, 0.0, 0.0));
-	pSection->AppendPoint(CVector(1.0, 0.41, 0.0));
-	pSection->AppendPoint(CVector(5.0, 0.39, 0.0));
+	pSection->AppendPoint(Vector3d(0.0, 0.0, 0.0));
+	pSection->AppendPoint(Vector3d(1.0, 0.41, 0.0));
+	pSection->AppendPoint(Vector3d(5.0, 0.39, 0.0));
 	InsertSection(pSection);
 
 	pSection = new SailSection(this);
 	pSection->SetSection(3.5, 3, 0.0, 0);
-	pSection->AppendPoint(CVector(0.5, 0.0, 3.5));
-	pSection->AppendPoint(CVector(0.9, 0.3, 3.5));
-	pSection->AppendPoint(CVector(4.1, 0.39, 3.5));
+	pSection->AppendPoint(Vector3d(0.5, 0.0, 3.5));
+	pSection->AppendPoint(Vector3d(0.9, 0.3, 3.5));
+	pSection->AppendPoint(Vector3d(4.1, 0.39, 3.5));
 	InsertSection(pSection);
 
 	pSection = new SailSection(this);
 	pSection->SetSection(7.0, 1, 5.0, 0);
-	pSection->AppendPoint(CVector(1.5, 0.0, 7.0));
-	pSection->AppendPoint(CVector(2.3, 0.1, 7.0));
-	pSection->AppendPoint(CVector(3.0, 0.1,  7.0));
+	pSection->AppendPoint(Vector3d(1.5, 0.0, 7.0));
+	pSection->AppendPoint(Vector3d(2.3, 0.1, 7.0));
+	pSection->AppendPoint(Vector3d(3.0, 0.1,  7.0));
 	InsertSection(pSection);
 
 	m_SplineSurface.m_uAxis=2;
@@ -53,9 +53,9 @@ NURBSSail::NURBSSail()
 
 
 
-CVector NURBSSail::GetPoint(double xrel, double zrel)
+Vector3d NURBSSail::GetPoint(double xrel, double zrel)
 {
-	CVector Pt;
+	Vector3d Pt;
 	m_SplineSurface.GetPoint(zrel, xrel, Pt);
 	return Pt;
 }
@@ -74,18 +74,18 @@ CVector NURBSSail::GetSectionPoint(int iSection, double xrel)
 }*/
 
 
-CVector NURBSSail::GetSectionPoint(SailSection *pSailSection, double xrel)
+Vector3d NURBSSail::GetSectionPoint(SailSection *pSailSection, double xrel)
 {
 	int iSection = m_oaSection.indexOf(pSailSection);
 	if(iSection>0) return GetSectionPoint(iSection, xrel);
-	else           return CVector(0.0,0.0,0.0);
+	else           return Vector3d(0.0,0.0,0.0);
 }
 
 
 
-CVector NURBSSail::GetSectionPoint(int iSection, double xrel)
+Vector3d NURBSSail::GetSectionPoint(int iSection, double xrel)
 {
-	if(iSection>=m_oaSection.size()) return CVector(0.0,0.0,0.0);
+	if(iSection>=m_oaSection.size()) return Vector3d(0.0,0.0,0.0);
 
 	if(iSection==0)	                         return GetPoint(xrel, 0.0);
 	else if(iSection==m_oaSection.size()-1)  return GetPoint(xrel, 1.0);
@@ -97,7 +97,7 @@ CVector NURBSSail::GetSectionPoint(int iSection, double xrel)
 	double u=0.5, u0=0.0, u1=1.0, ulast=0.0;
 	double dmax=1000.0;
 	int iter=0;
-	CVector Pt, Pt0, Pt1;
+	Vector3d Pt, Pt0, Pt1;
 	Pt0 = GetPoint(xrel, u0);
 	Pt1 = GetPoint(xrel, u1);
 	//todo : use u from previous calculation to speed up
@@ -310,7 +310,7 @@ bool NURBSSail::SerializeSail(QDataStream &ar, bool bIsStoring)
 		if (IsNURBSSail())
 		{
 			// compute luff angle
-			CVector LE = m_SplineSurface.LeadingEdgeAxis();
+			Vector3d LE = m_SplineSurface.LeadingEdgeAxis();
 			m_LuffAngle = atan2(LE.x, LE.z) * 180./PI;
 		}
 		return true;
@@ -434,7 +434,7 @@ void NURBSSail::DrawFrame(int iSection, QPainter &painter, double const &scalex,
 	painter.save();
 
 	QPoint From, To;
-	CVector Pt, is;
+	Vector3d Pt, is;
 	double px;
 
 	is.x = pFrame->m_CtrlPoint.last().x - pFrame->m_CtrlPoint.first().x;

@@ -46,8 +46,8 @@ public:
 	bool IsSailcutSail() {return m_SailType==SAILCUTSAIL;};
 	bool IsNURBSSail()  {return m_SailType==NURBSSAIL;};
 
-	void PanelTrefftz(CVector VInf, double *Mu, double *Sigma, int pos, CVector &FFForce, BoatPolar *pBoatPolar);
-	void PanelComputeOnBody(CVector VInf, double *Cp, double *Gamma, CVector &F, CVector &M, BoatPolar *pBoatPolar, CVector CoG);
+	void PanelTrefftz(Vector3d VInf, double *Mu, double *Sigma, int pos, Vector3d &FFForce, BoatPolar *pBoatPolar);
+	void PanelComputeOnBody(Vector3d VInf, double *Cp, double *Gamma, Vector3d &F, Vector3d &M, BoatPolar *pBoatPolar, Vector3d CoG);
 	void SortSections();
 	void SetLuffAngle(double Angle);
 	void SetLuffAngle();
@@ -62,8 +62,8 @@ public:
 	virtual double FootLength()=0;
 	virtual double Chord(double zrel)=0;
 
-	virtual CVector GetPoint(double xrel, double zrel)=0;
-	virtual CVector GetSectionPoint(int iSection, double xrel)=0;
+	virtual Vector3d GetPoint(double xrel, double zrel)=0;
+	virtual Vector3d GetSectionPoint(int iSection, double xrel)=0;
 	virtual void SplineSurface() = 0;
 	virtual bool SerializeSail(QDataStream &ar, bool bIsStoring)=0;
 
@@ -82,10 +82,10 @@ private:
 	//The variables defining the sail
 
 	//position wrt absolute coordinates
-	CVector m_LEPosition;
+	Vector3d m_LEPosition;
 
 	//relative position of corner points in the sail's referential
-	CVector tack, head, clew, peak;
+	Vector3d tack, head, clew, peak;
 
 	//Global geometry
 	double m_LuffAngle;
@@ -102,7 +102,7 @@ private:
 
 //	CVector m_SailNormal;
 
-	CVector m_Vd[MAXSAILSTATIONS];		// downwash vector at span stations
+	Vector3d m_Vd[MAXSAILSTATIONS];		// downwash vector at span stations
 
 	CPanel *m_pPanel;			//pointer to the VLM Panel array
 	static void *s_pBoatAnalysisDlg;

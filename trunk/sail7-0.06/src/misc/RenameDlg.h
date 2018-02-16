@@ -47,7 +47,7 @@ private slots:
 	void OnDoubleClickList(QListWidgetItem * pItem);
 
 public:
-	RenameDlg(void *pParent=NULL);
+	RenameDlg(QWidget *pParent=NULL);
 	void keyPressEvent(QKeyEvent *event);
 	void SetupLayout();
 

@@ -45,12 +45,12 @@ private:
 	void mouseDoubleClickEvent (QMouseEvent *event);
 	void wheelEvent (QWheelEvent *event );
 
-	void ClientToGL(QPoint const &point, CVector &real);
-	void GLToClient(CVector const &real, QPoint &point);
+	void ClientToGL(QPoint const &point, Vector3d &real);
+	void GLToClient(Vector3d const &real, QPoint &point);
 	void GLInverseMatrix(double MatIn[][4], double MatOut[][4]);
 
-	void GLDrawArrow(CVector O, CVector u, double length);
-	void GLDrawCube(CVector Pt, double side);
+	void GLDrawArrow(Vector3d O, Vector3d u, double length);
+	void GLDrawCube(Vector3d Pt, double side);
 	void GLDrawCylinder(QColor cr, double rbase, double rtop, double hbase, double htop, int NumArcs, int NumHeight);
 	void GLCreateCylinderList(int GLList, QColor cr, double rbase, double rtop, double hbase, double htop, int NumArcs, int NumHeight);
 	void GLRenderSphere(QColor cr, double radius, int NumLongitudes, int NumLatitudes);

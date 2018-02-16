@@ -27,7 +27,7 @@ public:
 	double GetY(double const &x);
 	bool Serialize(QDataStream &ar, bool bIsStoring);
 
-	CVector GetNormal(double const &x);
+	Vector3d GetNormal(double const &x);
 
 
 	bool SplineCurve();

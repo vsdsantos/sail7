@@ -15,7 +15,7 @@ public:
 	void GetSlopes(double &s0, double &s1);
 	bool Serialize(QDataStream &ar, bool bIsStoring);
 
-	CVector GetNormal(double const &x);
+	Vector3d GetNormal(double const &x);
 
 	double p, m;
 };

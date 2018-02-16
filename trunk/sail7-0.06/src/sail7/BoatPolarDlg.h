@@ -20,7 +20,7 @@
 #include <QStandardItemModel>
 #include "../misc/FloatEdit.h"
 #include "../misc/FloatEditDelegate.h"
-#include "../objects/CVector.h"
+#include "../objects/Vector3d.h"
 #include "../objects/Boat.h"
 
 class BoatPolarDlg : public QDialog

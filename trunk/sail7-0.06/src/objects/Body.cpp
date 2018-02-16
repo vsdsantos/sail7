@@ -77,7 +77,7 @@ CBody::CBody()
 		m_SplineSurface.m_pFrame[ifr]->m_CtrlPoint.clear();
 		for(int is=0; is<4; is++)
 		{
-			m_SplineSurface.m_pFrame[ifr]->m_CtrlPoint.append(CVector(0.0,0.0,0.0));
+			m_SplineSurface.m_pFrame[ifr]->m_CtrlPoint.append(Vector3d(0.0,0.0,0.0));
 		}
 	}
 
@@ -192,12 +192,12 @@ void CBody::SetKnots()
 
 
 void CBody::ComputeAero(double *Cp, double &XCP, double &YCP, double &ZCP,
-						double &GCm, double &GRm, double &GYm, double &Alpha, CVector &CoG)
+						double &GCm, double &GRm, double &GYm, double &Alpha, Vector3d &CoG)
 {
 	int p;
 	double cosa, sina, PanelLift;
-	CVector PanelForce, LeverArm, WindNormal, WindDirection;
-	CVector GeomMoment;
+	Vector3d PanelForce, LeverArm, WindNormal, WindDirection;
+	Vector3d GeomMoment;
 
 	cosa = cos(Alpha*PI/180.0);
 	sina = sin(Alpha*PI/180.0);
@@ -330,7 +330,7 @@ void CBody::ExportGeometry(QTextStream &outStream, int type, double mtoUnit, int
 	QString strong, LengthUnit,str;
 	int k,l;
 	double u, v;
-	CVector Point;
+	Vector3d Point;
 
 
 	if(type==1)	str="";
@@ -445,9 +445,9 @@ double CBody::Length()
 }
 
 
-CVector CBody::LeadingPoint()
+Vector3d CBody::LeadingPoint()
 {
-	return CVector(m_SplineSurface.m_pFrame[0]->m_Position.x,
+	return Vector3d(m_SplineSurface.m_pFrame[0]->m_Position.x,
 				   0.0,
 				   (m_SplineSurface.m_pFrame[0]->m_CtrlPoint.first().z + m_SplineSurface.m_pFrame[0]->m_CtrlPoint.last().z)/2.0 );
 }
@@ -461,7 +461,7 @@ double CBody::GetSectionArcLength(double x)
 	// aproximate arc length, used for inertia estimations
 	double length = 0.0;
 	double ux = Getu(x);
-	CVector Pt, Pt1;
+	Vector3d Pt, Pt1;
 	GetPoint(ux, 0.0, true, Pt1);
 
 	int NPoints = 10;//why not ?
@@ -476,7 +476,7 @@ double CBody::GetSectionArcLength(double x)
 }
 
 
-void CBody::GetPoint(double u, double v, bool bRight, CVector &Pt)
+void CBody::GetPoint(double u, double v, bool bRight, Vector3d &Pt)
 {
 	m_SplineSurface.GetPoint(u, v, Pt);
 	if(!bRight)  Pt.y = -Pt.y;
@@ -490,7 +490,7 @@ double CBody::Getu(double x)
 }
 
 
-double CBody::Getv(double u, CVector r, bool bRight)
+double CBody::Getv(double u, Vector3d r, bool bRight)
 {
 	double sine = 10000.0;
 
@@ -629,7 +629,7 @@ void CBody::InsertSideLine(int SideLine)
 }
 
 
-int CBody::InsertPoint(CVector Real)
+int CBody::InsertPoint(Vector3d Real)
 {
 	//Real is to be inserted in the current frame
 	if(m_iActiveFrame<0)
@@ -657,7 +657,7 @@ int CBody::InsertPoint(CVector Real)
 }
 
 
-int CBody::InsertFrame(CVector Real)
+int CBody::InsertFrame(Vector3d Real)
 {
 	int k, n=0;
 
@@ -722,7 +722,7 @@ int CBody::InsertFrame(CVector Real)
 
 
 
-void CBody::InterpolateCurve(CVector *D, CVector *P, double *v, double *knots, int degree, int Size)
+void CBody::InterpolateCurve(Vector3d *D, Vector3d *P, double *v, double *knots, int degree, int Size)
 {
 	int i,j;
 	double Nij[MAXBODYFRAMES* MAXBODYFRAMES];//MAXBODYFRAMES is greater than MAXSIDELINES
@@ -823,7 +823,7 @@ void CBody::InterpolateSurface()
 }
 
 
-bool CBody::Intersect(CVector A, CVector B, CVector &I, bool bRight)
+bool CBody::Intersect(Vector3d A, Vector3d B, Vector3d &I, bool bRight)
 {
 	if(m_LineType==BODYPANELTYPE)        return IntersectPanels(A,B,I);
 	else if (m_LineType==BODYSPLINETYPE) return IntersectNURBS(A,B,I, bRight);
@@ -831,11 +831,11 @@ bool CBody::Intersect(CVector A, CVector B, CVector &I, bool bRight)
 }
 
 
-bool CBody::IntersectNURBS(CVector A, CVector B, CVector &I, bool bRight)
+bool CBody::IntersectNURBS(Vector3d A, Vector3d B, Vector3d &I, bool bRight)
 {
 	//intersect line AB with right or left body surface
 	//intersection point is I
-	CVector N, tmp, M0, M1;
+	Vector3d N, tmp, M0, M1;
 	double u, v, dist, t, tp;
 	int iter = 0;
 	int itermax = 20;
@@ -891,12 +891,12 @@ bool CBody::IntersectNURBS(CVector A, CVector B, CVector &I, bool bRight)
 }
 
 
-bool CBody::IntersectPanels(CVector A, CVector B, CVector &I)
+bool CBody::IntersectPanels(Vector3d A, Vector3d B, Vector3d &I)
 {
 	bool b1, b2, b3, b4, b5;
 	int i,k;
 	double r,s,t;
-	CVector LA, TA, LB, TB, U, V, W, H, D1, D2, N, C, P;
+	Vector3d LA, TA, LB, TB, U, V, W, H, D1, D2, N, C, P;
 	bool bIntersect = false;
 
 	U = B-A;
@@ -1034,7 +1034,7 @@ bool CBody::IntersectPanels(CVector A, CVector B, CVector &I)
 
 
 
-int CBody::IsFramePos(CVector Real, double ZoomFactor)
+int CBody::IsFramePos(Vector3d Real, double ZoomFactor)
 {
 	int k;
 	for (k=0; k<FrameSize(); k++)
@@ -1047,7 +1047,7 @@ int CBody::IsFramePos(CVector Real, double ZoomFactor)
 }
 
 
-bool CBody::IsInNURBSBody(CVector Pt)
+bool CBody::IsInNURBSBody(Vector3d Pt)
 {
 	double u, v;
 	bool bRight;
@@ -1093,7 +1093,7 @@ int CBody::ReadFrame(QTextStream &in, int &Line, CFrame *pFrame, double const &U
 		}
 		else 
 		{
-			pFrame->m_CtrlPoint.append(CVector(x/Unit, y/Unit, z/Unit));
+			pFrame->m_CtrlPoint.append(Vector3d(x/Unit, y/Unit, z/Unit));
 			i++;
 		}
 		if(i>=MAXSIDELINES)
@@ -1278,7 +1278,7 @@ bool CBody::SerializeBody(QDataStream &ar, bool bIsStoring, int ProjectFormat)
 			for(i=0; i<n; i++)
 			{
 				ar >> f >> g >> h;
-				m_MassPosition.append(CVector(f,g,h));
+				m_MassPosition.append(Vector3d(f,g,h));
 			}
 			for(i=0; i<n; i++)
 			{
@@ -1351,7 +1351,7 @@ void CBody::Translate(double XTrans, double YTrans, double ZTrans, bool bFrameOn
 }
 
 
-void CBody::Translate(CVector T, bool bFrameOnly, int FrameID)
+void CBody::Translate(Vector3d T, bool bFrameOnly, int FrameID)
 {
 	Translate(T.x, T.y, T.z, bFrameOnly, FrameID);
 }
@@ -1404,7 +1404,7 @@ void CBody::ComputeBodyAxisInertia()
 	//  - the center of gravity is calculated from component masses and is NOT the CoG defined in the polar
 
 	int i;
-	CVector LA, VolumeCoG;
+	Vector3d LA, VolumeCoG;
 	double Ixx, Iyy, Izz, Ixz, VolumeMass;
 	Ixx = Iyy = Izz = Ixz = VolumeMass = 0.0;
 
@@ -1444,7 +1444,7 @@ void CBody::ComputeBodyAxisInertia()
 
 
 
-void CBody::ComputeVolumeInertia(CVector &CoG, double &CoGIxx, double &CoGIyy, double &CoGIzz, double &CoGIxz)
+void CBody::ComputeVolumeInertia(Vector3d &CoG, double &CoGIxx, double &CoGIyy, double &CoGIzz, double &CoGIxz)
 {
 	// Assume that the mass is distributed homogeneously in the body's skin
 	// Homogeneity is questionable, but is a rather handy assumption
@@ -1455,7 +1455,7 @@ void CBody::ComputeVolumeInertia(CVector &CoG, double &CoGIxx, double &CoGIyy, d
 	int i,j,k;
 	double ux, rho;
 	double dj, dj1;
-	CVector Pt, LATB, TALB, N, PLA, PTA, PLB, PTB, Top, Bot;
+	Vector3d Pt, LATB, TALB, N, PLA, PTA, PLB, PTB, Top, Bot;
 	double BodyArea = 0.0;
 	double SectionArea;
 	double xpos, dl;

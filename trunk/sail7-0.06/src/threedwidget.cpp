@@ -569,8 +569,8 @@ void ThreeDWidget::CreateArcballList(ArcBall &ArcBall, double GLScale)
 	int row, col, NumAngles, NumCircles;
 	double R, lat_incr, lon_incr, phi, theta;
 	ArcBall.GetMatrix();
-	CVector eye(0.0,0.0,1.0);
-	CVector up(0.0,1.0,0.0);
+	Vector3d eye(0.0,0.0,1.0);
+	Vector3d up(0.0,1.0,0.0);
 	ArcBall.SetZoom(0.45,eye,up);
 
 	glNewList(ARCBALL,GL_COMPILE);
@@ -830,18 +830,18 @@ void ThreeDWidget::GLRenderSphere(QColor cr, double radius, int NumLongitudes, i
 }
 
 
-void ThreeDWidget::GLDrawArrow(CVector O, CVector u, double length)
+void ThreeDWidget::GLDrawArrow(Vector3d O, Vector3d u, double length)
 {
 	// draws an arrow at point P
 	// in the direction u
 	// with length length
 
-	CVector P, P1, P2;
+	Vector3d P, P1, P2;
 
 	//reference arrow
-	CVector R(0.0,0.0,1.0);
-	CVector R1( 0.07, 0.0, -0.15);
-	CVector R2(-0.07, 0.0, -0.15);
+	Vector3d R(0.0,0.0,1.0);
+	Vector3d R1( 0.07, 0.0, -0.15);
+	Vector3d R2(-0.07, 0.0, -0.15);
 
 	// Rotate the reference arrow to align it with u
 	Quaternion Qt;
@@ -849,7 +849,7 @@ void ThreeDWidget::GLDrawArrow(CVector O, CVector u, double length)
 	double sina2  = sqrt((1.0 - cosa)*0.5);
 	double cosa2  = sqrt((1.0 + cosa)*0.5);
 
-	CVector Omega = R * u;
+	Vector3d Omega = R * u;
 
 	Omega.Normalize();
 	Omega *=sina2;
@@ -907,7 +907,7 @@ void ThreeDWidget::GLDrawArrow(CVector O, CVector u, double length)
 }
 
 
-void ThreeDWidget::GLDrawCube(CVector Pt, double side)
+void ThreeDWidget::GLDrawCube(Vector3d Pt, double side)
 {
 	//
 	// Render the sphere representing the light or point masses
@@ -964,7 +964,7 @@ void ThreeDWidget::GLCreateCubeList(int GLList, double side)
 		glPolygonMode(GL_FRONT,GL_FILL);
 
 		//six sides to construct 4+2 (or 3+3...)
-		CVector O;
+		Vector3d O;
 		GLDrawCube(O, side);
 	}
 	glEndList();
@@ -1084,7 +1084,7 @@ void ThreeDWidget::NormalVector(GLdouble p1[3], GLdouble p2[3],  GLdouble p3[3],
 
 
 
-void ThreeDWidget::ClientToGL(QPoint const &point, CVector &real)
+void ThreeDWidget::ClientToGL(QPoint const &point, Vector3d &real)
 {
 	//
 	// In input, takes the 2D point in screen client area coordinates
@@ -1108,7 +1108,7 @@ void ThreeDWidget::ClientToGL(QPoint const &point, CVector &real)
 
 
 
-void ThreeDWidget::GLToClient(CVector const &real, QPoint &point)
+void ThreeDWidget::GLToClient(Vector3d const &real, QPoint &point)
 {
 	//
 	//converts an opengl 2D vector to screen client coordinates

@@ -111,7 +111,7 @@ void ArcBall::GetMatrix()
 
 
 /** find the intersection with the plane through the visible edge*/
-void ArcBall::EdgeCoords(CVector m, CVector &V)
+void ArcBall::EdgeCoords(Vector3d m, Vector3d &V)
 {
 	// find the intersection of the edge plane and the ray
 	t = (ab_edge - ab_zoom) / (ab_eyedir.dot(m));
@@ -303,7 +303,7 @@ void ArcBall::SetQuat(double r, double qx, double qy, double qz)
 }
 
 
-void ArcBall::SetZoom(double radius, CVector eye, CVector up)
+void ArcBall::SetZoom(double radius, Vector3d eye, Vector3d up)
 {
 	ab_eye     = eye; // store eye vector
 	ab_zoom2   = ab_eye.dot(ab_eye);
@@ -325,7 +325,7 @@ void ArcBall::SetZoom(double radius, CVector eye, CVector up)
 }
 
 
-void ArcBall::PlanarCoords(int const &mx, int const &my, CVector &V)
+void ArcBall::PlanarCoords(int const &mx, int const &my, Vector3d &V)
 {
 	ClientToGL(mx, my, ax, ay);
 
@@ -338,7 +338,7 @@ void ArcBall::PlanarCoords(int const &mx, int const &my, CVector &V)
 }
 
 
-void ArcBall::SphereCoords(int const &mx, int const &my, CVector &V)
+void ArcBall::SphereCoords(int const &mx, int const &my, Vector3d &V)
 {
 	// find the intersection with the sphere
 

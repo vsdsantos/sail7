@@ -77,23 +77,23 @@ public:
 
 
 	ArcBall m_ArcBall;
-	CVector m_MousePos;
+	Vector3d m_MousePos;
 	QPoint m_ViewportTrans;
 	double m_Scale, m_RefScale, m_ScaleY;
 
-	CVector m_glViewportTrans;// the translation vector in gl viewport coordinates
-	CVector m_glRotCenter;    // the center of rotation in object coordinates... is also the opposite of the translation vector
+	Vector3d m_glViewportTrans;// the translation vector in gl viewport coordinates
+	Vector3d m_glRotCenter;    // the center of rotation in object coordinates... is also the opposite of the translation vector
 
 	static bool s_bAxes, s_bSurfaces, s_bOutline, s_bCtrlPoints, s_bVLMPanels, s_bglLight;
 
 	double m_glScaled;
 	double MatIn[4][4], MatOut[4][4];
-	CVector m_SailOffset;
+	Vector3d m_SailOffset;
 
 
 	QPoint m_ptPopUp;
 	QPoint m_LastPoint, m_PointDown;
-	CVector m_RealPopUp;
+	Vector3d m_RealPopUp;
 
 
 	QSail *m_pSail;

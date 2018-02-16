@@ -122,8 +122,8 @@ bool Naca4Spline::Serialize(QDataStream &ar, bool bIsStoring)
 
 
 
-CVector Naca4Spline::GetNormal(double const &x)
+Vector3d Naca4Spline::GetNormal(double const &x)
 {
-	return CVector(0.0, 1.0, 0.0);
+	return Vector3d(0.0, 1.0, 0.0);
 }
 

@@ -23,7 +23,7 @@
 #ifndef CRECTANGLE_H
 #define CRECTANGLE_H
 
-#include "CVector.h"
+#include "Vector3d.h"
 
 class CRectangle
 {
@@ -44,7 +44,7 @@ public:
 			bottom = b;
 	};
 
-	CRectangle(CVector const &TopLeft, CVector const &BottomRight)
+	CRectangle(Vector3d const &TopLeft, Vector3d const &BottomRight)
 	{
 			left   = TopLeft.x;
 			right  = BottomRight.x;
@@ -76,7 +76,7 @@ public:
 		if(bottom==top && right==left) return true;
 		else                           return false;
 	};
-	bool PtInRect(CVector const &pt)
+	bool PtInRect(Vector3d const &pt)
 	{
 		if(left<pt.x && pt.x<right && bottom<pt.y && pt.y<top ) return true;
 		return false;

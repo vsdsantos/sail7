@@ -68,7 +68,7 @@ private:
 	void SetPicture();
 	void ClearStack();
 
-	CVector MousetoReal(QPoint &point);
+	Vector3d MousetoReal(QPoint &point);
 
 
 
@@ -80,7 +80,7 @@ private:
 	int m_NeutralStyle, m_NeutralWidth;
 
 	QPoint m_ptOffset;
-	CVector m_MousePos;
+	Vector3d m_MousePos;
 	QPoint m_ViewportTrans;
 	QPoint m_ptPopUp;
 	QPoint m_PointDown;

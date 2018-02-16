@@ -34,42 +34,42 @@ public:
 	CBody();
 
 	bool Gauss(double *A, int n, double *B, int m);
-	bool IsInNURBSBody(CVector Pt);
-	bool Intersect(CVector A, CVector B, CVector &I, bool bRight);
-	bool IntersectPanels(CVector A, CVector B, CVector &I);
-	bool IntersectNURBS(CVector A, CVector B, CVector &I, bool bRight);
+	bool IsInNURBSBody(Vector3d Pt);
+	bool Intersect(Vector3d A, Vector3d B, Vector3d &I, bool bRight);
+	bool IntersectPanels(Vector3d A, Vector3d B, Vector3d &I);
+	bool IntersectNURBS(Vector3d A, Vector3d B, Vector3d &I, bool bRight);
 	bool SerializeBody(QDataStream &ar, bool bIsStoring, int ProjectFormat=5);
 	bool ImportDefinition(QTextStream &inStream, double mtoUnit);
 	bool ExportDefinition() ;
 
 
-	int InsertFrame(CVector Real);
-	int InsertPoint(CVector Real);
-	int IsFramePos(CVector Real, double ZoomFactor);
+	int InsertFrame(Vector3d Real);
+	int InsertPoint(Vector3d Real);
+	int IsFramePos(Vector3d Real, double ZoomFactor);
 	int RemoveFrame(int n);
 	int ReadFrame(QTextStream &in, int &Line, CFrame *pFrame, double const &Unit);
 
 	double Length();
 	double Getu(double x);
-	double Getv(double u, CVector r, bool bRight);
+	double Getv(double u, Vector3d r, bool bRight);
 	double GetSectionArcLength(double x);
 
-	CVector LeadingPoint();
+	Vector3d LeadingPoint();
 
     void ComputeAero(double *Cp, double &XCP, double &YCP, double &ZCP,
-					 double &GCm, double &GRm, double &GYm, double &Alpha, CVector &CoG);
+					 double &GCm, double &GRm, double &GYm, double &Alpha, Vector3d &CoG);
 //	void ComputeCenterLine();
 	void Duplicate(CBody *pBody);
 	void ExportGeometry(QTextStream &outStream, int type, double mtoUnit, int nx, int nh);
-	void GetPoint(double u, double v, bool bRight, CVector &Pt);
+	void GetPoint(double u, double v, bool bRight, Vector3d &Pt);
 	void InsertSideLine(int SideLine);
-	void InterpolateCurve(CVector *D, CVector *P, double *v, double *knots, int degree, int Size);
+	void InterpolateCurve(Vector3d *D, Vector3d *P, double *v, double *knots, int degree, int Size);
 	void InterpolateSurface();
 	void RemoveActiveFrame();
 	void RemoveSideLine(int SideLine);
 	void Scale(double XFactor, double YFactor, double ZFactor, bool bFrameOnly=false, int FrameID=0);
 	void Translate(double XTrans, double YTrans, double ZTrans, bool bFrameOnly=false, int FrameID=0);
-	void Translate(CVector T, bool bFrameOnly=false, int FrameID=0);
+	void Translate(Vector3d T, bool bFrameOnly=false, int FrameID=0);
 	void SetKnots();
 	void SetPanelPos();
 	void SetEdgeWeight(double uw, double vw);
@@ -83,7 +83,7 @@ public:
 	int SideLineCount()   {return m_SplineSurface.FramePointCount();};// same as FramePointCount();
 
 	void ComputeBodyAxisInertia();
-	void ComputeVolumeInertia(CVector &CoG, double &CoGIxx, double &CoGIyy, double &CoGIzz, double &CoGIxz);
+	void ComputeVolumeInertia(Vector3d &CoG, double &CoGIxx, double &CoGIyy, double &CoGIzz, double &CoGIxz);
 	double TotalMass();
 
 
@@ -104,11 +104,11 @@ public:
 
 	double m_Bunch;
 
-	CVector m_CoG;
+	Vector3d m_CoG;
 	double m_VolumeMass, m_TotalMass;	    //for inertia calculations
 //	int m_NMass; //number of point mass values
 	QList<double> m_MassValue;
-	QList<CVector> m_MassPosition;
+	QList<Vector3d> m_MassPosition;
 	QStringList m_MassTag;
 	double m_CoGIxx,m_CoGIyy,m_CoGIzz,m_CoGIxz;
 
@@ -121,14 +121,14 @@ public:
 	int m_xPanels[MAXBODYFRAMES];
 	int m_hPanels[MAXSIDELINES];
 
-	CVector m_LEPosition;
+	Vector3d m_LEPosition;
 
 	CPanel *m_pPanel;
 
 	//allocate temporary variables to
 	//avoid lengthy memory allocation times on the stack
 	double value, eps, bs, cs;
-	CVector t_R, t_Prod, t_Q, t_r, t_N;
+	Vector3d t_R, t_Prod, t_Q, t_r, t_N;
 //	CVector P0, P1, P2, PI;
 	static double s_XPanelPos[300];
 

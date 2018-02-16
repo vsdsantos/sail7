@@ -12,7 +12,7 @@
 #define BOATOPP_H
 
 #include "../params.h"
-#include "../objects/CVector.h"
+#include "../objects/Vector3d.h"
 
 #include <QString>
 #include <QColor>
@@ -30,7 +30,7 @@ public:
 	bool SerializeBoatOpp(QDataStream &ar, bool bIsStoring);
 	void GetBoatOppProperties(QString &BOppProperties);
 
-	void GetLiftDrag(double &Lift, double &Drag, CVector &WindDirection, CVector &WindNormal, CVector &WindSide);
+	void GetLiftDrag(double &Lift, double &Drag, Vector3d &WindDirection, Vector3d &WindNormal, Vector3d &WindSide);
 
 	double Lift();
 	double Drag();
@@ -76,10 +76,10 @@ private:
 	double m_SailAngle[MAXSAILS];// Sail rotation around the mast, degrees
 
 
-	CVector F;  // resulting force from panel force Summation
-	CVector M;  // resulting moment from panel force Summation w.r.t. CoG
+	Vector3d F;  // resulting force from panel force Summation
+	Vector3d M;  // resulting moment from panel force Summation w.r.t. CoG
 
-	CVector ForceTrefftz; // resulting force in the far field plane
+	Vector3d ForceTrefftz; // resulting force in the far field plane
 
 };
 

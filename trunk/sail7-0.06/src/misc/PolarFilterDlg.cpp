@@ -24,7 +24,7 @@
 #include "PolarFilterDlg.h"
 
 
-PolarFilterDlg::PolarFilterDlg(void *pParent)
+PolarFilterDlg::PolarFilterDlg(QWidget *pParent) : QDialog(pParent)
 {
 	setWindowTitle(tr("Polar Filter"));
 

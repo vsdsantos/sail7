@@ -24,9 +24,9 @@ ArcSpline::ArcSpline()
 	m_Spline2.SetColor(m_SplineColor);
 
 	m_CtrlPoint.clear();
-	m_CtrlPoint.append(CVector(0.0, 0.0,  0.0));
-	m_CtrlPoint.append(CVector(0.3, 0.10, 0.0));
-	m_CtrlPoint.append(CVector(1.0, 0.0,  0.0));
+	m_CtrlPoint.append(Vector3d(0.0, 0.0,  0.0));
+	m_CtrlPoint.append(Vector3d(0.3, 0.10, 0.0));
+	m_CtrlPoint.append(Vector3d(1.0, 0.0,  0.0));
 
 	m_Spline1.InsertPoint(m_CtrlPoint.at(0).x, m_CtrlPoint.at(0).y);
 	m_Spline1.InsertPoint(m_SlopePoint[0].x, m_SlopePoint[0].x);
@@ -73,6 +73,7 @@ bool ArcSpline::SplineCurve()
 
 	m_Spline1.SplineCurve();
 	m_Spline2.SplineCurve();
+    return true;
 }
 
 
@@ -126,7 +127,7 @@ void ArcSpline::GetSlopes(double &s0, double &s1)
 
 
 
-CVector ArcSpline::GetNormal(double const &x)
+Vector3d ArcSpline::GetNormal(double const &x)
 {
-	return CVector(0.0, 1.0, 0.0);
+	return Vector3d(0.0, 1.0, 0.0);
 }

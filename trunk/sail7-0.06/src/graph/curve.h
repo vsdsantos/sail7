@@ -13,15 +13,15 @@
 #define CURVE_H
 
 #include "../params.h"
-#include "../objects/CVector.h"
+#include "../objects/Vector3d.h"
 #include <QColor>
 
-class CCurve : public QObject
+class CCurve
 {
 	friend class Graph;
 
 public:
-	CVector GetPoint(int ref);
+	Vector3d GetPoint(int ref);
 
 	bool PointsVisible();
 	bool IsVisible();

@@ -35,7 +35,7 @@ public:
 	bool GetAutoYMin();
 	bool GetBorder();
 	bool GetInverted();
-	bool IsInDrawRect(CVector const &pt);
+	bool IsInDrawRect(Vector3d const &pt);
 	bool IsInDrawRect(int const &x, int const &y);
 	bool IsInDrawRect(QPoint const &pt);
 	bool Init();

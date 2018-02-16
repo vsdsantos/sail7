@@ -52,7 +52,7 @@ double GL3DScales::s_YOffset = 0.0;
 double GL3DScales::s_ZOffset = 0.0;
 
 
-GL3DScales::GL3DScales(QWidget *parent)
+GL3DScales::GL3DScales(QWidget *pParent) : QWidget(pParent)
 {
 	setWindowTitle(tr("3D Scales Settings"));
 

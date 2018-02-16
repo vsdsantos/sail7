@@ -15,7 +15,7 @@
 #include <QPainter>
 #include <QPoint>
 #include "Spline.h"
-#include "./CVector.h"
+#include "./Vector3d.h"
 
 // This class defines sections of a sail
 // A section is deined by a cubic spline
@@ -36,7 +36,7 @@ public:
 	void GetSlopes(double &s0, double &s1);
 	void Duplicate(void *pSpline);
 	bool Serialize(QDataStream &ar, bool bIsStoring);
-	CVector GetNormal(double const &x);
+	Vector3d GetNormal(double const &x);
 
 	//variables
 	double a[MAXCTRLPOINTS], b[MAXCTRLPOINTS], c[MAXCTRLPOINTS], d[MAXCTRLPOINTS];

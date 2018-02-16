@@ -22,7 +22,7 @@ public:
 	void DrawSpline(QPainter &painter, double const &scalex, double const &scaley, QPoint const &Offset, bool bSelected=true);
 	void DrawCtrlPoints(QPainter &painter, double scalex, double scaley, QPoint const &Offset);
 
-	void MoveTo(CVector NewPosition);
+	void MoveTo(Vector3d NewPosition);
 	void Copy(SailSection *pSection);
 	bool SerializeSection(QDataStream &ar, bool bIsStoring);
 	void SetSection(double const &span, double const& chord, double const&twist, double const&angle);

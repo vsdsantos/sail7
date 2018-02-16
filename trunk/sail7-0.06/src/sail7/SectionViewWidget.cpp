@@ -76,9 +76,9 @@ void SectionViewWidget::OnCurrentSectionOnly()
 
 
 
-CVector SectionViewWidget::MousetoReal(QPoint &point)
+Vector3d SectionViewWidget::MousetoReal(QPoint &point)
 {
-	CVector Real;
+	Vector3d Real;
 
 	Real.x =  (point.x() - m_ptOffset.x())/m_Scale;
 	Real.y = -(point.y() - m_ptOffset.y())/m_Scale/m_ScaleY;
@@ -265,7 +265,7 @@ void SectionViewWidget::PaintLegend(QPainter &painter)
 		int XPos = rect().right() -5;
 
 		NURBSSail *pNSail =(NURBSSail*)m_pSail;
-		CVector LE = pNSail->m_SplineSurface.LeadingEdgeAxis();
+		Vector3d LE = pNSail->m_SplineSurface.LeadingEdgeAxis();
 		QString strLuffAngle = QString("Luff Angle = %1").arg(atan2(LE.x, LE.z) * 180./PI, 5,'f',1) + QString::fromUtf8("°");
 		painter.drawText(XPos-fm.width(strLuffAngle), YPos, strLuffAngle);
 	}
@@ -433,7 +433,7 @@ void SectionViewWidget::OnInsertCtrlPt()
 	if(!m_pSail->IsNURBSSail()) return;
 	if(!m_pSailSection || !m_pSailSection->IsNURBSSection()) return;
 
-	CVector Real = MousetoReal(m_PointDown);
+	Vector3d Real = MousetoReal(m_PointDown);
 
 	int pos = m_pSailSection->InsertPoint(Real, 1);
 	for(int ifr=0; ifr<m_pSail->m_oaSection.size(); ifr++)
@@ -459,7 +459,7 @@ void SectionViewWidget::OnRemoveCtrlPt()
 	if(!m_pSailSection || !m_pSailSection->IsNURBSSection()) return;
 	SailDlg *pSailDlg = (SailDlg*)m_pSailDlg;
 
-	CVector Real = MousetoReal(m_PointDown);
+	Vector3d Real = MousetoReal(m_PointDown);
 
 	int n =  m_pSailSection->IsPoint(Real, m_Scale/m_RefScale);
 	if (n>=0)
@@ -499,7 +499,7 @@ void SectionViewWidget::mousePressEvent(QMouseEvent *event)
 	if(!m_pSailSection) return;
 	SailDlg *pSailDlg = (SailDlg*)m_pSailDlg;
 	QPoint point = event->pos();
-	CVector Real = MousetoReal(point);
+	Vector3d Real = MousetoReal(point);
 //	Real.z = m_pSailSection->m_Position.z;
 
 	// get a reference for mouse movements

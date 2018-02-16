@@ -15,7 +15,7 @@
 #include <QColor>
 #include <QPainter>
 #include <QPoint>
-#include "CVector.h"
+#include "Vector3d.h"
 
 #define SPLINEOUTPUTRES  50
 #define SPLINECONTROLSIZE 30
@@ -32,21 +32,21 @@ public:
 	virtual void Duplicate(void *pSpline) = 0;
 	virtual void GetCamber(double &Camber, double &xc) = 0;
 	virtual double GetY(double const &x) = 0;
-	virtual CVector GetNormal(double const &x) = 0;
+	virtual Vector3d GetNormal(double const &x) = 0;
 	virtual void GetSlopes(double &s0, double &s1) = 0;
 	virtual void SplineKnots(){};//re-implemented in some subclasses
 	virtual bool SplineCurve(){return true;};//re-implemented in some subclasses
 	virtual bool Serialize(QDataStream &ar, bool bIsStoring) = 0;
 
-	void CopyPoints(QList<CVector> *m_pPointList);
+	void CopyPoints(QList<Vector3d> *m_pPointList);
 	void DrawCtrlPoints(QPainter & painter, double const &scalex, double const &scaley, QPoint const &Offset);
 	void DrawSlopePoints(QPainter & painter, double const &scalex, double const &scaley, QPoint const &Offset);
 
 	bool InsertPoint(double const &x, double const &y);
 	bool RemovePoint(int const &k);
 
-	int IsControlPoint(CVector const &Real, double const &ZoomFactor);
-	int IsSlopePoint(CVector const &Real, double const &ZoomFactor);
+	int IsControlPoint(Vector3d const &Real, double const &ZoomFactor);
+	int IsSlopePoint(Vector3d const &Real, double const &ZoomFactor);
 
 	bool IsSplineType(enumSplineType type){return m_SplineType==type;};
 	QString SplineType();
@@ -65,8 +65,8 @@ public:
 
 	enumSplineType m_SplineType;
 
-	QList <CVector> m_CtrlPoint;
-	CVector m_SlopePoint[2];
+	QList <Vector3d> m_CtrlPoint;
+	Vector3d m_SlopePoint[2];
 	QColor m_SplineColor;
 	int m_Style, m_Width;
 	int m_iMinPoints, m_iMaxPoints;

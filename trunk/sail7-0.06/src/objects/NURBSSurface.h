@@ -24,9 +24,9 @@ public:
 	NURBSSurface(int iAxis=0);
 	void SetKnots();
 	double Getu(double pos, double v);
-	double Getv(double u, CVector r);
-	void GetPoint(double u, double v, CVector &Pt);
-	bool IntersectNURBS(CVector A, CVector B, CVector &I);
+	double Getv(double u, Vector3d r);
+	void GetPoint(double u, double v, Vector3d &Pt);
+	bool IntersectNURBS(Vector3d A, Vector3d B, Vector3d &I);
 	int SetvDegree(int nvDegree);
 	int SetuDegree(int nuDegree);
 
@@ -35,7 +35,7 @@ public:
 	void InsertFrame(CFrame *pNewFrame);
 	CFrame *AppendFrame();
 
-	CVector LeadingEdgeAxis();
+	Vector3d LeadingEdgeAxis();
 
 	double Weight(const double &d, int const &i, int const &N);
 
@@ -68,7 +68,7 @@ public:
 	//allocate temporary variables to
 	//avoid lengthy memory allocation times on the stack
 	double value, eps, bs, cs;
-	CVector t_R, t_Prod, t_Q, t_r, t_N;
+	Vector3d t_R, t_Prod, t_Q, t_r, t_N;
 
 //	double m_vPanelPos[300];
 

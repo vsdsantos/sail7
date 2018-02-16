@@ -20,7 +20,7 @@
 #include "BoatAnalysisDlg.h"
 #include "../mainframe.h"
 #include "../globals.h"
-#include "../objects/CVector.h"
+#include "../objects/Vector3d.h"
 #include "sail7.h"
 
 
@@ -32,10 +32,10 @@ CPanel *BoatAnalysisDlg::s_pWakePanel = NULL;// the current working wake panel a
 CPanel *BoatAnalysisDlg::s_pRefWakePanel = NULL;// a copy of the reference wake node array if wake needs to be reset
 CPanel *BoatAnalysisDlg::s_pMemPanel = NULL;// a copy of the reference panel array for tilted calc
 
-CVector *BoatAnalysisDlg::s_pNode = NULL;	// the working array of Nodes
-CVector *BoatAnalysisDlg::s_pMemNode = NULL;	// a copy of the reference node array for tilted calc
-CVector *BoatAnalysisDlg::s_pWakeNode = NULL;	// the current working wake node array
-CVector *BoatAnalysisDlg::s_pRefWakeNode = NULL; // a copy of the reference wake node array if wake needs to be reset
+Vector3d *BoatAnalysisDlg::s_pNode = NULL;	// the working array of Nodes
+Vector3d *BoatAnalysisDlg::s_pMemNode = NULL;	// a copy of the reference node array for tilted calc
+Vector3d *BoatAnalysisDlg::s_pWakeNode = NULL;	// the current working wake node array
+Vector3d *BoatAnalysisDlg::s_pRefWakeNode = NULL; // a copy of the reference wake node array if wake needs to be reset
 
 double *BoatAnalysisDlg::s_aij = NULL;
 double *BoatAnalysisDlg::s_aijWake = NULL;
@@ -103,7 +103,7 @@ void BoatAnalysisDlg::AddString(QString strong)
 
 void BoatAnalysisDlg::BuildInfluenceMatrix()
 {
-	CVector C, V;
+	Vector3d C, V;
 	int m, mm, p, pp;
 	double phi;
 
@@ -177,7 +177,7 @@ void BoatAnalysisDlg::CreateRHS(double *RHS)
 	//	rotation Angle around vector Omega
 	int m, p, pp;
 	double  phi, sigmapp;
-	CVector V, C, VPanel;
+	Vector3d V, C, VPanel;
 
 	m = 0;
 
@@ -243,10 +243,10 @@ void BoatAnalysisDlg::CreateWakeContribution()
 	//
 	int kw, lw, pw, p, pp;
 
-	CVector V, C, TrPt;
+	Vector3d V, C, TrPt;
 	double phi;
 	double PHC[MAXSAILSTATIONS];
-	CVector VHC[MAXSAILSTATIONS];
+	Vector3d VHC[MAXSAILSTATIONS];
 
 	AddString(tr("      Adding the wake's contribution...")+"\n");
 
@@ -368,10 +368,10 @@ void BoatAnalysisDlg::CreateWakeContribution(double *pWakeContrib)
 	//
 	int kw, lw, pw, p, pp;
 
-	static CVector V, C, TrPt;
+	static Vector3d V, C, TrPt;
 	double phi;
 	double PHC[MAXSAILSTATIONS];
-	CVector VHC[MAXSAILSTATIONS];
+	Vector3d VHC[MAXSAILSTATIONS];
 
 	AddString(tr("      Adding the wake's contribution...")+"\n");
 
@@ -473,7 +473,7 @@ void BoatAnalysisDlg::CreateWakeContribution(double *pWakeContrib)
 void BoatAnalysisDlg::ComputeFarField()
 {
 	int pos;
-	CVector SailForce;
+	Vector3d SailForce;
 
 	AddString(tr("      Calculating aerodynamic coefficients in the far field plane")+"\n");
 
@@ -489,7 +489,7 @@ void BoatAnalysisDlg::ComputeFarField()
 			//save the results... will save another FF calculation when computing operating point
 			m_SailForce[is] = SailForce;
 
-			memcpy(m_Vd  + is*MAXSAILSTATIONS, m_pSailList[is]->m_Vd,  m_pSailList[is]->m_NStation*sizeof(CVector));
+			memcpy(m_Vd  + is*MAXSAILSTATIONS, m_pSailList[is]->m_Vd,  m_pSailList[is]->m_NStation*sizeof(Vector3d));
 
 			pos += m_pSailList[is]->m_NElements;
 
@@ -508,8 +508,8 @@ void BoatAnalysisDlg::ComputeBoat()
 	QSail7 *pSail7 = (QSail7*)s_pSail7;
 	int pos;
 
-	CVector ForceTrefftz;
-	CVector SailForce, SailMoment, F,M;
+	Vector3d ForceTrefftz;
+	Vector3d SailForce, SailMoment, F,M;
 
 	QString strong;
 	strong = QString("       Calculating point %1\n").arg(m_Ctrl,7,'f',2);
@@ -530,7 +530,7 @@ void BoatAnalysisDlg::ComputeBoat()
 
 			//restore the saved FF results
 			ForceTrefftz += m_SailForce[iw];
-			memcpy(m_pSailList[iw]->m_Vd,  m_Vd  + iw*MAXSAILSTATIONS, m_pSailList[iw]->m_NStation*sizeof(CVector));
+			memcpy(m_pSailList[iw]->m_Vd,  m_Vd  + iw*MAXSAILSTATIONS, m_pSailList[iw]->m_NStation*sizeof(Vector3d));
 
 			//Compute moment coefficients
 			SailForce.Set(0.0,0.0,0.0);
@@ -559,12 +559,12 @@ void BoatAnalysisDlg::ComputeBoat()
 }
 
 
-void BoatAnalysisDlg::GetDoubletDerivative(const int &p, double *Mu, double &Cp, CVector &VLocal, double const &QInf, double Vx, double Vy, double Vz)
+void BoatAnalysisDlg::GetDoubletDerivative(const int &p, double *Mu, double &Cp, Vector3d &VLocal, double const &QInf, double Vx, double Vy, double Vz)
 {
 	static int PL,PR, PU, PD;
 	static double DELQ, DELP, mu0,mu1,mu2, x0,x1,x2, Speed2;
-	static CVector VTot;//total local panel speed
-	static CVector S2, Sl2;
+	static Vector3d VTot;//total local panel speed
+	static Vector3d S2, Sl2;
 
 	PL = s_pPanel[p].m_iPL;
 	PR = s_pPanel[p].m_iPR;
@@ -720,8 +720,8 @@ void BoatAnalysisDlg::ComputeOnBody()
 {
 	//following VSAERO theory manual
 	//the on-body tangential perturbation speed is the derivative of the doublet strength
-	static CVector VLocal;
-	static CVector PanelForce, Force;
+	static Vector3d VLocal;
+	static Vector3d PanelForce, Force;
 	double Speed2;
 
 	//______________________________________________________________________________________
@@ -768,7 +768,7 @@ void BoatAnalysisDlg::ComputeOnBody()
 void BoatAnalysisDlg::ComputeSurfSpeeds(double *Mu, double *Sigma)
 {
 	int p;
-	CVector C;
+	Vector3d C;
 
 	for (p=0; p<m_MatSize; p++)
 	{
@@ -785,12 +785,11 @@ void BoatAnalysisDlg::ComputeSurfSpeeds(double *Mu, double *Sigma)
 
 
 
-void BoatAnalysisDlg::GetDoubletInfluence(CVector const &C, CPanel *pPanel, CVector &V, double &phi, bool bWake, bool bAll)
+void BoatAnalysisDlg::GetDoubletInfluence(Vector3d const &C, CPanel *pPanel, Vector3d &V, double &phi, bool bWake, bool bAll)
 {
 	// returns the influence of the panel pPanel at point C
 	// if the panel pPanel is located on a thin surface, then its the influence of a vortex
 	// if it is on a thick surface, then its a doublet
-
 
 	if(pPanel->m_Pos!=MIDSURFACE || pPanel->m_bIsWakePanel)
 	{
@@ -822,7 +821,7 @@ void BoatAnalysisDlg::GetDoubletInfluence(CVector const &C, CPanel *pPanel, CVec
 }
 
 
-void BoatAnalysisDlg::GetSourceInfluence(CVector const &C, CPanel *pPanel, CVector &V, double &phi)
+void BoatAnalysisDlg::GetSourceInfluence(Vector3d const &C, CPanel *pPanel, Vector3d &V, double &phi)
 {
 	// returns the influence of a uniform source distribution on the panel pPanel at point C
 	// The panel is necessarily located on a thick surface, else the source strength is zero
@@ -842,9 +841,9 @@ void BoatAnalysisDlg::GetSourceInfluence(CVector const &C, CPanel *pPanel, CVect
 }
 
 
-void BoatAnalysisDlg::GetSpeedVector(CVector const &C, double *Mu, double *Sigma, CVector &VT, bool bAll, bool bTrace)
+void BoatAnalysisDlg::GetSpeedVector(Vector3d const &C, double *Mu, double *Sigma, Vector3d &VT, bool bAll, bool bTrace)
 {
-	CVector V;
+	Vector3d V;
 	int pp, pw, lw;
 	double phi, sign;
 
@@ -975,8 +974,8 @@ void BoatAnalysisDlg::SetupLayout()
 {
 	QDesktopWidget desktop;
 	QRect r = desktop.geometry();
-	setMinimumHeight(r.height()/2);
-	setMinimumWidth(r.width()/2);
+	setMinimumHeight(r.height()/3);
+	setMinimumWidth(r.width()/5);
 
 	m_pctrlTextOutput = new QTextEdit;
 	m_pctrlTextOutput->setReadOnly(true);
@@ -1035,7 +1034,7 @@ bool BoatAnalysisDlg::Solve()
 
 
 	//   Define unit local velocity vector, necessary for moment calculations in stability analysis of 3D panels
-	CVector u(1.0, 0.0, 0.0);
+	Vector3d u(1.0, 0.0, 0.0);
 	double Cp;
 	for (int p=0; p<m_MatSize; p++)
 	{
@@ -1124,9 +1123,9 @@ void BoatAnalysisDlg::StartAnalysis()
 	{
 		//restore the panels and nodes;
 		memcpy(s_pPanel, s_pMemPanel, m_MatSize * sizeof(CPanel));
-		memcpy(s_pNode,  s_pMemNode,  m_nNodes  * sizeof(CVector));
+		memcpy(s_pNode,  s_pMemNode,  m_nNodes  * sizeof(Vector3d));
 		memcpy(s_pWakePanel, s_pRefWakePanel, m_WakeSize * sizeof(CPanel));
-		memcpy(s_pWakeNode,  s_pRefWakeNode,  m_nWakeNodes * sizeof(CVector));
+		memcpy(s_pWakeNode,  s_pRefWakeNode,  m_nWakeNodes * sizeof(Vector3d));
 	}
 
 	m_bIsFinished = true;
@@ -1139,12 +1138,12 @@ void BoatAnalysisDlg::SetAngles(BoatPolar *pBoatPolar, double Ctrl, bool bBCOnly
 {
 	// Rotate the panels by the bank angle
 	// (and translate the wake to the new T.E. position - thin surfaces, no wake)
-	CVector O(0.0,0.0,0.0);
+	Vector3d O(0.0,0.0,0.0);
 	QSail7 *pSail7 = (QSail7*)s_pSail7;
 
 	//reset the initial geometry before a new set of angles is processed
 	memcpy(s_pPanel, s_pMemPanel, m_MatSize * sizeof(CPanel));
-	memcpy(s_pNode,  s_pMemNode,  m_nNodes  * sizeof(CVector));
+	memcpy(s_pNode,  s_pMemNode,  m_nNodes  * sizeof(Vector3d));
 //	memcpy(s_pWakePanel, s_pRefWakePanel, m_WakeSize * sizeof(CPanel));
 //	memcpy(s_pWakeNode,  s_pRefWakeNode,  m_nWakeNodes * sizeof(CVector));
 
@@ -1158,7 +1157,7 @@ void BoatAnalysisDlg::SetAngles(BoatPolar *pBoatPolar, double Ctrl, bool bBCOnly
 
 	//rotate the sails around the masts
 	Quaternion qt;
-	CVector Mast;
+	Vector3d Mast;
 	for(int is=0; is<m_pBoat->m_poaSail.size(); is++)
 	{
 		QSail *pSail = (QSail*)m_pBoat->m_poaSail.at(is);
@@ -1298,12 +1297,12 @@ void BoatAnalysisDlg::WriteString(QString strong)
 }
 
 
-void BoatAnalysisDlg::VLMGetVortexInfluence(CPanel *pPanel, CVector const &C, CVector &V, bool bAll)
+void BoatAnalysisDlg::VLMGetVortexInfluence(CPanel *pPanel, Vector3d const &C, Vector3d &V, bool bAll)
 {
 	// calculates the the panel p's vortex influence at point C
 	// V is the resulting velocity
-	static int lw, pw, p;
-	static CVector AA1, BB1, VT;
+	int lw, pw, p;
+	Vector3d AA1, BB1, VT;
 	p = pPanel->m_iElement;
 
 	V.x = V.y = V.z = 0.0;
@@ -1396,7 +1395,7 @@ void BoatAnalysisDlg::VLMGetVortexInfluence(CPanel *pPanel, CVector const &C, CV
 
 
 
-void BoatAnalysisDlg::Forces(double *Mu, double *Sigma, double alpha, double *VInf, CVector &Force, CVector &Moment, bool bTilted, bool bTrace)
+void BoatAnalysisDlg::Forces(double *Mu, double *Sigma, double alpha, double *VInf, Vector3d &Force, Vector3d &Moment, bool bTilted, bool bTrace)
 {
 	// Calculates the forces using a farfield method
 	// Calculates the moments by a near field method, i.e. direct summation on the panels
@@ -1406,8 +1405,8 @@ void BoatAnalysisDlg::Forces(double *Mu, double *Sigma, double alpha, double *VI
 	static int j, k, l, p, pp, m, nw, iTA, iTB;
 	static double StripArea;
 	static double GammaStrip;
-	static CVector  C, PanelLeverArm, Wg;
-	static CVector Velocity, StripForce, dF, PanelForce, PanelForcep1;
+	static Vector3d  C, PanelLeverArm, Wg;
+	static Vector3d Velocity, StripForce, dF, PanelForce, PanelForcep1;
 //	QSail7 *pSail7= (QSail7*)s_pSail7;
 
 	int coef = 1;
