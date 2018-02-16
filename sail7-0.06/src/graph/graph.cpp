@@ -568,7 +568,7 @@ bool Graph::Init()
 }
 
 
-bool Graph::IsInDrawRect(CVector const &pt)
+bool Graph::IsInDrawRect(Vector3d const &pt)
 {
 	if(m_rDrawRect.PtInRect(pt))
 	{

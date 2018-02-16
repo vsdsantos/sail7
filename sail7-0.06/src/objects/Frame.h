@@ -22,7 +22,7 @@
 #ifndef CFRAME_H
 #define CFRAME_H
 
-#include "CVector.h"
+#include "Vector3d.h"
 #include <QDataStream>
 #include <QList>
 
@@ -33,17 +33,17 @@ public:
 	~CFrame();
     bool SerializeFrame(QDataStream &ar, bool bIsStoring);
 
-	int IsPoint(CVector const &Point, double const &ZoomFactor);
-	void AppendPoint(CVector const& Pt);
+	int IsPoint(Vector3d const &Point, double const &ZoomFactor);
+	void AppendPoint(Vector3d const& Pt);
 	void InsertPoint(int n);
-	void InsertPoint(int n, const CVector &Pt);
-	int InsertPoint(CVector const &Real, int iAxis);
+	void InsertPoint(int n, const Vector3d &Pt);
+	int InsertPoint(Vector3d const &Real, int iAxis);
 	bool RemovePoint(int n);
 
 	void CopyFrame(CFrame *pFrame);
-	void CopyPoints(QList<CVector> *m_pPointList);
+	void CopyPoints(QList<Vector3d> *m_pPointList);
 
-	void SetPosition(CVector Pos);
+	void SetPosition(Vector3d Pos);
 	void SetuPosition(double u);
 	void SetvPosition(double v);
 	void SetwPosition(double w);
@@ -57,8 +57,8 @@ public:
 
 	int m_iHighlight, m_iSelect;
 
-	CVector m_Position;
-	QList <CVector> m_CtrlPoint;	// the point's positions
+	Vector3d m_Position;
+	QList <Vector3d> m_CtrlPoint;	// the point's positions
 };
 
 

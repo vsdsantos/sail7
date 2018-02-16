@@ -54,10 +54,10 @@ public:
 	MainFrame(QWidget *parent = 0, Qt::WindowFlags flags = 0);
 
 	bool LoadFile(QString PathName);
-	void ClientToGL(QPoint const &point, CVector &real);
+	void ClientToGL(QPoint const &point, Vector3d &real);
 	void DeleteProject();
 	void DeleteBoat(void *pObj, bool bResultsOnly = false);
-	void GLToClient(CVector const &real, QPoint &point);
+	void GLToClient(Vector3d const &real, QPoint &point);
 	void RemoveOpPoint(bool bCurrent);
 	void SaveSettings();
 	void SelectBoatOpp(double x);
@@ -258,11 +258,11 @@ public:
 	double m_RHSRef[VLMMAXMATSIZE*VLMMAXRHS];		// RHS vector
 
 
-	CVector m_Node[2*VLMMAXMATSIZE];		// the node array for the currently loaded UFO
-	CVector m_TempWakeNode[2*VLMMAXMATSIZE];	// the temporary wake node array during relaxation calc
-	CVector m_MemNode[2*VLMMAXMATSIZE];         // used if the analysis should be performed on the tilted geometry
-	CVector m_WakeNode[2*VLMMAXMATSIZE];        // the reference current wake node array
-	CVector m_RefWakeNode[2*VLMMAXMATSIZE];     // the reference wake node array if wake needs to be reset
+	Vector3d m_Node[2*VLMMAXMATSIZE];		// the node array for the currently loaded UFO
+	Vector3d m_TempWakeNode[2*VLMMAXMATSIZE];	// the temporary wake node array during relaxation calc
+	Vector3d m_MemNode[2*VLMMAXMATSIZE];         // used if the analysis should be performed on the tilted geometry
+	Vector3d m_WakeNode[2*VLMMAXMATSIZE];        // the reference current wake node array
+	Vector3d m_RefWakeNode[2*VLMMAXMATSIZE];     // the reference wake node array if wake needs to be reset
 	CPanel m_Panel[VLMMAXMATSIZE];		// the panel array for the currently loaded UFO
 	CPanel m_MemPanel[VLMMAXMATSIZE];           // used if the analysis should be performed on the tilted geometry
 	CPanel m_WakePanel[VLMMAXMATSIZE];          // the reference current wake panel array

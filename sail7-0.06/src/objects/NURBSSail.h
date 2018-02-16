@@ -20,9 +20,9 @@ public:
 
 	bool SerializeSail(QDataStream &ar, bool bIsStoring);
 
-	CVector GetPoint(double xrel, double zrel);
-	CVector GetSectionPoint(int iSection, double xrel);
-	CVector GetSectionPoint(SailSection *pSailSection, double xrel);
+	Vector3d GetPoint(double xrel, double zrel);
+	Vector3d GetSectionPoint(int iSection, double xrel);
+	Vector3d GetSectionPoint(SailSection *pSailSection, double xrel);
 
 	void CreateSection(int iSection);
 	void DeleteSection(int iSection);

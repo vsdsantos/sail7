@@ -26,7 +26,7 @@
 
 
 #include "Quaternion.h"
-#include "CVector.h"
+#include "Vector3d.h"
 
 typedef enum {UNIFORM, SINE, MSINE, COSINE} enumPanelDistrib;// the type of panel spacing along chord or span
 typedef enum {BOTSURFACE, MIDSURFACE, TOPSURFACE, SIDESURFACE, BODYSURFACE} enumPanelPosition;
@@ -43,12 +43,12 @@ class CPanel
 public:
 	CPanel();
 
-	void RotateBC(CVector const &HA, Quaternion & Qt);
+	void RotateBC(Vector3d const &HA, Quaternion & Qt);
 	void Reset();
 	void SetFrame();
-	void SetFrame(CVector const &LA, CVector const &LB, CVector const &TA, CVector const &TB);
+	void SetFrame(Vector3d const &LA, Vector3d const &LB, Vector3d const &TA, Vector3d const &TB);
 
-	bool Intersect(CVector const &A, CVector const &U, CVector &I, double &dist);
+	bool Intersect(Vector3d const &A, Vector3d const &U, Vector3d &I, double &dist);
 	bool Invert33(double *l);
 
 	bool IsBotSurface() {return m_Pos==BOTSURFACE;}
@@ -57,15 +57,15 @@ public:
 	bool IsSideSurface(){return m_Pos==SIDESURFACE;}
 	bool IsBodySurface(){return m_Pos==BODYSURFACE;}
 
-	CVector GlobalToLocal(CVector const &V);
-	CVector GlobalToLocal(double const &Vx, double const &Vy, double const &Vz);
-	CVector LocalToGlobal(CVector const &V);
+	Vector3d GlobalToLocal(Vector3d const &V);
+	Vector3d GlobalToLocal(double const &Vx, double const &Vy, double const &Vz);
+	Vector3d LocalToGlobal(Vector3d const &V);
 
 	double Width();
 	double GetArea();
 
-	void DoubletNASA4023(CVector const &C, CVector &V, double &phi, bool bWake);
-	void SourceNASA4023(CVector const &C, CVector &V, double &phi);
+	void DoubletNASA4023(Vector3d const &C, Vector3d &V, double &phi, bool bWake);
+	void SourceNASA4023(Vector3d const &C, Vector3d &V, double &phi);
 protected:	
 	bool m_bIsInSymPlane;
 	bool m_bIsLeftPanel;
@@ -78,19 +78,19 @@ protected:
 	int m_iWakeColumn;
 
 	//Local frame of refernce
-	CVector VortexPos;
-	CVector Vortex;
-	CVector P1, P2, P3, P4;//point's local coordinates
-	CVector m, l;
+	Vector3d VortexPos;
+	Vector3d Vortex;
+	Vector3d P1, P2, P3, P4;//point's local coordinates
+	Vector3d m, l;
 
 	double dl;
 	double Area;
 	double Size, SMP, SMQ;
 	double lij[9];
 
-	static CVector *s_pNode;
-	static CVector smp, smq, MidA, MidB;
-	static CVector ILA, ILB, ITA, ITB, Tt, V, W, P, LATB, TALB;
+	static Vector3d *s_pNode;
+	static Vector3d smp, smq, MidA, MidB;
+	static Vector3d ILA, ILB, ITA, ITB, Tt, V, W, P, LATB, TALB;
 
 	static double s_pCoreSize;
 	static double s_VortexPos;//between 0 and 1
@@ -103,16 +103,16 @@ public:
 
 	bool m_bIsLeading, m_bIsTrailing;
 	int m_iLA, m_iLB, m_iTA, m_iTB;//Corner Node numbers
-	CVector Normal;
-	CVector CtrlPt;
-	CVector CollPt;
-	CVector VA, VB;
+	Vector3d Normal;
+	Vector3d CtrlPt;
+	Vector3d CollPt;
+	Vector3d VA, VB;
 
-	static CVector m_R[5];
+	static Vector3d m_R[5];
 	static double RFF, eps;
 	static double side, sign, dist, S, GL;
 	static double RNUM, DNOM, PN, DA, DB, PA, PB, SM, SL, AM, AL, Al, pjk, CJKi;
-	static CVector PJK, a, b, s, T, T1, T2, h;
+	static Vector3d PJK, a, b, s, T, T1, T2, h;
 
 };
 

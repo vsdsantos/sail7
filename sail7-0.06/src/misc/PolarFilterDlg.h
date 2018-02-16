@@ -34,7 +34,7 @@ class PolarFilterDlg : public QDialog
 
 
 public:
-	PolarFilterDlg(void *pParent=NULL);
+	PolarFilterDlg(QWidget *pParent=NULL);
 	void InitDialog();
 
 private slots:

@@ -22,7 +22,7 @@
 #ifndef ARCBALL_H
 #define ARCBALL_H
 
-#include "CVector.h"
+#include "Vector3d.h"
 #include "../params.h"
 
 
@@ -31,7 +31,7 @@ class Quaternion
 private:
 	double theta;
 	double t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t15, t19, t20, t24;
-	CVector R;	
+	Vector3d R;	
 
 public:
 	double a, qx, qy,qz;
@@ -60,9 +60,9 @@ public:
 		Settxx();
 	};
 
-	Quaternion(double const &Angle, CVector const &R)
+	Quaternion(double const &Angle, Vector3d const &R)
 	{	
-		CVector N;
+		Vector3d N;
 		N = R;
 		N.Normalize();
 		theta = Angle*PI/180.0;
@@ -77,13 +77,13 @@ public:
 	};
 
 	//inline functions
-	void Conjugate(CVector const &Vin, CVector &Vout)
+	void Conjugate(Vector3d const &Vin, Vector3d &Vout)
 	{
 		Vout.x = 2.0*( (t8 + t10)*Vin.x + (t6 -  t4)*Vin.y + (t3 + t7)*Vin.z ) + Vin.x;
 		Vout.y = 2.0*( (t4 +  t6)*Vin.x + (t5 + t10)*Vin.y + (t9 - t2)*Vin.z ) + Vin.y;
 		Vout.z = 2.0*( (t7 -  t3)*Vin.x + (t2 +  t9)*Vin.y + (t5 + t8)*Vin.z ) + Vin.z;
 	};
-	void Conjugate(CVector &V)
+	void Conjugate(Vector3d &V)
 	{
 		R.x = V.x;
 		R.y = V.y;
@@ -127,9 +127,9 @@ public:
 		Settxx();
 	};
 
-	void Set(double const &Angle, CVector const &R)
+	void Set(double const &Angle, Vector3d const &R)
 	{	
-		CVector N;
+		Vector3d N;
 		N = R;
 		N.Normalize();
 		theta = Angle*PI/180.0;

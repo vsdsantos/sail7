@@ -19,7 +19,7 @@
 #include <QList>
 #include <complex>
 
-#include "objects/CVector.h"
+#include "objects/Vector3d.h"
 
 using namespace std;
 
@@ -88,14 +88,14 @@ bool Crout_LU_with_Pivoting_Solve(double *LU, double B[], int pivot[], double x[
 bool SplineInterpolation(int n, double *x, double *y,  double *a, double *b, double *c, double *d);
 double GetInterpolation(double t, double *y, int m, double *a, double *b, double *c, double *d);
 
-void VLMCmn(CVector const &A, CVector const &B, CVector const &WindDirection, CVector const &C, CVector &V, bool const &bAll=true, double const &CoreSize = 0.0001);
-void VLMQmn(CVector const &LA, CVector const &LB, CVector const &TA, CVector const &TB, CVector const &C, CVector &V, double const &CoreSize = 0.0001);
+void VLMCmn(Vector3d const &A, Vector3d const &B, Vector3d const &WindDirection, Vector3d const &C, Vector3d &V, bool const &bAll=true, double const &CoreSize = 0.0001);
+void VLMQmn(Vector3d const &LA, Vector3d const &LB, Vector3d const &TA, Vector3d const &TB, Vector3d const &C, Vector3d &V, double const &CoreSize = 0.0001);
 
-bool Intersect(CVector const &LA, CVector const &LB, CVector const &TA, CVector const &TB, CVector const &Normal, CVector const &A,  CVector const &U,  CVector &I, double &dist);
+bool Intersect(Vector3d const &LA, Vector3d const &LB, Vector3d const &TA, Vector3d const &TB, Vector3d const &Normal, Vector3d const &A,  Vector3d const &U,  Vector3d &I, double &dist);
 
 double SplineBlend(int const &index, int const &degree, double const &t, double *knots);
 
-void SetWindAxis(double const Beta, CVector &WindDirection, CVector & WindNormal, CVector &WindSide);
+void SetWindAxis(double const Beta, Vector3d &WindDirection, Vector3d & WindNormal, Vector3d &WindSide);
 
 
 #endif // FUNCTIONS_H

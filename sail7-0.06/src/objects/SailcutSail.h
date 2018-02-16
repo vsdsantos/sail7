@@ -21,11 +21,11 @@ public:
 
 	bool SerializeSail(QDataStream &ar, bool bIsStoring);
 
-	CVector GetPoint(double xrel, double zrel);
-	CVector GetSectionPoint(int iSection, double xrel);
+	Vector3d GetPoint(double xrel, double zrel);
+	Vector3d GetSectionPoint(int iSection, double xrel);
 
-	CVector SectionLE(int iSection);
-	CVector SectionTE(int iSection);
+	Vector3d SectionLE(int iSection);
+	Vector3d SectionTE(int iSection);
 
 	void SplineSurface();
 

@@ -203,8 +203,8 @@ void SailViewWidget::Set3DScale()
 //	m_SailOffset.y = -pSec1->m_Span/2.0 * m_glScaled;
 
 	m_ArcBall.GetMatrix();
-	CVector eye(0.0,0.0,1.0);
-	CVector up(0.0,1.0,0.0);
+	Vector3d eye(0.0,0.0,1.0);
+	Vector3d up(0.0,1.0,0.0);
 	m_ArcBall.SetZoom(0.3,eye,up);
 
 	Set3DRotationCenter();
@@ -370,7 +370,7 @@ void SailViewWidget::Set3DRotationCenter(QPoint point)
 	//finds the closest sail point under the screen point,
 	//and changes the rotation vector and viewport translation
 	int  i, j;
-	CVector I, A, B, AA, BB, U;
+	Vector3d I, A, B, AA, BB, U;
 	double dist;
 
 	i=-1;
@@ -401,13 +401,13 @@ void SailViewWidget::Set3DRotationCenter(QPoint point)
 	U.Set(BB.x-AA.x, BB.y-AA.y, BB.z-AA.z);
 	U.Normalize();
 
-	CVector LA,LB,TA,TB;
+	Vector3d LA,LB,TA,TB;
 	LA = m_pSail->GetPoint(0.0,0.0);
 	LB = m_pSail->GetPoint(0.0,1.0);
 	TA = m_pSail->GetPoint(1.0,0.0);
 	TB = m_pSail->GetPoint(1.0,1.0);
 
-	if(Intersect(LA, LB, TA, TB, CVector(0.0,-1.0,0.0), AA, U, I, dist))
+	if(Intersect(LA, LB, TA, TB, Vector3d(0.0,-1.0,0.0), AA, U, I, dist))
 	{
 //		smooth visual transition
 		m_p3DWidget->GLInverseMatrix(MatIn, MatOut);
@@ -434,7 +434,7 @@ void SailViewWidget::GLCreateSailGeom()
 {
 	QSail7 *pSail7 = (QSail7*)s_pSail7;
 	if(m_pSail->m_oaSection.size()<2) return;
-	pSail7->GLCreateSailGeom(SAILSURFACE, m_pSail, CVector(0.0,0.0,0.0));
+	pSail7->GLCreateSailGeom(SAILSURFACE, m_pSail, Vector3d(0.0,0.0,0.0));
 }
 
 
@@ -446,12 +446,12 @@ void SailViewWidget::GLCreateSailMesh()
 
 	QColor color;
 	int width;
-	CVector N, LATB, TALB;
+	Vector3d N, LATB, TALB;
 
 	int k,l;
 	double tau, tau1, x, x1;
 
-	CVector LA, LB, TA, TB;
+	Vector3d LA, LB, TA, TB;
 
 	glNewList(SAILMESHPANELS,GL_COMPILE);
 	{
@@ -584,8 +584,8 @@ void SailViewWidget::GLDraw3D()
 	if(m_bResetglArcball)
 	{
 		m_ArcBall.GetMatrix();
-		CVector eye(0.0,0.0,1.0);
-		CVector up(0.0,1.0,0.0);
+		Vector3d eye(0.0,0.0,1.0);
+		Vector3d up(0.0,1.0,0.0);
 		m_ArcBall.SetZoom(0.3,eye,up);
 
 		if(glIsList(ARCBALL))
@@ -750,7 +750,7 @@ void SailViewWidget::mouseMoveEvent(QMouseEvent *event)
 {
 	QPoint point(event->pos().x(), event->pos().y());
 	QPoint glPoint(event->pos().x() + m_p3DWidget->geometry().x(), event->pos().y()+m_p3DWidget->geometry().y());
-	CVector Real;
+	Vector3d Real;
 
 	if(!hasFocus()) setFocus();
 
@@ -810,7 +810,7 @@ void SailViewWidget::mousePressEvent(QMouseEvent *event)
 	QPoint point(event->pos().x(), event->pos().y());
 	QPoint glPoint(event->pos().x() + m_p3DWidget->geometry().x(), event->pos().y()+m_p3DWidget->geometry().y());
 
-	CVector Real;
+	Vector3d Real;
 	bool bCtrl = false;
 	if(event->modifiers() & Qt::ControlModifier) bCtrl =true;
 

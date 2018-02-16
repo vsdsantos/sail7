@@ -88,11 +88,11 @@ void SailcutSail::Duplicate(QSail *pSail)
 
 
 
-CVector SailcutSail::GetSectionPoint(int iSection, double xrel)
+Vector3d SailcutSail::GetSectionPoint(int iSection, double xrel)
 {
 	double k, av, ar, a, b, c;
 	SailSection *pSection;
-	CVector Point;
+	Vector3d Point;
 
 	pSection = m_oaSection.at(iSection);
 
@@ -331,23 +331,23 @@ double SailcutSail::Chord(SailSection *pSection)
 
 
 
-CVector SailcutSail::GetPoint(double xrel, double zrel)
+Vector3d SailcutSail::GetPoint(double xrel, double zrel)
 {
 	double tau, k, av, ar, a, b, c, yrel;
 	SailSection *pSection0, *pSection1;
 	SailcutSpline *pSpline0, *pSpline1;
-	CVector Point;
+	Vector3d Point;
 
 	double z = zrel*fabs(m_oaSection.last()->m_Position.z - m_oaSection.first()->m_Position.z);
 
 	// get the point on the straight line between tack and head
-	CVector LEPoint = tack * (1.0-zrel) + head *zrel;
+	Vector3d LEPoint = tack * (1.0-zrel) + head *zrel;
 
 	// get the point on the straight line between clew and peak
-	CVector TEPoint = clew * (1.0-zrel) + peak *zrel;
+	Vector3d TEPoint = clew * (1.0-zrel) + peak *zrel;
 
 	//construct the outward normal to the straight line
-	CVector Normal(peak.z-clew.z, 0.0, -peak.x+clew.x);
+	Vector3d Normal(peak.z-clew.z, 0.0, -peak.x+clew.x);
 	Normal.Normalize();
 
 	// add the sail round
@@ -386,7 +386,7 @@ CVector SailcutSail::GetPoint(double xrel, double zrel)
 			return Point;
 		}
 	}
-	return CVector(0.0,0.0,0.0);
+	return Vector3d(0.0,0.0,0.0);
 }
 
 
@@ -398,13 +398,13 @@ double SailcutSail::Chord(double zrel)
 
 
 	// get the point on the straight line between tack and head
-	CVector LEPoint = tack * (1.0-zrel) + head *zrel;
+	Vector3d LEPoint = tack * (1.0-zrel) + head *zrel;
 
 	// get the point on the straight line between clew and peak
-	CVector TEPoint = clew * (1.0-zrel) + peak *zrel;
+	Vector3d TEPoint = clew * (1.0-zrel) + peak *zrel;
 
 	//construct the outward normal to the straight line
-	CVector Normal(peak.z-clew.z, 0.0, -peak.x+clew.x);
+	Vector3d Normal(peak.z-clew.z, 0.0, -peak.x+clew.x);
 	Normal.Normalize();
 
 	// add the sail round
@@ -417,13 +417,13 @@ double SailcutSail::Chord(double zrel)
 }
 
 
-CVector SailcutSail::SectionLE(int iSection)
+Vector3d SailcutSail::SectionLE(int iSection)
 {
 	double zp = zrel(m_oaSection[iSection]->m_Position.z);
 	return tack * (1.0-zp) + head *zp;
 }
 
-CVector SailcutSail::SectionTE(int iSection)
+Vector3d SailcutSail::SectionTE(int iSection)
 {
 	double zp = zrel(m_oaSection[iSection]->m_Position.z);
 	return clew * (1.0-zp) + peak *zp;
@@ -435,13 +435,13 @@ void SailcutSail::SplineSurface()
 	tack.Set(0.0,0.0,0.0);
 
 	double FootAngle = -m_oaSection.first()->m_Angle * PI/180.0;
-	clew = tack + CVector(cos(FootAngle), 0.0, sin(FootAngle)) * m_oaSection.first()->m_Chord;
+	clew = tack + Vector3d(cos(FootAngle), 0.0, sin(FootAngle)) * m_oaSection.first()->m_Chord;
 
 	double LuffAngle = m_LuffAngle *PI/180.0;
-	head = tack + CVector(sin(LuffAngle), 0.0, cos(LuffAngle)) * LuffLength();
+	head = tack + Vector3d(sin(LuffAngle), 0.0, cos(LuffAngle)) * LuffLength();
 
 	double GaffAngle = -m_oaSection.last()->m_Angle * PI/180.0;
-	peak = head + CVector(cos(GaffAngle), 0.0, sin(GaffAngle)) * m_oaSection.last()->m_Chord;
+	peak = head + Vector3d(cos(GaffAngle), 0.0, sin(GaffAngle)) * m_oaSection.last()->m_Chord;
 }
 
 

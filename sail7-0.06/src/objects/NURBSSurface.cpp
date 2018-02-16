@@ -89,7 +89,7 @@ double NURBSSurface::Getu(double pos, double v)
 
 
 
-double NURBSSurface::Getv(double u, CVector r)
+double NURBSSurface::Getv(double u, Vector3d r)
 {
 	double sine = 10000.0;
 
@@ -121,14 +121,14 @@ double NURBSSurface::Getv(double u, CVector r)
 }
 
 
-void NURBSSurface::GetPoint(double u, double v, CVector &Pt)
+void NURBSSurface::GetPoint(double u, double v, Vector3d &Pt)
 {
 	//returns the point corresponding to the parametric values u and v
 	//assumes that the knots have been set previously
 
 	//Scan u-direction first, then v-direction
 
-	CVector V, Vv;
+	Vector3d V, Vv;
 	double wx, weight;
 
 	if(u>=1.0) u=0.99999999999;
@@ -190,11 +190,11 @@ double NURBSSurface::Weight(int i, int N)
 
 
 
-bool NURBSSurface::IntersectNURBS(CVector A, CVector B, CVector &I)
+bool NURBSSurface::IntersectNURBS(Vector3d A, Vector3d B, Vector3d &I)
 {
 	//intersect line AB with NURBS
 	//intersection point is I
-	CVector  tmp, M0, M1;
+	Vector3d  tmp, M0, M1;
 	double u, v, dist, t, tp;
 	int iter = 0;
 	int itermax = 20;
@@ -354,7 +354,7 @@ CFrame * NURBSSurface::AppendFrame()
 
 
 
-CVector NURBSSurface::LeadingEdgeAxis()
+Vector3d NURBSSurface::LeadingEdgeAxis()
 {
 	return (m_pFrame.last()->m_CtrlPoint.first() - m_pFrame.first()->m_CtrlPoint.first());
 }

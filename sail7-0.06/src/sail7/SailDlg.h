@@ -140,7 +140,7 @@ public:
 
 
 //	CVector m_LA, m_LB, m_TA, m_TB;
-	CVector m_Normal;
+	Vector3d m_Normal;
 
 	int m_iSection;
 };

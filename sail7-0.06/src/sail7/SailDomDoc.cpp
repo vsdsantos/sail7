@@ -441,13 +441,13 @@ bool SailDomDoc::Import(QFile *pFile)
 	double theta0 =   0.0;
 	double theta1 = 180.0;
 	double c = pSCSail->FootLength();
-	CVector Head, Peak, Clew;
+	Vector3d Head, Peak, Clew;
 	Head.Set(luffL*sin(pSCSail->m_LuffAngle*PI/180.0), 0.0, w);
-	CVector gaff = CVector(cos(pSCSail->m_oaSection.last()->m_Angle*PI/180.0),0.0, -sin(pSCSail->m_oaSection.last()->m_Angle*PI/180.0));
+	Vector3d gaff = Vector3d(cos(pSCSail->m_oaSection.last()->m_Angle*PI/180.0),0.0, -sin(pSCSail->m_oaSection.last()->m_Angle*PI/180.0));
 	gaff *= pSCSail->m_oaSection.last()->m_Chord;
 	Peak = Head + gaff;
 
-	Clew  = CVector(c*sin((theta0+theta1)/2.0*PI/180.0), 0.0, c*cos((theta0+theta1)/2.0*PI/180.0));
+	Clew  = Vector3d(c*sin((theta0+theta1)/2.0*PI/180.0), 0.0, c*cos((theta0+theta1)/2.0*PI/180.0));
 	double ll = (Clew-Peak).VAbs();
 	int iter=0;
 
@@ -455,7 +455,7 @@ bool SailDomDoc::Import(QFile *pFile)
 	{
 		if(ll<leechL) theta0 = (theta0+theta1)/2.0;
 		else          theta1 = (theta0+theta1)/2.0;
-		Clew  = CVector(c*sin((theta0+theta1)/2.0*PI/180.0), 0.0, c*cos((theta0+theta1)/2.0*PI/180.0));
+		Clew  = Vector3d(c*sin((theta0+theta1)/2.0*PI/180.0), 0.0, c*cos((theta0+theta1)/2.0*PI/180.0));
 		ll = (Clew-Peak).VAbs();
 		iter++;
 	}

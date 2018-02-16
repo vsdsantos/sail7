@@ -10,7 +10,7 @@
 #ifndef CSAILCUTSPLINE_H
 #define CSAILCUTSPLINE_H
 
-#include "CVector.h"
+#include "Vector3d.h"
 
 #include <QPainter>
 #include <QPoint>
@@ -36,7 +36,7 @@ public:
 	void jacobian2(double e, double v, double cg[]);
 	void jacobian(double k, double e, double v, double r, double cg[]);
 
-	CVector GetNormal(double const &x);
+	Vector3d GetNormal(double const &x);
 
 
 
@@ -52,7 +52,7 @@ public:
 		A = 1.0 + av/4.0;
 	};
 
-	QList <CVector> *m_pCtrlPoint;
+	QList <Vector3d> *m_pCtrlPoint;
 
 //	double m_Chord;
 

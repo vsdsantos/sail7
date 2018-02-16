@@ -15,7 +15,7 @@
 #define NXPOINTS 87
 #define NHOOPPOINTS 53
 
-static CVector m_T[(NXPOINTS+1)*(NHOOPPOINTS+1)]; //temporary points to save calculation times for body NURBS surfaces
+static Vector3d m_T[(NXPOINTS+1)*(NHOOPPOINTS+1)]; //temporary points to save calculation times for body NURBS surfaces
 
 
 void GLCreateBody3DSplines(void *pParent, int iList, CBody *pBody, int nx, int nh)
@@ -24,10 +24,10 @@ void GLCreateBody3DSplines(void *pParent, int iList, CBody *pBody, int nx, int n
 	int p;
 	double v;
 
-	CVector Point;
+	Vector3d Point;
 	double xinc, hinc, u;
-	CVector N, LATB, TALB;
-	CVector LA, LB, TA, TB;
+	Vector3d N, LATB, TALB;
+	Vector3d LA, LB, TA, TB;
 	MainFrame *pMainFrame = (MainFrame*)pParent;
 
 	nx = qMin(nx, NXPOINTS);
@@ -223,7 +223,7 @@ void GLCreateBody3DFlatPanels(void *pParent, int iList, CBody *pBody)
 	int j,k;
 	QColor color;
 	int style, width;
-	CVector P1, P2, P3, P4, N, P1P3, P2P4, Tj, Tjp1;
+	Vector3d P1, P2, P3, P4, N, P1P3, P2P4, Tj, Tjp1;
 
 	MainFrame *pMainFrame = (MainFrame*)pParent;
 
@@ -374,8 +374,8 @@ void GLCreateBodyMesh(void *pParent, int iList, CBody *pBody)
 	int i,j,k,l;
 	int p, nx, nh;
 	double uk, v, dj, dj1, dl1;
-	CVector N, LATB, TALB, LA, LB, TA, TB;
-	CVector PLA, PLB, PTA, PTB;
+	Vector3d N, LATB, TALB, LA, LB, TA, TB;
+	Vector3d PLA, PLB, PTA, PTB;
 	QColor color;
 
 	MainFrame *pMainFrame = (MainFrame*)pParent;

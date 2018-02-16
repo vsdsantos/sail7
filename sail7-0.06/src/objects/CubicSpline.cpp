@@ -25,9 +25,9 @@ CubicSpline::CubicSpline()
 	s1 = -1.0/2.0;
 
 	m_CtrlPoint.clear();
-	m_CtrlPoint.insert(0,CVector(0.0,0.0,0.0));
-	m_CtrlPoint.append(CVector(0.3, 0.15, 0.0));
-	m_CtrlPoint.append(CVector(1.0,0.0,0.0));
+	m_CtrlPoint.insert(0,Vector3d(0.0,0.0,0.0));
+	m_CtrlPoint.append(Vector3d(0.3, 0.15, 0.0));
+	m_CtrlPoint.append(Vector3d(1.0,0.0,0.0));
 	SplineCurve();
 
 }
@@ -301,7 +301,7 @@ bool CubicSpline::Serialize(QDataStream &ar, bool bIsStoring)
 		for(int ic=0; ic<n;ic++)
 		{
 			ar >> x >> y;
-			m_CtrlPoint.append(CVector(x,y,0.0));
+			m_CtrlPoint.append(Vector3d(x,y,0.0));
 		}
 
 		ar >> s0 >> s1;
@@ -313,9 +313,9 @@ bool CubicSpline::Serialize(QDataStream &ar, bool bIsStoring)
 
 
 
-CVector CubicSpline::GetNormal(double const &x)
+Vector3d CubicSpline::GetNormal(double const &x)
 {
-	return CVector(0.0, 1.0, 0.0);
+	return Vector3d(0.0, 1.0, 0.0);
 }
 
 

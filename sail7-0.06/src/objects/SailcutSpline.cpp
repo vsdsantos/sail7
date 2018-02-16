@@ -193,10 +193,10 @@ void SailcutSpline::Duplicate(SailcutSpline *pSCSpline)
 }
 
 
-CVector SailcutSpline::GetNormal(double const &x)
+Vector3d SailcutSpline::GetNormal(double const &x)
 {
 	double yp = K * ( A *  pow((1 - x),(AV + 1)) / (AV +1) - AR/2 * x*x + AR / 6 - ( A / ((AV + 2) * (AV + 1))));
-	CVector N(-yp, 1.0, 0.0);
+	Vector3d N(-yp, 1.0, 0.0);
 	N.Normalize();
 	return N;
 }

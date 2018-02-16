@@ -26,7 +26,7 @@
 
 
 
-RenameDlg::RenameDlg(void *pParent)
+RenameDlg::RenameDlg(QWidget *pParent) : QDialog(pParent)
 {
 	setWindowTitle(tr("Rename"));
 	m_bEnableOverwrite = true;

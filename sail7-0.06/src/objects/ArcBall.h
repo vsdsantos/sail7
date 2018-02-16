@@ -71,7 +71,7 @@
 
 
 
-#include "../objects/CVector.h"
+#include "../objects/Vector3d.h"
 #include "../objects/Quaternion.h"
 #include <QRect>
 
@@ -91,15 +91,15 @@ public:
 
 	void SetQuat(Quaternion Qt);
 	void SetQuat(double r, double qx, double qy, double qz);
-	void SetZoom(double radius, CVector eye, CVector up);
+	void SetZoom(double radius, Vector3d eye, Vector3d up);
 	void Rotate();
 	void Reset();
 	void Start(int mx, int my);
 	void Move(int mx, int my);
 	void GetMatrix();
-	void SphereCoords(int const &mx, int const &my, CVector &V);// find the intersection with the sphere
-	void PlanarCoords(int const &mx, int const &my, CVector &V);// get intersection with plane for "trackball" style rotation
-	void EdgeCoords(CVector m, CVector &V);	// find the intersection with the plane through the visible edge
+	void SphereCoords(int const &mx, int const &my, Vector3d &V);// find the intersection with the sphere
+	void PlanarCoords(int const &mx, int const &my, Vector3d &V);// get intersection with plane for "trackball" style rotation
+	void EdgeCoords(Vector3d m, Vector3d &V);	// find the intersection with the plane through the visible edge
 	void RotateCrossPoint();
 	void QuatIdentity(float* q);	// reset the rotation matrix
 	void QuatCopy(float* dst, float* src);// copy a rotation matrix
@@ -127,12 +127,12 @@ public:
 
 	void *m_p3dWidget;
 
-	CVector ab_start;
-	CVector ab_curr;
-	CVector ab_eye;
-	CVector ab_eyedir;
-	CVector ab_up;
-	CVector ab_out;
+	Vector3d ab_start;
+	Vector3d ab_curr;
+	Vector3d ab_eye;
+	Vector3d ab_eyedir;
+	Vector3d ab_up;
+	Vector3d ab_out;
 
 	Quaternion Quat;
 	double angle, cosa2, sina2, cosa;
@@ -147,7 +147,7 @@ public:
 	QRect *m_pRect;
 
 	//avoid lengthy recurring memory allocations
-	CVector aa, c, m, ec, sc, p, d;
+	Vector3d aa, c, m, ec, sc, p, d;
 	double t, ac, c2, q, b, delta, a;
 	double x2, y2, z2, xy, xz, yz, wx, wy, wz;
 	double ax,ay,az;

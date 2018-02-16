@@ -806,7 +806,7 @@ void SailDlg::ReadData()
 	else
 	{
 		NURBSSail *pNSail =(NURBSSail*)m_pSail;
-		CVector LE = pNSail->m_SplineSurface.LeadingEdgeAxis();
+		Vector3d LE = pNSail->m_SplineSurface.LeadingEdgeAxis();
 		pNSail->m_LuffAngle = atan2(LE.x, LE.z) * 180./PI;
 	}
 }
@@ -909,7 +909,7 @@ void SailDlg::ReadSectionData()
 
 
 
-void SailDlg::OnPointCellChanged(QWidget *pWidget)
+void SailDlg::OnPointCellChanged(QWidget *)
 {
 	m_bChanged = true;
 	ReadPointData();
@@ -1220,7 +1220,7 @@ bool SailDlg::eventFilter( QObject* o, QEvent* e )
 		m_pctrlPointTable->setColumnWidth(1, w2);
 		m_pctrlPointTable->setColumnWidth(2, w2);
 	}
-	else return QDialog::eventFilter( o, e );
+    return QDialog::eventFilter( o, e );
 }
 
 
@@ -1238,7 +1238,7 @@ void SailDlg::OnAlignedLE()
 		//translate  middle section
 		if(pNSail->m_oaSection.size() && pNSail->m_oaSection[1]->m_CtrlPoint.size())
 		{
-			CVector newpos;
+			Vector3d newpos;
 			newpos.x = (pNSail->m_oaSection.first()->m_CtrlPoint.first().x + pNSail->m_oaSection.last()->m_CtrlPoint.first().x)/2.0;
 			newpos.y = (pNSail->m_oaSection.first()->m_CtrlPoint.first().y + pNSail->m_oaSection.last()->m_CtrlPoint.first().y)/2.0;
 			newpos.z = pNSail->m_oaSection[1]->m_Position.z;

@@ -21,7 +21,7 @@ public:
 	void DrawSpline(QPainter & painter, double const &scalex, double const &scaley, QPoint const &Offset);
 	void GetCamber(double &Camber, double &xc);
 	double GetY(double const &x);
-	CVector GetNormal(double const &x);
+	Vector3d GetNormal(double const &x);
 
 	void GetSlopes(double &s0, double &s1);
 	void Duplicate(void *pSpline);

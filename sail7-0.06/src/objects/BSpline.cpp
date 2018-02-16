@@ -197,12 +197,12 @@ double BSpline::GetY(double const &x)
 
 
 
-CVector BSpline::GetNormal(double const &x)
+Vector3d BSpline::GetNormal(double const &x)
 {
 	double dx, dy;
-	CVector Normal;
+	Vector3d Normal;
 
-	if(x<=0.0 || x>=1.0) return CVector(0.0, 1.0, 0.0);
+	if(x<=0.0 || x>=1.0) return Vector3d(0.0, 1.0, 0.0);
 
 	for (int i=0; i<SPLINEOUTPUTRES-1; i++)
 	{
@@ -215,7 +215,7 @@ CVector BSpline::GetNormal(double const &x)
 			return Normal;
 		}
 	}
-	return CVector(0.0, 1.0, 0.0);
+	return Vector3d(0.0, 1.0, 0.0);
 }
 
 
@@ -347,7 +347,7 @@ bool BSpline::Serialize(QDataStream &ar, bool bIsStoring)
 		for(int ic=0; ic<n;ic++)
 		{
 			ar >> x >> y;
-			m_CtrlPoint.append(CVector(x,y,0.0));
+			m_CtrlPoint.append(Vector3d(x,y,0.0));
 		}
 		SplineKnots();
 		SplineCurve();

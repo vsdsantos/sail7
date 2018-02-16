@@ -587,7 +587,7 @@ bool BoatPolarDlg::eventFilter(QObject* o, QEvent* e)
 		double wc	= (double)m_pctrlWindGradientTable->width() *0.9;
 		m_pctrlWindGradientTable->setColumnWidth(0,(int)(wc/2));
 	}
-	else return QDialog::eventFilter( o, e );
+    return QDialog::eventFilter( o, e );
 }
 
 

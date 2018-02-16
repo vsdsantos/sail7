@@ -30,18 +30,18 @@ double CPanel::s_VortexPos = 0.25;
 double CPanel::s_CtrlPos   = 0.75;
 double CPanel::mat[9];
 double CPanel::det;
-CVector CPanel::smp, CPanel::smq, CPanel::MidA, CPanel::MidB;
-CVector *CPanel::s_pNode;
-CVector CPanel::ILA, CPanel::ILB, CPanel::ITA, CPanel::ITB, CPanel::Tt, CPanel::V, CPanel::W;
-CVector CPanel::P;
-CVector CPanel::LATB, CPanel::TALB;
+Vector3d CPanel::smp, CPanel::smq, CPanel::MidA, CPanel::MidB;
+Vector3d *CPanel::s_pNode;
+Vector3d CPanel::ILA, CPanel::ILB, CPanel::ITA, CPanel::ITB, CPanel::Tt, CPanel::V, CPanel::W;
+Vector3d CPanel::P;
+Vector3d CPanel::LATB, CPanel::TALB;
 
 double CPanel::RFF=10.0;
 double CPanel::eps= 1.e-7;
 double CPanel::side, CPanel::sign, CPanel::dist, CPanel::S, CPanel::GL;
 double CPanel::RNUM, CPanel::DNOM, CPanel::PN, CPanel::DA, CPanel::DB, CPanel::PA, CPanel::PB, CPanel::SM, CPanel::SL, CPanel::AM, CPanel::AL, CPanel::Al, CPanel::pjk, CPanel::CJKi;
-CVector CPanel::PJK, CPanel::a, CPanel::b, CPanel::s, CPanel::T, CPanel::T1, CPanel::T2, CPanel::h;
-CVector CPanel::m_R[5];
+Vector3d CPanel::PJK, CPanel::a, CPanel::b, CPanel::s, CPanel::T, CPanel::T1, CPanel::T2, CPanel::h;
+Vector3d CPanel::m_R[5];
 
 
 
@@ -91,7 +91,7 @@ void CPanel::SetFrame()
 
 
 
-void CPanel::SetFrame(CVector const &LA, CVector const &LB, CVector const &TA, CVector const &TB)
+void CPanel::SetFrame(Vector3d const &LA, Vector3d const &LB, Vector3d const &TA, Vector3d const &TB)
 {
 	LATB.x = TB.x - LA.x;
 	LATB.y = TB.y - LA.y;
@@ -250,9 +250,9 @@ a(ei-fh) - b(di-fg) + c(dh-eg)      (dh-eg)   (bg-ah)   (ae-bd)*/
 }
 
 
-CVector CPanel::GlobalToLocal(CVector const &V)
+Vector3d CPanel::GlobalToLocal(Vector3d const &V)
 {
-	CVector L;
+	Vector3d L;
 	L.x = lij[0]*V.x +lij[1]*V.y +lij[2]*V.z;
 	L.y = lij[3]*V.x +lij[4]*V.y +lij[5]*V.z;
 	L.z = lij[6]*V.x +lij[7]*V.y +lij[8]*V.z;
@@ -260,9 +260,9 @@ CVector CPanel::GlobalToLocal(CVector const &V)
 }
 
 
-CVector CPanel::GlobalToLocal(double const &Vx, double const &Vy, double const &Vz)
+Vector3d CPanel::GlobalToLocal(double const &Vx, double const &Vy, double const &Vz)
 {
-	CVector L;
+	Vector3d L;
 	L.x = lij[0]*Vx +lij[1]*Vy +lij[2]*Vz;
 	L.y = lij[3]*Vx +lij[4]*Vy +lij[5]*Vz;
 	L.z = lij[6]*Vx +lij[7]*Vy +lij[8]*Vz;
@@ -270,9 +270,9 @@ CVector CPanel::GlobalToLocal(double const &Vx, double const &Vy, double const &
 }
 
 
-CVector CPanel::LocalToGlobal(CVector const &V)
+Vector3d CPanel::LocalToGlobal(Vector3d const &V)
 {
-	CVector L;
+	Vector3d L;
 	L.x = V.x * l.x + V.y * m.x + V.z * Normal.x;
 	L.y = V.x * l.y + V.y * m.y + V.z * Normal.y;
 	L.z = V.x * l.z + V.y * m.z + V.z * Normal.z;
@@ -281,7 +281,7 @@ CVector CPanel::LocalToGlobal(CVector const &V)
 
 
 
-bool CPanel::Intersect(CVector const &A, CVector const &U, CVector &I, double &dist)
+bool CPanel::Intersect(Vector3d const &A, Vector3d const &U, Vector3d &I, double &dist)
 {
 	bool b1, b2, b3, b4;
 	double r,s;
@@ -371,7 +371,7 @@ double CPanel::Width()
 }
 
 
-void CPanel::RotateBC(CVector const &HA, Quaternion &Qt)
+void CPanel::RotateBC(Vector3d const &HA, Quaternion &Qt)
 {
 	// HA is the rotation center
 	//rotates the panels properties which are used in control analysis
@@ -424,7 +424,7 @@ void CPanel::RotateBC(CVector const &HA, Quaternion &Qt)
 
 
 
-void CPanel::DoubletNASA4023(CVector const &C, CVector &V, double &phi, bool bWake)
+void CPanel::DoubletNASA4023(Vector3d const &C, Vector3d &V, double &phi, bool bWake)
 {
 	// VSAERO theory Manual
 	// Influence of panel pp at coll pt of panel p
@@ -566,7 +566,7 @@ void CPanel::DoubletNASA4023(CVector const &C, CVector &V, double &phi, bool bWa
 
 
 
-void CPanel::SourceNASA4023(CVector const &C, CVector &V, double &phi)
+void CPanel::SourceNASA4023(Vector3d const &C, Vector3d &V, double &phi)
 {
 	//VSAERO theory Manual
 	//Influence of panel pp at coll pt of panel p

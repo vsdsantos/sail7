@@ -31,7 +31,7 @@ CFrame::CFrame(int nCtrlPts)
 	m_CtrlPoint.clear();
 	for(int ic=0; ic<nCtrlPts; ic++)
 	{
-		m_CtrlPoint.append(CVector(0.0,0.0,0.0));
+		m_CtrlPoint.append(Vector3d(0.0,0.0,0.0));
 	}
 	m_iHighlight = -1;
 	m_iSelect    =  0;
@@ -42,7 +42,7 @@ CFrame::~CFrame()
 {
 }
 
-int CFrame::IsPoint(const CVector &Point, const double &ZoomFactor)
+int CFrame::IsPoint(const Vector3d &Point, const double &ZoomFactor)
 {
     int l;
 	for(l=0; l<m_CtrlPoint.size(); l++)
@@ -86,7 +86,7 @@ bool CFrame::SerializeFrame(QDataStream &ar, bool bIsStoring)
 			ar >> fx;
 			ar >> fy;
 			ar >> fz;
-			m_CtrlPoint.append(CVector((double)fx, (double)fy, (double)fz));
+			m_CtrlPoint.append(Vector3d((double)fx, (double)fy, (double)fz));
 		}
 	}
 	return true;
@@ -106,7 +106,7 @@ bool CFrame::RemovePoint(int n)
 
 void CFrame::InsertPoint(int n)
 {
-	m_CtrlPoint.insert(n, CVector(0.0,0.0,0.0));
+	m_CtrlPoint.insert(n, Vector3d(0.0,0.0,0.0));
 	if(n>0 && n<m_CtrlPoint.size()-1)
 	{
 		m_CtrlPoint[n] = (m_CtrlPoint[n+1] + m_CtrlPoint[n-1])/2.0;
@@ -119,14 +119,14 @@ void CFrame::InsertPoint(int n)
 }
 
 
-void CFrame::InsertPoint(int n, CVector const& Pt)
+void CFrame::InsertPoint(int n, Vector3d const& Pt)
 {
 	m_CtrlPoint.insert(n, Pt);
 	m_iSelect = n;
 }
 
 
-int CFrame::InsertPoint(const CVector &Real, int iAxis)
+int CFrame::InsertPoint(const Vector3d &Real, int iAxis)
 {
 	int k=0;
 	if(iAxis==1)
@@ -214,7 +214,7 @@ void CFrame::CopyFrame(CFrame *pFrame)
 }
 
 
-void CFrame::CopyPoints(QList<CVector> *m_pPointList)
+void CFrame::CopyPoints(QList<Vector3d> *m_pPointList)
 {
 	m_CtrlPoint.clear();
 	for(int ip=0; ip<m_pPointList->size(); ip++)
@@ -224,13 +224,13 @@ void CFrame::CopyPoints(QList<CVector> *m_pPointList)
 }
 
 
-void CFrame::AppendPoint(CVector const& Pt)
+void CFrame::AppendPoint(Vector3d const& Pt)
 {
 	m_CtrlPoint.append(Pt);
 }
 
 
-void CFrame::SetPosition(CVector Pos)
+void CFrame::SetPosition(Vector3d Pos)
 {
 	m_Position = Pos;
 }

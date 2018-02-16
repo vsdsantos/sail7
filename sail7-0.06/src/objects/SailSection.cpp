@@ -125,7 +125,7 @@ bool SailSection::SerializeSection(QDataStream &ar, bool bIsStoring)
 			for(int ic=0; ic<nc; ic++)
 			{
 				ar >> x >> y >> z;
-				m_CtrlPoint.append(CVector(x,y,z));
+				m_CtrlPoint.append(Vector3d(x,y,z));
 			}
 		}
 		else if (k==2)
@@ -276,7 +276,7 @@ void SailSection::DrawCtrlPoints(QPainter &painter, double scalex, double scaley
 		painter.setPen(PointPen);
 		painter.setBrush(NoBrush);
 
-		CVector Point, LastPoint;
+		Vector3d Point, LastPoint;
 		for (i=0; i<m_CtrlPoint.size(); i++)
 		{
 			// rotate the control point in the direction of the section
@@ -398,7 +398,7 @@ double SailSection::Twist()
 {
 	//TODO : should be a sail method
 	static double w;
-	static CVector PtA, PtB;
+	static Vector3d PtA, PtB;
 
 	if(IsNURBSSection())
 	{
@@ -435,10 +435,10 @@ void SailSection::SetSailcutSpline(double k, double av, double ar)
 }
 
 
-void SailSection::MoveTo(CVector NewPosition)
+void SailSection::MoveTo(Vector3d NewPosition)
 {
 	if(!m_CtrlPoint.size()) return;
-	CVector trans = NewPosition - m_CtrlPoint.first();
+	Vector3d trans = NewPosition - m_CtrlPoint.first();
 
 	for(int ic=0; ic<m_CtrlPoint.size(); ic++)
 	{

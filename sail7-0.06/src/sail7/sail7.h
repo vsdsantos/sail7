@@ -41,7 +41,7 @@
 #include "BoatAnalysisDlg.h"
 
 
-
+class MainFrame;
 
 
 class QSail7 : public QWidget
@@ -158,7 +158,8 @@ private slots:
 
 public:
 
-	static void *s_pMainFrame, *s_p2DWidget, *s_p3DWidget;
+    static MainFrame *s_pMainFrame;
+    static void *s_p2DWidget, *s_p3DWidget;
 
 //____________________Methods________________________________________
 	void contextMenuEvent (QContextMenuEvent * event);
@@ -218,7 +219,7 @@ public:
 
 	int CreateSailElements(QSail *pSail);
 	int CreateBodyElements(CBody *pBody);
-	int IsNode(CVector &Pt);
+	int IsNode(Vector3d &Pt);
 
 	bool SetModBoat(CBoat *pModBoat);
 	bool SetModBoatPolar(BoatPolar *pModBoatPolar);
@@ -229,15 +230,15 @@ public:
 	void GLCreateSailLists();
 	void GLCreateBodyLists();
 	void GLCallViewLists();
-	void GLCreateSailMesh(CVector *pNode, CPanel *pPanel);
-	void GLCreateSailGeom(int GLList, QSail *pSail, CVector Position);
+	void GLCreateSailMesh(Vector3d *pNode, CPanel *pPanel);
+	void GLCreateSailGeom(int GLList, QSail *pSail, Vector3d Position);
 	void GLCreateWaterList();
 	void GLCreateWindList();
 	void GLCreateStreamLines();
 
 	/** Creates the OpenGl list for lift and drag arrows.  Uses the force calculed in the Trefftz plane.*/
 	void GLDrawForces();
-	void GLCreateBodyMesh(CVector* pNode, CPanel *pPanel);
+	void GLCreateBodyMesh(Vector3d* pNode, CPanel *pPanel);
 	void GLCreatePanelNormals();
 
 	void PaintBoatLegend(QPainter &painter, QRect rect);
@@ -245,8 +246,8 @@ public:
 
 	void DrawBoatPolarLegend(QPainter &painter, QPoint place, int bottom);
 
-	void RotatePanelsX(double const &Angle, CVector const &P);
-	void RotatePanelsZ(double const &Angle, CVector const &P);
+	void RotatePanelsX(double const &Angle, Vector3d const &P);
+	void RotatePanelsZ(double const &Angle, Vector3d const &P);
 	void CreateBoatPolarCurves();
 	void FillBoatPlrCurve(CCurve *pCurve, BoatPolar *pBoatPolar, enumPolarVar XVar, enumPolarVar YVar);
 	void SetAnalysisParams();
@@ -258,7 +259,7 @@ public:
 	BoatPolar* AddBoatPolar(BoatPolar *pBoatPolar);
 	BoatPolar* GetBoatPolar(QString BoatPolarName);
 
-	void AddBoatOpp(double *Cp, double *Gamma, double *Sigma, CVector const &F, CVector const &M, CVector const& ForceTrefftz);
+	void AddBoatOpp(double *Cp, double *Gamma, double *Sigma, Vector3d const &F, Vector3d const &M, Vector3d const& ForceTrefftz);
 
 
 //____________________Variables______________________________________
@@ -340,9 +341,9 @@ private:
 	QPoint m_PointDown, m_LastPoint;
 	QRect m_r3DCltRect;
 
-	CVector m_ObjectOffset;
-	CVector m_glViewportTrans;// the translation vector in gl viewport coordinates
-	CVector m_glRotCenter;    // the center of rotation in object coordinates... is also the opposite of the translation vector
+	Vector3d m_ObjectOffset;
+	Vector3d m_glViewportTrans;// the translation vector in gl viewport coordinates
+	Vector3d m_glRotCenter;    // the center of rotation in object coordinates... is also the opposite of the translation vector
 
 	int m_3DAxisStyle, m_3DAxisWidth;
 	QColor m_3DAxisColor;
@@ -395,10 +396,10 @@ private:
 	double *m_pRHSRef;		// RHS vector
 
 	static CPanel* s_pPanel;		// the panel array for the currently loaded UFO
-	static CVector* s_pNode;		// the node array for the currently loaded UFO
-	static CVector* s_pMemNode;         // used if the analysis should be performed on the tilted geometry
-	static CVector* s_pWakeNode;        // the reference current wake node array
-	static CVector* s_pRefWakeNode;     // the reference wake node array if wake needs to be reset
+	static Vector3d* s_pNode;		// the node array for the currently loaded UFO
+	static Vector3d* s_pMemNode;         // used if the analysis should be performed on the tilted geometry
+	static Vector3d* s_pWakeNode;        // the reference current wake node array
+	static Vector3d* s_pRefWakeNode;     // the reference wake node array if wake needs to be reset
 	static CPanel* s_pMemPanel;           // used if the analysis should be performed on the tilted geometry
 	static CPanel* s_pWakePanel;          // the reference current wake panel array
 	static CPanel* s_pRefWakePanel;       // the reference wake panel array if wake needs to be reset

@@ -1242,7 +1242,7 @@ bool MainFrame::LoadFile(QString PathName)
 
 		XFile.close();
 
-		if(m_oaBoat.size()) return SAIL7;
+        if(m_oaBoat.size()) return true;
 	}
 
 	return true;

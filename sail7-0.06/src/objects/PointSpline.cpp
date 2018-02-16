@@ -74,9 +74,9 @@ double PointSpline::GetY(double const &x)
 
 
 
-CVector PointSpline::GetNormal(double const &x)
+Vector3d PointSpline::GetNormal(double const &x)
 {
-	return CVector(0.0, 1.0, 0.0);
+	return Vector3d(0.0, 1.0, 0.0);
 }
 
 
@@ -136,7 +136,7 @@ bool PointSpline::Serialize(QDataStream &ar, bool bIsStoring)
 		for(int ic=0; ic<n;ic++)
 		{
 			ar >> x >> y;
-			m_CtrlPoint.append(CVector(x,y,0.0));
+			m_CtrlPoint.append(Vector3d(x,y,0.0));
 		}
 	}
 	return true;

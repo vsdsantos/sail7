@@ -162,8 +162,8 @@ private:
 	void StorePicture();
 	void TakePicture();
 
-	void Insert(CVector Pt);
-	void Remove(CVector Pt);
+	void Insert(Vector3d Pt);
+	void Remove(Vector3d Pt);
 
 
 private:
@@ -220,12 +220,12 @@ private:
 
 	QPoint m_MousePos;
 	QPoint m_ptPopUp;
-	CVector m_RealPopUp;
+	Vector3d m_RealPopUp;
 
 	CFrame *m_pFrame;
 	CBody *m_pBody;
 	CPanel *m_pPanel;
-	CVector *m_pNode;
+	Vector3d *m_pNode;
 
     BodyGridDlg *m_BodyGridDlg;
 
@@ -269,16 +269,16 @@ private:
 						// this is not the scale to display the model in the OpenGL view
 	double m_LetterWidth;
 
-	CVector m_UFOOffset;
-	CVector m_BodyOffset;
-	CVector m_FrameOffset;
+	Vector3d m_UFOOffset;
+	Vector3d m_BodyOffset;
+	Vector3d m_FrameOffset;
 
-	CVector m_BodyScalingCenter, m_BodyScaledOffset;
-	CVector m_FrameScalingCenter, m_FrameScaledOffset;
+	Vector3d m_BodyScalingCenter, m_BodyScaledOffset;
+	Vector3d m_FrameScalingCenter, m_FrameScaledOffset;
 
 
-	CVector m_glViewportTrans;// the translation vector in gl viewport coordinates
-	CVector m_glRotCenter;    // the center of rotation in object coordinates... is also the opposite of the translation vector
+	Vector3d m_glViewportTrans;// the translation vector in gl viewport coordinates
+	Vector3d m_glRotCenter;    // the center of rotation in object coordinates... is also the opposite of the translation vector
 	QRect m_BodyLineRect;
 	QRect m_FrameRect;
 	QRect m_BodyRect;

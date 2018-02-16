@@ -39,7 +39,7 @@ bool Spline::InsertPoint(double const &x, double const &y)
 		//No points yet
 		if(m_CtrlPoint.size()<=0)
 		{
-			m_CtrlPoint.append(CVector(x,y,0.0));
+			m_CtrlPoint.append(Vector3d(x,y,0.0));
 			m_CtrlPoint[0].x = x;
 			m_CtrlPoint[0].y = y;
 		}
@@ -48,14 +48,14 @@ bool Spline::InsertPoint(double const &x, double const &y)
 			if(x<m_CtrlPoint[0].x)
 			{
 				// we're the new minimum point
-				m_CtrlPoint.prepend(CVector(x,y,0.0));
+				m_CtrlPoint.prepend(Vector3d(x,y,0.0));
 			}
 			else
 			{
 				if(x>=m_CtrlPoint[m_CtrlPoint.size()-1].x)
 				{
 					// we're the new maximum point
-					m_CtrlPoint.append(CVector(x,y,0.0));
+					m_CtrlPoint.append(Vector3d(x,y,0.0));
 				}
 				else
 				{
@@ -64,7 +64,7 @@ bool Spline::InsertPoint(double const &x, double const &y)
 					{
 						if (x>m_CtrlPoint[k].x && x<m_CtrlPoint[k+1].x)
 						{
-							m_CtrlPoint.insert(k+1, CVector(x,y,0.0));
+							m_CtrlPoint.insert(k+1, Vector3d(x,y,0.0));
 							break;
 						}
 					}
@@ -78,7 +78,7 @@ bool Spline::InsertPoint(double const &x, double const &y)
 
 
 
-int Spline::IsControlPoint(CVector const &Real, double const &ZoomFactor)
+int Spline::IsControlPoint(Vector3d const &Real, double const &ZoomFactor)
 {
 	static int k;
 	for (k=0; k<m_CtrlPoint.size(); k++)
@@ -90,7 +90,7 @@ int Spline::IsControlPoint(CVector const &Real, double const &ZoomFactor)
 }
 
 
-int Spline::IsSlopePoint(CVector const &Real, double const &ZoomFactor)
+int Spline::IsSlopePoint(Vector3d const &Real, double const &ZoomFactor)
 {
 	static int k;
 	for (k=0; k<2; k++)
@@ -328,7 +328,7 @@ QString Spline::SplineType(int iType)
 	}
 }
 
-void Spline::CopyPoints(QList<CVector> *m_pPointList)
+void Spline::CopyPoints(QList<Vector3d> *m_pPointList)
 {
 	m_CtrlPoint.clear();
 	if(!m_pPointList->size()) return;

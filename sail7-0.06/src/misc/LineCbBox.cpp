@@ -26,7 +26,7 @@
 #include <QPaintEvent>
 
 
-LineCbBox::LineCbBox(void *pParent)
+LineCbBox::LineCbBox(QWidget *pParent) : QComboBox(pParent)
 {
 	m_Style = 0;
 	m_Width = 1;

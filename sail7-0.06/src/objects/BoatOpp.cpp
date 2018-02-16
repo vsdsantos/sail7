@@ -227,7 +227,7 @@ void BoatOpp::GetBoatOppProperties(QString &BOppProperties)
 
 double BoatOpp::Lift()
 {
-	CVector WindDirection, WindNormal, WindSide;
+	Vector3d WindDirection, WindNormal, WindSide;
 	SetWindAxis(m_Beta, WindDirection, WindNormal, WindSide);
 	return ForceTrefftz.dot(WindNormal);
 }
@@ -235,13 +235,13 @@ double BoatOpp::Lift()
 
 double BoatOpp::Drag()
 {
-	CVector WindDirection, WindNormal, WindSide;
+	Vector3d WindDirection, WindNormal, WindSide;
 	SetWindAxis(m_Beta, WindDirection, WindNormal, WindSide);
 	return ForceTrefftz.dot(WindDirection);
 }
 
 
-void BoatOpp::GetLiftDrag(double &Lift, double &Drag, CVector &WindDirection, CVector &WindNormal, CVector &WindSide)
+void BoatOpp::GetLiftDrag(double &Lift, double &Drag, Vector3d &WindDirection, Vector3d &WindNormal, Vector3d &WindSide)
 {
 	SetWindAxis(m_Beta, WindDirection, WindNormal, WindSide);
 	Lift = ForceTrefftz.dot(WindNormal);
