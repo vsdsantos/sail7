@@ -25,7 +25,7 @@
 #include "./GL3dBodyDlg.h"
 
 
-void *ScaleSailDlg::s_pMainFrame = NULL;
+void *ScaleSailDlg::s_pMainFrame = nullptr;
 
 ScaleSailDlg::ScaleSailDlg(void *pParent)
 {
@@ -34,7 +34,7 @@ ScaleSailDlg::ScaleSailDlg(void *pParent)
 	m_XFactor = 1.0;
 	m_YFactor = 1.0;
 	m_ZFactor = 1.0;
-	m_pSail = NULL;
+	m_pSail = nullptr;
 	SetupLayout();
 }
 

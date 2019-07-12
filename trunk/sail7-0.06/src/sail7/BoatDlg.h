@@ -32,7 +32,7 @@ class BoatDlg : public QDialog
 {
     Q_OBJECT
 	friend class MainFrame;
-	friend class QSail7;
+	friend class Sail7;
 	friend class CBoatDef;
 	friend class QSail;
 
@@ -66,7 +66,7 @@ private slots:
 	void OnHullCellChanged(QWidget *pWidget);
 
 public:
-	void InitDialog(CBoat *pBoatDef);
+	void InitDialog(Boat *pBoatDef);
 
 	void keyPressEvent(QKeyEvent *event);
 
@@ -86,7 +86,7 @@ private:
 	static void *s_pMainFrame;
 	static void *s_pSail7;
 
-	CBoat *m_pBoat;
+	Boat *m_pBoat;
 
 //	QTabWidget *m_pTabWidget;
 //	QWidget *SailPage, *HullPage;

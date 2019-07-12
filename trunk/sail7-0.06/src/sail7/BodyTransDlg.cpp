@@ -29,7 +29,7 @@
 #include "../mainframe.h"
 #include "../globals.h"
 
-void *BodyTransDlg::s_pMainFrame = NULL;
+void *BodyTransDlg::s_pMainFrame = nullptr;
 
 
 BodyTransDlg::BodyTransDlg(QWidget *pParent) : QDialog(pParent)

@@ -68,14 +68,14 @@ SailcutSpline::SailcutSpline()
 
 #define SPLINEPOINTS 50
 
-void SailcutSpline::DrawSpline(QPainter & painter, double const &scalex, double const &scaley, QPoint const &Offset, double Chord, double Twist)
+void SailcutSpline::DrawSpline(QPainter & painter, double const &scalex, double const &scaley, QPointF const &Offset, double Chord, double Twist)
 {
 	painter.save();
 
-	static double cost, sint, sx, sy;
-	static double B,C;
-	static double x, y, xr, yr;
-	static QPoint From, To;
+    double cost=0, sint=0, sx=0, sy=0;
+    double B=0,C=0;
+    double x=0, y=0, xr=0, yr=0;
+    QPointF From, To;
 
 	cost = cos(Twist*PI/180.0);
 	sint = sin(Twist*PI/180.0);
@@ -90,14 +90,14 @@ void SailcutSpline::DrawSpline(QPainter & painter, double const &scalex, double 
 	y = K*(-A*pow((1-x),(AV+2)) / (( AV+2)*(AV +1)) - AR/6*x*x*x + C*x + B);
 	xr = x*cost - y*sint;
 	yr = x*sint + y*cost;
-	From = QPoint((xr*sx) + Offset.x(), (-yr*sy) + Offset.y());
+    From = QPointF((xr*sx) + Offset.x(), (-yr*sy) + Offset.y());
 	for(int j=0; j<=SPLINEPOINTS; j++)
 	{
-		x = (double)j/(double)SPLINEPOINTS;
+        x = double(j)/double(SPLINEPOINTS);
 		y = K*(-A*pow((1-x),(AV+2)) / (( AV+2)*(AV +1)) - AR/6*x*x*x + C*x + B);
 		xr = x*cost - y*sint;
 		yr = x*sint + y*cost;
-		To   = QPoint((xr*sx) + Offset.x(), (-yr*sy) + Offset.y());
+        To   = QPointF((xr*sx) + Offset.x(), (-yr*sy) + Offset.y());
 		painter.drawLine(From, To);
 		From = To;
 	}
@@ -109,7 +109,7 @@ void SailcutSpline::DrawSpline(QPainter & painter, double const &scalex, double 
 double SailcutSpline::Getzmax(double const &k, double const &av, double const &ar)
 {
 	int iter=0;
-	double x, x0, x1, s;
+    double x=0, x0=0, x1=0, s=0;
 	double a = 1+av/4.0;
 	double b = a/((av+2) * (av+1));
 	double c = ar/6 - b;
@@ -133,7 +133,7 @@ double SailcutSpline::Getzmax(double const &k, double const &av, double const &a
 double SailcutSpline::Depth()
 {
 	int iter=0;
-	double x, x0, x1, s;
+    double x=0, x0=0, x1=0, s=0;
 	double a = 1+AV/4.0;
 	double b = a/((AV+2) * (AV+1));
 	double c = AR/6 - b;
@@ -164,7 +164,7 @@ void SailcutSpline::GetCamber(double &Camber, double &xc)
 
 	for(int j=0; j<SPLINEOUTPUTRES; j++)
 	{
-		x = (double)j/(double)SPLINEOUTPUTRES;
+        x = double(j)/double(SPLINEOUTPUTRES);
 		c = K*(-A*pow((1-x),(AV+2)) / (( AV+2)*(AV +1)) - AR/6*x*x*x + C*x + B);
 
 		if(fabs(c)>fabs(Camber))
@@ -386,13 +386,14 @@ void SailcutSpline::ComputeAKVR2(double slope0, double slope1, double c)
 	// assumes an initial state has been set and that the current input parameters
 	// correspond to the sailcut spline parameters.
 
-	double e, v, r, k;
-	double e1,v1,r1,k1;
-	double gg0, gg1;
+    double e=0, v=0, r=0, k=0;
+    double e1=0,v1=0,r1=0,k1=0;
+    double gg0=0, gg1=0;
 
-	double cg[4], cgin[4];
+    double cg[] = {0,0,0,0};
+    double cgin[] = {0,0,0,0};
 	double dmax = 1000.0;
-	double dd;
+    double dd=0;
 	int iter = 0;
 
 	//Set profile family

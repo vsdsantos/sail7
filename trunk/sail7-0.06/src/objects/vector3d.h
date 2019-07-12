@@ -25,7 +25,7 @@
 #ifndef CVector_H
 #define CVector_H
 
-class CVector  
+class Vector3d
 {
 public: 
 	double x;
@@ -33,19 +33,23 @@ public:
 	double z;
 
 	//inline constructors
-	CVector()
+       Vector3d()
 	{
 		x  = 0.0;
 		y  = 0.0;
 		z  = 0.0;
-	};
+       }
 
-	CVector(double const &xi, double const &yi, double const &zi)
+       Vector3d(double const &xi, double const &yi, double const &zi)
 	{
 		x  = xi;
 		y  = yi;
 		z  = zi;
-	};
+       }
+
+       float xf() const {return float(x);}
+       float yf() const {return float(y);}
+       float zf() const {return float(z);}
 
 	//inline operators
 	double operator[](const int &i)
@@ -53,98 +57,93 @@ public:
 		if(i==0) return x;
 		if(i==1) return y;
 		if(i==2) return z;
+              return 0.0;
 	}
 
-	bool operator ==(CVector const &V)
+       bool operator ==(Vector3d const &V)
 	{
 		//used only to compare point positions
 		return (V.x-x)*(V.x-x) + (V.y-y)*(V.y-y) + (V.z-z)*(V.z-z)<0.000000001;
-	};
+       }
 	
-	void operator =(CVector const &T)
-	{
-		x = T.x;
-		y = T.y;
-		z = T.z;
-	};
-	
-	void operator+=(CVector const &T)
+
+       void operator+=(Vector3d const &T)
 	{
 		x += T.x;
 		y += T.y;
 		z += T.z;
-	};
+       }
 	
-	void operator-=(CVector const &T)
+       void operator-=(Vector3d const &T)
 	{
 		x -= T.x;
 		y -= T.y;
 		z -= T.z;
-	};
+       }
 
 	void operator*=(double const &d)
 	{
 		x *= d;
 		y *= d;
 		z *= d;
-	};
+       }
 				   
-	CVector operator *(double const &d)
+       Vector3d operator *(double const &d)
 	{
-		CVector T(x*d, y*d, z*d);
+              Vector3d T(x*d, y*d, z*d);
 		return T;
-	};
+       }
 	
-	CVector operator *(CVector const &T)
+       Vector3d operator *(Vector3d const &T)
 	{
-		CVector C;
+              Vector3d C;
 		C.x =  y*T.z - z*T.y;
 		C.y = -x*T.z + z*T.x;
 		C.z =  x*T.y - y*T.x;
 		return C;
-	};
+       }
 	
-	CVector operator /(double const &d)
+       Vector3d operator /(double const &d)
 	{
-		CVector T(x/d, y/d, z/d);
+              Vector3d T(x/d, y/d, z/d);
 		return T;
-	};
+       }
 	
-	CVector operator +(CVector const &V) const
+       Vector3d operator +(Vector3d const &V) const
 	{
-		CVector T(x+V.x, y+V.y, z+V.z);
+              Vector3d T(x+V.x, y+V.y, z+V.z);
 		return T;
-	};
+       }
 	
 
-	CVector operator -(CVector const &V) const
+       Vector3d operator -(Vector3d const &V) const
 	{
-		CVector T(x-V.x, y-V.y, z-V.z);
+              Vector3d T(x-V.x, y-V.y, z-V.z);
 		return T;
-	};
+       }
 
 	
 	//inline methods
-	void Copy(CVector const &V)
+       void Copy(Vector3d const &V)
 	{	
 		x = V.x;
 		y = V.y;
 		z = V.z;
-	};
+       }
 	
 	void Set(double const &x0, double const &y0, double const &z0)
 	{	
 		x = x0;
 		y = y0;
 		z = z0;
-	};
+       }
 	
-	void Set(CVector const &V)
+       void Set(Vector3d const &V)
 	{	
 		x = V.x;
 		y = V.y;
 		z = V.z;
-	};
+       }
 
 	void Normalize()
 	{
@@ -153,37 +152,37 @@ public:
 		x/=abs;
 		y/=abs;
 		z/=abs;
-	};
+       }
 		
 	double VAbs()
 	{
 		return sqrt(x*x+y*y+z*z);
-	};
+       }
 	
-	double dot(CVector const &V)
+       double dot(Vector3d const &V)
 	{	
 		return x*V.x + y*V.y + z*V.z;
-	};
+       }
 	
-	bool IsSame(CVector const &V)
+       bool IsSame(Vector3d const &V)
 	{
 		//used only to compare point positions
 		return (V.x-x)*(V.x-x) + (V.y-y)*(V.y-y) + (V.z-z)*(V.z-z)<0.000000001;
-	};
+       }
 
-	void Translate(CVector const &T)
+       void Translate(Vector3d const &T)
 	{
 		x += T.x;
 		y += T.y;
 		z += T.z;
-	};
+       }
 
 	void Translate(const double &tx, const double &ty, const double &tz)
 	{
 		x += tx;
 		y += ty;
 		z += tz;
-	};
+       }
 
 	int size() const
 	{
@@ -191,11 +190,11 @@ public:
 	}
 
 	//other methods
-	void Rotate(CVector const &R, double Angle);
-	void Rotate(CVector &O, CVector const &R, double Angle);
-	void RotateX(CVector const &O, double XTilt);
-	void RotateY(CVector const &O, double YTilt);
-	void RotateZ(CVector const &O, double ZTilt);
+       void Rotate(Vector3d const &R, double Angle);
+       void Rotate(Vector3d &O, Vector3d const &R, double Angle);
+       void RotateX(Vector3d const &O, double XTilt);
+       void RotateY(Vector3d const &O, double YTilt);
+       void RotateZ(Vector3d const &O, double ZTilt);
 	void RotateX(double Bank);
 	void RotateY(double YTilt);
 	void RotateZ(double ZRot);

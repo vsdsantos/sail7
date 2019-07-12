@@ -19,7 +19,7 @@
 #include <QList>
 #include <complex>
 
-#include "objects/Vector3d.h"
+#include "objects/vector3d.h"
 
 using namespace std;
 

@@ -34,7 +34,7 @@ void * BoatDlg::s_pSail7;
 BoatDlg::BoatDlg()
 {
 	setWindowTitle("Boat definition dialog");
-	m_pBoat = NULL;
+	m_pBoat = nullptr;
 	SetupLayout();
 	Connect();
 }
@@ -198,7 +198,7 @@ void BoatDlg::Connect()
 
 
 
-void BoatDlg::InitDialog(CBoat *pBoat)
+void BoatDlg::InitDialog(Boat *pBoat)
 {
 	//Load the controls with the boat definition data
 	if(!pBoat) return;
@@ -307,7 +307,7 @@ void BoatDlg::keyPressEvent(QKeyEvent *event)
 
 void BoatDlg::OnAddHull()
 {
-	CBody *pNewBody = new CBody;
+	Body *pNewBody = new Body;
 	pNewBody->m_BodyName = QString("Hull %1").arg(m_pBoat->m_poaHull.size()+1);
 	m_pBoat->m_poaHull.append(pNewBody);
 	FillHullList();
@@ -322,7 +322,7 @@ void BoatDlg::OnDeleteHull()
 {
 	int iSelect = m_pctrlHullTable->currentIndex().row();
 	if(iSelect<0 || iSelect>=m_pBoat->m_poaHull.size()) return;
-	CBody *pCurHull = (CBody*)m_pBoat->m_poaHull.at(iSelect);
+	Body *pCurHull = (Body*)m_pBoat->m_poaHull.at(iSelect);
 	if(!pCurHull) return;
 
 	QString strange = tr("Are you sure you want to delete the Hull")+" "+pCurHull->m_BodyName+"?";
@@ -331,7 +331,7 @@ void BoatDlg::OnDeleteHull()
 	if(resp != QMessageBox::Yes) return;
 	for(int is=m_pBoat->m_poaHull.size()-1;is>=0;is--)
 	{
-		CBody* pHull = (CBody*)m_pBoat->m_poaHull.at(is);
+		Body* pHull = (Body*)m_pBoat->m_poaHull.at(is);
 		if(is==iSelect)
 		{
 			//delete
@@ -353,7 +353,7 @@ void BoatDlg::OnDeleteHull()
 
 void BoatDlg::OnImportHull()
 {
-	CBody *pNewHull = new CBody();
+	Body *pNewHull = new Body();
 	if(!pNewHull) return;
 
 
@@ -449,15 +449,15 @@ void BoatDlg::OnGetHull()
 	SelectObjectDlg dlg;
 	QStringList NameList;
 	QString BoatName, HullName;
-	QSail7 *pSail7= (QSail7*)s_pSail7;
+	Sail7 *pSail7= (Sail7*)s_pSail7;
 
 	NameList.clear();
 	for(int k=0; k<pSail7->m_poaBoat->size(); k++)
 	{
-		CBoat *pBoat = (CBoat*)pSail7->m_poaBoat->at(k);
+		Boat *pBoat = (Boat*)pSail7->m_poaBoat->at(k);
 		for(int j=0; j<pBoat->m_poaHull.size(); j++)
 		{
-			CBody*pHull = (CBody*)pBoat->m_poaHull.at(j);
+			Body*pHull = (Body*)pBoat->m_poaHull.at(j);
 			NameList.append(pBoat->m_BoatName + " / " + pHull->m_BodyName);
 		}
 	}
@@ -472,13 +472,13 @@ void BoatDlg::OnGetHull()
 			BoatName = dlg.m_SelectedName.left(pos);
 			HullName = dlg.m_SelectedName.right(dlg.m_SelectedName.length()-pos-3);
 
-			CBody *pNewHull = new CBody;
+			Body *pNewHull = new Body;
 			pNewHull->m_BodyName = HullName;
 
-			CBoat *pBoat = pSail7->GetBoat(BoatName);
+			Boat *pBoat = pSail7->GetBoat(BoatName);
 			if(!pBoat) return;
 
-			CBody *pHull = pBoat->GetBody(HullName);
+			Body *pHull = pBoat->GetBody(HullName);
 			if(!pHull) return;
 
 			pNewHull->Duplicate(pHull);
@@ -498,10 +498,10 @@ void BoatDlg::OnDuplicateHull()
 {
 	int iSelect = m_pctrlHullTable->currentIndex().row();
 	if(iSelect<0 || iSelect>=m_pBoat->m_poaHull.size()) return;
-	CBody *pCurHull = (CBody*)m_pBoat->m_poaHull.at(iSelect);
+	Body *pCurHull = (Body*)m_pBoat->m_poaHull.at(iSelect);
 	if(!pCurHull) return;
 
-	CBody *pNewBody = new CBody;
+	Body *pNewBody = new Body;
 	pNewBody->Duplicate(pCurHull);
 	m_pBoat->m_poaHull.append(pNewBody);
 	FillHullList();
@@ -517,9 +517,9 @@ void BoatDlg::OnEditHull()
 	//Get a pointer to the currently selected Hull
 	int iSelect = m_pctrlHullTable->currentIndex().row();
 	if(iSelect<0 || iSelect>=m_pBoat->m_poaHull.size()) return;
-	CBody *pCurHull = (CBody*)m_pBoat->m_poaHull.at(iSelect);
+	Body *pCurHull = (Body*)m_pBoat->m_poaHull.at(iSelect);
 
-	CBody memBody;
+	Body memBody;
 	memBody.Duplicate(pCurHull);
 
 	GL3dBodyDlg dlg(this);
@@ -635,7 +635,7 @@ void BoatDlg::OnDuplicateSail()
 	QSail *pCurSail = m_pBoat->m_poaSail.at(iSelect);
 	if(!pCurSail) return;
 
-	QSail *pNewSail = NULL;
+	QSail *pNewSail = nullptr;
 	if(pCurSail->IsNURBSSail())        pNewSail = new NURBSSail;
 	else if(pCurSail->IsSailcutSail()) pNewSail = new SailcutSail;
 	if(pNewSail)
@@ -658,7 +658,7 @@ void BoatDlg::OnEditSail()
 	int iSelect = m_pctrlSailTable->currentIndex().row();
 	if(iSelect<0 || iSelect>=m_pBoat->m_poaSail.size()) return;
 
-	QSail *pMemSail = NULL;
+	QSail *pMemSail = nullptr;
 	QSail *pSail = m_pBoat->m_poaSail.at(iSelect);
 	if(pSail->IsNURBSSail())        pMemSail = new NURBSSail;
 	else if(pSail->IsSailcutSail()) pMemSail = new SailcutSail;
@@ -697,12 +697,12 @@ void BoatDlg::OnImportSail()
 	SelectObjectDlg dlg;
 	QStringList NameList;
 	QString BoatName, SailName;
-	QSail7 *pSail7 = (QSail7*)s_pSail7;
+	Sail7 *pSail7 = (Sail7*)s_pSail7;
 
 	NameList.clear();
 	for(int k=0; k<pSail7->m_poaBoat->size(); k++)
 	{
-		CBoat *pBoat = (CBoat*)pSail7->m_poaBoat->at(k);
+		Boat *pBoat = (Boat*)pSail7->m_poaBoat->at(k);
 		for(int j=0; j<pBoat->m_poaSail.size(); j++)
 		{
 			QSail *pSail = (QSail*)pBoat->m_poaSail.at(j);
@@ -720,13 +720,13 @@ void BoatDlg::OnImportSail()
 			BoatName = dlg.m_SelectedName.left(pos);
 			SailName = dlg.m_SelectedName.right(dlg.m_SelectedName.length()-pos-3);
 
-			CBoat *pBoat = pSail7->GetBoat(BoatName);
+			Boat *pBoat = pSail7->GetBoat(BoatName);
 			if(!pBoat) return;
 
 			QSail *pSail = pBoat->GetSail(SailName);
 			if(!pSail) return;
 
-			QSail *pNewSail = NULL;
+			QSail *pNewSail = nullptr;
 			if(pSail->IsNURBSSail())        pNewSail = new NURBSSail;
 			else if(pSail->IsSailcutSail()) pNewSail = new SailcutSail;
 			if(pNewSail)
@@ -817,7 +817,7 @@ void BoatDlg::ReadData()
 	}
 	for(int ib=0; ib<m_pHullModel->rowCount(); ib++)
 	{
-		CBody *pHull = (CBody*)m_pBoat->m_poaHull.at(ib);
+		Body *pHull = (Body*)m_pBoat->m_poaHull.at(ib);
 		if(pHull)
 		{
 			QModelIndex index = m_pHullModel->index(ib, 0, QModelIndex());
@@ -844,7 +844,7 @@ void BoatDlg::FillHullList()
 	m_pHullModel->setRowCount(m_pBoat->m_poaHull.size());
 	for(int is=0; is<m_pBoat->m_poaHull.size(); is++)
 	{
-		CBody *pHull = (CBody*)m_pBoat->m_poaHull.at(is);
+		Body *pHull = (Body*)m_pBoat->m_poaHull.at(is);
 		if(pHull)
 		{
 			ind = m_pHullModel->index(is, 0, QModelIndex());

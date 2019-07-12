@@ -40,8 +40,8 @@ GraphDlg::GraphDlg()
 	setWindowTitle(tr("Graph Settings"));
 
 	m_iGraphType = 1;
-	m_pMemGraph = NULL;
-	m_pGraph    = NULL;
+	m_pMemGraph = nullptr;
+	m_pGraph    = nullptr;
 	m_NGraph      = 0 ;
 	m_bApplied = true;
 	m_bVariableChanged = false;
@@ -49,7 +49,7 @@ GraphDlg::GraphDlg()
 	m_XSel = 0;
 	m_YSel = 1;
 
-	m_pTitleFont = m_pLabelFont = NULL;
+	m_pTitleFont = m_pLabelFont = nullptr;
 
 	SetupLayout();
 	Connect();

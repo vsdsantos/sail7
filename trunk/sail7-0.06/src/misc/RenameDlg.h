@@ -35,7 +35,7 @@ class RenameDlg : public QDialog
 	Q_OBJECT
 
 	friend class MainFrame;
-	friend class QSail7;
+	friend class Sail7;
 
 private:
 	void InitDialog();

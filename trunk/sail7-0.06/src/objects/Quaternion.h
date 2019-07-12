@@ -22,7 +22,7 @@
 #ifndef ARCBALL_H
 #define ARCBALL_H
 
-#include "Vector3d.h"
+#include "vector3d.h"
 #include "../params.h"
 
 

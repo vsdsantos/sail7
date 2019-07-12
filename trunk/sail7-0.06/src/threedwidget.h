@@ -20,7 +20,7 @@ class ThreeDWidget : public QGLWidget
 {
     Q_OBJECT
 
-	friend class QSail7;
+	friend class Sail7;
 	friend class BoatDlg;
 	friend class MainFrame;
 	friend class ArcBall;

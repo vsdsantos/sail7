@@ -32,8 +32,8 @@
 #include <QVBoxLayout>
 
 
-void * DisplaySettingsDlg::s_pMainFrame = NULL;
-void * DisplaySettingsDlg::s_pSail7 = NULL;
+void * DisplaySettingsDlg::s_pMainFrame = nullptr;
+void * DisplaySettingsDlg::s_pSail7 = nullptr;
 
 
 DisplaySettingsDlg::DisplaySettingsDlg()
@@ -189,7 +189,7 @@ void DisplaySettingsDlg::OnBackgroundColor()
 void DisplaySettingsDlg::reject()
 {
 //	MainFrame *pMainFrame = (MainFrame*)m_pMainFrame;
-	QSail7 *pSail7 = (QSail7*)s_pSail7;
+	Sail7 *pSail7 = (Sail7*)s_pSail7;
 	for(int ig=0; ig<4; ig++)
 	{
 		pSail7->m_BoatGraph[ig].CopySettings(&m_MemGraph);
@@ -203,7 +203,7 @@ void DisplaySettingsDlg::OnGraphSettings()
 {
 	if(!m_pRefGraph) return;
 //	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
-	QSail7 *pSail7 = (QSail7*)s_pSail7;
+	Sail7 *pSail7 = (Sail7*)s_pSail7;
 
 	GraphDlg dlg;
 

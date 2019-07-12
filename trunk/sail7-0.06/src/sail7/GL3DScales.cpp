@@ -29,8 +29,8 @@
 #include <QAction>
 #include <QtDebug>
 
-void *GL3DScales::s_pSail7     = NULL;
-void *GL3DScales::s_pMainFrame = NULL;
+void *GL3DScales::s_pSail7     = nullptr;
+void *GL3DScales::s_pMainFrame = nullptr;
 
 bool GL3DScales::s_bAutoCpScale = true;
 
@@ -294,7 +294,7 @@ void GL3DScales::SetupLayout()
 void GL3DScales::InitDialog()
 {
 	if(!s_pMainFrame) return;
-	QSail7* pSail7 = (QSail7*)s_pSail7;
+	Sail7* pSail7 = (Sail7*)s_pSail7;
 	MainFrame* pMainFrame = (MainFrame*)s_pMainFrame;
 	QString str;
 
@@ -318,7 +318,7 @@ void GL3DScales::InitDialog()
 void GL3DScales::OnCpScale()
 {
 	MainFrame* pMainFrame = (MainFrame*)s_pMainFrame;
-	QSail7 *pSail7 = (QSail7*)s_pSail7;
+	Sail7 *pSail7 = (Sail7*)s_pSail7;
 
 	s_bAutoCpScale = m_pctrlAutoCpScale->isChecked();
 	m_pctrlLegendMin->setEnabled(!s_bAutoCpScale);
@@ -338,7 +338,7 @@ void GL3DScales::OnCpScale()
 void GL3DScales::OnApply()
 {
 	MainFrame* pMainFrame = (MainFrame*)s_pMainFrame;
-	QSail7 *pSail7 = (QSail7*)s_pSail7;
+	Sail7 *pSail7 = (Sail7*)s_pSail7;
 	s_bAutoCpScale = m_pctrlAutoCpScale->isChecked();
 	s_LegendMax = m_pctrlLegendMax->Value();
 	s_LegendMin = m_pctrlLegendMin->Value();
@@ -353,7 +353,7 @@ void GL3DScales::OnApply()
 void GL3DScales::OnLiftScale(int pos)
 {
 	MainFrame* pMainFrame = (MainFrame*)s_pMainFrame;
-	QSail7 *pSail7 = (QSail7*)s_pSail7;
+	Sail7 *pSail7 = (Sail7*)s_pSail7;
 
 	s_LiftScale    = pos/100.0/sqrt(1.01-pos/100.0);
 	pSail7->m_bResetglLift = true;
@@ -366,7 +366,7 @@ void GL3DScales::OnLiftScale(int pos)
 void GL3DScales::OnDragScale(int pos)
 {
 	MainFrame* pMainFrame = (MainFrame*)s_pMainFrame;
-	QSail7 *pSail7 = (QSail7*)s_pSail7;
+	Sail7 *pSail7 = (Sail7*)s_pSail7;
 
 	s_DragScale    = pos/100.0/sqrt(1.01-pos/100.0);
 	pSail7->m_bResetglDrag = true;
@@ -378,7 +378,7 @@ void GL3DScales::OnDragScale(int pos)
 void GL3DScales::OnVelocityScale(int pos)
 {
 	MainFrame* pMainFrame = (MainFrame*)s_pMainFrame;
-	QSail7 *pSail7 = (QSail7*)s_pSail7;
+	Sail7 *pSail7 = (Sail7*)s_pSail7;
 	s_VelocityScale    = pos/100.0/sqrt(1.01-pos/100.0);
 	pSail7->m_bResetglDownwash = true;
 	pMainFrame->UpdateView();
@@ -388,7 +388,7 @@ void GL3DScales::OnVelocityScale(int pos)
 void GL3DScales::OnVelocitySet()
 {
 	MainFrame* pMainFrame = (MainFrame*)s_pMainFrame;
-	QSail7 *pSail7 = (QSail7*)s_pSail7;
+	Sail7 *pSail7 = (Sail7*)s_pSail7;
 
 	int pos = m_pctrlVelocityScaleSlider->sliderPosition();
 
@@ -445,7 +445,7 @@ void GL3DScales::SetStreamControls()
 
 bool GL3DScales::LoadSettings(QSettings *pSettings)
 {
-	QSail7 *pSail7 = (QSail7*)s_pSail7;
+	Sail7 *pSail7 = (Sail7*)s_pSail7;
 	int l,d,v;
 	l=d=v=50;
 
@@ -484,7 +484,7 @@ bool GL3DScales::LoadSettings(QSettings *pSettings)
 
 bool GL3DScales::SaveSettings(QSettings *pSettings)
 {
-	QSail7 *pSail7 = (QSail7*)s_pSail7;
+	Sail7 *pSail7 = (Sail7*)s_pSail7;
 //	ReadStreamParams();
 	pSettings->beginGroup("GL3DScales");
 	{

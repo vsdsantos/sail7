@@ -17,15 +17,15 @@
 #include "Sail.h"
 
 
-void * QSail::s_pBoatAnalysisDlg;
-void * QSail::s_pMainFrame;
+BoatAnalysisDlg * QSail::s_pBoatAnalysisDlg;
+MainFrame * QSail::s_pMainFrame;
 
 QSail::QSail()
 {
-	m_pPanel     = NULL;
+    m_pPanel     = nullptr;
 
 	m_SailName = "Sail Name";
-	m_SailColor.setHsv((int)(((double)qrand()/(double)RAND_MAX)*255), 140, 170, 140);
+    m_SailColor.setHsv(int((double(qrand())/double(RAND_MAX))*255), 140, 170, 140);
 	m_SailType = SAILCUTSAIL;
 
 	m_LuffAngle = 0.0;
@@ -49,8 +49,7 @@ void QSail::PanelTrefftz(Vector3d VInf, double *Mu, double *Sigma, int pos, Vect
 	// Downwash is evaluated at a distance 1km downstream (i.e. infinite)
 
 	int l, p;
-	Vector3d C, Wg, dF, StripForce, WindDirection, WindNormal;
-	BoatAnalysisDlg *pPanelDlg = (BoatAnalysisDlg*)s_pBoatAnalysisDlg;
+    Vector3d C, Wg, dF, StripForce, WindDirection, WindNormal;
 
 
 	//lift and drag are calculated in wind axis
@@ -75,7 +74,7 @@ void QSail::PanelTrefftz(Vector3d VInf, double *Mu, double *Sigma, int pos, Vect
 				C = m_pPanel[p].CtrlPt;
 				C += WindDirection *1000.0;
 
-				pPanelDlg->GetSpeedVector(C, Mu, Sigma, Wg, false);
+                s_pBoatAnalysisDlg->GetSpeedVector(C, Mu, Sigma, Wg, false);
 //				qDebug()<<Wg.x<<Wg.y<<Wg.z;
 
 				if(m_pPanel[p].m_bIsTrailing) m_Vd[m] = Wg;
@@ -241,7 +240,7 @@ void QSail::CreateSection(int iSection)
 	else
 	{
 		SailSection *pCurSection = m_oaSection.at(iSection);
-		SailSection *pPrevSection=NULL;
+        SailSection *pPrevSection=nullptr;
 		if(iSection>0) pPrevSection = m_oaSection.at(iSection-1);
 
 		if(pPrevSection)

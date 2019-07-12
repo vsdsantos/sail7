@@ -71,7 +71,7 @@
 
 
 
-#include "../objects/Vector3d.h"
+#include "../objects/vector3d.h"
 #include "../objects/Quaternion.h"
 #include <QRect>
 

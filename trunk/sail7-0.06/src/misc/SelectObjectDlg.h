@@ -21,7 +21,7 @@ class SelectObjectDlg : public QDialog
 	Q_OBJECT
 
 	friend class BoatDlg;
-	friend class QSail7;
+	friend class Sail7;
 
 public:
 	SelectObjectDlg(void *parent = NULL);

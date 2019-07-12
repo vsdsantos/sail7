@@ -31,7 +31,7 @@ class ModDlg : public QDialog
 {
 	Q_OBJECT
 
-	friend class QSail7;
+	friend class Sail7;
 	friend class ManageBodiesDlg;
 
 

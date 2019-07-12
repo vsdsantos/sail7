@@ -174,7 +174,7 @@ void NURBSSail::CreateSection(int iSection)
 	else
 	{
 		SailSection *pCurSection = m_oaSection.at(iSection);
-		SailSection *pPrevSection=NULL;
+		SailSection *pPrevSection=nullptr;
 		if(iSection>0) pPrevSection = m_oaSection.at(iSection-1);
 
 		if(pPrevSection)

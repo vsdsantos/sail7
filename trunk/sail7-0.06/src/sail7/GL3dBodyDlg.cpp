@@ -102,7 +102,7 @@ GL3dBodyDlg::GL3dBodyDlg(QWidget *pParent): QDialog(pParent)
 	}*/
 
     m_BodyGridDlg = new BodyGridDlg(this);
-	m_pBody = NULL;
+	m_pBody = nullptr;
 
 	m_BodyOffset.Set( 0.20, -0.12, 0.0);
 	m_FrameOffset.Set(0.80, -0.50, 0.0);
@@ -2398,7 +2398,7 @@ void GL3dBodyDlg::OnExportBodyGeom()
 
 void GL3dBodyDlg::OnImportBodyDef()
 {
-	CBody *pNewBody = new CBody();
+	Body *pNewBody = new Body();
 	if(!pNewBody) return;
 
 
@@ -2577,7 +2577,7 @@ void GL3dBodyDlg::Insert(Vector3d Pt)
 		{
 			FrameSel = m_pBody->InsertFrame(Real);
 			if(FrameSel>0) m_pFrame = m_pBody->Frame(FrameSel);
-			else           m_pFrame = NULL;
+			else           m_pFrame = nullptr;
 		}
 
 		m_bResetglBody   = true;
@@ -3014,18 +3014,18 @@ void GL3dBodyDlg::reject()
 		int res = QMessageBox::question(this, tr("Body Dlg Exit"), tr("Save the Body ?"), QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel);
 		if (QMessageBox::No == res)
 		{
-			m_pBody = NULL;
+			m_pBody = nullptr;
 			QDialog::reject();
 		}
 		else if (QMessageBox::Cancel == res) return;
 		else
 		{
-			m_pBody = NULL;
+			m_pBody = nullptr;
 			done(QDialog::Accepted);
 			return;
 		}
 	}
-	else m_pBody = NULL;
+	else m_pBody = nullptr;
 	s_bWindowMaximized= isMaximized();
 	s_WindowPos = pos();
 	s_WindowSize = size();
@@ -3212,14 +3212,14 @@ void GL3dBodyDlg::SetControls()
 }
 
 
-bool GL3dBodyDlg::InitDialog(CBody *pBody)
+bool GL3dBodyDlg::InitDialog(Body *pBody)
 {
 	if(!pBody) return false;
 	return SetBody(pBody);
 }
 
 
-bool GL3dBodyDlg::SetBody(CBody *pBody)
+bool GL3dBodyDlg::SetBody(Body *pBody)
 {
 	m_pBody = pBody;
 	if(!m_pBody) return false;
@@ -3362,7 +3362,7 @@ void GL3dBodyDlg::SetScales()
 void GL3dBodyDlg::SetFrame(int iFrame)
 {
 	if(!m_pBody) return;
-	if(iFrame<0 || iFrame>=m_pBody->FrameSize()) m_pFrame = NULL;
+	if(iFrame<0 || iFrame>=m_pBody->FrameSize()) m_pFrame = nullptr;
 	else                                         m_pFrame = m_pBody->Frame(iFrame);
 	m_pBody->m_iActiveFrame = iFrame;
 

@@ -1,8 +1,8 @@
 /****************************************************************************
 
-			   CBoat class
-			   Copyright (C) 2011-2012 Andre Deperrois sail7@xflr5.com
-			   All rights reserved
+                        CBoat class
+                        Copyright (C) 2011-2012 Andre Deperrois sail7@xflr5.com
+                        All rights reserved
 
 *****************************************************************************/
 
@@ -13,22 +13,22 @@
 #include "Body.h"
 #include <QList>
 
-class CBoat
+class Boat
 {
-public:
-    CBoat();
+    public:
+        Boat();
 
-	QSail* GetSail(QString const &SailName);
-	CBody* GetBody(QString const &BodyName);
-	void DuplicateBoat(CBoat *pBoat);
-	bool SerializeBoat(QDataStream &ar, bool bIsStoring);
-	double Height();
+        QSail* GetSail(QString const &SailName);
+        Body* GetBody(QString const &BodyName);
+        void DuplicateBoat(Boat *pBoat);
+        bool SerializeBoat(QDataStream &ar, bool bIsStoring);
+        double Height();
 
-	QList <QSail*> m_poaSail;
-	QList <CBody*> m_poaHull;
+        QList <QSail*> m_poaSail;
+        QList <Body*> m_poaHull;
 
-	QString m_BoatName;
-	QString m_BoatDescription;
+        QString m_BoatName;
+        QString m_BoatDescription;
 
 };
 

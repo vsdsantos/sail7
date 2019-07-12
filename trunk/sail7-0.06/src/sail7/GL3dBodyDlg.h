@@ -47,7 +47,7 @@ class GL3dBodyDlg : public QDialog
 {
 	Q_OBJECT
 	friend class MainFrame;
-	friend class QSail7;
+	friend class Sail7;
 	friend class QMiarex;
 	friend class ThreeDWidget;
 	friend class GLLightDlg;
@@ -150,14 +150,14 @@ private:
 	void Set3DRotationCenter(QPoint point);
 	void UpdateView();
 
-	bool InitDialog(CBody *pBody);
+	bool InitDialog(Body *pBody);
 	bool LoadSettings(QSettings *pSettings);
 	bool SaveSettings(QSettings *pSettings);
 
 	void ResizeTables();
 
 private:
-	bool SetBody(CBody *pBody);
+	bool SetBody(Body *pBody);
 	void SetPicture();
 	void StorePicture();
 	void TakePicture();
@@ -209,8 +209,8 @@ private:
 	QAction *m_pExportBodyDef, *m_pImportBodyDef, *m_pExportBodyGeom, *m_pTranslateBody;// *m_pSetupLight;
 	QAction *m_pGrid;
 
-	CBody m_TmpPic;
-	CBody m_UndoPic[20];
+	Body m_TmpPic;
+	Body m_UndoPic[20];
 	int m_StackPos, m_StackSize;// undo : current stack position and current stack size
 	bool m_bStored;
 	bool m_bResetFrame;
@@ -223,7 +223,7 @@ private:
 	Vector3d m_RealPopUp;
 
 	CFrame *m_pFrame;
-	CBody *m_pBody;
+	Body *m_pBody;
 	CPanel *m_pPanel;
 	Vector3d *m_pNode;
 

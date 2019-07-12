@@ -15,7 +15,7 @@
 #include <QColor>
 #include <QPainter>
 #include <QPoint>
-#include "Vector3d.h"
+#include "vector3d.h"
 
 #define SPLINEOUTPUTRES  50
 #define SPLINECONTROLSIZE 30

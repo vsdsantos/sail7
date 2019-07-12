@@ -31,7 +31,7 @@ class GL3DScales : public QWidget
 {
 	Q_OBJECT
 	friend class MainFrame;
-	friend class QSail7;
+	friend class Sail7;
 
 public:
 	GL3DScales(QWidget *parent = NULL);

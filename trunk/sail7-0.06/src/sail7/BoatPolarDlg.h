@@ -20,13 +20,13 @@
 #include <QStandardItemModel>
 #include "../misc/FloatEdit.h"
 #include "../misc/FloatEditDelegate.h"
-#include "../objects/Vector3d.h"
+#include "../objects/vector3d.h"
 #include "../objects/Boat.h"
 
 class BoatPolarDlg : public QDialog
 {
 	Q_OBJECT
-	friend class QSail7;
+	friend class Sail7;
 	friend class CBoatDef;
 	friend class QSail;
 	friend class MainFrame;
@@ -39,7 +39,7 @@ private:
 
 	void SetupLayout();
 	void Connect();
-	void InitDialog(CBoat *pBoat, BoatPolar *pBoatPolar=NULL);
+	void InitDialog(Boat *pBoat, BoatPolar *pBoatPolar=NULL);
 	void SetDensity();
 	void FillVariableList();
 	void ReadData();
@@ -57,7 +57,7 @@ private:
 
 	QString m_BoatPolarName;
 
-	CBoat *m_pBoat;
+	Boat *m_pBoat;
 
 	static int s_UnitType;//1= International, 2= English
 

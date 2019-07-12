@@ -31,7 +31,7 @@ class ObjectPropsDlg : public QDialog
 	Q_OBJECT
 
 	friend class MainFrame;
-	friend class QSail7;
+	friend class Sail7;
 
 
 public:

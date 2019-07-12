@@ -23,12 +23,12 @@
 
 
 #include <math.h>
-#include "CVector.h"
+#include "vector3d.h"
 #include "Quaternion.h"
 #include "../globals.h"
 
 
-void CVector::Rotate(CVector const &R, double Angle)
+void Vector3d::Rotate(Vector3d const &R, double Angle)
 {
 	//rotate the vector around R with an angle Angle
 	Quaternion Qt;
@@ -38,12 +38,12 @@ void CVector::Rotate(CVector const &R, double Angle)
 
 
 
-void CVector::Rotate(CVector &O, CVector const &R, double Angle)
+void Vector3d::Rotate(Vector3d &O, Vector3d const &R, double Angle)
 {
 	//rotate the point defined by the vector around origin O, rotation vector R and angle Angle
 	Quaternion Qt;
 	Qt.Set(Angle, R);
-	CVector OP;
+	Vector3d OP;
 	OP.x = x-O.x;
 	OP.y = y-O.y;
 	OP.z = z-O.z;
@@ -54,10 +54,10 @@ void CVector::Rotate(CVector &O, CVector const &R, double Angle)
 }
 
 
-void CVector::RotateX(CVector const &O, double XTilt)
+void Vector3d::RotateX(Vector3d const &O, double XTilt)
 {
 	//Rotate the vector around the X-axis, by an angle XTilt
-	CVector OP;
+	Vector3d OP;
 	OP.x = x-O.x;
 	OP.y = y-O.y;
 	OP.z = z-O.z;
@@ -67,10 +67,10 @@ void CVector::RotateX(CVector const &O, double XTilt)
 	z = O.z + OP.y * sin(XTilt) + OP.z * cos(XTilt);
 }
 
-void CVector::RotateY(CVector const &O, double YTilt)
+void Vector3d::RotateY(Vector3d const &O, double YTilt)
 {
 	//Rotate the vector around the Y-axis, by an angle YTilt
-	CVector OP;
+	Vector3d OP;
 	OP.x = x-O.x;
 	OP.y = y-O.y;
 	OP.z = z-O.z;
@@ -82,10 +82,10 @@ void CVector::RotateY(CVector const &O, double YTilt)
 }
 
 
-void CVector::RotateZ(CVector const &O, double ZTilt)
+void Vector3d::RotateZ(Vector3d const &O, double ZTilt)
 {
 	//Rotate the vector around the Z-axis, by an angle ZTilt
-	CVector OP;
+	Vector3d OP;
 	OP.x = x-O.x;
 	OP.y = y-O.y;
 	OP.z = z-O.z;
@@ -96,7 +96,7 @@ void CVector::RotateZ(CVector const &O, double ZTilt)
 	y = O.y - OP.x * sin(ZTilt) + OP.y * cos(ZTilt);
 }
 
-void  CVector::RotateX(double Bank)
+void  Vector3d::RotateX(double Bank)
 {
 	Bank *=PI/180.0;
 
@@ -106,7 +106,7 @@ void  CVector::RotateX(double Bank)
 	z =  yo * sin(Bank) + zo * cos(Bank);
 }
 
-void  CVector::RotateY(double YTilt)
+void  Vector3d::RotateY(double YTilt)
 {
 	YTilt *=PI/180.0;
 
@@ -118,7 +118,7 @@ void  CVector::RotateY(double YTilt)
 
 
 
-void  CVector::RotateZ(double ZRot)
+void  Vector3d::RotateZ(double ZRot)
 {
 	ZRot *=PI/180.0;
 

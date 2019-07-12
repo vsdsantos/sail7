@@ -28,10 +28,10 @@
 #include <QColor>
 
 
-class CBody
+class Body
 {
 public:
-	CBody();
+    Body();
 
 	bool Gauss(double *A, int n, double *B, int m);
 	bool IsInNURBSBody(Vector3d Pt);
@@ -59,7 +59,7 @@ public:
     void ComputeAero(double *Cp, double &XCP, double &YCP, double &ZCP,
 					 double &GCm, double &GRm, double &GYm, double &Alpha, Vector3d &CoG);
 //	void ComputeCenterLine();
-	void Duplicate(CBody *pBody);
+    void Duplicate(Body *pBody);
 	void ExportGeometry(QTextStream &outStream, int type, double mtoUnit, int nx, int nh);
 	void GetPoint(double u, double v, bool bRight, Vector3d &Pt);
 	void InsertSideLine(int SideLine);

@@ -26,7 +26,7 @@
 
 
 #include "Quaternion.h"
-#include "Vector3d.h"
+#include "vector3d.h"
 
 typedef enum {UNIFORM, SINE, MSINE, COSINE} enumPanelDistrib;// the type of panel spacing along chord or span
 typedef enum {BOTSURFACE, MIDSURFACE, TOPSURFACE, SIDESURFACE, BODYSURFACE} enumPanelPosition;
@@ -35,10 +35,10 @@ class CPanel
 {
 	friend class MainFrame;
 	friend class CSurface;
-	friend class QSail7;
+	friend class Sail7;
 	friend class BoatAnalysisDlg;
 	friend class QSail;
-	friend class CBody;
+       friend class Body;
 
 public:
 	CPanel();
