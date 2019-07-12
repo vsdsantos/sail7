@@ -1,7 +1,7 @@
 /****************************************************************************
 
 		 BoatOpp Class
-		 Copyright (C) 2011-2012 Andre Deperrois sail7@xflr5.com
+		 Copyright (C) 2011-2012 Andre Deperrois 
 		 All rights reserved
 
 *****************************************************************************/

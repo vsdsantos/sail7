@@ -1,7 +1,7 @@
 /****************************************************************************
 
 		 SailSection Class
-		 Copyright (C) 2012 Andre Deperrois sail7@xflr5.com
+		 Copyright (C) 2012 Andre Deperrois 
 		 All rights reserved
 
 *****************************************************************************/
@@ -170,14 +170,14 @@ void SailSection::DrawSpline(QPainter &painter, double const &scalex, double con
 
 bool SailSection::IsNURBSSection()
 {
-	QSail *pSail = (QSail*)m_pSail;
+	Sail *pSail = (Sail*)m_pSail;
 	return (pSail->IsNURBSSail());
 }
 
 
 bool SailSection::IsSailcutSection()
 {
-	QSail *pSail = (QSail*)m_pSail;
+	Sail *pSail = (Sail*)m_pSail;
 	return (pSail->IsSailcutSail());
 }
 

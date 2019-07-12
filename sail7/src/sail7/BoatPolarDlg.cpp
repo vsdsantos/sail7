@@ -1,7 +1,7 @@
 /****************************************************************************
 
 		 BoatPolarDlg Class
-		 Copyright (C) 2011-2012 Andre Deperrois sail7@xflr5.com
+		 Copyright (C) 2011-2012 Andre Deperrois 
 		 All rights reserved
 
 *****************************************************************************/
@@ -166,7 +166,7 @@ void BoatPolarDlg::FillVariableList()
 	// the next set of line are the sail angles
 	for(int is=0; is<m_pBoat->m_poaSail.size(); is++)
 	{
-		QSail *pSail = (QSail*)m_pBoat->m_poaSail.at(is);
+		Sail *pSail = (Sail*)m_pBoat->m_poaSail.at(is);
 		ind = m_pVariableModel->index(is+3, 0, QModelIndex());
 		m_pVariableModel->setData(ind, pSail->m_SailName+" Angle");
 		ind = m_pVariableModel->index(is+3, 1, QModelIndex());

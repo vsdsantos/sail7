@@ -1,7 +1,7 @@
 /****************************************************************************
 
             Sail7
-            Copyright (C) 2011-2012 Andre Deperrois sail7@xflr5.com
+            Copyright (C) 2011-2012 Andre Deperrois 
             All rights reserved
 
 *****************************************************************************/
@@ -68,8 +68,7 @@ CPanel* Sail7::s_pRefWakePanel;       // the reference wake panel array if wake 
 #define SIDEPOINTS 51
 
 
-Sail7::Sail7(QWidget *parent)
-    : QWidget(parent)
+Sail7::Sail7(QWidget *parent) : QWidget(parent)
 {
     m_GLList = 0;
 
@@ -170,7 +169,7 @@ Sail7::Sail7(QWidget *parent)
     m_ArcBall.m_pTransy   = &m_glViewportTrans.y;
 
 
-    QSail::s_pBoatAnalysisDlg = &m_PanelDlg;
+    Sail::s_pBoatAnalysisDlg = &m_PanelDlg;
 
 
     SailDlg::s_WindowPos = QPoint(20, 30);
@@ -1209,7 +1208,7 @@ void Sail7::GetDistrib(int const &NPanels, const int &DistType, const int &k, do
 }
 
 
-int Sail7::CreateSailElements(QSail *pSail)
+int Sail7::CreateSailElements(Sail *pSail)
 {
     int k,l;
     int n0, n1, n2, n3;
@@ -3039,7 +3038,7 @@ void Sail7::SetBoat(QString BoatName)
 
     for(int is=0; is<m_pCurBoat->m_poaSail.size(); is++)
     {
-        QSail *pSail = m_pCurBoat->m_poaSail.at(is);
+        Sail *pSail = m_pCurBoat->m_poaSail.at(is);
         if(pSail)
         {
             pSail->m_pPanel = s_pPanel+m_MatSize;
@@ -3525,7 +3524,7 @@ void Sail7::GLCreateSailLists()
     {
         for(int is=0; is<m_pCurBoat->m_poaSail.size(); is++)
         {
-            QSail *pSail = m_pCurBoat->m_poaSail.at(is);
+            Sail *pSail = m_pCurBoat->m_poaSail.at(is);
 
             //create the list for the sail surface
             if(glIsList(is+SAILGEOMBASE))
@@ -3627,7 +3626,7 @@ void Sail7::GLCallViewLists()
     {
         if(m_pCurBoatOpp)
         {
-            QSail *pSail = m_pCurBoat->m_poaSail.at(is);
+            Sail *pSail = m_pCurBoat->m_poaSail.at(is);
             Vector3d LE = pSail->m_LEPosition;
             //			LE.RotateX(m_pCurBoatOpp->m_Phi);
 
@@ -3874,7 +3873,7 @@ void Sail7::GLCreateSailMesh(Vector3d *pNode, CPanel *pPanel)
     for(int is=0; is<m_pCurBoat->m_poaSail.size(); is++)
     {
         // one list for each sail so that we can rotate the sail panels around the mast axis
-        QSail *pSail = m_pCurBoat->m_poaSail.at(is);
+        Sail *pSail = m_pCurBoat->m_poaSail.at(is);
 
         if(glIsList(SAILMESHBASE+is)) glDeleteLists(SAILMESHBASE+is, 1);
         glNewList(SAILMESHBASE+is,GL_COMPILE);
@@ -5575,7 +5574,7 @@ void Sail7::GLCreatePanelForces(BoatOpp *pBoatOpp)
 
     for(int is=0; is<m_pCurBoat->m_poaSail.size(); is++)
     {
-        QSail *pSail = m_pCurBoat->m_poaSail.at(is);
+        Sail *pSail = m_pCurBoat->m_poaSail.at(is);
         glNewList(SAILFORCELISTBASE+is, GL_COMPILE);
         {
             m_GLList++;
@@ -5770,7 +5769,7 @@ void Sail7::GLCreatePanelForces(BoatOpp *pBoatOpp)
 
 
 
-void Sail7::GLCreateSailGeom(int GLList, QSail*pSail, Vector3d Position)
+void Sail7::GLCreateSailGeom(int GLList, Sail*pSail, Vector3d Position)
 {
     //	ThreeDWidget *p3DWidget = (ThreeDWidget*)s_p3DWidget;
 
@@ -6028,7 +6027,7 @@ void Sail7::GLCreateCp(BoatOpp *pBoatOpp)
 
     for(int is=0; is<m_pCurBoat->m_poaSail.size(); is++)
     {
-        QSail *pSail = m_pCurBoat->m_poaSail.at(is);
+        Sail *pSail = m_pCurBoat->m_poaSail.at(is);
         CPanel *pCpPanel;
 
         glNewList(SAILCPBASE+is, GL_COMPILE);
@@ -6609,7 +6608,7 @@ void Sail7::GLCreateStreamLines()
                 bFound =false;
                 for(int iSail=0; iSail<m_pCurBoat->m_poaSail.size(); iSail++)
                 {
-                    QSail *pSail = m_pCurBoat->m_poaSail.at(iSail);
+                    Sail *pSail = m_pCurBoat->m_poaSail.at(iSail);
                     for(int pp=0; pp<pSail->m_NElements; pp++)
                     {
                         if(pSail->m_pPanel[pp].m_iTA == iStream.at(is))
@@ -7436,14 +7435,14 @@ void Sail7::PaintBoatOppLegend(QPainter &painter, QRect rect)
 
         for(int is=0; is<nSails; is++)
         {
-            QSail *pSail = m_pCurBoat->m_poaSail.at(is);
+            Sail *pSail = m_pCurBoat->m_poaSail.at(is);
             Result = pSail->m_SailName+ QString(" angle = %1").arg(m_pCurBoatOpp->m_SailAngle[is], 7,'f',2);
             Result += QString::fromUtf8("°   ");
             painter.drawText(RightPos, ZPos+D, dwidth, dheight, Qt::AlignRight | Qt::AlignTop, Result);
             D+=dheight;
         }
 
-        QSail *pSail = m_pCurBoat->m_poaSail.at(0);
+        Sail *pSail = m_pCurBoat->m_poaSail.at(0);
         if(pSail)
         {
             ReynoldsFormat(Result, pSail->FootLength() * m_pCurBoatOpp->m_QInf /m_pCurBoatPolar->m_Viscosity);
@@ -7517,7 +7516,7 @@ void Sail7::PaintBoatLegend(QPainter &painter, QRect rect)
     int a,b;
     a=8; b=3;
 
-    QSail *pSail =nullptr;
+    Sail *pSail =nullptr;
     if(m_pCurBoat->m_poaSail.size())
     {
         pSail = m_pCurBoat->m_poaSail.at(0);

@@ -1,7 +1,7 @@
 /****************************************************************************
 
 		 SailcutSail Class
-		 Copyright (C) 2012 Andre Deperrois sail7@xflr5.com
+		 Copyright (C) 2012 Andre Deperrois 
 		 All rights reserved
 
 *****************************************************************************/
@@ -14,7 +14,7 @@
 #include <QDomNode>
 #include "Sail.h"
 
-class SailcutSail : public QSail
+class SailcutSail : public Sail
 {
 public:
 	SailcutSail();
@@ -31,7 +31,7 @@ public:
 
 	bool Import(QFile *pFile);
 	void Export();
-	void Duplicate(QSail *pSail);
+	void Duplicate(Sail *pSail);
 	void ScaleSail(double XFactor, double YFactor, double ZFactor);
 
 	void SetLeechRoundEquation();

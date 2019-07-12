@@ -1,7 +1,7 @@
 /****************************************************************************
 
 	QGraph Classes
-	Copyright (C) 2008-2010 Andre Deperrois sail7@xflr5.com
+	Copyright (C) 2008-2010 Andre Deperrois 
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -54,7 +54,7 @@ void QGraph::DrawGraph(QRect const &rect, QPainter &painter)
 
 void QGraph::DrawGraph(QPainter &painter)
 {
-	static QColor color;
+    QColor color;
 	painter.save();
 
 //	Paint background
@@ -99,10 +99,10 @@ void QGraph::DrawGraph(QPainter &painter)
 void QGraph::DrawCurve(int nIndex, QPainter &painter)
 {
 	painter.save();
-	static double scaley;
-	static int i, ptside;
-	static QPoint From, To, Min, Max;
-	static QRect rViewRect;
+    double scaley;
+    int i, ptside;
+    QPoint From, To, Min, Max;
+    QRect rViewRect;
 
 	ptside = 2;
 	CCurve* pCurve = GetCurve(nIndex);
@@ -174,8 +174,8 @@ void QGraph::DrawCurve(int nIndex, QPainter &painter)
 
 void QGraph::DrawAxes(QPainter &painter)
 {	
-	static double xp, yp, scaley;
-	static QPen AxesPen;
+    double xp, yp, scaley;
+    QPen AxesPen;
 	scaley = m_scaley;
 	painter.save();
 
@@ -208,9 +208,9 @@ void QGraph::DrawAxes(QPainter &painter)
 void QGraph::DrawTitles(QPainter &painter)
 {
 	//draws the x & y axis name
-	static double scaley;
-	static int XPosXTitle, YPosXTitle, XPosYTitle, YPosYTitle;
-	static double xp, yp;
+    double scaley;
+    int XPosXTitle, YPosXTitle, XPosYTitle, YPosYTitle;
+    double xp, yp;
 
 	scaley = m_scaley;
 	painter.save();
@@ -243,8 +243,8 @@ void QGraph::DrawTitles(QPainter &painter)
 
 void QGraph::DrawXTicks(QPainter &painter)
 {
-	static double main, scaley, xt, yp;
-	static int exp, TickSize, height, yExpOff, xMainOff, nx;
+    double main, scaley, xt, yp;
+    int exp, TickSize, height, yExpOff, xMainOff, nx;
 
 	if(fabs(xunit)<0.00000001) return;
 	if(fabs(xmax-xmin)/xunit>30.0) return;
@@ -308,8 +308,8 @@ void QGraph::DrawXTicks(QPainter &painter)
 				else if (exp_x>=-1) strLabel = QString("%1").arg(xt,6,'f',1);
 				else if (exp_x>=-2) strLabel = QString("%1").arg(xt,6,'f',2);
 				else if (exp_x>=-3) strLabel = QString("%1").arg(xt,6,'f',3);
-				painter.drawText((int)(xt/m_scalex) - fm.width(strLabel)/2 + m_ptoffset.x(),
-								 (int)(yp/scaley)   + TickSize*2 +height   + m_ptoffset.y(),
+                painter.drawText(int(xt/m_scalex) - fm.width(strLabel)/2 + m_ptoffset.x(),
+                                 int(yp/scaley)   + TickSize*2 +height   + m_ptoffset.y(),
 								 strLabel);
 			}
 		}
@@ -323,8 +323,8 @@ void QGraph::DrawXTicks(QPainter &painter)
 
 void QGraph::DrawYTicks(QPainter &painter)
 {
-	static double scaley, xp, main, yt;
-	static int TickSize, fmheight, fmheight2, fmheight4, exp;
+    double scaley, xp, main, yt;
+    int TickSize, fmheight, fmheight4, exp;
 	if(fabs(xunit)<0.00000001) return;
 	if(fabs(ymax-ymin)/yunit>30.0) return;
 	scaley = m_scaley;
@@ -335,7 +335,7 @@ void QGraph::DrawYTicks(QPainter &painter)
 	painter.setFont(m_LabelLogFont);
 
 	fmheight  = fm.height();
-	fmheight2 = (int)(fmheight/2);
+
 	fmheight4 = (int)(fmheight/4);
 
 	TickSize = 5;
@@ -358,8 +358,8 @@ void QGraph::DrawYTicks(QPainter &painter)
 		if(yt>=ymin)
 		{
 			painter.setPen(LabelPen);
-			painter.drawLine((int)(xp/m_scalex)          +m_ptoffset.x(), (int)(yt/scaley) +m_ptoffset.y(),
-							 (int)(xp/m_scalex)-TickSize +m_ptoffset.x(), (int)(yt/scaley) +m_ptoffset.y());
+            painter.drawLine(int(xp/m_scalex)          +m_ptoffset.x(), int(yt/scaley) +m_ptoffset.y(),
+                             int(xp/m_scalex)-TickSize +m_ptoffset.x(), int(yt/scaley) +m_ptoffset.y());
 
 			painter.setPen(m_LabelColor);
 
@@ -377,8 +377,8 @@ void QGraph::DrawYTicks(QPainter &painter)
 				strLabel    = QString("%1 10").arg(main,5,'f',2);
 				strLabelExp = QString("%1").arg(exp);
 
-				painter.drawText((int)(xp/m_scalex) - fm.width(strLabel)-TickSize*3 + m_ptoffset.x(),
-								 (int)(yt/scaley)   + fmheight4                     + m_ptoffset.y(),
+                painter.drawText(int(xp/m_scalex) - fm.width(strLabel)-TickSize*3 + m_ptoffset.x(),
+                                 int(yt/scaley)   + fmheight4                     + m_ptoffset.y(),
 								 strLabel);
 
 				if(exp_y>=3)
@@ -401,8 +401,8 @@ void QGraph::DrawYTicks(QPainter &painter)
 				else if (exp_y>=-2) strLabel = QString("%1").arg(yt,6,'f',2);
 				else if (exp_y>=-3) strLabel = QString("%1").arg(yt,6,'f',3);
 				
-				painter.drawText((int)(xp/m_scalex) - fm.width(strLabel)-TickSize*2 +m_ptoffset.x(),
-								 (int)(yt/scaley)   + fmheight4 +m_ptoffset.y(),
+                painter.drawText(int(xp/m_scalex) - fm.width(strLabel)-TickSize*2 +m_ptoffset.x(),
+                                 int(yt/scaley)   + fmheight4 +m_ptoffset.y(),
 								 strLabel);
 
 			}
@@ -464,8 +464,8 @@ void QGraph::DrawYMajGrid(QPainter &painter)
 
 	double yt = yo-int((yo-ymin)*1.0001/yunit)*yunit;//one tick at the origin
 
-	int XMin = qMax((int)(xmin/m_scalex + m_ptoffset.x()), m_rCltRect.left());
-	int XMax = qMin((int)(xmax/m_scalex + m_ptoffset.x()), m_rCltRect.right());
+    int XMin = qMax(int(xmin/m_scalex + m_ptoffset.x()), m_rCltRect.left());
+    int XMax = qMin(int(xmax/m_scalex + m_ptoffset.x()), m_rCltRect.right());
 
 	while(yt<=ymax*1.0001)
 	{
@@ -494,8 +494,8 @@ void QGraph::DrawXMinGrid(QPainter &painter)
 	painter.setPen(GridPen);
 
 
-	YMin = (int)(ymin/scaley)+ m_ptoffset.y();
-	YMax = (int)(ymax/scaley)+ m_ptoffset.y();
+    YMin = int(ymin/scaley)+ m_ptoffset.y();
+    YMax = int(ymax/scaley)+ m_ptoffset.y();
 
 	double xDelta = m_XMinorUnit;
 	double xt = xo-int((xo-xmin)*1.0001/xDelta)*xDelta;//one tick at the origin
@@ -528,8 +528,8 @@ void QGraph::DrawYMinGrid(QPainter &painter)
 
 	double yDelta = m_YMinorUnit;
 	double yt = yo-int((yo-ymin)*1.0001/yDelta)*yDelta;//one tick at the origin
-	int XMin = qMax((int)(xmin/m_scalex + m_ptoffset.x()), m_rCltRect.left());
-	int XMax = qMin((int)(xmax/m_scalex + m_ptoffset.x()), m_rCltRect.right());
+    int XMin = qMax(int(xmin/m_scalex + m_ptoffset.x()), m_rCltRect.left());
+    int XMax = qMin(int(xmax/m_scalex + m_ptoffset.x()), m_rCltRect.right());
 
 	while(yt<=ymax*1.0001)
 	{

@@ -1,7 +1,7 @@
 /****************************************************************************
 
 	GL3DScales Class
-	Copyright (C) 2011 Andre Deperrois sail7@xflr5.com
+	Copyright (C) 2011 Andre Deperrois 
 
 	All rights reserved
 

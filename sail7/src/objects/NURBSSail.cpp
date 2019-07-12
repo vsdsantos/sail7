@@ -1,7 +1,7 @@
 /****************************************************************************
 
 		 NURBSSail Class
-		 Copyright (C) 2012 Andre Deperrois sail7@xflr5.com
+		 Copyright (C) 2012 Andre Deperrois 
 		 All rights reserved
 
 *****************************************************************************/
@@ -319,7 +319,7 @@ bool NURBSSail::SerializeSail(QDataStream &ar, bool bIsStoring)
 
 
 
-void NURBSSail::Duplicate(QSail *pSail)
+void NURBSSail::Duplicate(Sail *pSail)
 {
 	m_SailName        = pSail->m_SailName;
 	m_SailDescription = pSail->m_SailDescription;

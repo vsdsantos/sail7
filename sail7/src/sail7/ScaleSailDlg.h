@@ -1,7 +1,7 @@
 /****************************************************************************
 
 		 ScaleSailDlg Class
-		 Copyright (C) 2012 Andre Deperrois sail7@xflr5.com
+		 Copyright (C) 2012 Andre Deperrois 
 		 All rights reserved
 
 *****************************************************************************/
@@ -36,7 +36,7 @@ private slots:
 
 private:
 	void SetupLayout();
-	void InitDialog(QSail *pSail);
+	void InitDialog(Sail *pSail);
 	void EnableControls();
 	void keyPressEvent(QKeyEvent *event);
 
@@ -52,7 +52,7 @@ private:
 private:
 	void *m_pSailDlg;
 	double m_XFactor, m_YFactor, m_ZFactor;
-	QSail * m_pSail;
+	Sail * m_pSail;
 };
 
 

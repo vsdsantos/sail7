@@ -1,7 +1,7 @@
 /****************************************************************************
 
 	AboutS7 Class
-	Copyright (C) 2011 Andre Deperrois sail7@xflr5.com
+	Copyright (C) 2011 Andre Deperrois 
 
 	All rights reserved
 
@@ -43,14 +43,14 @@ void AboutS7::SetupLayout()
 	LogoLayout->addWidget(lab1,1,2);
 
 	QLabel *lab3  = new QLabel(tr("Copyright (C) Andre Deperrois 2003-2012"));
-	QLabel *lab4  = new QLabel(tr("Bug reports, comments and suggestions to sail7@xflr5.com"));
+	QLabel *lab4  = new QLabel(tr("Bug reports, comments and suggestions to "));
 	QLabel *lab5  = new QLabel(tr("This program is distributed in the hope that it will be useful,"));
 	QLabel *lab6  = new QLabel(tr("but WITHOUT ANY WARRANTY; without even the implied warranty of"));
 	QLabel *lab7  = new QLabel(tr("MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."));
 
 
 /*	QLabel *sail7Link = new QLabel;
-	sail7Link->setText("Comments and suggestions to : sail7@xflr5.com");
+	sail7Link->setText("Comments and suggestions to : ");
 	sail7Link->setOpenExternalLinks(true);
 	sail7Link->setTextInteractionFlags(Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse);
 	sail7Link->setAlignment(Qt::AlignVCenter| Qt::AlignLeft);*/

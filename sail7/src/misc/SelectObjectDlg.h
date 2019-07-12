@@ -1,7 +1,7 @@
 /****************************************************************************
 
 		 SelectObjectDlg Class
-		 Copyright (C) 2012 Andre Deperrois sail7@xflr5.com
+		 Copyright (C) 2012 Andre Deperrois 
 		 All rights reserved
 
 *****************************************************************************/

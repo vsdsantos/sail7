@@ -78,7 +78,7 @@ void SailViewWidget::Connect()
 }
 
 
-void SailViewWidget::InitDialog(QSail *pSail)
+void SailViewWidget::InitDialog(Sail *pSail)
 {
 	m_pSail = pSail;
 	m_pctrlSurfaces->setChecked(s_bSurfaces);
