@@ -42,9 +42,10 @@
 
 
 class MainFrame;
+class TwoDWidget;
+class ThreeDWidget;
 
-
-class QSail7 : public QWidget
+class Sail7 : public QWidget
 {
 	friend class MainFrame;
 	friend class TwoDWidget;
@@ -56,7 +57,7 @@ class QSail7 : public QWidget
 	friend class BoatAnalysisDlg;
 	friend class QSailPolar;
 	friend class QSail;
-	friend class CBoat;
+	friend class Boat;
 	friend class DisplaySettingsDlg;
 	friend class SailDlg;
 	friend class SailViewWidget;
@@ -66,7 +67,7 @@ class QSail7 : public QWidget
 
 
 public:
-	QSail7(QWidget *parent = NULL);
+    Sail7(QWidget *parent = nullptr);
 
 
 private slots:
@@ -159,7 +160,8 @@ private slots:
 public:
 
     static MainFrame *s_pMainFrame;
-    static void *s_p2DWidget, *s_p3DWidget;
+    static TwoDWidget *s_p2DWidget;
+    static ThreeDWidget *s_p3DWidget;
 
 //____________________Methods________________________________________
 	void contextMenuEvent (QContextMenuEvent * event);
@@ -185,7 +187,7 @@ public:
 
 	void SetScale();
 	void SetBoat(QString BoatName="");
-	void SetBoatPolar(BoatPolar *pBoatPolar=NULL, QString BoatPlrName = "");
+    void SetBoatPolar(BoatPolar *pBoatPolar=nullptr, QString BoatPlrName = "");
 	bool SetBoatOpp(bool bCurrent=true, double x=0);
 
 	void DrawTextLegend();
@@ -218,10 +220,10 @@ public:
 	void Set3DScale();
 
 	int CreateSailElements(QSail *pSail);
-	int CreateBodyElements(CBody *pBody);
+	int CreateBodyElements(Body *pBody);
 	int IsNode(Vector3d &Pt);
 
-	bool SetModBoat(CBoat *pModBoat);
+	bool SetModBoat(Boat *pModBoat);
 	bool SetModBoatPolar(BoatPolar *pModBoatPolar);
 
 
@@ -254,8 +256,8 @@ public:
 	void SetCurveParams();
 	void SetBoatPlrLegendPos();
 
-	CBoat* AddBoat(CBoat *pNewBoat);
-	CBoat* GetBoat(QString BoatName);
+	Boat* AddBoat(Boat *pNewBoat);
+	Boat* GetBoat(QString BoatName);
 	BoatPolar* AddBoatPolar(BoatPolar *pBoatPolar);
 	BoatPolar* GetBoatPolar(QString BoatPolarName);
 
@@ -270,11 +272,11 @@ private:
 	QList<void *> *m_poaSail;			// a pointer to the array of sail objects
 	QList<void *> *m_poaHull;			// a pointer to the array of hull objects
 	QList<void *> *m_poaRig;			// a pointer to the array of rig objects
-	QList<void *> *m_poaBoat;			// a pointer to the array of boat objects
-	QList<void *> *m_poaBoatPolar;		// a pointer to the boat polar array
-	QList<void *> *m_poaBoatOpp;		// a pointer to the boat OpPoint array
+    QList<Boat *> *m_poaBoat;			// a pointer to the array of boat objects
+    QList<BoatPolar *> *m_poaBoatPolar;		// a pointer to the boat polar array
+    QList<BoatOpp *> *m_poaBoatOpp;		// a pointer to the boat OpPoint array
 
-	CBoat *m_pCurBoat;
+	Boat *m_pCurBoat;
 	BoatPolar *m_pCurBoatPolar;
 	BoatOpp *m_pCurBoatOpp;
 

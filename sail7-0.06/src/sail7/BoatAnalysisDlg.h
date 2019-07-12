@@ -23,7 +23,7 @@
 #include "../objects/BoatPolar.h"
 #include "../objects/Boat.h"
 #include "../objects/Panel.h"
-#include "../objects/Vector3d.h"
+#include "../objects/vector3d.h"
 
 
 
@@ -31,7 +31,7 @@ class BoatAnalysisDlg : public QDialog
 {
 	Q_OBJECT
 
-	friend class QSail7;
+	friend class Sail7;
 	friend class MainFrame;
 	friend class CBoatDef;
 	friend class QSail;
@@ -151,7 +151,7 @@ private:
 	
 	
 	BoatPolar *m_pBoatPolar;
-	CBoat *m_pBoat;
+	Boat *m_pBoat;
 
 	//temp data
 	Vector3d VG, CG;

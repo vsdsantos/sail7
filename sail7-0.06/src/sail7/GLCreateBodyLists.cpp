@@ -18,7 +18,7 @@
 static Vector3d m_T[(NXPOINTS+1)*(NHOOPPOINTS+1)]; //temporary points to save calculation times for body NURBS surfaces
 
 
-void GLCreateBody3DSplines(void *pParent, int iList, CBody *pBody, int nx, int nh)
+void GLCreateBody3DSplines(void *pParent, int iList, Body *pBody, int nx, int nh)
 {
 	int i,j,k,l;
 	int p;
@@ -218,7 +218,7 @@ void GLCreateBody3DSplines(void *pParent, int iList, CBody *pBody, int nx, int n
 
 
 
-void GLCreateBody3DFlatPanels(void *pParent, int iList, CBody *pBody)
+void GLCreateBody3DFlatPanels(void *pParent, int iList, Body *pBody)
 {
 	int j,k;
 	QColor color;
@@ -367,7 +367,7 @@ void GLCreateBody3DFlatPanels(void *pParent, int iList, CBody *pBody)
 
 
 
-void GLCreateBodyMesh(void *pParent, int iList, CBody *pBody)
+void GLCreateBodyMesh(void *pParent, int iList, Body *pBody)
 {
 	if(!pBody) return;
 

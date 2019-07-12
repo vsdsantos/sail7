@@ -13,7 +13,7 @@
 #include "SailcutSail.h"
 
 
-CBoat::CBoat()
+Boat::Boat()
 {
 	m_poaSail.clear();
 	m_poaHull.clear();
@@ -22,30 +22,30 @@ CBoat::CBoat()
 
 
 
-QSail *CBoat::GetSail(const QString &SailName)
+QSail *Boat::GetSail(const QString &SailName)
 {
 	for(int is=0; is<m_poaSail.size(); is++)
 	{
-		QSail* pSail = (QSail*)m_poaSail.at(is);
+        QSail* pSail = m_poaSail.at(is);
 		if(pSail->m_SailName==SailName) return pSail;
 	}
-	return NULL;
+    return nullptr;
 }
 
 
-CBody *CBoat::GetBody(const QString &BodyName)
+Body *Boat::GetBody(const QString &BodyName)
 {
 	for(int is=0; is<m_poaHull.size(); is++)
 	{
-		CBody* pBody = (CBody*)m_poaHull.at(is);
+        Body* pBody = (Body*)m_poaHull.at(is);
 		if(pBody->m_BodyName==BodyName) return pBody;
 	}
-	return NULL;
+    return nullptr;
 }
 
 
 
-bool CBoat::SerializeBoat(QDataStream &ar, bool bIsStoring)
+bool Boat::SerializeBoat(QDataStream &ar, bool bIsStoring)
 {
 	//saves or loads the wing data to the archive ar
 
@@ -74,7 +74,7 @@ bool CBoat::SerializeBoat(QDataStream &ar, bool bIsStoring)
 		ar << m_poaHull.size();
 		for(int ih=0; ih<m_poaHull.size(); ih++)
 		{
-			CBody *pHull = (CBody*)m_poaHull.at(ih);
+            Body *pHull = (Body*)m_poaHull.at(ih);
 			if(!pHull) return false;
 			if(!pHull->SerializeBody(ar, true)) return false;
 		}
@@ -112,7 +112,7 @@ bool CBoat::SerializeBoat(QDataStream &ar, bool bIsStoring)
 		ar>>n;
 		for(int ih=0; ih<n; ih++)
 		{
-			CBody *pHull = new CBody;
+            Body *pHull = new Body;
 			if(!pHull->SerializeBody(ar, false)) return false;
 			m_poaHull.append(pHull);
 		}
@@ -121,11 +121,11 @@ bool CBoat::SerializeBoat(QDataStream &ar, bool bIsStoring)
 }
 
 
-void CBoat::DuplicateBoat(CBoat*pBoat)
+void Boat::DuplicateBoat(Boat*pBoat)
 {
 	for(int is=0; is<pBoat->m_poaSail.size(); is++)
 	{
-		QSail *pNewSail = NULL;
+        QSail *pNewSail = nullptr;
 		QSail *pSail = pBoat->m_poaSail.at(is);
 		if(pSail->IsNURBSSail())        pNewSail = new NURBSSail;
 		else if(pSail->IsSailcutSail()) pNewSail = new SailcutSail;
@@ -140,7 +140,7 @@ void CBoat::DuplicateBoat(CBoat*pBoat)
 
 	for(int ih=0; ih<pBoat->m_poaHull.size(); ih++)
 	{
-		CBody *pHull = new CBody;
+        Body *pHull = new Body;
 		pHull->Duplicate(pBoat->m_poaHull.at(ih));
 		m_poaHull.append(pHull);
 	}
@@ -149,7 +149,7 @@ void CBoat::DuplicateBoat(CBoat*pBoat)
 }
 
 
-double CBoat::Height()
+double Boat::Height()
 {
 	//approximate boat height
 	double h = 0.0;

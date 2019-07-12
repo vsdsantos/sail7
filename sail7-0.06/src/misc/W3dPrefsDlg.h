@@ -35,7 +35,7 @@ class W3dPrefsDlg : public QDialog
 {
 	Q_OBJECT
 
-	friend class QSail7;
+	friend class Sail7;
 	friend class MainFrame;
 	friend class GL3dBodyDlg;
 	friend class SailViewWidget;

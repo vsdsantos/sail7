@@ -23,7 +23,7 @@
 #ifndef CRECTANGLE_H
 #define CRECTANGLE_H
 
-#include "Vector3d.h"
+#include "vector3d.h"
 
 class CRectangle
 {

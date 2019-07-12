@@ -7,20 +7,24 @@
 *****************************************************************************/
 
 
-#ifndef CSAILCUTSPLINE_H
-#define CSAILCUTSPLINE_H
-
-#include "Vector3d.h"
+#pragma once
+#include "vector3d.h"
 
 #include <QPainter>
 #include <QPoint>
 
 class SailcutSpline
 {
+    friend class SailSection;
+    friend class SailDlg;
+    friend class SailcutSail;
+    friend class SectionViewWidget;
+    friend class SailDomDoc;
+
 public:
 	SailcutSpline();
 
-	void DrawSpline(QPainter & painter, double const &scalex, double const &scaley, QPoint const &Offset, double Chord, double Twist);
+    void DrawSpline(QPainter & painter, double const &scalex, double const &scaley, const QPointF &Offset, double Chord, double Twist);
 //	bool SplineCurve();
 	void ComputeAKVR2(double slope0, double slope1, double c);
 	void ComputeAKVR4(double slope0, double slope1, double c);
@@ -38,8 +42,6 @@ public:
 
 	Vector3d GetNormal(double const &x);
 
-
-
 	void SetStyle(int style){m_Style = style;}
 	void SetWidth(int width){m_Width = width;}
 	void SetColor(QColor color){m_SplineColor = color;}
@@ -50,15 +52,7 @@ public:
 		AV = av;
 		AR = ar;
 		A = 1.0 + av/4.0;
-	};
-
-	QList <Vector3d> *m_pCtrlPoint;
-
-//	double m_Chord;
-
-	QColor m_SplineColor;
-	int m_Style, m_Width;
-
+    }
 
 	double GetY(double const &x)
 	{
@@ -68,28 +62,22 @@ public:
 	}
 
 
-	double AV, AR, K, A;
-
-	double s0, s1; //slopes at the leading and the trailing edges;
-	double e; //position of max camber 0<e<1;
-	double t; // max camber
-	double a;
 
 private:
 
-	double f0(double k, double v, double r, double e)
+    double f0(double k, double v, double r, double )
 	{
 		// slope at (0,0) is s0
 		return k*(a/(v+1) + r/6.0 - a/(v+1)/(v+2)) -s0;
 	}
 
-	double f1(double k, double v, double r, double e)
+    double f1(double k, double v, double r, double )
 	{
 		// slope at (1,0) is s1
 		return k*(-r/2 + r/6 - a/(v+1)/(v+2)) -s1;
 	}
 
-	double f2(double k, double v, double r, double e)
+    double f2(double , double v, double r, double e)
 	{
 		//slope is 0 at x=e
 		return a*pow((1.0-e),(v+1.0)) /(v+1.0) -r/2.0*e*e +r/6.0 -a/(v+1.0)/(v+2.0);
@@ -113,7 +101,23 @@ private:
 	}
 	double Getzmax(double const &k, double const &av, double const &ar);
 
+private:
+
+    QList <Vector3d> *m_pCtrlPoint;
+
+//	double m_Chord;
+
+    QColor m_SplineColor;
+    int m_Style, m_Width;
+
+
+
+    double AV, AR, K, A;
+
+    double s0, s1; //slopes at the leading and the trailing edges;
+    double e; //position of max camber 0<e<1;
+    double t; // max camber
+    double a;
 
 };
 
-#endif // CSAILCUTSPLINE_H

@@ -177,8 +177,8 @@ bool BoatPolar::SerializeBoatPlr(QDataStream &ar, bool bIsStoring)
 	double d;
 	int i;
 
-	QSail7 *pSail7 = (QSail7*)s_pSail7;
-	CBoat *pBoat = pSail7->GetBoat(m_BoatName);
+	Sail7 *pSail7 = (Sail7*)s_pSail7;
+	Boat *pBoat = pSail7->GetBoat(m_BoatName);
 
 	int PolarFormat = 100391;
 	// 100391 : added Lift and Drag
@@ -325,13 +325,13 @@ void * BoatPolar::GetBoatPlrVariable(enumPolarVar iVar)
 			pVar = &m_Ctrl;
 			break;
 		case VINF:
-			pVar = NULL;//QInf
+			pVar = nullptr;//QInf
 			break;
 		case BETA:
-			pVar = NULL;//Beta
+			pVar = nullptr;//Beta
 			break;
 		case PHI:
-			pVar = NULL;//PHi
+			pVar = nullptr;//PHi
 			break;
 		case LIFT:
 			pVar = &m_Lift;
@@ -442,14 +442,14 @@ QString BoatPolar::GetPolarVariableName(int iVar)
 
 void BoatPolar::GetPolarProperties(QString &PolarProperties, int FileType, bool bData)
 {
-	QSail7 *pSail7 = (QSail7*)s_pSail7;
+	Sail7 *pSail7 = (Sail7*)s_pSail7;
 	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 	QString strong, lenunit, massunit, speedunit;
 	GetLengthUnit(lenunit, pMainFrame->m_LengthUnit);
 	GetWeightUnit(massunit, pMainFrame->m_WeightUnit);
 	GetSpeedUnit(speedunit, pMainFrame->m_SpeedUnit);
 
-	CBoat *pBoat = pSail7->GetBoat(m_BoatName);
+	Boat *pBoat = pSail7->GetBoat(m_BoatName);
 	if(!pBoat) return;
 	PolarProperties.clear();
 

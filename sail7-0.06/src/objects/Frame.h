@@ -22,7 +22,7 @@
 #ifndef CFRAME_H
 #define CFRAME_H
 
-#include "Vector3d.h"
+#include "vector3d.h"
 #include <QDataStream>
 #include <QList>
 
@@ -50,7 +50,7 @@ public:
 
 	void RotateFrameY(double Angle);
 
-	int PointCount() {return m_CtrlPoint.size();};
+       int PointCount() {return m_CtrlPoint.size();}
 
 	double Height();
 	double zPos();

@@ -14,8 +14,8 @@
 #include "BoatOpp.h"
 #include <QtDebug>
 
-void *BoatOpp::s_pMainFrame = NULL;
-void *BoatOpp::s_pSail7 = NULL;
+void *BoatOpp::s_pMainFrame = nullptr;
+void *BoatOpp::s_pSail7 = nullptr;
 
 
 BoatOpp::BoatOpp()
@@ -58,8 +58,8 @@ bool BoatOpp::SerializeBoatOpp(QDataStream &ar, bool bIsStoring)
 	int ArchiveFormat;
 	int a,p,j, k,l;
 	float f;
-	QSail7 *pSail7 = (QSail7*)s_pSail7;
-	CBoat *pBoat = pSail7->GetBoat(m_BoatName);
+	Sail7 *pSail7 = (Sail7*)s_pSail7;
+	Boat *pBoat = pSail7->GetBoat(m_BoatName);
 
 	if(bIsStoring)
 	{
@@ -171,8 +171,8 @@ void BoatOpp::GetBoatOppProperties(QString &BOppProperties)
 	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 	QString strong, lenunit, forceunit, momentunit, speedunit;
 
-	QSail7 *pSail7 = (QSail7*)s_pSail7;
-	CBoat *pBoat = pSail7->GetBoat(m_BoatName);
+	Sail7 *pSail7 = (Sail7*)s_pSail7;
+	Boat *pBoat = pSail7->GetBoat(m_BoatName);
 
 	GetLengthUnit(lenunit, pMainFrame->m_LengthUnit);
 	GetSpeedUnit(speedunit, pMainFrame->m_SpeedUnit);

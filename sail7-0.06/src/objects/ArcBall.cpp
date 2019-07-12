@@ -29,12 +29,12 @@
 
 ArcBall::ArcBall(void)
 {
-	m_p3dWidget = NULL;
-	m_pOffx     = NULL;
-	m_pOffy     = NULL;
-	m_pTransx   = NULL;
-	m_pTransy   = NULL;
-	m_pRect     = NULL;
+	m_p3dWidget = nullptr;
+	m_pOffx     = nullptr;
+	m_pOffy     = nullptr;
+	m_pTransx   = nullptr;
+	m_pTransy   = nullptr;
+	m_pRect     = nullptr;
 
 	angle = 0.0;
 	Quat.a  = 0.0;

@@ -31,7 +31,7 @@ RenameDlg::RenameDlg(QWidget *pParent) : QDialog(pParent)
 	setWindowTitle(tr("Rename"));
 	m_bEnableOverwrite = true;
 	m_bExists = true;
-	m_pstrArray = NULL;
+	m_pstrArray = nullptr;
 	SetupLayout();
 }
 

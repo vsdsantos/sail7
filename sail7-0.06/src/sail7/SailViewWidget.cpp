@@ -8,9 +8,9 @@
 #include <QtDebug>
 
 
-void *SailViewWidget::s_pMainFrame;
-void *SailViewWidget::s_pSail7;
-void *SailViewWidget::s_pSailDlg;
+MainFrame *SailViewWidget::s_pMainFrame;
+Sail7 *SailViewWidget::s_pSail7;
+SailDlg *SailViewWidget::s_pSailDlg;
 
 QPoint SailViewWidget::s_WindowPos=QPoint(500,100);
 QSize  SailViewWidget::s_WindowSize = QSize(500,400);
@@ -195,8 +195,8 @@ void SailViewWidget::Set3DScale()
 	m_bIs3DScaleSet = true;
 
 	SailSection *pSec1 = m_pSail->m_oaSection.last();
-	if(pSec1->m_Position.z>0) m_glScaled = (GLfloat)(1.0/ pSec1->m_Position.z);
-	else                      m_glScaled = (GLfloat)(1.0);
+    if(pSec1->m_Position.z>0) m_glScaled = 1.0/ pSec1->m_Position.z;
+    else                      m_glScaled = 1.0;
 
 	m_SailOffset.x = 0.0;
 	m_SailOffset.y = 0.0;
@@ -432,9 +432,8 @@ void SailViewWidget::Set3DRotationCenter(QPoint point)
 
 void SailViewWidget::GLCreateSailGeom()
 {
-	QSail7 *pSail7 = (QSail7*)s_pSail7;
 	if(m_pSail->m_oaSection.size()<2) return;
-	pSail7->GLCreateSailGeom(SAILSURFACE, m_pSail, Vector3d(0.0,0.0,0.0));
+    s_pSail7->GLCreateSailGeom(SAILSURFACE, m_pSail, Vector3d(0.0,0.0,0.0));
 }
 
 
@@ -442,7 +441,7 @@ void SailViewWidget::GLCreateSailGeom()
 void SailViewWidget::GLCreateSailMesh()
 {
 //	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
-	QSail7*pSail7= (QSail7*)s_pSail7;
+	Sail7*pSail7= (Sail7*)s_pSail7;
 
 	QColor color;
 	int width;
@@ -609,27 +608,32 @@ void SailViewWidget::GLDraw3D()
 		GLCreateSailGeom();
 	}
 
-	if(m_bResetglGeom || m_bResetglCtrlPoints && m_pSail)
-	{
-		if(glIsList(SAILCTRLPOINTS))
-		{
-			glDeleteLists(SAILCTRLPOINTS,1);
-			m_GLList -=1;
-		}
-		GLCreateCtrlPoints();
-		m_bResetglCtrlPoints = false;
-	}
+    if(m_pSail)
+    {
+        if(m_bResetglGeom || m_bResetglCtrlPoints)
+        {
+            if(glIsList(SAILCTRLPOINTS))
+            {
+                glDeleteLists(SAILCTRLPOINTS,1);
+                m_GLList -=1;
+            }
+            GLCreateCtrlPoints();
+            m_bResetglCtrlPoints = false;
+        }
+    }
 
-	if(m_bResetglGeom || m_bResetglSectionHighlight && m_pSail)
-	{
-		if(glIsList(SECTIONHIGHLIGHT))
-		{
-			glDeleteLists(SECTIONHIGHLIGHT, 1);
-		}
-		GLCreateSectionHighlight();
-		m_bResetglSectionHighlight = false;
-	}
-
+    if(m_pSail)
+    {
+        if(m_bResetglGeom || m_bResetglSectionHighlight)
+        {
+            if(glIsList(SECTIONHIGHLIGHT))
+            {
+                glDeleteLists(SECTIONHIGHLIGHT, 1);
+            }
+            GLCreateSectionHighlight();
+            m_bResetglSectionHighlight = false;
+        }
+    }
 
 	if((m_bResetglGeom || m_bResetglSailMesh) && m_pSail)
 	{
@@ -649,7 +653,7 @@ void SailViewWidget::GLRenderSail()
 {
 //	int width;
 
-	QSail7 * pSail7 = (QSail7*)s_pSail7;
+	Sail7 * pSail7 = (Sail7*)s_pSail7;
 
 //	width = m_rCltRect.width();
 
@@ -775,8 +779,8 @@ void SailViewWidget::mouseMoveEvent(QMouseEvent *event)
 			//translate
 			if(m_p3DWidget->geometry().contains(glPoint))
 			{
-				m_glViewportTrans.x += (GLfloat)(Delta.x()*2.0/m_glScaled/m_p3DWidget->rect().width());
-				m_glViewportTrans.y += (GLfloat)(Delta.y()*2.0/m_glScaled/m_p3DWidget->rect().width());
+                m_glViewportTrans.x += GLfloat(Delta.x()*2.0/m_glScaled/m_p3DWidget->rect().width());
+                m_glViewportTrans.y += GLfloat(Delta.y()*2.0/m_glScaled/m_p3DWidget->rect().width());
 
 				m_glRotCenter.x = MatOut[0][0]*(m_glViewportTrans.x) + MatOut[0][1]*(-m_glViewportTrans.y) + MatOut[0][2]*m_glViewportTrans.z;
 				m_glRotCenter.y = MatOut[1][0]*(m_glViewportTrans.x) + MatOut[1][1]*(-m_glViewportTrans.y) + MatOut[1][2]*m_glViewportTrans.z;

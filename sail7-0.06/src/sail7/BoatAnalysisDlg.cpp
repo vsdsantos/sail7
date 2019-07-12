@@ -20,27 +20,27 @@
 #include "BoatAnalysisDlg.h"
 #include "../mainframe.h"
 #include "../globals.h"
-#include "../objects/Vector3d.h"
+#include "../objects/vector3d.h"
 #include "sail7.h"
 
 
-void *BoatAnalysisDlg::s_pSail7 = NULL;
-void *BoatAnalysisDlg::s_pMainFrame = NULL;
+void *BoatAnalysisDlg::s_pSail7 = nullptr;
+void *BoatAnalysisDlg::s_pMainFrame = nullptr;
 
-CPanel *BoatAnalysisDlg::s_pPanel = NULL; //the original array of panels
-CPanel *BoatAnalysisDlg::s_pWakePanel = NULL;// the current working wake panel array
-CPanel *BoatAnalysisDlg::s_pRefWakePanel = NULL;// a copy of the reference wake node array if wake needs to be reset
-CPanel *BoatAnalysisDlg::s_pMemPanel = NULL;// a copy of the reference panel array for tilted calc
+CPanel *BoatAnalysisDlg::s_pPanel = nullptr; //the original array of panels
+CPanel *BoatAnalysisDlg::s_pWakePanel = nullptr;// the current working wake panel array
+CPanel *BoatAnalysisDlg::s_pRefWakePanel = nullptr;// a copy of the reference wake node array if wake needs to be reset
+CPanel *BoatAnalysisDlg::s_pMemPanel = nullptr;// a copy of the reference panel array for tilted calc
 
-Vector3d *BoatAnalysisDlg::s_pNode = NULL;	// the working array of Nodes
-Vector3d *BoatAnalysisDlg::s_pMemNode = NULL;	// a copy of the reference node array for tilted calc
-Vector3d *BoatAnalysisDlg::s_pWakeNode = NULL;	// the current working wake node array
-Vector3d *BoatAnalysisDlg::s_pRefWakeNode = NULL; // a copy of the reference wake node array if wake needs to be reset
+Vector3d *BoatAnalysisDlg::s_pNode = nullptr;	// the working array of Nodes
+Vector3d *BoatAnalysisDlg::s_pMemNode = nullptr;	// a copy of the reference node array for tilted calc
+Vector3d *BoatAnalysisDlg::s_pWakeNode = nullptr;	// the current working wake node array
+Vector3d *BoatAnalysisDlg::s_pRefWakeNode = nullptr; // a copy of the reference wake node array if wake needs to be reset
 
-double *BoatAnalysisDlg::s_aij = NULL;
-double *BoatAnalysisDlg::s_aijWake = NULL;
-double *BoatAnalysisDlg::s_RHS = NULL;
-double *BoatAnalysisDlg::s_RHSRef = NULL;
+double *BoatAnalysisDlg::s_aij = nullptr;
+double *BoatAnalysisDlg::s_aijWake = nullptr;
+double *BoatAnalysisDlg::s_RHS = nullptr;
+double *BoatAnalysisDlg::s_RHSRef = nullptr;
 
 
 
@@ -74,10 +74,10 @@ BoatAnalysisDlg::BoatAnalysisDlg()
 	m_WakeSize   = 0;
 	m_strOut = "";
 
-	for(int iw=0; iw<MAXSAILS; iw++) m_pSailList[iw] = NULL;
+	for(int iw=0; iw<MAXSAILS; iw++) m_pSailList[iw] = nullptr;
 
-	m_pBoatPolar = NULL;
-	m_pBoat  = NULL;
+	m_pBoatPolar = nullptr;
+	m_pBoat  = nullptr;
 
 	memset(m_Sigma,  0, sizeof(m_Sigma));
 	memset(m_Mu,     0, sizeof(m_Mu));
@@ -505,7 +505,7 @@ void BoatAnalysisDlg::ComputeFarField()
 void BoatAnalysisDlg::ComputeBoat()
 {
 	// calculates the viscous and inviscid wing coefficients 
-	QSail7 *pSail7 = (QSail7*)s_pSail7;
+	Sail7 *pSail7 = (Sail7*)s_pSail7;
 	int pos;
 
 	Vector3d ForceTrefftz;
@@ -884,7 +884,7 @@ void BoatAnalysisDlg::InitDialog()
 	m_pctrlProgress->setValue(m_Progress);
 	QString FileName = QDir::tempPath() + "/sail7.log";
 	m_pXFile = new QFile(FileName);
-	if (!m_pXFile->open(QIODevice::WriteOnly | QIODevice::Text)) m_pXFile = NULL;
+	if (!m_pXFile->open(QIODevice::WriteOnly | QIODevice::Text)) m_pXFile = nullptr;
 
 /*	if(m_pBoatPolar && (m_pBoatPolar->m_bTiltedGeom || m_pBoatPolar->m_bWakeRollUp))
 	{
@@ -1139,7 +1139,7 @@ void BoatAnalysisDlg::SetAngles(BoatPolar *pBoatPolar, double Ctrl, bool bBCOnly
 	// Rotate the panels by the bank angle
 	// (and translate the wake to the new T.E. position - thin surfaces, no wake)
 	Vector3d O(0.0,0.0,0.0);
-	QSail7 *pSail7 = (QSail7*)s_pSail7;
+	Sail7 *pSail7 = (Sail7*)s_pSail7;
 
 	//reset the initial geometry before a new set of angles is processed
 	memcpy(s_pPanel, s_pMemPanel, m_MatSize * sizeof(CPanel));

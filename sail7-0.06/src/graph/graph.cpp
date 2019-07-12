@@ -195,7 +195,7 @@ void Graph::DeleteCurve(int index)
 
 void Graph::DeleteCurve(CCurve *pCurve)
 {
-	CCurve *pOldCurve = NULL;
+	CCurve *pOldCurve = nullptr;
 	for(int i=0; i<m_oaCurves.size(); i++)
 	{
 		pOldCurve = (CCurve*)m_oaCurves.at(i);
@@ -211,7 +211,7 @@ void Graph::DeleteCurve(CCurve *pCurve)
 
 void Graph::DeleteCurve(QString CurveTitle)
 {
-	CCurve *pOldCurve = NULL;
+	CCurve *pOldCurve = nullptr;
 	for(int i=0; i<m_oaCurves.size(); i++)
 	{
 		pOldCurve = (CCurve*)m_oaCurves.at(i);
@@ -344,7 +344,7 @@ CCurve* Graph::GetCurve(int nIndex)
 {
     if(m_oaCurves.size()>nIndex)
 		return (CCurve*)m_oaCurves[nIndex];
-	else return NULL;
+	else return nullptr;
 }
 
 
@@ -361,7 +361,7 @@ CCurve* Graph::GetCurve(QString CurveTitle)
 			if(strong==CurveTitle) return pCurve;
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 
@@ -1339,7 +1339,7 @@ CCurve*  Graph::GetClosestPoint(const double &x, const double &y, double &xSel, 
 	static double dist, dmax, x1, y1;
 	dmax = 1.e40;
 	CCurve *pOldCurve, *pCurveSel;
-	pCurveSel = NULL;
+	pCurveSel = nullptr;
 	
 	for(i=0; i<m_oaCurves.size(); i++)
 	{
@@ -1381,14 +1381,14 @@ CCurve* Graph::GetCurvePoint(const int &xClt, const int &yClt,int &nSel)
 		}
 	}
 	nSel = -1;
-	return  NULL;
+	return  nullptr;
 }
 
 
 bool Graph::SelectPoint(QString const &CurveName, int sel)
 {
 	QString str;
-	CCurve *pCurve = NULL;
+	CCurve *pCurve = nullptr;
 	
 	if(sel<0) 
 	{

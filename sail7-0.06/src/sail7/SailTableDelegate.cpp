@@ -16,8 +16,8 @@ SailTableDelegate::SailTableDelegate(QObject *parent)
  : QItemDelegate(parent)
 {
 	m_pSailDlg = parent;
-	m_pNPanels = NULL;
-	m_pPrecision = NULL;
+	m_pNPanels = nullptr;
+	m_pPrecision = nullptr;
 }
 
 
@@ -45,7 +45,7 @@ QWidget *SailTableDelegate::createEditor(QWidget *parent, const QStyleOptionView
 		}
 		return editor;
 	}
-	return NULL;
+	return nullptr;
 }
 
 

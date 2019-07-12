@@ -15,7 +15,7 @@
 #include <QPainter>
 #include <QPoint>
 #include "Spline.h"
-#include "./Vector3d.h"
+#include "./vector3d.h"
 
 // This class defines sections of a sail
 // A section is deined by a cubic spline

@@ -137,75 +137,8 @@ bool SailSection::SerializeSection(QDataStream &ar, bool bIsStoring)
 	}
 }
 
-/*
 void SailSection::DrawSpline(QPainter &painter, double const &scalex, double const &scaley, QPoint const &Offset, bool bSelected)
 {
-	static QPoint From, To;
-	static int k;
-	QPen SplinePen;
-
-	painter.save();
-
-	if(bSelected)
-	{
-		SplinePen.setStyle(GetStyle(m_SCSpline.m_Style));
-		SplinePen.setWidth(m_SCSpline.m_Width);
-		SplinePen.setColor(m_SCSpline.m_SplineColor);
-		painter.setPen(SplinePen);
-	}
-	else
-	{
-		SplinePen.setWidth(1);
-		SplinePen.setColor(QColor(100,100,100));
-		SplinePen.setStyle(Qt::DashLine);
-		painter.setPen(SplinePen);
-	}
-
-	if(IsNURBSSection())
-	{
-		NURBSSail *pNSail = (NURBSSail*)m_pSail;
-		double w = pNSail->m_SplineSurface.Getu(m_uPosition);
-		double v = 0.0;
-		CVector Point;
-
-		int nv = 17;
-
-		Point = pNSail->GetPoint(v, w);
-		From.rx() = (int)( Point.x * scalex + Offset.x());
-		From.ry() = (int)(-Point.y * scaley + Offset.y());
-		m_c = Point.y;
-		m_x = Point.x;
-
-		for(k=1; k<=nv;k++)
-		{
-			v = (double)k/(double)nv;
-			Point = pNSail->GetPoint(v, w);
-			if(fabs(Point.y)>m_c)
-			{
-				m_c = Point.y;
-				m_x = Point.x;
-			}
-			To.rx() = (int)( Point.x * scalex + Offset.x());
-			To.ry() = (int)(-Point.y * scaley + Offset.y());
-
-			painter.drawLine(From, To);
-
-			From = To;
-		}
-	}
-	else
-	{
-		SailcutSail *pSCSail = (SailcutSail*)m_pSail;
-		m_SCSpline.DrawSpline(painter, scalex, scaley, Offset, pSCSail->Chord(this), pSCSail->Twist(this));
-	}
-	painter.restore();
-}
-*/
-
-void SailSection::DrawSpline(QPainter &painter, double const &scalex, double const &scaley, QPoint const &Offset, bool bSelected)
-{
-	static QPoint From, To;
-	static int k;
 	QPen SplinePen;
 
 	painter.save();
@@ -252,8 +185,8 @@ bool SailSection::IsSailcutSection()
 
 void SailSection::DrawCtrlPoints(QPainter &painter, double scalex, double scaley, QPoint const &Offset)
 {
-	static QPoint pt;
-	static int i, width;
+    QPoint pt;
+    int i, width;
 
 	if(!IsSailcutSection() && m_CtrlPoint.size()>0)
 	{
@@ -397,8 +330,8 @@ double SailSection::Chord()
 double SailSection::Twist()
 {
 	//TODO : should be a sail method
-	static double w;
-	static Vector3d PtA, PtB;
+    double w;
+    Vector3d PtA, PtB;
 
 	if(IsNURBSSection())
 	{

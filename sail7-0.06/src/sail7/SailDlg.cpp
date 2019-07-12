@@ -50,7 +50,7 @@ SailDlg::SailDlg(QWidget *pParent) : QDialog(pParent)
 
 	SailViewWidget::s_pSailDlg = this;
 
-	m_pSail=NULL;
+	m_pSail=nullptr;
 
 	m_bChanged  = false;
 	m_iSection  = -1;

@@ -28,7 +28,7 @@
 #include <QFile>
 #include <QTextStream>
 #include "./Spline.h"
-#include "./Vector3d.h"
+#include "./vector3d.h"
 #include "../params.h"
 
 class BSpline : public Spline

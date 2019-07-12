@@ -15,6 +15,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
+    src/objects/vector3d.cpp \
     src/twodwidget.cpp \
 	src/threedwidget.cpp \
 	src/sail7Application.cpp \
@@ -46,7 +47,6 @@ SOURCES += \
     src/misc/DisplaySettingsDlg.cpp \
     src/misc/ColorButton.cpp \
     src/objects/Quaternion.cpp \
-	src/objects/CVector.cpp \
     src/objects/Panel.cpp \
     src/objects/ArcBall.cpp \
 	src/objects/Sail.cpp \
@@ -87,6 +87,7 @@ SOURCES += \
     src/sail7/SailDomDoc.cpp
 
 HEADERS  += \
+    src/objects/vector3d.h \
     src/twodwidget.h \
 	src/threedwidget.h \
 	src/sail7Application.h \
@@ -121,7 +122,6 @@ HEADERS  += \
     src/objects/Quaternion.h \
     src/objects/CRectangle.h \
     src/objects/Panel.h \
-    src/objects/CVector.h \
     src/objects/ArcBall.h \
 	src/objects/BoatPolar.h \
 	src/objects/BoatOpp.h \

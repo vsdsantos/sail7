@@ -32,8 +32,8 @@ SectionViewWidget::SectionViewWidget(QWidget *parent) :QWidget(parent)
 
 	m_pSailDlg = parent;
 
-	m_pSail = NULL;
-	m_pSailSection = NULL;
+	m_pSail = nullptr;
+	m_pSailSection = nullptr;
 	m_Scale = m_RefScale = m_ScaleY = 1.0;
 	m_ptOffset = QPoint(0,0);
 

@@ -16,13 +16,13 @@
 #include <QTextStream>
 
 #include "./BoatOpp.h"
-#include "../objects/Vector3d.h"
+#include "../objects/vector3d.h"
 
 class BoatPolar
 {
 	friend class MainFrame;
 	friend class QSail;
-	friend class QSail7;
+	friend class Sail7;
 	friend class BoatPolarDlg;
 	friend class BoatAnalysisDlg;
 

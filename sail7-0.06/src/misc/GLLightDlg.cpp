@@ -41,7 +41,7 @@ bool GLLightDlg::s_bLight;
 
 GLLightDlg::GLLightDlg()
 {
-	m_pGL3dBodyDlg = m_pGL3dWingDlg = NULL;
+	m_pGL3dBodyDlg = m_pGL3dWingDlg = nullptr;
 
 	m_Size = 5.0;
 	SetDefaults(m_Size);

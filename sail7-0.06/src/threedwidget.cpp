@@ -16,8 +16,8 @@
 #include "sail7/GL3dBodyDlg.h"
 #include "threedwidget.h"
 
-void *ThreeDWidget::s_pSail7 = NULL;
-void *ThreeDWidget::s_pMainFrame = NULL;
+void *ThreeDWidget::s_pSail7 = nullptr;
+void *ThreeDWidget::s_pMainFrame = nullptr;
 
 
 ThreeDWidget::ThreeDWidget(QWidget *parent)
@@ -63,7 +63,7 @@ void ThreeDWidget::mousePressEvent(QMouseEvent *event)
 	{
 		if(m_iView == GLSAIL7VIEW)
 		{
-			QSail7* pSail7 = (QSail7*)s_pSail7;
+			Sail7* pSail7 = (Sail7*)s_pSail7;
 			pSail7->mousePressEvent(event);
 		}
 		else  if(m_iView ==GLBODYVIEW)
@@ -87,7 +87,7 @@ void ThreeDWidget::mouseReleaseEvent(QMouseEvent *event)
 	{
 		if(m_iView == GLSAIL7VIEW)
 		{
-			QSail7* pSail7 = (QSail7*)s_pSail7;
+			Sail7* pSail7 = (Sail7*)s_pSail7;
 			pSail7->mouseReleaseEvent(event);
 		}
 		else  if(m_iView ==GLBODYVIEW)
@@ -111,7 +111,7 @@ void ThreeDWidget::mouseMoveEvent(QMouseEvent *event)
 	{
 		if(m_iView==GLSAIL7VIEW)
 		{
-			QSail7* pSail7 = (QSail7*)s_pSail7;
+			Sail7* pSail7 = (Sail7*)s_pSail7;
 			pSail7->mouseMoveEvent(event);
 		}
 		else  if(m_iView ==GLBODYVIEW)
@@ -136,7 +136,7 @@ void ThreeDWidget::mouseDoubleClickEvent ( QMouseEvent * event )
 	{
 		if(m_iView == GLSAIL7VIEW)
 		{
-			QSail7* pSail7 = (QSail7*)s_pSail7;
+			Sail7* pSail7 = (Sail7*)s_pSail7;
 			pSail7->mouseDoubleClickEvent(event);
 		}
 		else  if(m_iView ==GLBODYVIEW)
@@ -160,7 +160,7 @@ void ThreeDWidget::wheelEvent(QWheelEvent *event)
 	{
 		if(m_iView == GLSAIL7VIEW)
 		{
-			QSail7* pSail7 = (QSail7*)s_pSail7;
+			Sail7* pSail7 = (Sail7*)s_pSail7;
 			pSail7->wheelEvent(event);
 		}
 		else  if(m_iView ==GLBODYVIEW)
@@ -190,7 +190,7 @@ void ThreeDWidget::keyPressEvent(QKeyEvent *event)
 	{
 		if(m_iView == GLSAIL7VIEW)
 		{
-			QSail7* pSail7 = (QSail7*)s_pSail7;
+			Sail7* pSail7 = (Sail7*)s_pSail7;
 			pSail7->keyPressEvent(event);
 		}
 		else  if(m_iView ==GLBODYVIEW)
@@ -213,7 +213,7 @@ void ThreeDWidget::keyReleaseEvent(QKeyEvent *event)
 	{
 		if(m_iView == GLSAIL7VIEW)
 		{
-			QSail7* pSail7 = (QSail7*)s_pSail7;
+			Sail7* pSail7 = (Sail7*)s_pSail7;
 			pSail7->keyReleaseEvent(event);
 		}
 		else  if(m_iView ==GLBODYVIEW)
@@ -242,7 +242,7 @@ void ThreeDWidget::paintEvent(QPaintEvent *event)
 
 	if(m_iView==GLSAIL7VIEW)
 	{
-		QSail7* pSail7 = (QSail7*)s_pSail7;
+		Sail7* pSail7 = (Sail7*)s_pSail7;
 
 		if(pSail7->m_bResetTextLegend)
 		{
@@ -270,7 +270,7 @@ void ThreeDWidget::paintGL()
 
 	if(m_iView==GLSAIL7VIEW)
 	{
-		QSail7* pSail7 = (QSail7*)s_pSail7;
+		Sail7* pSail7 = (Sail7*)s_pSail7;
 		pSail7->GLDraw3D();
 		if(pSail7->m_iView==SAIL3DVIEW) pSail7->GLRenderView();
 	}
@@ -355,7 +355,7 @@ void ThreeDWidget::resizeGL(int width, int height)
 
 	if(s_pSail7 && m_iView == GLSAIL7VIEW)
 	{
-		QSail7* pSail7 = (QSail7*)s_pSail7;
+		Sail7* pSail7 = (Sail7*)s_pSail7;
 		pSail7->m_ArcBall.GetMatrix();
 //		pSail7->SetScale(m_rCltRect);
 		pSail7->m_bIs3DScaleSet = false;

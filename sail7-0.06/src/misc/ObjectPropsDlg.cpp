@@ -31,8 +31,8 @@ void * ObjectPropsDlg::s_pMainFrame;
 
 ObjectPropsDlg::ObjectPropsDlg()
 {
-	m_pBoatPolar  = NULL;
-	m_pBoatOpp    = NULL;
+	m_pBoatPolar  = nullptr;
+	m_pBoatOpp    = nullptr;
 
 	SetupLayout();
 }

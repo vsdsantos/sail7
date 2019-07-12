@@ -68,7 +68,7 @@ QColor W3dPrefsDlg::s_StreamLinesColor  = QColor(200, 150, 255);
 W3dPrefsDlg::W3dPrefsDlg()
 {
 	setWindowTitle(tr("3D Styles"));
-//	s_pSail7  = NULL;
+//	s_pSail7  = nullptr;
 
 	SetupLayout();
 

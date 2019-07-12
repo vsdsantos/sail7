@@ -38,7 +38,7 @@ BoatPolarDlg::BoatPolarDlg()
 	QString strLength;
 	GetLengthUnit(strLength, pMainFrame->m_LengthUnit);
 
-	m_pBoat     = NULL;
+	m_pBoat     = nullptr;
 
 	m_BoatPolarName = "SailPolar Name";
 
@@ -251,7 +251,7 @@ void BoatPolarDlg::ReadData()
 
 
 
-void BoatPolarDlg::InitDialog(CBoat *pBoat, BoatPolar *pBoatPolar)
+void BoatPolarDlg::InitDialog(Boat *pBoat, BoatPolar *pBoatPolar)
 {
 	MainFrame* pMainFrame = (MainFrame*)s_pMainFrame;
 	QString str;
@@ -338,11 +338,11 @@ void BoatPolarDlg::keyPressEvent(QKeyEvent *event)
 				OnOK();
 				return;
 			}
-			break;
 		}
 		case Qt::Key_Escape:
 		{
 			reject();
+            return;
 		}
 		default:
 			event->ignore();
