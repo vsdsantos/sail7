@@ -1,7 +1,7 @@
 /****************************************************************************
 
 		 NURBSSail Class
-		 Copyright (C) 2012 Andre Deperrois sail7@xflr5.com
+		 Copyright (C) 2012 Andre Deperrois 
 		 All rights reserved
 
 *****************************************************************************/
@@ -13,7 +13,7 @@
 #include "Sail.h"
 #include "NURBSSurface.h"
 
-class NURBSSail : public QSail
+class NURBSSail : public Sail
 {
 public:
 	NURBSSail();
@@ -27,7 +27,7 @@ public:
 	void CreateSection(int iSection);
 	void DeleteSection(int iSection);
 
-	void Duplicate(QSail *pSail);
+	void Duplicate(Sail *pSail);
 	bool Import(QFile *pFile);
 	void Export();
 	void ScaleSail(double XFactor, double YFactor, double ZFactor);

@@ -1,7 +1,7 @@
 /****************************************************************************
 
 		 BoatAnalysisDlg Class
-		 Copyright (C) 2012 Andre Deperrois sail7@xflr5.com
+		 Copyright (C) 2012 Andre Deperrois 
 		 All rights reserved
 
 *****************************************************************************/
@@ -1160,7 +1160,7 @@ void BoatAnalysisDlg::SetAngles(BoatPolar *pBoatPolar, double Ctrl, bool bBCOnly
 	Vector3d Mast;
 	for(int is=0; is<m_pBoat->m_poaSail.size(); is++)
 	{
-		QSail *pSail = (QSail*)m_pBoat->m_poaSail.at(is);
+		Sail *pSail = (Sail*)m_pBoat->m_poaSail.at(is);
 		Mast.Set(sin(pSail->m_LuffAngle*PI/180.0), 0.0, cos(pSail->m_LuffAngle*PI/180.0));
 //		Mast.RotateX(pSail->m_LEPosition, m_Phi);
 
@@ -1418,7 +1418,7 @@ void BoatAnalysisDlg::Forces(double *Mu, double *Sigma, double alpha, double *VI
 
 	for(j=0; j<m_pBoat->m_poaSail.size(); j++)
 	{
-		QSail *pSail = (QSail*)m_pBoat->m_poaSail.at(j);
+		Sail *pSail = (Sail*)m_pBoat->m_poaSail.at(j);
 		for(k=0; k<pSail->m_NZPanels; k++)
 		{
 			//Get the strip area

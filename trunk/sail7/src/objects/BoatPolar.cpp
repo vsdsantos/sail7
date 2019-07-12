@@ -1,7 +1,7 @@
 /****************************************************************************
 
 		 SailPolar Class
-		 Copyright (C) 2011-2012 Andre Deperrois sail7@xflr5.com
+		 Copyright (C) 2011-2012 Andre Deperrois 
 		 All rights reserved
 
 *****************************************************************************/
@@ -468,7 +468,7 @@ void BoatPolar::GetPolarProperties(QString &PolarProperties, int FileType, bool 
 
 	for(int is=0; is<pBoat->m_poaSail.size();is++)
 	{
-		QSail*pSail =(QSail*)pBoat->m_poaSail.at(is);
+		Sail*pSail =(Sail*)pBoat->m_poaSail.at(is);
 		strong  = "  "+QString(pSail->m_SailName + QString::fromUtf8(" = %1° / %2°"))
 							   .arg(-m_SailAngleMin[is],5,'f',1)
 							   .arg(-m_SailAngleMax[is],5,'f',1);

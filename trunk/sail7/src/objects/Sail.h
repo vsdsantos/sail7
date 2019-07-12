@@ -1,7 +1,7 @@
 /****************************************************************************
 
          CSail Class
-         Copyright (C) 2011-2012 Andre Deperrois sail7@xflr5.com
+         Copyright (C) 2011-2012 Andre Deperrois 
          All rights reserved
 
 *****************************************************************************/
@@ -23,7 +23,7 @@ typedef enum {NURBSSAIL, SAILCUTSAIL} enumSailType;// the type of sail definitio
 class MainFrame;
 class BoatAnalysisDlg;
 
-class QSail
+class Sail
 {
     friend class MainFrame;
     friend class Sail7;
@@ -41,8 +41,8 @@ class QSail
     friend class SailDomDoc;
 
     public:
-        QSail();
-        virtual ~QSail() {}
+        Sail();
+        virtual ~Sail() {}
 
         bool IsSailPanel(int nPanel);
         bool IsSailNode(int nNode);
@@ -56,7 +56,7 @@ class QSail
         void SetLuffAngle();
         virtual void ScaleSail(double XFactor, double YFactor, double ZFactor)=0;
 
-        virtual void Duplicate(QSail *pSail)=0;
+        virtual void Duplicate(Sail *pSail)=0;
         virtual bool Import(QFile *pFile)=0;
         virtual void Export()=0;
 

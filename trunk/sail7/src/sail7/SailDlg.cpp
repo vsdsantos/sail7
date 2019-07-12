@@ -1,7 +1,7 @@
 /****************************************************************************
 
 		 SailDlg Class
-		 Copyright (C) 2012 Andre Deperrois sail7@xflr5.com
+		 Copyright (C) 2012 Andre Deperrois 
 		 All rights reserved
 
 *****************************************************************************/
@@ -128,7 +128,7 @@ void SailDlg::OnUpdateLeechRound()
 }
 
 
-bool SailDlg::InitDialog(QSail *pSail)
+bool SailDlg::InitDialog(Sail *pSail)
 {
 	if(!pSail) return false;
 
@@ -217,7 +217,7 @@ bool SailDlg::InitDialog(QSail *pSail)
 }
 
 
-void SailDlg::SetSailData(QSail* pSail)
+void SailDlg::SetSailData(Sail* pSail)
 {
 	m_pctrlSailName->setText(m_pSail->m_SailName);
 	m_pctrlSailColor->SetColor(m_pSail->m_SailColor);

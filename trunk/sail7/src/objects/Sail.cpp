@@ -1,7 +1,7 @@
 /****************************************************************************
 
 		 CSail Class
-		 Copyright (C) 2011-2012 Andre Deperrois sail7@xflr5.com
+         Copyright (C) 2011-2012 Andre Deperrois
 		 All rights reserved
 
 *****************************************************************************/
@@ -17,10 +17,10 @@
 #include "Sail.h"
 
 
-BoatAnalysisDlg * QSail::s_pBoatAnalysisDlg;
-MainFrame * QSail::s_pMainFrame;
+BoatAnalysisDlg * Sail::s_pBoatAnalysisDlg;
+MainFrame * Sail::s_pMainFrame;
 
-QSail::QSail()
+Sail::Sail()
 {
     m_pPanel     = nullptr;
 
@@ -42,7 +42,7 @@ QSail::QSail()
 }
 
 
-void QSail::PanelTrefftz(Vector3d VInf, double *Mu, double *Sigma, int pos, Vector3d &FFForce, BoatPolar *pBoatPolar)
+void Sail::PanelTrefftz(Vector3d VInf, double *Mu, double *Sigma, int pos, Vector3d &FFForce, BoatPolar *pBoatPolar)
 {
 	// calculates the induced lift and drag from the vortices or wake panels strength
 	// using a farfield method
@@ -102,7 +102,7 @@ void QSail::PanelTrefftz(Vector3d VInf, double *Mu, double *Sigma, int pos, Vect
 
 
 
-void QSail::PanelComputeOnBody(Vector3d VInf, double *Cp, double *Gamma,
+void Sail::PanelComputeOnBody(Vector3d VInf, double *Cp, double *Gamma,
 							   Vector3d &SailForce, Vector3d &SailMoment,
 							   BoatPolar *pBoatPolar, Vector3d CoG)
 {
@@ -144,7 +144,7 @@ void QSail::PanelComputeOnBody(Vector3d VInf, double *Cp, double *Gamma,
 
 
 
-bool QSail::IsSailPanel(int nPanel)
+bool Sail::IsSailPanel(int nPanel)
 {
 	for(int p=0; p<m_NElements; p++)
 	{
@@ -154,7 +154,7 @@ bool QSail::IsSailPanel(int nPanel)
 }
 
 
-bool QSail::IsSailNode(int nNode)
+bool Sail::IsSailNode(int nNode)
 {
 	for(int p=0; p<m_NElements; p++)
 	{
@@ -168,21 +168,21 @@ bool QSail::IsSailNode(int nNode)
 
 
 
-void QSail::SetLuffAngle()
+void Sail::SetLuffAngle()
 {
 	SetLuffAngle(m_LuffAngle);
 }
 
 
 
-void QSail::SetLuffAngle(double Angle)
+void Sail::SetLuffAngle(double Angle)
 {
 	m_LuffAngle = Angle;
 	SplineSurface();
 }
 
 
-void QSail::SortSections()
+void Sail::SortSections()
 {
 	// bubble sort
 	// derived from http://www.concentric.net/~ttwang/sort/sort.htm
@@ -212,7 +212,7 @@ void QSail::SortSections()
 
 
 
-void QSail::InsertSection(SailSection *pSection)
+void Sail::InsertSection(SailSection *pSection)
 {
 	for(int is=0; is<m_oaSection.size(); is++)
 	{
@@ -227,7 +227,7 @@ void QSail::InsertSection(SailSection *pSection)
 
 
 
-void QSail::CreateSection(int iSection)
+void Sail::CreateSection(int iSection)
 {
 	SailSection *pNewSection = new SailSection(this);
 
@@ -265,7 +265,7 @@ void QSail::CreateSection(int iSection)
 }
 
 
-void QSail::DeleteSection(int iSection)
+void Sail::DeleteSection(int iSection)
 {
 	m_oaSection.removeAt(iSection);
 	SplineSurface();

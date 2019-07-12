@@ -1,7 +1,7 @@
 /****************************************************************************
 
 	GraphDlg  Classes
-	Copyright (C) 2008 Andre Deperrois sail7@xflr5.com
+	Copyright (C) 2008 Andre Deperrois 
 
 	All rights reserved
 

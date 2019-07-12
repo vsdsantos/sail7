@@ -1,7 +1,7 @@
 /****************************************************************************
 
     Graph Classes
-        Copyright (C) 2003 Andre Deperrois sail7@xflr5.com
+        Copyright (C) 2003 Andre Deperrois 
 
 	All rights reserved
 
@@ -20,6 +20,7 @@
 #include <QList>
 #include "../objects/CRectangle.h"
 #include "curve.h"
+
 
 class Graph
 {
@@ -212,7 +213,7 @@ private:
 
 	QString m_XTitle;
 	QString m_YTitle;
-	QList<void*> m_oaCurves;
+    QList<CCurve*> m_oaCurves;
 
 	QPoint m_ptoffset; //in screen coordinates, w.r.t. the client area
 

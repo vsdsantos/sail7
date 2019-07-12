@@ -1,7 +1,7 @@
 /****************************************************************************
 
 		 BoatDlg Class
-		 Copyright (C) 2011-2012 Andre Deperrois sail7@xflr5.com
+		 Copyright (C) 2011-2012 Andre Deperrois 
 		 All rights reserved
 
 *****************************************************************************/
@@ -34,7 +34,7 @@ class BoatDlg : public QDialog
 	friend class MainFrame;
 	friend class Sail7;
 	friend class CBoatDef;
-	friend class QSail;
+	friend class Sail;
 
 
 public:

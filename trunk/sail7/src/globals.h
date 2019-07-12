@@ -1,7 +1,7 @@
 /****************************************************************************
 
 	Global Functions 
-	Copyright (C) 2008-2010 Andre Deperrois sail7@xflr5.com
+	Copyright (C) 2008-2010 Andre Deperrois 
 
 	All rights reserved
 

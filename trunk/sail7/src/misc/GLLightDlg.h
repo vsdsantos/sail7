@@ -2,7 +2,7 @@
 /****************************************************************************
 
 	GLLightDlg class
-	Copyright (C) 2009 Andre Deperrois sail7@xflr5.com
+	Copyright (C) 2009 Andre Deperrois 
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by

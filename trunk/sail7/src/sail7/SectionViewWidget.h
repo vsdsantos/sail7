@@ -1,7 +1,7 @@
 /****************************************************************************
 
 		 SectionWidget Class
-		 Copyright (C) 2012 Andre Deperrois sail7@xflr5.com
+		 Copyright (C) 2012 Andre Deperrois 
 		 All rights reserved
 
 *****************************************************************************/
@@ -58,7 +58,7 @@ private:
 	void contextMenuEvent (QContextMenuEvent * event);
 
 	void Connect();
-	void Initialize(QSail *pSail, SailSection *pSection);
+	void Initialize(Sail *pSail, SailSection *pSection);
 	void SetSection(SailSection *pSection);
 	void PaintLegend(QPainter &painter);
 	void ReleaseZoom();
@@ -101,7 +101,7 @@ private:
 	QAction *m_pInsertPoint, *m_pRemovePoint, *m_pCurrentOnly;
 
 
-	QSail *m_pSail;
+	Sail *m_pSail;
 	SailSection *m_pSailSection;
 };
 

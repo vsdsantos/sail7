@@ -1,7 +1,7 @@
 /****************************************************************************
 
 		 SailDlg Class
-		 Copyright (C) 2012 Andre Deperrois sail7@xflr5.com
+		 Copyright (C) 2012 Andre Deperrois 
 		 All rights reserved
 
 *****************************************************************************/
@@ -76,12 +76,12 @@ public:
 	void ReadData();
 	void ReadSectionData();
 	void ReadPointData();
-	void SetSailData(QSail *pSail);
+	void SetSailData(Sail *pSail);
 	void UpdateSailDataOutput();
 	void UpdateView();
 	void UpdateSailView();
 
-	bool InitDialog(QSail *pSail);
+	bool InitDialog(Sail *pSail);
 	bool eventFilter( QObject* o, QEvent* e );
 
 	static void *s_pMainFrame;
@@ -133,7 +133,7 @@ public:
 	QAction *m_pUndo, *m_pRedo;
 	QAction *m_pResetXScale;
 
-	QSail *m_pSail;
+	Sail *m_pSail;
 	bool m_bChanged;
 
 

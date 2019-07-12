@@ -1,7 +1,7 @@
 /****************************************************************************
 
 		 BoatAnalysisDlg Class
-		 Copyright (C) 2011-2012 Andre Deperrois sail7@xflr5.com
+		 Copyright (C) 2011-2012 Andre Deperrois 
 		 All rights reserved
 
 *****************************************************************************/
@@ -34,7 +34,7 @@ class BoatAnalysisDlg : public QDialog
 	friend class Sail7;
 	friend class MainFrame;
 	friend class CBoatDef;
-	friend class QSail;
+	friend class Sail;
 
 public:
 	BoatAnalysisDlg();
@@ -165,7 +165,7 @@ public:
 	Vector3d m_Vd[ 4*VLMMAXRHS * MAXSAILSTATIONS];
 	Vector3d m_SailForce[4*VLMMAXRHS];
 	Vector3d m_SailCP[4*VLMMAXRHS];
-	QSail* m_pSailList[MAXSAILS]; //pointer to the boat's sails
+	Sail* m_pSailList[MAXSAILS]; //pointer to the boat's sails
 
 };
 

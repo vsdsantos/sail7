@@ -1,7 +1,7 @@
 /****************************************************************************
 
 			CBoat class
-			Copyright (C) 2011-2012 Andre Deperrois sail7@xflr5.com
+			Copyright (C) 2011-2012 Andre Deperrois 
 			All rights reserved
 
 *****************************************************************************/
@@ -22,11 +22,11 @@ Boat::Boat()
 
 
 
-QSail *Boat::GetSail(const QString &SailName)
+Sail *Boat::GetSail(const QString &SailName)
 {
 	for(int is=0; is<m_poaSail.size(); is++)
 	{
-        QSail* pSail = m_poaSail.at(is);
+        Sail* pSail = m_poaSail.at(is);
 		if(pSail->m_SailName==SailName) return pSail;
 	}
     return nullptr;
@@ -64,7 +64,7 @@ bool Boat::SerializeBoat(QDataStream &ar, bool bIsStoring)
 		ar << m_poaSail.size();
 		for(int is=0; is<m_poaSail.size(); is++)
 		{
-			QSail *pSail = (QSail*)m_poaSail.at(is);
+			Sail *pSail = (Sail*)m_poaSail.at(is);
 			if(!pSail) return false;
 			if(pSail->IsNURBSSail()) ar<<1;
 			else                     ar<<2;
@@ -125,8 +125,8 @@ void Boat::DuplicateBoat(Boat*pBoat)
 {
 	for(int is=0; is<pBoat->m_poaSail.size(); is++)
 	{
-        QSail *pNewSail = nullptr;
-		QSail *pSail = pBoat->m_poaSail.at(is);
+        Sail *pNewSail = nullptr;
+		Sail *pSail = pBoat->m_poaSail.at(is);
 		if(pSail->IsNURBSSail())        pNewSail = new NURBSSail;
 		else if(pSail->IsSailcutSail()) pNewSail = new SailcutSail;
 

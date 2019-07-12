@@ -1,7 +1,7 @@
 /****************************************************************************
 
                         CBoat class
-                        Copyright (C) 2011-2012 Andre Deperrois sail7@xflr5.com
+                        Copyright (C) 2011-2012 Andre Deperrois 
                         All rights reserved
 
 *****************************************************************************/
@@ -18,13 +18,13 @@ class Boat
     public:
         Boat();
 
-        QSail* GetSail(QString const &SailName);
+        Sail* GetSail(QString const &SailName);
         Body* GetBody(QString const &BodyName);
         void DuplicateBoat(Boat *pBoat);
         bool SerializeBoat(QDataStream &ar, bool bIsStoring);
         double Height();
 
-        QList <QSail*> m_poaSail;
+        QList <Sail*> m_poaSail;
         QList <Body*> m_poaHull;
 
         QString m_BoatName;

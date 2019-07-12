@@ -1,7 +1,7 @@
 /****************************************************************************
 
 		 ScaleSailDlg Class
-		 Copyright (C) 2012 Andre Deperrois sail7@xflr5.com
+		 Copyright (C) 2012 Andre Deperrois 
 		 All rights reserved
 
 *****************************************************************************/
@@ -40,7 +40,7 @@ ScaleSailDlg::ScaleSailDlg(void *pParent)
 
 
 
-void ScaleSailDlg::InitDialog(QSail *pSail)
+void ScaleSailDlg::InitDialog(Sail *pSail)
 {
 	m_pSail = pSail;
 	m_pctrlXScaleFactor->SetValue(m_XFactor);

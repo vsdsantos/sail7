@@ -1,7 +1,7 @@
 /****************************************************************************
 
     MainFrame  Class
-    Copyright (C) 2012 Andre Deperrois sail7@xflr5.com
+    Copyright (C) 2012 Andre Deperrois 
     All rights reserved
 
 *****************************************************************************/
@@ -429,7 +429,7 @@ void MainFrame::CreateDockWindows()
     SailDlg::s_pMainFrame              = this;
     GL3dBodyDlg::s_pMainFrame          = this;
     SectionViewWidget::s_pMainFrame    = this;
-    QSail::s_pMainFrame                = this;
+    Sail::s_pMainFrame                = this;
     SailViewWidget::s_pMainFrame       = this;
 
     m_pctrlSail7Widget = new QDockWidget("Sail7", this);

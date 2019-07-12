@@ -1,7 +1,7 @@
 /****************************************************************************
 
 		 SectionWidget Class
-		 Copyright (C) 2012 Andre Deperrois sail7@xflr5.com
+		 Copyright (C) 2012 Andre Deperrois 
 		 All rights reserved
 
 *****************************************************************************/
@@ -359,7 +359,7 @@ void SectionViewWidget::OnZoomYScale()
 }
 
 
-void SectionViewWidget::Initialize(QSail *pSail, SailSection *pSection)
+void SectionViewWidget::Initialize(Sail *pSail, SailSection *pSection)
 {
 	m_pSail = pSail;
 	m_pSailSection = pSection;
