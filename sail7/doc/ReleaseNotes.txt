@@ -1,13 +1,13 @@
-	
+    
 *******************************************************************************
 
 
                                         sail7
 
                           A tool for the design of sails and boats
-                            Program based on xflr5 source code
+                            Program based on the xflr5 source code
 
-									Copyright (C) 2012-2013
+                                 Copyright (C) 2012-2019
 
                                      Andre Deperrois
 
@@ -15,37 +15,35 @@
 *******************************************************************************
 
 
-sail7 v0.06 January 4th, 2013
-	- Added an option to export OpPoint data to a text file
+sail7 v1.0, July 14th, 2019
+    - Restored the saving of wind gradient parameters in the polar definition form
+    - Added an option to export OpPoint data to a text file
+    - Code cleaning
 
 
-sail7 v0.05 December 15th, 2012
-	- Corrected the issue of missing luff angle of NURBS type sails in save/load operations
+sail7 v0.05 alpha December 15th, 2012
+    - Corrected the issue of missing luff angle of NURBS type sails in save/load operations
 
 
-
-sail7 v0.04 December 8th, 2012
-	- Added display of Luff angle to NURBS section view
-	- Added a 3D display of lift and drag alongside with body forces
-	- Improved the calculation and display of NURBS sections
-	- Corrected the rotation of the NURBS type sails around the sail's leading edge
-	- Improved the formatting of polar data points in the polar properties window
-	- Added lift and drag to the graphic results
-	- Corrected a bug in the display of bodies
-	- Corrected the style of lines
-	- Improved the selection of points in the sail section view
-
+sail7 v0.04 alpha December 8th, 2012
+    - Added display of Luff angle to NURBS section view
+    - Added a 3D display of lift and drag alongside with body forces
+    - Improved the calculation and display of NURBS sections
+    - Corrected the rotation of the NURBS type sails around the sail's leading edge
+    - Improved the formatting of polar data points in the polar properties window
+    - Added lift and drag to the graphic results
+    - Corrected a bug in the display of bodies
+    - Corrected the style of lines
+    - Improved the selection of points in the sail section view
 
 
-sail7 v0.03 November 4th, 2012
-	- code published on sourceforge
-
+sail7 v0.03 alpha November 4th, 2012
+    - code published on sourceforge
 
 
 sail7 v0.02 alpha June 9th, 2012
-	- first operational release for alpha-testing
-
+    - first operational release for alpha-testing
 
 
 sail7 v0.01 alpha January 4th, 2012
-	- concept demonstration
+    - concept demonstration

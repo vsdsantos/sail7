@@ -26,23 +26,23 @@
 #include <math.h>
 
 #include "./sail7.h"
-#include "./BoatPolarDlg.h"
-#include "./BoatDlg.h"
-#include "./GL3dBodyDlg.h"
-#include "./SailViewWidget.h"
-#include "./SailDlg.h"
-#include "./GLCreateBodyLists.h"
-#include "./GL3DScales.h"
+#include "./boatpolardlg.h"
+#include "./boatdlg.h"
+#include "./gl3dbodydlg.h"
+#include "./sailwwidget.h"
+#include "./saildlg.h"
+#include "./glcreatebodylists.h"
+#include "./gl3dscales.h"
 #include "../globals.h"
 #include "../mainframe.h"
 #include "../twodwidget.h"
-#include "../objects/NURBSSail.h"
-#include "../objects/SailcutSail.h"
-#include "../misc/ProgressDlg.h"
-#include "../misc/ModDlg.h"
-#include "../misc/ObjectPropsDlg.h"
-#include "../misc/RenameDlg.h"
-#include "../misc/SelectObjectDlg.h"
+#include "../objects/nurbssail.h"
+#include "../objects/sailcutsail.h"
+#include "../misc/progressdlg.h"
+#include "../misc/moddlg.h"
+#include "../misc/objectpropsdlg.h"
+#include "../misc/renamedlg.h"
+#include "../misc/selectobjectdlg.h"
 #include "../graph/graphdlg.h"
 
 
@@ -51,8 +51,8 @@ TwoDWidget *Sail7::s_p2DWidget;
 ThreeDWidget *Sail7::s_p3DWidget;
 
 
-CPanel* Sail7::s_pPanel;		// the panel array for the currently loaded UFO
-Vector3d* Sail7::s_pNode;		// the node array for the currently loaded UFO
+CPanel* Sail7::s_pPanel;        // the panel array for the currently loaded UFO
+Vector3d* Sail7::s_pNode;        // the node array for the currently loaded UFO
 Vector3d* Sail7::s_pMemNode;         // used if the analysis should be performed on the tilted geometry
 Vector3d* Sail7::s_pWakeNode;        // the reference current wake node array
 Vector3d* Sail7::s_pRefWakeNode;     // the reference wake node array if wake needs to be reset
@@ -96,7 +96,7 @@ Sail7::Sail7(QWidget *parent) : QWidget(parent)
     m_bAxes          = false;
     m_bWater         = false;
     m_bWindDirection = true;
-    //	m_bShowLight     = false;
+    //    m_bShowLight     = false;
     m_bglLight       = true;
     m_bSurfaces      = true;
     m_bOutline       = true;
@@ -227,7 +227,7 @@ void Sail7::SetupLayout()
                 m_pctrlControlMax     = new FloatEdit(1., 3);
                 m_pctrlControlDelta   = new FloatEdit(0.5, 3);
 
-                /*	m_pctrlControlMin->setMinimumHeight(20);
+                /*    m_pctrlControlMin->setMinimumHeight(20);
                 m_pctrlControlMax->setMinimumHeight(20);
                 m_pctrlControlDelta->setMinimumHeight(20);*/
                 m_pctrlControlMin->setAlignment(Qt::AlignRight);
@@ -270,7 +270,7 @@ void Sail7::SetupLayout()
             m_pctrlWater          = new QCheckBox(tr("Water"));
             m_pctrlWindDirection  = new QCheckBox(tr("Wind"));
             m_pctrlBOppAnimate    = new QCheckBox(tr("Animate"));
-            //	m_pctrlHighlightOpp   = new QCheckBox(tr("Highlight OpPoint"));
+            //    m_pctrlHighlightOpp   = new QCheckBox(tr("Highlight OpPoint"));
 
 
             m_pctrlAnimateBOppSpeed= new QSlider(Qt::Horizontal);
@@ -298,7 +298,7 @@ void Sail7::SetupLayout()
     {
         m_pctrlPolarProps1 = new QTextEdit;
         m_pctrlPolarProps1->setReadOnly(true);
-        //	m_pctrlPolarProps1->setWordWrapMode(QTextOption::NoWrap);
+        //    m_pctrlPolarProps1->setWordWrapMode(QTextOption::NoWrap);
         QHBoxLayout *PolarPropsLayout = new QHBoxLayout;
         {
             PolarPropsLayout->addWidget(m_pctrlPolarProps1);
@@ -314,8 +314,8 @@ void Sail7::SetupLayout()
         {
             m_pctrlShowCurve  = new QCheckBox(tr("Curve"));
             m_pctrlShowPoints = new QCheckBox(tr("Points"));
-            //	m_pctrlShowCurve->setMinimumHeight(10);
-            //	m_pctrlShowPoints->setMinimumHeight(10);
+            //    m_pctrlShowCurve->setMinimumHeight(10);
+            //    m_pctrlShowPoints->setMinimumHeight(10);
             m_pctrlCurveStyle = new LineCbBox();
             m_pctrlCurveWidth = new LineCbBox();
             m_pctrlCurveColor = new LineButton;
@@ -376,7 +376,7 @@ void Sail7::SetupLayout()
                 m_pctrlVortices   = new QCheckBox(tr("Vortices"));
 
                 ThreeDParams->addWidget(m_pctrlAxes, 1,1);
-                //	ThreeDParams->addWidget(m_pctrlLight, 1,2);
+                //    ThreeDParams->addWidget(m_pctrlLight, 1,2);
                 ThreeDParams->addWidget(m_pctrlPanels, 1,2);
                 ThreeDParams->addWidget(m_pctrlSurfaces, 2,1);
                 ThreeDParams->addWidget(m_pctrlOutline, 2,2);
@@ -625,7 +625,7 @@ void Sail7::keyPressEvent(QKeyEvent *event)
                 m_pCurGraph->SetAuto(true);
                 UpdateView();
             }
-            //			else if(m_iView==WOPPVIEW)   OnResetWingScale();
+            //            else if(m_iView==WOPPVIEW)   OnResetWingScale();
             else if(m_iView==SAILPOLARVIEW) OnResetBoatPlrLegend();
 
             break;
@@ -790,7 +790,7 @@ void Sail7::OnSail3DView()
 
 void Sail7::OnSailPolarView()
 {
-    //	if (m_bAnimateWOpp) StopAnimate();
+    //    if (m_bAnimateWOpp) StopAnimate();
 
     if(m_iView==SAILPOLARVIEW)
     {
@@ -830,23 +830,21 @@ void Sail7::UpdateView()
 
 void Sail7::PaintView(QPainter &painter)
 {
-    static int h,w,w2,h2, h23, w3,w23;
-    static QRect Rect1, Rect2, Rect3, Rect4, r2DCltRect;
-
+    QRect Rect1, Rect2, Rect3, Rect4, r2DCltRect;
 
     r2DCltRect = s_p2DWidget->geometry();
 
     painter.save();
 
-    w   = r2DCltRect.width();
-    w2  = int(w/2);
-    w3  = int(0.35*w);
-    w23 = 2*w3;
-    h   = r2DCltRect.height();
-    h2  = int(h/2);
-    h23 = int(2*h/3);
-    //	h34 = (int)(3*h/4);
-    //	h38 = (int)(3*h/8);
+    int w   = r2DCltRect.width();
+    int w2  = int(w/2);
+    int w3  = int(0.35*w);
+    int w23 = 2*w3;
+    int h   = r2DCltRect.height();
+    int h2  = int(h/2);
+    int h23 = int(2*h/3);
+    //    h34 = (int)(3*h/4);
+    //    h38 = (int)(3*h/8);
 
     //Refresh the active view
     painter.fillRect(r2DCltRect, s_pMainFrame->m_BackgroundColor);
@@ -974,7 +972,7 @@ void Sail7::GLDraw3D()
         }
         if(m_pCurBoat && m_pCurBoatPolar && m_pCurBoatOpp)
         {
-            //			GLCreateForce();
+            //            GLCreateForce();
             m_bResetglLift = false;
         }
     }
@@ -989,7 +987,7 @@ void Sail7::GLDraw3D()
     {
         GLCreateSailMesh(s_pNode, s_pPanel);
         GLCreateBodyMesh(s_pNode, s_pPanel);
-        //		GLCreatePanelNormals();
+        //        GLCreatePanelNormals();
         m_bResetglMesh = false;
     }
 
@@ -1056,12 +1054,12 @@ void Sail7::GLRenderView()
     // Renders the OpenGl 3D view
     //
 
-    static GLdouble pts[4];
+    GLdouble pts[4];
 
     pts[0]= 0.0; pts[1]=0.0; pts[2]=-1.0; pts[3]= m_ClipPlanePos;  //x=m_VerticalSplit
     glClipPlane(GL_CLIP_PLANE1, pts);
-    if(m_ClipPlanePos>4.9999) 	glDisable(GL_CLIP_PLANE1);
-    else						glEnable(GL_CLIP_PLANE1);
+    if(m_ClipPlanePos>4.9999)     glDisable(GL_CLIP_PLANE1);
+    else                        glEnable(GL_CLIP_PLANE1);
 
     // Clear the viewport
     glFlush();
@@ -1075,8 +1073,8 @@ void Sail7::GLRenderView()
 
     glPushMatrix();
     {
-        if(m_ClipPlanePos>4.9999) 	glDisable(GL_CLIP_PLANE1);
-        else						glEnable(GL_CLIP_PLANE1);
+        if(m_ClipPlanePos>4.9999)     glDisable(GL_CLIP_PLANE1);
+        else                        glEnable(GL_CLIP_PLANE1);
 
         if(m_GLLightDlg.isVisible()) //show light
         {
@@ -1156,8 +1154,8 @@ void Sail7::GLRenderView()
 
         glLoadIdentity();
 
-        //		GLDrawBoatLegend();
-        //		if(m_pCurBoatOpp) GLDrawBoatOppLegend();
+        //        GLDrawBoatLegend();
+        //        if(m_pCurBoatOpp) GLDrawBoatOppLegend();
 
         glDisable(GL_CLIP_PLANE1);
         if (m_b3DCp && m_pCurBoatOpp)
@@ -1311,7 +1309,7 @@ int Sail7::CreateSailElements(Sail *pSail)
             if(k==0)                   s_pPanel[m_MatSize].m_iPR = -1;
             if(k==pSail->m_NZPanels-1) s_pPanel[m_MatSize].m_iPL = -1;
 
-            //			if(m_pPanel[m_MatSize].m_bIsTrailing)
+            //            if(m_pPanel[m_MatSize].m_bIsTrailing)
             if(true)
             {
                 s_pPanel[m_MatSize].m_iWake = 0;          //no need for wake panels in VLM formulation
@@ -1461,7 +1459,7 @@ int Sail7::CreateBodyElements(Body *pBody)
                         s_pPanel[m_MatSize].m_iPU = m_MatSize - nh;
 
                         if(lnx==0)      s_pPanel[m_MatSize].m_iPU = -1;// no panel downstream
-                        if(lnx==nx-1)	s_pPanel[m_MatSize].m_iPD = -1;// no panel upstream
+                        if(lnx==nx-1)    s_pPanel[m_MatSize].m_iPD = -1;// no panel upstream
 
                         s_pPanel[m_MatSize].m_iPL = m_MatSize + 1;
                         s_pPanel[m_MatSize].m_iPR = m_MatSize - 1;
@@ -1568,7 +1566,7 @@ int Sail7::CreateBodyElements(Body *pBody)
                 s_pPanel[m_MatSize].m_iPU = m_MatSize - nh;
 
                 if(k==0)    s_pPanel[m_MatSize].m_iPU = -1;// no panel downstream
-                if(k==nx-1)	s_pPanel[m_MatSize].m_iPD = -1;// no panel upstream
+                if(k==nx-1)    s_pPanel[m_MatSize].m_iPD = -1;// no panel upstream
 
                 s_pPanel[m_MatSize].m_iPL = m_MatSize + 1;
                 s_pPanel[m_MatSize].m_iPR = m_MatSize - 1;
@@ -1666,8 +1664,8 @@ int Sail7::CreateBodyElements(Body *pBody)
             s_pPanel[m_MatSize].m_iPD = m_MatSize - nh;
             s_pPanel[m_MatSize].m_iPU = m_MatSize + nh;
 
-            if(k==0)	s_pPanel[m_MatSize].m_iPU = -1;// no panel downstream
-            if(k==nx-1)	s_pPanel[m_MatSize].m_iPD = -1;// no panel upstream
+            if(k==0)    s_pPanel[m_MatSize].m_iPU = -1;// no panel downstream
+            if(k==nx-1)    s_pPanel[m_MatSize].m_iPD = -1;// no panel upstream
 
             s_pPanel[m_MatSize].m_iPL = m_MatSize + 1;
             s_pPanel[m_MatSize].m_iPR = m_MatSize - 1;
@@ -1706,14 +1704,14 @@ void Sail7::GLCreateWindList()
             h = (double)iw/10.0 * height;
 
             s = m_pCurBoatPolar->WindFactor(h);
-            //			p3DWidget->GLDrawCylinder(QColor(150,150,150), 0.13*s, 0.13*s, 0.0*s, 1.5*s, 31, 11);
-            //			p3DWidget->GLDrawCylinder(QColor(150,150,150), 0.31*s, 0.00*s, 1.5*s, 2.5*s, 31, 11);
+            //            p3DWidget->GLDrawCylinder(QColor(150,150,150), 0.13*s, 0.13*s, 0.0*s, 1.5*s, 31, 11);
+            //            p3DWidget->GLDrawCylinder(QColor(150,150,150), 0.31*s, 0.00*s, 1.5*s, 2.5*s, 31, 11);
             s_p3DWidget->GLDrawArrow(Vector3d(0.0, 0.0, iw*height/10.0), w, s*2.0);
 
-            //			glTranslated(0.0, 0.0, height/10.0);
+            //            glTranslated(0.0, 0.0, height/10.0);
         }
 
-        /*		glBegin(GL_LINE_STRIP);
+        /*        glBegin(GL_LINE_STRIP);
         {
             for(int iw=0; iw<=100; iw++)
             {
@@ -1743,7 +1741,7 @@ void Sail7::GLCreateWaterList()
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         glPolygonOffset(1.0, 1.0);
 
-        /*		double ti, tip1, tj;
+        /*        double ti, tip1, tj;
         double lx=1.0, ly=5.;
         for(int iw=0; iw<WATERMESH; iw++)
         {
@@ -1795,7 +1793,7 @@ void Sail7::OnNewBoat()
 
     BoatDlg dlg;
     dlg.InitDialog(pNewBoat);
-    //	BoatDlg.m_bAcceptName= true;
+    //    BoatDlg.m_bAcceptName= true;
     dlg.move(s_pMainFrame->m_DlgPos);
 
     if(QDialog::Accepted == dlg.exec())
@@ -1826,7 +1824,7 @@ void Sail7::OnNewBoat()
         s_pMainFrame->SetSaveState(false);
         SetBoat();
         s_pMainFrame->UpdateBoats();
-        //		m_bIs2DScaleSet = false;
+        //        m_bIs2DScaleSet = false;
         SetScale();
         UpdateView();
     }
@@ -1944,7 +1942,7 @@ void Sail7::OnRenameCurBoat()
 {
     //Rename the currently selected Boat
 
-    if(!m_pCurBoat)	return;
+    if(!m_pCurBoat)    return;
 
     //Rename the currently selected UFO
     QString OldName;
@@ -2187,7 +2185,7 @@ void Sail7::wheelEvent(QWheelEvent *event)
     //The mouse button has been wheeled
     //Process the message
     QPoint pt(event->x(), event->y()); //client coordinates
-    static double ZoomFactor;
+    double ZoomFactor;
     if(event->delta()>0)
     {
         if(!s_pMainFrame->m_bReverseZoom) ZoomFactor = 1./1.06;
@@ -2261,7 +2259,7 @@ void Sail7::mousePressEvent(QMouseEvent *event)
 
         if(m_iView==SAIL3DVIEW)
         {
-            //	point is in client coordinates
+            //    point is in client coordinates
 
             Vector3d Real;
             bool bCtrl = false;
@@ -2337,7 +2335,7 @@ void Sail7::mouseReleaseEvent(QMouseEvent *)
         m_bCrossPoint = false;
         UpdateView();
 
-        //	We need to re-calculate the translation vector
+        //    We need to re-calculate the translation vector
         int i,j;
         for(i=0; i<4; i++)
             for(j=0; j<4; j++)
@@ -2434,7 +2432,7 @@ void Sail7::Set3DRotationCenter(QPoint point)
     if(bIntersect)
     {
 
-        //		smooth visual transition
+        //        smooth visual transition
        s_p3DWidget->GLInverseMatrix(MatIn, MatOut);
 
         U.x = (-PP.x -m_glRotCenter.x)/30.0;
@@ -2513,9 +2511,9 @@ void Sail7::Set3DScale()
         double lmax=5;
         for(int is=0; is<m_pCurBoat->m_poaSail.size(); is++)
         {
-            //			CSail*pSail= (CSail*)m_pCurBoat->m_poaSail.at(is);
-            //			SailSection *pSailSection = (SailSection*)pSail->m_oaSection.at(0);
-            //			lmax = qMax(lmax, pSailSection->m_Chord);
+            //            CSail*pSail= (CSail*)m_pCurBoat->m_poaSail.at(is);
+            //            SailSection *pSailSection = (SailSection*)pSail->m_oaSection.at(0);
+            //            lmax = qMax(lmax, pSailSection->m_Chord);
         }
         m_glScaled = GLfloat(3.f/4.0f*m_GLScale/lmax);
         m_glViewportTrans.x = 0.0;
@@ -2541,10 +2539,10 @@ void Sail7::mouseMoveEvent(QMouseEvent *event)
     //
 
     if(!hasFocus()) setFocus();
-    static Vector3d Real;
-    static bool bCtrl;
-    static QPoint Delta, point;
-    static double xu, yu, x1, y1, xmin, xmax, ymin, ymax;
+    Vector3d Real;
+    bool bCtrl;
+    QPoint Delta, point;
+    double xu, yu, x1, y1, xmin, xmax, ymin, ymax;
 
     Delta.setX(event->pos().x() - m_LastPoint.x());
     Delta.setY(event->pos().y() - m_LastPoint.y());
@@ -2656,22 +2654,22 @@ void Sail7::On3DIso()
     SetViewControls();
     m_pctrlIso->setChecked(true);
 
-    m_ArcBall.ab_quat[0]	= -0.65987748f;
-    m_ArcBall.ab_quat[1]	=  0.38526487f;
-    m_ArcBall.ab_quat[2]	= -0.64508355f;
-    m_ArcBall.ab_quat[3]	=  0.0f;
-    m_ArcBall.ab_quat[4]	= -0.75137258f;
-    m_ArcBall.ab_quat[5]	= -0.33720365f;
-    m_ArcBall.ab_quat[6]	=  0.56721509f;
-    m_ArcBall.ab_quat[7]	=  0.0f;
-    m_ArcBall.ab_quat[8]	=  0.000f;
-    m_ArcBall.ab_quat[9]	=  0.85899049f;
-    m_ArcBall.ab_quat[10]	=  0.51199043f;
-    m_ArcBall.ab_quat[11]	=  0.0f;
-    m_ArcBall.ab_quat[12]	=  0.0f;
-    m_ArcBall.ab_quat[13]	=  0.0f;
-    m_ArcBall.ab_quat[14]	=  0.0f;
-    m_ArcBall.ab_quat[15]	=  1.0f;
+    m_ArcBall.ab_quat[0]    = -0.65987748f;
+    m_ArcBall.ab_quat[1]    =  0.38526487f;
+    m_ArcBall.ab_quat[2]    = -0.64508355f;
+    m_ArcBall.ab_quat[3]    =  0.0f;
+    m_ArcBall.ab_quat[4]    = -0.75137258f;
+    m_ArcBall.ab_quat[5]    = -0.33720365f;
+    m_ArcBall.ab_quat[6]    =  0.56721509f;
+    m_ArcBall.ab_quat[7]    =  0.0f;
+    m_ArcBall.ab_quat[8]    =  0.000f;
+    m_ArcBall.ab_quat[9]    =  0.85899049f;
+    m_ArcBall.ab_quat[10]    =  0.51199043f;
+    m_ArcBall.ab_quat[11]    =  0.0f;
+    m_ArcBall.ab_quat[12]    =  0.0f;
+    m_ArcBall.ab_quat[13]    =  0.0f;
+    m_ArcBall.ab_quat[14]    =  0.0f;
+    m_ArcBall.ab_quat[15]    =  1.0f;
 
     Set3DRotationCenter();
     UpdateView();
@@ -2739,7 +2737,7 @@ void Sail7::On3DWindFront()
     Quaternion Qt1(sqrt(2.0)/2.0, 0.0,            sqrt(2.0)/2.0, 0.0);// rotate by 90 deg around y
     Quaternion Qt2(sqrt(2.0)/2.0, -sqrt(2.0)/2.0, 0.0,           0.0);// rotate by 90 deg around x
 
-    if(!m_pCurBoatOpp)	m_ArcBall.SetQuat(Qt1 * Qt2);
+    if(!m_pCurBoatOpp)    m_ArcBall.SetQuat(Qt1 * Qt2);
     else
     {
         Vector3d R(0.0, 0.0, 1.0);
@@ -2763,7 +2761,7 @@ void Sail7::On3DWindRear()
     Quaternion Qt1(sqrt(2.0)/2.0, 0.0,            sqrt(2.0)/2.0, 0.0);// rotate by 90 deg around y
     Quaternion Qt2(sqrt(2.0)/2.0, -sqrt(2.0)/2.0, 0.0,           0.0);// rotate by 90 deg around x
 
-    if(!m_pCurBoatOpp)	m_ArcBall.SetQuat(Qt1 * Qt2);
+    if(!m_pCurBoatOpp)    m_ArcBall.SetQuat(Qt1 * Qt2);
     else
     {
         Vector3d R(0.0, 0.0, 1.0);
@@ -3000,10 +2998,10 @@ void Sail7::SetBoat(QString BoatName)
 
             if(!BoatName.size())
             {
-                //				for(int i=0; i<4; i++) m_pBoatList[i] = nullptr;
+                //                for(int i=0; i<4; i++) m_pBoatList[i] = nullptr;
                 m_pCurBoat  = nullptr;
-                //				if(m_iView==BoatPOLARVIEW)		CreateWPolarCurves();
-                //				else if(m_iView==BoatOPPVIEW)	CreateWOppCurves();
+                //                if(m_iView==BoatPOLARVIEW)        CreateWPolarCurves();
+                //                else if(m_iView==BoatOPPVIEW)    CreateWOppCurves();
 
                 QApplication::restoreOverrideCursor();
 
@@ -3070,7 +3068,7 @@ void Sail7::SetBoat(QString BoatName)
     }
 
     SetScale();
-    //	SetWGraphScale();
+    //    SetWGraphScale();
 
     SetControls();
 
@@ -3145,7 +3143,7 @@ bool Sail7::SetModBoat(Boat *pModBoat)
                                 break;
                             }
                         }
-                        if(!bInserted)	m_poaBoat->append(pModBoat);
+                        if(!bInserted)    m_poaBoat->append(pModBoat);
                         break;
                     }
                 }
@@ -3221,7 +3219,7 @@ void Sail7::OnRenameCurBoatPolar()
     int resp, k;
     BoatPolar* pBoatPolar = nullptr;
 
-    //	BoatOpp * pBoatOpp = nullptr;
+    //    BoatOpp * pBoatOpp = nullptr;
     QString OldName = m_pCurBoatPolar->m_BoatPolarName;
 
 
@@ -3254,7 +3252,7 @@ void Sail7::OnRenameCurBoatPolar()
             for (k=0; k<m_poaBoatPolar->size(); k++)
             {
                 pBoatPolar = m_poaBoatPolar->at(k);
-                if (pBoatPolar->m_BoatPolarName == dlg.m_strName &&	pBoatPolar->m_BoatName == m_pCurBoat->m_BoatName)
+                if (pBoatPolar->m_BoatPolarName == dlg.m_strName &&    pBoatPolar->m_BoatName == m_pCurBoat->m_BoatName)
                 {
                     bExists = true;
                     break;
@@ -3310,7 +3308,7 @@ void Sail7::OnRenameCurBoatPolar()
             for (k=0; k<m_poaBoatPolar->size(); k++)
             {
                 pBoatPolar = m_poaBoatPolar->at(k);
-                if (pBoatPolar->m_BoatPolarName == dlg.m_strName &&	pBoatPolar->m_BoatName == m_pCurBoat->m_BoatName)
+                if (pBoatPolar->m_BoatPolarName == dlg.m_strName &&    pBoatPolar->m_BoatName == m_pCurBoat->m_BoatName)
                 {
                     bExists = true;
                     break;
@@ -3342,7 +3340,7 @@ void Sail7::OnRenameCurBoatPolar()
             for (int l=m_poaBoatOpp->size()-1;l>=0; l--)
             {
                 BoatOpp *pBoatOpp = m_poaBoatOpp->at(l);
-                if (pBoatOpp->m_BoatPolarName == OldName &&	pBoatOpp->m_BoatName == m_pCurBoat->m_BoatName)
+                if (pBoatOpp->m_BoatPolarName == OldName &&    pBoatOpp->m_BoatName == m_pCurBoat->m_BoatName)
                 {
                     pBoatOpp->m_BoatPolarName= dlg.m_strName;
                 }
@@ -3419,7 +3417,7 @@ bool Sail7::SetModBoatPolar(BoatPolar *pModBoatPolar)
                         break;
                     }
                 }
-                if(!bInserted)	m_poaBoatPolar->append(pModBoatPolar);
+                if(!bInserted)    m_poaBoatPolar->append(pModBoatPolar);
                 s_pMainFrame->SetSaveState(false);
                 return true;
             }
@@ -3505,7 +3503,7 @@ void Sail7::GLCreateBodyLists()
                     glDeleteLists(BODYGEOMBASE+ib+MAXBODIES,1);
                     m_GLList -=2;
                 }
-                if(pHull->m_LineType==BODYPANELTYPE)	   GLCreateBody3DFlatPanels(s_pMainFrame, BODYGEOMBASE+ib, pHull);
+                if(pHull->m_LineType==BODYPANELTYPE)       GLCreateBody3DFlatPanels(s_pMainFrame, BODYGEOMBASE+ib, pHull);
                 else if(pHull->m_LineType==BODYSPLINETYPE) GLCreateBody3DSplines(s_pMainFrame, BODYGEOMBASE+ib, pHull,
                                                                                  GL3dBodyDlg::s_NXPoints,
                                                                                  GL3dBodyDlg::s_NHoopPoints);
@@ -3628,7 +3626,7 @@ void Sail7::GLCallViewLists()
         {
             Sail *pSail = m_pCurBoat->m_poaSail.at(is);
             Vector3d LE = pSail->m_LEPosition;
-            //			LE.RotateX(m_pCurBoatOpp->m_Phi);
+            //            LE.RotateX(m_pCurBoatOpp->m_Phi);
 
             glPushMatrix();
             {
@@ -3658,7 +3656,7 @@ void Sail7::GLCallViewLists()
                 if(m_bVLMPanels)
                 {
                     glCallList(SAILMESHBASE+is);
-                    //					if(!m_b3DCp) glCallList(SAILMESHBASE+MAXSAILS+is);
+                    //                    if(!m_b3DCp) glCallList(SAILMESHBASE+MAXSAILS+is);
                 }
 
                 if(m_b3DCp) glCallList(SAILCPBASE+is);
@@ -3847,7 +3845,7 @@ int Sail7::IsNode(Vector3d &Pt)
     // returns the index of a node if found, else returns NULL
     //
     int in;
-    //	for (in=0; in<m_nNodes; in++)
+    //    for (in=0; in<m_nNodes; in++)
     // explore in reverse order, since we have better chance of
     // finding the node close to the last point when creating elements
     //
@@ -3881,12 +3879,12 @@ void Sail7::GLCreateSailMesh(Vector3d *pNode, CPanel *pPanel)
             m_GLList++;
             glEnable(GL_DEPTH_TEST);
             glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-            //			glEnable(GL_POLYGON_OFFSET_FILL);
-            //			glPolygonOffset(1.0, 1.0);
+            //            glEnable(GL_POLYGON_OFFSET_FILL);
+            //            glPolygonOffset(1.0, 1.0);
 
             color = W3dPrefsDlg::s_VLMColor;
-            //			style = W3dPrefsDlg::s_VLMStyle;
-            //			width = W3dPrefsDlg::s_VLMWidth;
+            //            style = W3dPrefsDlg::s_VLMStyle;
+            //            width = W3dPrefsDlg::s_VLMWidth;
 
             glLineWidth(1.0);
 
@@ -3922,8 +3920,8 @@ void Sail7::GLCreateSailMesh(Vector3d *pNode, CPanel *pPanel)
             glPolygonOffset(1.0, 1.0);
 
             color = s_pMainFrame->m_BackgroundColor;
-            //			style = W3dPrefsDlg::s_VLMStyle;
-            //			width = W3dPrefsDlg::s_VLMWidth;
+            //            style = W3dPrefsDlg::s_VLMStyle;
+            //            width = W3dPrefsDlg::s_VLMWidth;
 
             glColor3d(color.redF(),color.greenF(),color.blueF());
 
@@ -3977,12 +3975,12 @@ void Sail7::GLCreateBodyMesh(Vector3d *pNode, CPanel *pPanel)
             m_GLList++;
             glEnable(GL_DEPTH_TEST);
             glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-            //			glEnable(GL_POLYGON_OFFSET_FILL);
-            //			glPolygonOffset(1.0, 1.0);
+            //            glEnable(GL_POLYGON_OFFSET_FILL);
+            //            glPolygonOffset(1.0, 1.0);
 
             color = W3dPrefsDlg::s_VLMColor;
-            //			style = W3dPrefsDlg::s_VLMStyle;
-            //			width = W3dPrefsDlg::s_VLMWidth;
+            //            style = W3dPrefsDlg::s_VLMStyle;
+            //            width = W3dPrefsDlg::s_VLMWidth;
 
             glLineWidth(1.0);
 
@@ -4018,8 +4016,8 @@ void Sail7::GLCreateBodyMesh(Vector3d *pNode, CPanel *pPanel)
             glPolygonOffset(1.0, 1.0);
 
             color = s_pMainFrame->m_BackgroundColor;
-            //			style = W3dPrefsDlg::s_VLMStyle;
-            //			width = W3dPrefsDlg::s_VLMWidth;
+            //            style = W3dPrefsDlg::s_VLMStyle;
+            //            width = W3dPrefsDlg::s_VLMWidth;
 
             glColor3d(color.redF(),color.greenF(),color.blueF());
 
@@ -4215,8 +4213,8 @@ void Sail7::OnSurfaces()
     {
         m_b3DCp = false;
         m_pctrlCp->setChecked(false);
-        //		m_bVLMPanels=false;
-        //		m_pctrlPanels->setChecked(false);
+        //        m_bVLMPanels=false;
+        //        m_pctrlPanels->setChecked(false);
     }
     UpdateView();
 }
@@ -4238,8 +4236,8 @@ void Sail7::OnPanels()
     SailViewWidget::s_bVLMPanels = m_bVLMPanels;
     if(m_bVLMPanels)
     {
-        //		m_bSurfaces=false;
-        //		m_pctrlSurfaces->setChecked(false);
+        //        m_bSurfaces=false;
+        //        m_pctrlSurfaces->setChecked(false);
     }
     UpdateView();
 }
@@ -4438,14 +4436,14 @@ void Sail7::SetBoatPolar(BoatPolar *pBoatPolar, QString BoatPolarName)
     if(!m_pCurBoat) return;
     m_bResetTextLegend = true;
 
-    if(!BoatPolarName.length() && m_pCurBoatPolar)	BoatPolarName = m_pCurBoatPolar->m_BoatPolarName;
+    if(!BoatPolarName.length() && m_pCurBoatPolar)    BoatPolarName = m_pCurBoatPolar->m_BoatPolarName;
 
     if(!pBoatPolar && BoatPolarName.length())
     {
         for (i=0; i<m_poaBoatPolar->size(); i++)
         {
             pOldBoatPolar =  m_poaBoatPolar->at(i);
-            if (pOldBoatPolar->m_BoatName == m_pCurBoat->m_BoatName &&	pOldBoatPolar->m_BoatPolarName == BoatPolarName)
+            if (pOldBoatPolar->m_BoatName == m_pCurBoat->m_BoatName &&    pOldBoatPolar->m_BoatPolarName == BoatPolarName)
             {
                 pBoatPolar = pOldBoatPolar;
                 break;
@@ -4484,7 +4482,7 @@ void Sail7::SetBoatPolar(BoatPolar *pBoatPolar, QString BoatPolarName)
     if(m_pCurBoatPolar)
     {
         int pos = s_pMainFrame->m_pctrlBoatPolar->findText(m_pCurBoatPolar->m_BoatPolarName);
-        if (pos>=0)		s_pMainFrame->m_pctrlBoatPolar->setCurrentIndex(pos);
+        if (pos>=0)        s_pMainFrame->m_pctrlBoatPolar->setCurrentIndex(pos);
     }
 
 
@@ -4521,7 +4519,7 @@ void Sail7::SetBoatPolar(BoatPolar *pBoatPolar, QString BoatPolarName)
         m_pctrlWater->setChecked(false);
     }
 
-    if(m_iView==SAILPOLARVIEW)	CreateBoatPolarCurves();
+    if(m_iView==SAILPOLARVIEW)    CreateBoatPolarCurves();
 
 
     s_pMainFrame->UpdateBoatOpps();
@@ -4612,10 +4610,10 @@ bool Sail7::SetBoatOpp(bool bCurrent, double x)
     {
         m_LastBoatOpp = m_pCurBoatOpp->m_Ctrl;
         m_pCurBoatPolar->m_AMem = m_pCurBoatOpp->m_Ctrl;
-        //		m_nWakeNodes   = m_pCurBoatOpp->m_nWakeNodes;
-        //		m_NXWakePanels = m_pCurBoatOpp->m_NXWam_AlphakePanels;
-        //		m_TotalWakeLength  =		m_pCurBoatOpp->m_FirstWakePanel;
-        //		m_WakePanelFactor =		m_pCurBoatOpp->m_WakeFactor;
+        //        m_nWakeNodes   = m_pCurBoatOpp->m_nWakeNodes;
+        //        m_NXWakePanels = m_pCurBoatOpp->m_NXWam_AlphakePanels;
+        //        m_TotalWakeLength  =        m_pCurBoatOpp->m_FirstWakePanel;
+        //        m_WakePanelFactor =        m_pCurBoatOpp->m_WakeFactor;
 
         //select m_pCurBoatOpp in the listbox
         s_pMainFrame->SelectBoatOpp(m_pCurBoatOpp->m_Ctrl);
@@ -4671,7 +4669,7 @@ void Sail7::FillBoatPlrCurve(CCurve *pCurve, BoatPolar *pBoatPolar, enumPolarVar
     //
     int i;
     double x,y;
-    static QList <double> *pX, *pY;
+    QList <double> *pX, *pY;
 
     pX = (QList <double> *) pBoatPolar->GetBoatPlrVariable(XVar);
     pY = (QList <double> *) pBoatPolar->GetBoatPlrVariable(YVar);
@@ -4806,7 +4804,7 @@ void Sail7::AddBoatOpp(double *Cp, double *Gamma, double *Sigma, Vector3d const 
         pNewPoint->M  = M;
         pNewPoint->ForceTrefftz = ForceTrefftz;
 
-        /*		CVector WindDirection, WindNormal, WindSide;
+        /*        CVector WindDirection, WindNormal, WindSide;
         SetWindAxis(pNewPoint->m_Beta, WindDirection, WindNormal, WindSide);
         pNewPoint->m_Lift = pNewPoint->ForceTrefftz.dot(WindNormal);
         pNewPoint->m_Drag = pNewPoint->ForceTrefftz.dot(WindDirection);*/
@@ -4818,7 +4816,7 @@ void Sail7::AddBoatOpp(double *Cp, double *Gamma, double *Sigma, Vector3d const 
 
         pNewPoint->m_nWakeNodes     = 0;
         pNewPoint->m_NXWakePanels   = 1;
-        //		pNewPoint->m_FirstWakePanel = m_pCurBoatPolar->m_WSpan;
+        //        pNewPoint->m_FirstWakePanel = m_pCurBoatPolar->m_WSpan;
         pNewPoint->m_WakeFactor     = 1.0;
 
     }
@@ -4863,7 +4861,7 @@ void Sail7::AddBoatOpp(double *Cp, double *Gamma, double *Sigma, Vector3d const 
                 }
             }
         }
-        if (!bIsInserted) 	m_poaBoatOpp->append(pNewPoint);
+        if (!bIsInserted)     m_poaBoatOpp->append(pNewPoint);
         m_pCurBoatOpp = pNewPoint;//TODO remove
         m_bResetglOpp = true;
         m_bResetglLegend = true;
@@ -4907,7 +4905,7 @@ void Sail7::RotatePanelsX(double const &Angle, Vector3d const &P)
     pw=0;
 
     if(!m_pCurBoatPolar) return;
-    /*	for (kw=0; kw<m_NWakeColumn; kw++)
+    /*    for (kw=0; kw<m_NWakeColumn; kw++)
     {
         //consider the first panel of the column;
         Pt = s_pWakeNode[s_pWakePanel[pw].m_iLA];
@@ -4973,7 +4971,7 @@ void Sail7::RotatePanelsZ(double const &Angle, Vector3d const &P)
         LATB = s_pNode[iLA] - s_pNode[iTB];
         TALB = s_pNode[iTA] - s_pNode[iLB];
 
-        if(s_pPanel[p].m_Pos==MIDSURFACE || s_pPanel[p].m_Pos==TOPSURFACE)	s_pPanel[p].SetFrame(s_pNode[iLA], s_pNode[iLB], s_pNode[iTA], s_pNode[iTB]);
+        if(s_pPanel[p].m_Pos==MIDSURFACE || s_pPanel[p].m_Pos==TOPSURFACE)    s_pPanel[p].SetFrame(s_pNode[iLA], s_pNode[iLB], s_pNode[iTA], s_pNode[iTB]);
         else if (s_pPanel[p].m_Pos==BOTSURFACE)                            s_pPanel[p].SetFrame(s_pNode[iLB], s_pNode[iLA], s_pNode[iTB], s_pNode[iTA]);
     }
 
@@ -4981,7 +4979,7 @@ void Sail7::RotatePanelsZ(double const &Angle, Vector3d const &P)
     pw=0;
 
     if(!m_pCurBoatPolar) return;
-    /*	for (kw=0; kw<m_NWakeColumn; kw++)
+    /*    for (kw=0; kw<m_NWakeColumn; kw++)
     {
         //consider the first panel of the column;
         Pt = s_pWakeNode[s_pWakePanel[pw].m_iLA];
@@ -5095,8 +5093,8 @@ void Sail7::PanelAnalyze(double V0, double VMax, double VDelta, bool bSequence)
     m_PanelDlg.m_WakeSize       = m_WakeSize;
     m_PanelDlg.m_bTrefftz       = m_bTrefftz;
     m_PanelDlg.m_nNodes         = m_nNodes;
-    //	m_PanelDlg.m_NSurfaces      = m_NSurfaces;
-    //	m_PanelDlg.m_ppSurface      = m_pSurface;
+    //    m_PanelDlg.m_NSurfaces      = m_NSurfaces;
+    //    m_PanelDlg.m_ppSurface      = m_pSurface;
     m_PanelDlg.m_MatSize        = m_MatSize;
 
 
@@ -5187,7 +5185,7 @@ void Sail7::OnSequence()
 
 void Sail7::OnPanelForce()
 {
-    m_bPanelForce	 = m_pctrlPanelForce->isChecked();
+    m_bPanelForce     = m_pctrlPanelForce->isChecked();
     if(m_bPanelForce)
     {
         m_b3DCp =false;
@@ -5195,7 +5193,7 @@ void Sail7::OnPanelForce()
     }
     if(m_iView == SAIL3DVIEW)
     {
-        //		if(!m_bAnimateWOpp) UpdateView();
+        //        if(!m_bAnimateWOpp) UpdateView();
     }
 
     m_bResetTextLegend = true;
@@ -5253,8 +5251,8 @@ void Sail7::On3DCp()
         m_pctrlSurfaces->setChecked(false);
         m_bPanelForce = false;
         m_pctrlPanelForce->setChecked(false);
-        //		m_bVLMPanels = false;
-        //		m_pctrlPanels->setChecked(false);
+        //        m_bVLMPanels = false;
+        //        m_pctrlPanels->setChecked(false);
     }
 
     m_bResetTextLegend = true;
@@ -5273,7 +5271,7 @@ void Sail7::OnStreamlines()
     m_bStream = m_pctrlStream->isChecked();
     if(m_pctrlStream->isChecked())
     {
-        //		m_bResetglStream = true;
+        //        m_bResetglStream = true;
     }
     if(m_iView==SAIL3DVIEW) UpdateView();
 }
@@ -5284,7 +5282,7 @@ void Sail7::OnSurfaceSpeeds()
     m_bSpeeds = m_pctrlSurfVel->isChecked();
     if(m_pctrlSurfVel->isChecked())
     {
-        //		m_bResetglSpeeds = true;
+        //        m_bResetglSpeeds = true;
     }
     if(m_iView==SAIL3DVIEW) UpdateView();
 }
@@ -5339,9 +5337,9 @@ void Sail7::OnAnimateBoatOppSingle()
     // So display the next WOpp in the sequence
     //
 
-    static bool bIsValid, bSkipOne;
-    static int size;
-    static BoatOpp *pBOpp;
+    bool bIsValid, bSkipOne;
+    int size;
+    BoatOpp *pBOpp;
 
     if(m_iView!=SAIL3DVIEW)             return; //nothing to animate
     if(!m_pCurBoat || !m_pCurBoatPolar) return; //nothing to animate
@@ -5604,7 +5602,7 @@ void Sail7::GLCreatePanelForces(BoatOpp *pBoatOpp)
                     cosa   = R.dot(pPanel->Normal);
                     sina2  = sqrt((1.0 - cosa)*0.5);
                     cosa2  = sqrt((1.0 + cosa)*0.5);
-                    //					angle = acos(cosa2)*180.0/PI;
+                    //                    angle = acos(cosa2)*180.0/PI;
 
                     Omega = R * pPanel->Normal;//crossproduct
                     Omega.Normalize();
@@ -5696,7 +5694,7 @@ void Sail7::GLCreatePanelForces(BoatOpp *pBoatOpp)
                     cosa   = R.dot(pPanel->Normal);
                     sina2  = sqrt((1.0 - cosa)*0.5);
                     cosa2  = sqrt((1.0 + cosa)*0.5);
-                    //					angle = acos(cosa2)*180.0/PI;
+                    //                    angle = acos(cosa2)*180.0/PI;
 
                     Omega = R * pPanel->Normal;//crossproduct
                     Omega.Normalize();
@@ -5717,7 +5715,7 @@ void Sail7::GLCreatePanelForces(BoatOpp *pBoatOpp)
                 if(pBoatOpp->m_Cp[p]>0)
                 {
                     // compression, point towards the surface
-                    //					P.Set(-P.x, -P.y, -P.z);
+                    //                    P.Set(-P.x, -P.y, -P.z);
                     glBegin(GL_LINES);
                     {
                         glVertex3d(O.x, O.y, O.z);
@@ -5771,7 +5769,7 @@ void Sail7::GLCreatePanelForces(BoatOpp *pBoatOpp)
 
 void Sail7::GLCreateSailGeom(int GLList, Sail*pSail, Vector3d Position)
 {
-    //	ThreeDWidget *p3DWidget = (ThreeDWidget*)s_p3DWidget;
+    //    ThreeDWidget *p3DWidget = (ThreeDWidget*)s_p3DWidget;
 
     glNewList(GLList, GL_COMPILE);
     {
@@ -5793,7 +5791,7 @@ void Sail7::GLCreateSailGeom(int GLList, Sail*pSail, Vector3d Position)
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         glPolygonOffset(1.0, 1.0);
 
-        static Vector3d PtA, PtB, PtA0, PtB0, LATB, TALB, PtNormal;
+        Vector3d PtA, PtB, PtA0, PtB0, LATB, TALB, PtNormal;
         PtNormal.Set(0.0, 1.0, 0.0);
         for (int k=0; k<SPANPOINTS; k++)
         {
@@ -5844,7 +5842,7 @@ void Sail7::GLCreateSailGeom(int GLList, Sail*pSail, Vector3d Position)
     glNewList(GLList+MAXSAILS, GL_COMPILE);
     {
         //remove
-        /*		{
+        /*        {
             CVector PtA;
             glColor3d(1.0, 0.7, .41);
             for (int k=0; k<SPANPOINTS; k++)
@@ -5930,7 +5928,7 @@ void Sail7::GLCreateSailGeom(int GLList, Sail*pSail, Vector3d Position)
         }
         glEnd();
 
-        /*		CVector PtB;
+        /*        CVector PtB;
         for (int j=0; j<=SPANPOINTS; j++)
         {
             glBegin(GL_LINES);
@@ -6159,15 +6157,15 @@ void Sail7::OnGL3DScale()
 {
     if(m_iView != SAIL3DVIEW)
     {
-        //		m_pctrl3DSettings->setChecked(false);
+        //        m_pctrl3DSettings->setChecked(false);
         return;
     }
     if(s_pMainFrame->m_pctrl3DScalesWidget->isVisible()) s_pMainFrame->m_pctrl3DScalesWidget->hide();
     else                                               s_pMainFrame->m_pctrl3DScalesWidget->show();
 
-    //	pMainFrame->Sail73DScalesAct->setChecked(pMainFrame->m_pctrl3DScalesWidget->isVisible());
-    //	if(m_pctrl3DSettings->isChecked()) pMainFrame->m_pctrl3DScalesWidget->show();
-    //	else                               pMainFrame->m_pctrl3DScalesWidget->hide();
+    //    pMainFrame->Sail73DScalesAct->setChecked(pMainFrame->m_pctrl3DScalesWidget->isVisible());
+    //    if(m_pctrl3DSettings->isChecked()) pMainFrame->m_pctrl3DScalesWidget->show();
+    //    else                               pMainFrame->m_pctrl3DScalesWidget->hide();
 }
 
 
@@ -6213,7 +6211,7 @@ void Sail7::SetBoatPlrLegendPos()
             m_BoatPlrLegendOffset.rx() = margin;
             m_BoatPlrLegendOffset.ry() = h23+margin;
         }
-        else if	(m_iBoatPlrView == 4)
+        else if    (m_iBoatPlrView == 4)
         {
             m_BoatPlrLegendOffset.rx() = (int)(0.70*w)+margin;
             m_BoatPlrLegendOffset.ry() = margin;
@@ -6455,7 +6453,7 @@ void Sail7::GLCreateStreamLines()
 {
     if(!m_pCurBoatOpp || !m_pCurBoatPolar || !m_pCurBoat) return;
 
-    //	GL3DScales *p3DScales = (GL3DScales *)m_pGL3DScales;
+    //    GL3DScales *p3DScales = (GL3DScales *)m_pGL3DScales;
     bool bFound;
     int i;
     int m, p, style, width;
@@ -6602,8 +6600,8 @@ void Sail7::GLCreateStreamLines()
 
             if(GL3DScales::s_pos==TRAILINGEDGE && fabs(GL3DScales::s_XOffset)<0.001 && fabs(GL3DScales::s_ZOffset)<0.001)
             {
-                //				VA = m_pCurBoatOpp->GetWindDirection();
-                //				VA.Normalize();
+                //                VA = m_pCurBoatOpp->GetWindDirection();
+                //                VA.Normalize();
                 //The initial velocity vector is the direction at the T.E., i.e. the bisector angle of the two panels
                 bFound =false;
                 for(int iSail=0; iSail<m_pCurBoat->m_poaSail.size(); iSail++)
@@ -6668,8 +6666,8 @@ void Sail7::GLCreateStreamLines()
     //restore panels.
     memcpy(s_pPanel, s_pMemPanel, m_MatSize * sizeof(CPanel));
     memcpy(s_pNode,  s_pMemNode,  m_nNodes  * sizeof(Vector3d));
-    //	memcpy(s_pWakePanel, s_pRefWakePanel, m_WakeSize * sizeof(CPanel));
-    //	memcpy(s_pWakeNode,  s_pRefWakeNode,  m_nWakeNodes * sizeof(CVector));
+    //    memcpy(s_pWakePanel, s_pRefWakePanel, m_WakeSize * sizeof(CPanel));
+    //    memcpy(s_pWakeNode,  s_pRefWakeNode,  m_nWakeNodes * sizeof(CVector));
 }
 
 
@@ -6724,7 +6722,7 @@ void Sail7::GLCreateSurfSpeeds()
         glLineWidth(W3dPrefsDlg::s_WakeWidth);
         style = W3dPrefsDlg::s_WakeStyle;
 
-        if     (style == Qt::DashLine) 	     glLineStipple (1, 0xCFCF);
+        if     (style == Qt::DashLine)          glLineStipple (1, 0xCFCF);
         else if(style == Qt::DotLine)        glLineStipple (1, 0x6666);
         else if(style == Qt::DashDotLine)    glLineStipple (1, 0xFF18);
         else if(style == Qt::DashDotDotLine) glLineStipple (1, 0x7E66);
@@ -6802,8 +6800,8 @@ void Sail7::GLCreateSurfSpeeds()
     //leave things as they were
     memcpy(s_pPanel, s_pMemPanel, m_MatSize * sizeof(CPanel));
     memcpy(s_pNode,  s_pMemNode,  m_nNodes  * sizeof(Vector3d));
-    //	memcpy(s_pWakePanel, s_pRefWakePanel, m_WakeSize * sizeof(CPanel));
-    //	memcpy(s_pWakeNode,  s_pRefWakeNode,  m_nWakeNodes * sizeof(CVector));
+    //    memcpy(s_pWakePanel, s_pRefWakePanel, m_WakeSize * sizeof(CPanel));
+    //    memcpy(s_pWakeNode,  s_pRefWakeNode,  m_nWakeNodes * sizeof(CVector));
 
     dlg.hide();
 }
@@ -6967,7 +6965,7 @@ void Sail7::SnapClient(QString const &FileName)
         case 24:
         {
             NbBytes = 4 * size.width() * size.height();//24 bits type BMP
-            //			size.setWidth(width - size.width() % 4);
+            //            size.setWidth(width - size.width() % 4);
             break;
         }
         case 32:
@@ -6995,7 +6993,7 @@ void Sail7::SnapClient(QString const &FileName)
             glReadPixels(0,0,size.width(),size.height(),GL_RGB,GL_UNSIGNED_BYTE,pPixelData);
             QImage Image(pPixelData, size.width(),size.height(), QImage::Format_RGB888);
             QImage FlippedImaged;
-            FlippedImaged = Image.mirrored();	//flip vertically
+            FlippedImaged = Image.mirrored();    //flip vertically
             FlippedImaged.save(FileName);
 #else
             QMessageBox::warning(s_pMainFrame,tr("Warning"),"The version of Qt used to compile the code is older than 4.4 and does not support 24 bit images... Sorry");
@@ -7007,7 +7005,7 @@ void Sail7::SnapClient(QString const &FileName)
             glReadPixels(0,0,size.width(),size.height(),GL_RGBA,GL_UNSIGNED_BYTE,pPixelData);
             QImage Image(pPixelData, size.width(),size.height(), QImage::Format_ARGB32);
             QImage FlippedImaged;
-            FlippedImaged = Image.mirrored();	//flip vertically
+            FlippedImaged = Image.mirrored();    //flip vertically
             FlippedImaged.save(FileName);
             break;
         }
@@ -7162,10 +7160,10 @@ void Sail7::OnHideCurBoatPolars()
     for (i=0; i<m_poaBoatPolar->size(); i++)
     {
         pBPolar = m_poaBoatPolar->at(i);
-        if(pBPolar->m_BoatName == m_pCurBoat->m_BoatName)	pBPolar->m_bIsVisible = false;
+        if(pBPolar->m_BoatName == m_pCurBoat->m_BoatName)    pBPolar->m_bIsVisible = false;
     }
 
-    if(m_iView==SAILPOLARVIEW)		CreateBoatPolarCurves();
+    if(m_iView==SAILPOLARVIEW)        CreateBoatPolarCurves();
     SetCurveParams();
     s_pMainFrame->SetSaveState(false);
     UpdateView();
@@ -7180,10 +7178,10 @@ void Sail7::OnShowCurBoatPolars()
     for (i=0; i<m_poaBoatPolar->size(); i++)
     {
         pBPolar = m_poaBoatPolar->at(i);
-        if(pBPolar->m_BoatName == m_pCurBoat->m_BoatName)	pBPolar->m_bIsVisible = true;
+        if(pBPolar->m_BoatName == m_pCurBoat->m_BoatName)    pBPolar->m_bIsVisible = true;
     }
 
-    if(m_iView==SAILPOLARVIEW)		CreateBoatPolarCurves();
+    if(m_iView==SAILPOLARVIEW)        CreateBoatPolarCurves();
     SetCurveParams();
     s_pMainFrame->SetSaveState(false);
     UpdateView();
@@ -7209,7 +7207,7 @@ void Sail7::OnDeleteCurBoatPolars()
         if(pBPolar && pBPolar->m_BoatName==m_pCurBoat->m_BoatName)
         {
             //first remove all WOpps and POpps associated to the Wing Polar
-            /*			CWOpp * pWOpp;
+            /*            CWOpp * pWOpp;
             for (int i=m_poaWOpp->size()-1; i>=0; i--)
             {
                 pWOpp = (CWOpp*)m_poaWOpp->at(i);
@@ -7244,7 +7242,7 @@ void Sail7::OnHideAllBoatPolars()
         pBPolar = m_poaBoatPolar->at(i);
         pBPolar->m_bIsVisible = false;
     }
-    if(m_iView==SAILPOLARVIEW)		CreateBoatPolarCurves();
+    if(m_iView==SAILPOLARVIEW)        CreateBoatPolarCurves();
     s_pMainFrame->SetSaveState(false);
     SetCurveParams();
     UpdateView();
@@ -7261,7 +7259,7 @@ void Sail7::OnShowAllBoatPolars()
         pBPolar = m_poaBoatPolar->at(i);
         pBPolar->m_bIsVisible = true;
     }
-    if(m_iView==SAILPOLARVIEW)		CreateBoatPolarCurves();
+    if(m_iView==SAILPOLARVIEW)        CreateBoatPolarCurves();
     s_pMainFrame->SetSaveState(false);
     SetCurveParams();
     UpdateView();
@@ -7406,8 +7404,8 @@ void Sail7::PaintBoatOppLegend(QPainter &painter, QRect rect)
 
 
     int nSails = m_pCurBoat->m_poaSail.size();
-    //	YPos = p3DWidget->geometry().bottom()- 12*dD - nSails*dD;
-    //	XPos = p3DWidget->geometry().right() - 10 ;
+    //    YPos = p3DWidget->geometry().bottom()- 12*dD - nSails*dD;
+    //    XPos = p3DWidget->geometry().right() - 10 ;
 
     //glNewList(BOATOPPLEGEND,GL_COMPILE);
     {
@@ -7495,7 +7493,7 @@ void Sail7::PaintBoatLegend(QPainter &painter, QRect rect)
     if(!m_pCurBoat) return;
     painter.save();
 
-    static int margin,dheight;
+    int margin,dheight;
 
     QPen textPen(s_pMainFrame->m_TextColor);
     painter.setPen(textPen);
@@ -7677,7 +7675,7 @@ void Sail7::PaintPanelForceLegendText(QPainter &painter, double rmin, double rma
     if(!m_bPanelForce) return;
 
     QString strForce, strong;
-    int p, i;
+
     int labellength;
     double f;
     double range, delta;
@@ -7699,7 +7697,7 @@ void Sail7::PaintPanelForceLegendText(QPainter &painter, double rmin, double rma
     QFontMetrics fm(s_pMainFrame->m_TextFont);
     int back = fm.averageCharWidth() * 5;
 
-    double h = (double)m_r3DCltRect.height();
+    double h = double(m_r3DCltRect.height());
     double y0 = 2.*h/5.0;
 
 
@@ -7707,8 +7705,8 @@ void Sail7::PaintPanelForceLegendText(QPainter &painter, double rmin, double rma
 
     ixPos  = m_r3DCltRect.width()-back;
 
-    dy     = (int) (h/40.0);
-    iyPos  = (int) (y0 - 12.0*dy);
+    dy     = int(h/40.0);
+    iyPos  = int(y0 - 12.0*dy);
 
     delta = range / 20.0;
 
@@ -7717,9 +7715,9 @@ void Sail7::PaintPanelForceLegendText(QPainter &painter, double rmin, double rma
     painter.drawText(ixPos-labellength, iyPos-dy, strForce);
 
 
-    for (i=0; i<=20; i++)
+    for (int i=0; i<=20; i++)
     {
-        f = rmin + (double)i * delta;
+        f = rmin + double(i) * delta;
         strong = QString("%1").arg(f, 5,'f',2);
         labellength = (fm.width(strong)+5);
         painter.drawText(ixPos-labellength, iyPos+i*dy, strong);

@@ -1,7 +1,7 @@
 /****************************************************************************
 
     Graph Classes
-	Copyright (C) 2003-2010 Andre Deperrois 
+    Copyright (C) 2003-2010 Andre Deperrois 
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -30,59 +30,59 @@ QColor Graph::m_CurveColors[10];
 
 Graph::Graph()
 {
-	//Type is used to determine automatic scales
-	m_Type = 1;
+    //Type is used to determine automatic scales
+    m_Type = 1;
 
-	xmin         = .0;
-	xmax         = .10;
-	ymin         = .0;
-	ymax         = .10;
-	xunit        = 0.1;
-	yunit        = 0.1;
-	xo           = 0.0;
-	yo           = 0.0;
-	m_XMinorUnit = 0.01;
-	m_YMinorUnit = 0.01;
+    xmin         = .0;
+    xmax         = .10;
+    ymin         = .0;
+    ymax         = .10;
+    xunit        = 0.1;
+    yunit        = 0.1;
+    xo           = 0.0;
+    yo           = 0.0;
+    m_XMinorUnit = 0.01;
+    m_YMinorUnit = 0.01;
 
-	m_scalex     = 0.1;
-	m_scaley     = 0.1;
-	Cxmin        = 0.0;
-	Cxmax        = 1.0;
-	Cymin        = 0.0;
-	Cymax        = 1.0;
+    m_scalex     = 0.1;
+    m_scaley     = 0.1;
+    Cxmin        = 0.0;
+    Cxmax        = 1.0;
+    Cymin        = 0.0;
+    Cymax        = 1.0;
 
-	exp_x = 0;
-	exp_y = 0;
+    exp_x = 0;
+    exp_y = 0;
 
-	m_bYInverted  = false;
-	m_bAutoX        = true;
-	m_bAutoY        = true;
-	m_bXAutoMinGrid = true;
-	m_bYAutoMinGrid = true;
-	m_bBorder       = true;
-	m_bIsPrinting   = false;
+    m_bYInverted  = false;
+    m_bAutoX        = true;
+    m_bAutoY        = true;
+    m_bXAutoMinGrid = true;
+    m_bYAutoMinGrid = true;
+    m_bBorder       = true;
+    m_bIsPrinting   = false;
 
-	m_ptoffset.rx() = 0;
-	m_ptoffset.ry() = 0;
+    m_ptoffset.rx() = 0;
+    m_ptoffset.ry() = 0;
 
-	m_CurveColors[0] = QColor(255,   0,   0);
-	m_CurveColors[1] = QColor(  0,   0, 255);
-	m_CurveColors[2] = QColor(  0, 255,   0);
-	m_CurveColors[3] = QColor(255, 255,   0);
-	m_CurveColors[4] = QColor(  0, 255, 255);
-	m_CurveColors[5] = QColor(255,   0, 255);
-	m_CurveColors[6] = QColor(255, 125,  70);
-	m_CurveColors[7] = QColor( 70, 125, 255);
-	m_CurveColors[8] = QColor(125, 255,  70);
-	m_CurveColors[9] = QColor(255, 70,  200);
+    m_CurveColors[0] = QColor(255,   0,   0);
+    m_CurveColors[1] = QColor(  0,   0, 255);
+    m_CurveColors[2] = QColor(  0, 255,   0);
+    m_CurveColors[3] = QColor(255, 255,   0);
+    m_CurveColors[4] = QColor(  0, 255, 255);
+    m_CurveColors[5] = QColor(255,   0, 255);
+    m_CurveColors[6] = QColor(255, 125,  70);
+    m_CurveColors[7] = QColor( 70, 125, 255);
+    m_CurveColors[8] = QColor(125, 255,  70);
+    m_CurveColors[9] = QColor(255, 70,  200);
 
-	m_iMargin= 44;
+    m_iMargin= 44;
 
-	m_h       = 0;
-	m_w       = 0;
-	m_rDrawRect.SetRectEmpty();
+    m_h       = 0;
+    m_w       = 0;
+    m_rDrawRect.SetRectEmpty();
 
-	SetDefaults();
+    SetDefaults();
 }
 
 Graph::~Graph()
@@ -93,28 +93,28 @@ Graph::~Graph()
 
 CCurve* Graph::AddCurve()
 {
-	CCurve *pCurve = new CCurve();
-	if(pCurve)
-	{
+    CCurve *pCurve = new CCurve();
+    if(pCurve)
+    {
         int nIndex = m_oaCurves.size();
-		pCurve->SetColor(m_CurveColors[nIndex%10]);
+        pCurve->SetColor(m_CurveColors[nIndex%10]);
         pCurve->SetStyle(0);
-		pCurve->m_pParentGraph = this;
+        pCurve->m_pParentGraph = this;
         m_oaCurves.append(pCurve);
-	}
-	return pCurve;
+    }
+    return pCurve;
 }
 
 
 double Graph::ClientTox(double x)
 {
-	return (x-m_ptoffset.x())*m_scalex;
+    return (x-m_ptoffset.x())*m_scalex;
 }
 
 
 double Graph::ClientToy(double y)
 {
-	return (y-m_ptoffset.y())*m_scaley;
+    return (y-m_ptoffset.y())*m_scaley;
 }
 
 
@@ -132,57 +132,57 @@ double Graph::ClientToy(int y)
 
 void Graph::CopySettings(Graph *pGraph, bool bScales)
 {
-	if(bScales)
-	{
-		xmin            = pGraph->xmin;
-		xmax            = pGraph->xmax;
-		xo              = pGraph->xo;
-		xunit           = pGraph->xunit;
+    if(bScales)
+    {
+        xmin            = pGraph->xmin;
+        xmax            = pGraph->xmax;
+        xo              = pGraph->xo;
+        xunit           = pGraph->xunit;
 
-		ymin            = pGraph->ymin;
-		ymax            = pGraph->ymax;
-		yo              = pGraph->yo;
-		yunit           = pGraph->yunit;
+        ymin            = pGraph->ymin;
+        ymax            = pGraph->ymax;
+        yo              = pGraph->yo;
+        yunit           = pGraph->yunit;
 
-		m_scalex        = pGraph->m_scalex;
-		m_scaley        = pGraph->m_scaley;
-	}
+        m_scalex        = pGraph->m_scalex;
+        m_scaley        = pGraph->m_scaley;
+    }
 
-	m_AxisColor     = pGraph->m_AxisColor;
-	m_BkColor       = pGraph->m_BkColor;
-	m_bBorder       = pGraph->m_bBorder;
-	m_BorderColor   = pGraph->m_BorderColor;
-	m_BorderStyle   = pGraph->m_BorderStyle;
-	m_BorderWidth   = pGraph->m_BorderWidth;
-	m_LabelColor    = pGraph->m_LabelColor;
-	m_LabelLogFont  = pGraph->m_LabelLogFont;
-	m_TitleColor    = pGraph->m_TitleColor;
-	m_TitleLogFont  = pGraph->m_TitleLogFont;
-	m_AxisStyle     = pGraph->m_AxisStyle;
-	m_AxisWidth     = pGraph->m_AxisWidth;
-	m_XMajClr       = pGraph->m_XMajClr;
-	m_XMajStyle     = pGraph->m_XMajStyle;
-	m_XMajWidth     = pGraph->m_XMajWidth;
-	m_XMinClr       = pGraph->m_XMinClr;
-	m_XMinStyle     = pGraph->m_XMinStyle;
-	m_XMinWidth     = pGraph->m_XMinWidth;
-	m_YMajClr       = pGraph->m_YMajClr;
-	m_YMajStyle     = pGraph->m_YMajStyle;
-	m_YMajWidth     = pGraph->m_YMajWidth;
-	m_YMinClr       = pGraph->m_YMinClr;
-	m_YMinStyle     = pGraph->m_YMinStyle;
-	m_YMinWidth     = pGraph->m_YMinWidth;
+    m_AxisColor     = pGraph->m_AxisColor;
+    m_BkColor       = pGraph->m_BkColor;
+    m_bBorder       = pGraph->m_bBorder;
+    m_BorderColor   = pGraph->m_BorderColor;
+    m_BorderStyle   = pGraph->m_BorderStyle;
+    m_BorderWidth   = pGraph->m_BorderWidth;
+    m_LabelColor    = pGraph->m_LabelColor;
+    m_LabelLogFont  = pGraph->m_LabelLogFont;
+    m_TitleColor    = pGraph->m_TitleColor;
+    m_TitleLogFont  = pGraph->m_TitleLogFont;
+    m_AxisStyle     = pGraph->m_AxisStyle;
+    m_AxisWidth     = pGraph->m_AxisWidth;
+    m_XMajClr       = pGraph->m_XMajClr;
+    m_XMajStyle     = pGraph->m_XMajStyle;
+    m_XMajWidth     = pGraph->m_XMajWidth;
+    m_XMinClr       = pGraph->m_XMinClr;
+    m_XMinStyle     = pGraph->m_XMinStyle;
+    m_XMinWidth     = pGraph->m_XMinWidth;
+    m_YMajClr       = pGraph->m_YMajClr;
+    m_YMajStyle     = pGraph->m_YMajStyle;
+    m_YMajWidth     = pGraph->m_YMajWidth;
+    m_YMinClr       = pGraph->m_YMinClr;
+    m_YMinStyle     = pGraph->m_YMinStyle;
+    m_YMinWidth     = pGraph->m_YMinWidth;
 
-	m_bAutoX        = pGraph->m_bAutoX;
-	m_bAutoY        = pGraph->m_bAutoY;
-	m_bXAutoMinGrid = pGraph->m_bXAutoMinGrid;
-	m_bYAutoMinGrid = pGraph->m_bYAutoMinGrid;
-	m_bYInverted    = pGraph->m_bYInverted;
-	m_bXMajGrid     = pGraph->m_bXMajGrid;
-	m_bXMinGrid     = pGraph->m_bXMinGrid;
-	m_bYMajGrid     = pGraph->m_bYMajGrid;
-	m_bYMinGrid     = pGraph->m_bYMinGrid;
-	m_bBorder       = pGraph->m_bBorder;
+    m_bAutoX        = pGraph->m_bAutoX;
+    m_bAutoY        = pGraph->m_bAutoY;
+    m_bXAutoMinGrid = pGraph->m_bXAutoMinGrid;
+    m_bYAutoMinGrid = pGraph->m_bYAutoMinGrid;
+    m_bYInverted    = pGraph->m_bYInverted;
+    m_bXMajGrid     = pGraph->m_bXMajGrid;
+    m_bXMinGrid     = pGraph->m_bXMinGrid;
+    m_bYMajGrid     = pGraph->m_bYMajGrid;
+    m_bYMinGrid     = pGraph->m_bYMinGrid;
+    m_bBorder       = pGraph->m_bBorder;
 }
 
 
@@ -190,60 +190,60 @@ void Graph::DeleteCurve(int index)
 {
     CCurve * pCurve = GetCurve(index);
     m_oaCurves.removeAt(index);
-	delete pCurve;
+    delete pCurve;
 }
 
 
 void Graph::DeleteCurve(CCurve *pCurve)
 {
-	CCurve *pOldCurve = nullptr;
-	for(int i=0; i<m_oaCurves.size(); i++)
-	{
+    CCurve *pOldCurve = nullptr;
+    for(int i=0; i<m_oaCurves.size(); i++)
+    {
         pOldCurve = m_oaCurves.at(i);
-		if(pOldCurve==pCurve)
-		{
-			m_oaCurves.removeAt(i);
-			delete pCurve;
-			return;
-		}
-	}
+        if(pOldCurve==pCurve)
+        {
+            m_oaCurves.removeAt(i);
+            delete pCurve;
+            return;
+        }
+    }
 }
 
 
 void Graph::DeleteCurve(QString CurveTitle)
 {
-	CCurve *pOldCurve = nullptr;
-	for(int i=0; i<m_oaCurves.size(); i++)
-	{
+    CCurve *pOldCurve = nullptr;
+    for(int i=0; i<m_oaCurves.size(); i++)
+    {
         pOldCurve = m_oaCurves.at(i);
-		if(pOldCurve->m_CurveName==CurveTitle)
-		{
-			m_oaCurves.removeAt(i);
-			delete pOldCurve;
-			return;
-		}
-	}
+        if(pOldCurve->m_CurveName==CurveTitle)
+        {
+            m_oaCurves.removeAt(i);
+            delete pOldCurve;
+            return;
+        }
+    }
 }
 
 
 void Graph::DeleteCurves()
 {
     int nIndex = m_oaCurves.size();
-	for (int i=nIndex-1; i>=0;i--)
-		delete GetCurve(i);
+    for (int i=nIndex-1; i>=0;i--)
+        delete GetCurve(i);
 
     m_oaCurves.clear();//removes the pointers
 
     if (m_bAutoX && !m_Type)
     {
-		xmin =  0.0;
-		xmax =  0.1;
-	}
+        xmin =  0.0;
+        xmax =  0.1;
+    }
 
-	if (m_bAutoY && !m_Type){
-		ymin =  0.0;
-		ymax =  0.1;
-	}
+    if (m_bAutoY && !m_Type){
+        ymin =  0.0;
+        ymax =  0.1;
+    }
 }
 
 
@@ -257,42 +257,42 @@ int Graph::GetCurveCount()
 
 QColor Graph::GetLabelColor()
 {
-	return m_LabelColor;
+    return m_LabelColor;
 }
 
 QColor Graph::GetAxisColor()
 {
-	return m_AxisColor;
+    return m_AxisColor;
 }
 
 QColor Graph::GetBorderColor()
 {
-	return m_BorderColor;
+    return m_BorderColor;
 }
 
 QColor Graph::GetBackColor()
 {
-	return m_BkColor;
+    return m_BkColor;
 }
 
 int Graph::GetAxisStyle()
 {
-	return m_AxisStyle;
+    return m_AxisStyle;
 }
 
 int Graph::GetAxisWidth()
 {
-	return m_AxisWidth;
+    return m_AxisWidth;
 }
 
 
 bool Graph::GetAutoX()
 {
-	return m_bAutoX;
+    return m_bAutoX;
 }
 bool Graph::GetAutoY()
 {
-	return m_bAutoY;
+    return m_bAutoY;
 }
 
 
@@ -300,373 +300,373 @@ bool Graph::GetAutoY()
 
 bool Graph::GetAutoXMin()
 {
-	return m_bXAutoMinGrid;
+    return m_bXAutoMinGrid;
 }
 bool Graph::GetAutoYMin()
 {
-	return m_bYAutoMinGrid;
+    return m_bYAutoMinGrid;
 }
 
 
 
 bool Graph::GetBorder()
 {
-	return m_bBorder;
+    return m_bBorder;
 }
 
 
 
 int Graph::GetBorderStyle()
 {
-	return m_BorderStyle;
+    return m_BorderStyle;
 }
 
 int Graph::GetBorderWidth()
 {
-	return m_BorderWidth;
+    return m_BorderWidth;
 }
 
 void Graph::GetClientRect(QRect &Rect)
 {
-	Rect = m_rCltRect;
+    Rect = m_rCltRect;
 }
 
 int Graph::GetClientRectWidth()
 {
-	return m_rCltRect.width();
+    return m_rCltRect.width();
 }
 
 int Graph::GetClientRectHeight()
 {
-	return m_rCltRect.height();
+    return m_rCltRect.height();
 }
 
 CCurve* Graph::GetCurve(int nIndex)
 {
     if(m_oaCurves.size()>nIndex)
         return m_oaCurves[nIndex];
-	else return nullptr;
+    else return nullptr;
 }
 
 
 CCurve* Graph::GetCurve(QString CurveTitle)
 {
-	QString strong;
-	CCurve * pCurve;
-	for(int i=0; i<m_oaCurves.size(); i++)
-	{
+    QString strong;
+    CCurve * pCurve;
+    for(int i=0; i<m_oaCurves.size(); i++)
+    {
         pCurve = m_oaCurves.at(i);
-		if(pCurve)
-		{
-			pCurve->GetTitle(strong);
-			if(strong==CurveTitle) return pCurve;
-		}
-	}
-	return nullptr;
+        if(pCurve)
+        {
+            pCurve->GetTitle(strong);
+            if(strong==CurveTitle) return pCurve;
+        }
+    }
+    return nullptr;
 }
 
 
 bool Graph::GetInverted()
 {
-	if(m_bYInverted) return true;
-	else return false;
+    if(m_bYInverted) return true;
+    else return false;
 }
 
 int Graph::GetLogPixelsY()
 {
-	return m_LogPixelsY;
+    return m_LogPixelsY;
 }
 int Graph::GetMargin()
 {
-	return m_iMargin;
+    return m_iMargin;
 }
 
 void Graph::GetTitleLogFont(QFont *plgft)
 {
-	*plgft = m_TitleLogFont;
+    *plgft = m_TitleLogFont;
 }
 
 
 void Graph::GetLabelLogFont(QFont *plgft)
 {
-	*plgft = m_LabelLogFont;
+    *plgft = m_LabelLogFont;
 }
 
 
 void Graph::GetGraphName(QString &GraphName)
 {
-	GraphName = m_GraphName;
+    GraphName = m_GraphName;
 }
 
 QString Graph::GetGraphName()
 {
-	return m_GraphName;
+    return m_GraphName;
 }
 
 QColor Graph::GetTitleColor()
 {
-	return m_TitleColor;
+    return m_TitleColor;
 }
 double Graph::GetX0()
 {
-	return xo;
+    return xo;
 }
 
 
 bool Graph::GetXMajGrid()
 {
-	return m_bXMajGrid;
+    return m_bXMajGrid;
 }
 
 
 void Graph::GetXMajGrid(bool &bstate, QColor &clr, int &style, int &width)
 {
-	bstate = m_bXMajGrid;
-	clr   = m_XMajClr;
-	style = m_XMajStyle;
-	width = m_XMajWidth;
+    bstate = m_bXMajGrid;
+    clr   = m_XMajClr;
+    style = m_XMajStyle;
+    width = m_XMajWidth;
 }
 
 
 bool Graph::GetXMinGrid()
 {
-	return m_bXMinGrid;
+    return m_bXMinGrid;
 }
 
 void Graph::GetXMinGrid(bool &state, bool &bAuto, QColor &clr, int &style, int &width, double &unit)
 {
-	state = m_bXMinGrid;
-	bAuto = m_bXAutoMinGrid;
-	clr   = m_XMinClr;
-	style = m_XMinStyle;
-	width = m_XMinWidth;
-	unit  = m_XMinorUnit;
+    state = m_bXMinGrid;
+    bAuto = m_bXAutoMinGrid;
+    clr   = m_XMinClr;
+    style = m_XMinStyle;
+    width = m_XMinWidth;
+    unit  = m_XMinorUnit;
 }
 
 double Graph::GetXMin()
 {
-	return xmin;
+    return xmin;
 }
 
 double Graph::GetXMax()
 {
-	return xmax;
+    return xmax;
 }
 
 
 double Graph::GetXScale()
 {
-	return m_scalex;
+    return m_scalex;
 }
 void Graph::GetXTitle(QString &str)
 {
-	str = m_XTitle;
+    str = m_XTitle;
 }
 
 double Graph::GetXUnit()
 {
-	return xunit;
+    return xunit;
 }
 
 
 int Graph::GetXVariable()
 {
-	return m_X;
+    return m_X;
 }
 
 
 
 bool Graph::GetYMajGrid()
 {
-	return m_bYMajGrid;
+    return m_bYMajGrid;
 }
 
 void Graph::GetYMajGrid(bool &state, QColor &clr, int &style, int &width)
 {
-	state = m_bYMajGrid;
-	clr   = m_YMajClr;
-	style = m_YMajStyle;
-	width = m_YMajWidth;
+    state = m_bYMajGrid;
+    clr   = m_YMajClr;
+    style = m_YMajStyle;
+    width = m_YMajWidth;
 }
 
 void Graph::GetYTitle(QString &str)
 {
-	str = m_YTitle;
+    str = m_YTitle;
 }
 
 
 bool Graph::GetYMinGrid()
 {
-	return m_bYMinGrid;
+    return m_bYMinGrid;
 }
 
 
 void Graph::GetYMinGrid(bool &state, bool &bAuto, QColor &clr, int &style, int &width, double &unit)
 {
-	state = m_bYMinGrid;
-	bAuto = m_bYAutoMinGrid;
-	clr   = m_YMinClr;
-	style = m_YMinStyle;
-	width = m_YMinWidth;
-	unit  = m_YMinorUnit;
+    state = m_bYMinGrid;
+    bAuto = m_bYAutoMinGrid;
+    clr   = m_YMinClr;
+    style = m_YMinStyle;
+    width = m_YMinWidth;
+    unit  = m_YMinorUnit;
 }
 
 
 double Graph::GetY0()
 {
-	return yo;
+    return yo;
 }
 double Graph::GetYMin()
 {
-	return ymin;
+    return ymin;
 }
 double Graph::GetYMax()
 {
-	return ymax;
+    return ymax;
 }
 double Graph::GetYUnit()
 {
-	return yunit;
+    return yunit;
 }
 
 
 double Graph::GetYScale()
 {
-	return m_scaley;
+    return m_scaley;
 }
 
 
 int Graph::GetYVariable()
 {
-	return m_Y;
+    return m_Y;
 }
 
 
 bool Graph::Init()
 {
-	double Margin;
-	
-	if(m_bIsPrinting)
-	{
-		Margin =  1500;
+    double Margin;
+    
+    if(m_bIsPrinting)
+    {
+        Margin =  1500;
 
-	}
-	else
-	{
-		Margin = m_iMargin;
-	}
-	//graph width and height
-	m_w =  m_rCltRect.width()  -2*Margin;
-	m_h =  m_rCltRect.height() -2*Margin;
+    }
+    else
+    {
+        Margin = m_iMargin;
+    }
+    //graph width and height
+    m_w =  m_rCltRect.width()  -2*Margin;
+    m_h =  m_rCltRect.height() -2*Margin;
 
-	SetXScale();
-	SetYScale();
+    SetXScale();
+    SetYScale();
 
-	if(m_bXAutoMinGrid) m_XMinorUnit = xunit/5.0;
-	if(m_bYAutoMinGrid) m_YMinorUnit = yunit/5.0;
+    if(m_bXAutoMinGrid) m_XMinorUnit = xunit/5.0;
+    if(m_bYAutoMinGrid) m_YMinorUnit = yunit/5.0;
 
-	return true;
+    return true;
 }
 
 
 bool Graph::IsInDrawRect(Vector3d const &pt)
 {
-	if(m_rDrawRect.PtInRect(pt))
-	{
-		return true;
-	}
-	else return false;
+    if(m_rDrawRect.PtInRect(pt))
+    {
+        return true;
+    }
+    else return false;
 }
 
 
 bool Graph::IsInDrawRect(QPoint const &pt)
 {
-	if(m_rCltRect.contains(pt)) return true;
-	else return false;
+    if(m_rCltRect.contains(pt)) return true;
+    else return false;
 }
 
 bool Graph::IsInDrawRect(int const &x, int const &y)
 {
-	if(m_rCltRect.contains(x,y)) return true;
-	else return false;
+    if(m_rCltRect.contains(x,y)) return true;
+    else return false;
 }
 
 
 void Graph::ResetCurves()
 {
-	CCurve *pCurve;
-	for(int i=0; i<m_oaCurves.size(); i++)
-	{
+    CCurve *pCurve;
+    for(int i=0; i<m_oaCurves.size(); i++)
+    {
         pCurve = m_oaCurves.at(i);
-		pCurve->ResetCurve();
-	}
+        pCurve->ResetCurve();
+    }
 }
 
 
 void Graph::ResetLimits()
 {
-	ResetXLimits();
-	ResetYLimits();
+    ResetXLimits();
+    ResetYLimits();
 }
 
 
 void Graph::ResetXLimits()
 {
-	if(m_bAutoX)
-	{
-		xmin =  0.0;
-		xmax =  0.1;
-		xo   =  0.0;
-	}
+    if(m_bAutoX)
+    {
+        xmin =  0.0;
+        xmax =  0.1;
+        xo   =  0.0;
+    }
 }
 
 
 void Graph::ResetYLimits()
 {
-	if(m_bAutoY)
-	{
-		ymin =   0.000;
-		ymax =   0.001;
-		yo   =   0.000;
-	}
+    if(m_bAutoY)
+    {
+        ymin =   0.000;
+        ymax =   0.001;
+        yo   =   0.000;
+    }
 }
 
 
 void Graph::Scale(double zoom)
 {
-	if (zoom<0.01) zoom =0.01;
-	m_bAutoX = false;
-	m_bAutoY = false;
+    if (zoom<0.01) zoom =0.01;
+    m_bAutoX = false;
+    m_bAutoY = false;
 
-	double xm = (xmin + xmax)/2.0;
-	xmin = xm+(xmin-xm)*zoom;
-	xmax = xm+(xmax-xm)*zoom;
+    double xm = (xmin + xmax)/2.0;
+    xmin = xm+(xmin-xm)*zoom;
+    xmax = xm+(xmax-xm)*zoom;
 
-	double ym = (ymin + ymax)/2.0;
-	ymin = ym+(ymin-ym)*zoom;
-	ymax = ym+(ymax-ym)*zoom;
+    double ym = (ymin + ymax)/2.0;
+    ymin = ym+(ymin-ym)*zoom;
+    ymax = ym+(ymax-ym)*zoom;
 }
 
 
 void Graph::Scalex(double zoom)
 {
-	if (zoom<0.01) zoom =0.01;
-	m_bAutoX = false;
+    if (zoom<0.01) zoom =0.01;
+    m_bAutoX = false;
 
-	double xm = (xmin + xmax)/2.0;
-	xmin = xm+(xmin-xm)*zoom;
-	xmax = xm+(xmax-xm)*zoom;
+    double xm = (xmin + xmax)/2.0;
+    xmin = xm+(xmin-xm)*zoom;
+    xmax = xm+(xmax-xm)*zoom;
 
 }
 
 void Graph::Scaley(double zoom)
 {
-	if (zoom<0.01) zoom =0.01;
-	m_bAutoY = false;
+    if (zoom<0.01) zoom =0.01;
+    m_bAutoY = false;
 
-	double ym = (ymin + ymax)/2.0;
-	ymin = ym+(ymin-ym)*zoom;
-	ymax = ym+(ymax-ym)*zoom;
+    double ym = (ymin + ymax)/2.0;
+    ymin = ym+(ymin-ym)*zoom;
+    ymax = ym+(ymax-ym)*zoom;
 }
 
 //___________________Start Sets______________________________________________________________
@@ -674,215 +674,215 @@ void Graph::Scaley(double zoom)
 
 void Graph::SetAuto(bool bAuto)
 {
-	m_bAutoX = bAuto;
-	m_bAutoY = bAuto;
-	ResetXLimits();
-	ResetYLimits();
+    m_bAutoX = bAuto;
+    m_bAutoY = bAuto;
+    ResetXLimits();
+    ResetYLimits();
 }
 
 void Graph::SetAutoX(bool bAuto)
 {
-	m_bAutoX = bAuto;
-	ResetXLimits();
+    m_bAutoX = bAuto;
+    ResetXLimits();
 }
 void Graph::SetAutoY(bool bAuto)
 {
-	m_bAutoY = bAuto;
-	ResetYLimits();
+    m_bAutoY = bAuto;
+    ResetYLimits();
 }
 void Graph::SetAutoXMinUnit(bool bAuto)
 {
-	m_bXAutoMinGrid = bAuto;
-	if(bAuto) m_XMinorUnit = xunit/5.0;
+    m_bXAutoMinGrid = bAuto;
+    if(bAuto) m_XMinorUnit = xunit/5.0;
 }
 
 
 void Graph::SetAutoXUnit()
 {
-//	xunit = 100.0*m_scalex;
-	xunit = (xmax-xmin)/3.0;
+//    xunit = 100.0*m_scalex;
+    xunit = (xmax-xmin)/3.0;
 
-	if (xunit<1.0)
-	{
+    if (xunit<1.0)
+    {
         exp_x = int(log10(xunit*1.00001)-1);
-		exp_x = qMax(-4, exp_x);
-	}
+        exp_x = qMax(-4, exp_x);
+    }
     else exp_x = int(log10(xunit*1.00001));
     int main_x = int(xunit/pow(10.0, exp_x)*1.000001);
 
 
-	if(main_x<2)
-		xunit = pow(10.0,exp_x);
-	else if (main_x<5)
-		xunit = 2.0*pow(10.0,exp_x);
-	else
-		xunit = 5.0*pow(10.0,exp_x);
+    if(main_x<2)
+        xunit = pow(10.0,exp_x);
+    else if (main_x<5)
+        xunit = 2.0*pow(10.0,exp_x);
+    else
+        xunit = 5.0*pow(10.0,exp_x);
 
 }
 
 
 void Graph::SetAutoYMinUnit(bool bAuto)
 {
-	m_bYAutoMinGrid = bAuto;
-	if(bAuto) m_YMinorUnit = yunit/5.0;
+    m_bYAutoMinGrid = bAuto;
+    if(bAuto) m_YMinorUnit = yunit/5.0;
 }
 
 
 void Graph::SetAutoYUnit()
 {
-//	yunit = 100.0 * m_scaley;
-	yunit = (ymax-ymin)/5.0;
-	if (yunit<1.0)
-	{
+//    yunit = 100.0 * m_scaley;
+    yunit = (ymax-ymin)/5.0;
+    if (yunit<1.0)
+    {
         exp_y = int(log10(yunit*1.00001)-1);
-//		exp_y = qMax(-4, exp_y);
-	}
+//        exp_y = qMax(-4, exp_y);
+    }
     else  exp_y = int(log10(yunit*1.00001));
 
     int main_y = int(yunit/pow(10.0, exp_y));
 
-	if(main_y<2)
-		yunit = pow(10.0,exp_y);
-	else if (main_y<5)
-		yunit = 2.0*pow(10.0,exp_y);
-	else
-		yunit = 5.0*pow(10.0,exp_y);	
+    if(main_y<2)
+        yunit = pow(10.0,exp_y);
+    else if (main_y<5)
+        yunit = 2.0*pow(10.0,exp_y);
+    else
+        yunit = 5.0*pow(10.0,exp_y);    
 }
 
 void Graph::SetAxisData(int s, int w, QColor clr)
 {
-	m_AxisStyle = s;
-	m_AxisWidth = w;
-	m_AxisColor = clr;
+    m_AxisStyle = s;
+    m_AxisWidth = w;
+    m_AxisColor = clr;
 }
 
 void Graph::SetAxisColor(QColor crColor)
 {
-	m_AxisColor = crColor;
+    m_AxisColor = crColor;
 }
 
 void Graph::SetAxisStyle(int nStyle)
 {
-	m_AxisStyle = nStyle;
+    m_AxisStyle = nStyle;
 }
 
 void Graph::SetAxisWidth(int Width)
 {
-	m_AxisWidth = Width;
+    m_AxisWidth = Width;
 }
 
 
 void Graph::SetBkColor(QColor cr)
 {
-	m_BkColor = cr;
+    m_BkColor = cr;
 }
 
 void Graph::SetBorderColor(QColor crBorder)
 {
-	m_BorderColor = crBorder;
+    m_BorderColor = crBorder;
 }
 
 void Graph::SetBorder(bool bBorder)
 {
-	m_bBorder = bBorder;
+    m_bBorder = bBorder;
 }
 
 void Graph::SetBorderWidth(int w)
 {
-	m_BorderWidth = w;
+    m_BorderWidth = w;
 }
 
 void Graph::SetBorderStyle(int s)
 {
-	m_BorderStyle = s;
+    m_BorderStyle = s;
 }
 
 void Graph::SetDrawRect(CRectangle &Rect)
 {
-	m_rDrawRect = Rect;
+    m_rDrawRect = Rect;
 }
 
 
 void Graph::SetDrawRect(QRect &Rect)
 {
-	m_rCltRect = Rect;
+    m_rCltRect = Rect;
 }
 
 void Graph::SetGraphName(QString GraphName)
 {
-	m_GraphName = GraphName;
+    m_GraphName = GraphName;
 }
 
 void Graph::SetDefaults()
 {
-	m_BkColor = QColor(0,10,20);
-	m_BorderColor = QColor(200,200,200);
-	m_BorderStyle = 0;
-	m_BorderWidth = 3;
+    m_BkColor = QColor(0,10,20);
+    m_BorderColor = QColor(200,200,200);
+    m_BorderStyle = 0;
+    m_BorderWidth = 3;
 
-	m_LogPixelsY = 96;
+    m_LogPixelsY = 96;
 
-	m_AxisStyle = 0;
-	m_AxisWidth = 1;
+    m_AxisStyle = 0;
+    m_AxisWidth = 1;
 
-	m_bYInverted = false;
+    m_bYInverted = false;
 
-	QFont TmpFont;
-//	TmpFont.CreatePointFont(85, "Comic Sans MS");
+    QFont TmpFont;
+//    TmpFont.CreatePointFont(85, "Comic Sans MS");
 
-	SetTitleLogFont(&TmpFont);
-	SetLabelLogFont(&TmpFont);
+    SetTitleLogFont(&TmpFont);
+    SetLabelLogFont(&TmpFont);
 
-	SetAxisColor(QColor(200,200,200));
-	SetTitleColor(QColor(255,255,255));
-	SetLabelColor(QColor(255,255,255));
+    SetAxisColor(QColor(200,200,200));
+    SetTitleColor(QColor(255,255,255));
+    SetLabelColor(QColor(255,255,255));
 
-	m_bXMajGrid = true;
-	m_bYMajGrid = true;
-	m_bXMinGrid = false;
-	m_bYMinGrid = false;
+    m_bXMajGrid = true;
+    m_bYMajGrid = true;
+    m_bXMinGrid = false;
+    m_bYMinGrid = false;
 
-	m_XMajStyle = 1;
-	m_YMajStyle = 1;
-	m_XMajWidth = 1;
-	m_YMajWidth = 1;
-	m_XMajClr   = QColor(90,90,90);
-	m_YMajClr   = QColor(90,90,90);
+    m_XMajStyle = 1;
+    m_YMajStyle = 1;
+    m_XMajWidth = 1;
+    m_YMajWidth = 1;
+    m_XMajClr   = QColor(90,90,90);
+    m_YMajClr   = QColor(90,90,90);
 
-	m_XMinStyle = 1;
-	m_YMinStyle = 1;
-	m_XMinWidth = 1;
-	m_YMinWidth = 1;
-	m_XMinClr   = QColor(50,50,50);
-	m_YMinClr   = QColor(50,50,50);
+    m_XMinStyle = 1;
+    m_YMinStyle = 1;
+    m_XMinWidth = 1;
+    m_YMinWidth = 1;
+    m_XMinClr   = QColor(50,50,50);
+    m_YMinClr   = QColor(50,50,50);
 
-	m_XMinorUnit = 0.1;
-	m_YMinorUnit = 0.1;
+    m_XMinorUnit = 0.1;
+    m_YMinorUnit = 0.1;
 }
 
 
 void Graph::SetLabelLogFont(QFont *plgft)
 {
-	m_LabelLogFont = *plgft;
+    m_LabelLogFont = *plgft;
 }
 
 
 
 void Graph::SetLabelColor(QColor crColor)
 {
-	m_LabelColor = crColor;
+    m_LabelColor = crColor;
 }
 
 
 void Graph::SetInverted(bool bInverted)
 {
-	m_bYInverted = bInverted;
+    m_bYInverted = bInverted;
 }
 
 
 void Graph::SetLogPixelsY(int n)
 {
-	m_LogPixelsY = n;
+    m_LogPixelsY = n;
 }
 
 
@@ -893,430 +893,430 @@ void Graph::SetMargin(double m)
 
 void Graph::SetMargin(int m)
 {
-	m_iMargin = m;
+    m_iMargin = m;
 }
 
 
 
 void Graph::SetTitleColor(QColor crColor)
 {
-	m_TitleColor = crColor;
+    m_TitleColor = crColor;
 }
 
 void Graph::SetTitleLogFont(QFont *plgft)
 {
-	m_TitleLogFont = *plgft;
+    m_TitleLogFont = *plgft;
 }
 
 
 
 void Graph::SetType(int type)
 {
-	m_Type = type;
+    m_Type = type;
 }
 
 
 
 void Graph::SetVariables(int const & X, int const & Y)
 {
-	m_X = X;
-	m_Y = Y;
+    m_X = X;
+    m_Y = Y;
 }
 
 
 void Graph::SetWindow(double x1, double x2, double y1, double y2)
 {
-	m_bAutoX = false;
-	m_bAutoY = false;
-	xmin = x1;
-	xmax = x2;
-	ymin = y1;
-	ymax = y2;
+    m_bAutoX = false;
+    m_bAutoY = false;
+    xmin = x1;
+    xmax = x2;
+    ymin = y1;
+    ymax = y2;
 }
 
 void Graph::SetX0(double f){
-	xo = f;
+    xo = f;
 }
 
 
 
 void Graph::SetXMajGrid(bool const &state, QColor const &clr, int const &style, int const &width)
 {
-	m_bXMajGrid = state;
-	m_XMajClr   = clr;
-	m_XMajStyle = style;
-	m_XMajWidth = width;
+    m_bXMajGrid = state;
+    m_XMajClr   = clr;
+    m_XMajStyle = style;
+    m_XMajWidth = width;
 }
 
 
 void Graph::SetXMajGrid(bool const &bGrid)
 {
-	m_bXMajGrid = bGrid;
+    m_bXMajGrid = bGrid;
 }
 
 void Graph::SetXMinGrid(bool const &bGrid)
 {
-	m_bXMinGrid = bGrid;
+    m_bXMinGrid = bGrid;
 }
 
 
 
 void Graph::SetXMax(double f){
-	xmax = f;
+    xmax = f;
 }
 
 
 void Graph::SetXMin(double f){
-	xmin = f;
+    xmin = f;
 }
 
 void Graph::SetXMinGrid(bool state, bool bAuto, QColor clr, int style, int width, double unit)
 {
-	m_bXMinGrid = state;
-	m_bXAutoMinGrid = bAuto;
-	m_XMinClr   = clr;
-	m_XMinStyle = style;
-	m_XMinWidth = width;
-	if(unit>0.0) m_XMinorUnit  = unit;
+    m_bXMinGrid = state;
+    m_bXAutoMinGrid = bAuto;
+    m_XMinClr   = clr;
+    m_XMinStyle = style;
+    m_XMinWidth = width;
+    if(unit>0.0) m_XMinorUnit  = unit;
 }
 
 
 
 void Graph::SetXMinorUnit(double f){
-	m_XMinorUnit = f;
+    m_XMinorUnit = f;
 }
 
 
 bool Graph::SetXScale()
 {
-	CCurve *pCurve;
-	int nc;
+    CCurve *pCurve;
+    int nc;
 
-	if(m_bAutoX)
-	{
-		bool bCurve = false;
+    if(m_bAutoX)
+    {
+        bool bCurve = false;
 
-		if (m_oaCurves.size())
-		{
-			//init only if we have a curve
-			for (nc=0; nc < m_oaCurves.size(); nc++)
-			{
+        if (m_oaCurves.size())
+        {
+            //init only if we have a curve
+            for (nc=0; nc < m_oaCurves.size(); nc++)
+            {
                 pCurve = m_oaCurves[nc];
-				if ((pCurve->IsVisible() ||pCurve->PointsVisible()) && pCurve->n>1)
-				{
-					bCurve = true;
-					break;//there is something to draw
-				}
-			}
-		}
-		if (bCurve)
-		{
-			Cxmin =  9999999.0;
-			Cxmax = -9999999.0;
-			for (nc=0; nc < m_oaCurves.size(); nc++)
-			{
+                if ((pCurve->IsVisible() ||pCurve->PointsVisible()) && pCurve->n>1)
+                {
+                    bCurve = true;
+                    break;//there is something to draw
+                }
+            }
+        }
+        if (bCurve)
+        {
+            Cxmin =  9999999.0;
+            Cxmax = -9999999.0;
+            for (nc=0; nc < m_oaCurves.size(); nc++)
+            {
                 pCurve = m_oaCurves[nc];
-				if ((pCurve->IsVisible() ||pCurve->PointsVisible())  && pCurve->n>0)
-				{
-					Cxmin = qMin(Cxmin, pCurve->GetxMin());
-					Cxmax = qMax(Cxmax, pCurve->GetxMax());
-				}
-			}
+                if ((pCurve->IsVisible() ||pCurve->PointsVisible())  && pCurve->n>0)
+                {
+                    Cxmin = qMin(Cxmin, pCurve->GetxMin());
+                    Cxmax = qMax(Cxmax, pCurve->GetxMax());
+                }
+            }
 
-			if(Cxmax<=Cxmin)
-				Cxmax = (Cxmin+1.0)*2.0;
+            if(Cxmax<=Cxmin)
+                Cxmax = (Cxmin+1.0)*2.0;
 
-			if(m_Type == 1)
-			{
-				xmin = qMin(xmin, Cxmin);
-				xmax = qMax(xmax, Cxmax);
-			}
-			else
-			{
-				xmin = Cxmin;
-				xmax = Cxmax;
-			}
-			if(Cxmin>=0.0) xmin = 0.0;
-			if(Cxmax<=0.0) xmax = 0.0;
+            if(m_Type == 1)
+            {
+                xmin = qMin(xmin, Cxmin);
+                xmax = qMax(xmax, Cxmax);
+            }
+            else
+            {
+                xmin = Cxmin;
+                xmax = Cxmax;
+            }
+            if(Cxmin>=0.0) xmin = 0.0;
+            if(Cxmax<=0.0) xmax = 0.0;
 
-		}
-		else
-		{
-			// until things are made clear
-			for (nc=0; nc < m_oaCurves.size(); nc++)
-			{
+        }
+        else
+        {
+            // until things are made clear
+            for (nc=0; nc < m_oaCurves.size(); nc++)
+            {
                 pCurve = m_oaCurves[nc];
-				if ((pCurve->IsVisible() ||pCurve->PointsVisible())  && pCurve->n>0)
-				{
-					xmin = qMin(xmin, pCurve->x[0]);
-					xmax = qMax(xmax, pCurve->x[0]);
-				}
-			}
-		}
-		xo=0.0;
+                if ((pCurve->IsVisible() ||pCurve->PointsVisible())  && pCurve->n>0)
+                {
+                    xmin = qMin(xmin, pCurve->x[0]);
+                    xmax = qMax(xmax, pCurve->x[0]);
+                }
+            }
+        }
+        xo=0.0;
 
-		if(fabs((xmin-xmax)/xmin)<0.001)
-		{
-			if(fabs(xmin)<0.00001) xmax = 1.0;
-			else
-			{
-				xmax = 2.0 * xmin;
-				if(xmax < xmin)
-				{
-					double tmp = xmax;
-					xmax = xmin;
-					xmin = tmp;
-				}
-			}
-		}
+        if(fabs((xmin-xmax)/xmin)<0.001)
+        {
+            if(fabs(xmin)<0.00001) xmax = 1.0;
+            else
+            {
+                xmax = 2.0 * xmin;
+                if(xmax < xmin)
+                {
+                    double tmp = xmax;
+                    xmax = xmin;
+                    xmin = tmp;
+                }
+            }
+        }
 
-		if(m_w<=0.0) return false;
+        if(m_w<=0.0) return false;
 
-		m_scalex   = (xmax-xmin)/m_w;
+        m_scalex   = (xmax-xmin)/m_w;
 
 
-		//try to set an automatic scale for X Axis
+        //try to set an automatic scale for X Axis
 
-		SetAutoXUnit();
-	}
-	else
-	{
-		//scales are set manually
-		if(m_w<=0.0) return false;
+        SetAutoXUnit();
+    }
+    else
+    {
+        //scales are set manually
+        if(m_w<=0.0) return false;
 
-//		m_scalex   =  (xmax-xmin)/m_w;
-		if (xunit<1.0)
-		{
+//        m_scalex   =  (xmax-xmin)/m_w;
+        if (xunit<1.0)
+        {
             exp_x = int(log10(xunit*1.00001)-1);
-			exp_x = qMax(-4, exp_x);
-		}
+            exp_x = qMax(-4, exp_x);
+        }
         else exp_x = int(log10(xunit*1.00001));
 
-	}
-	m_scalex   =  (xmax-xmin)/m_w;
+    }
+    m_scalex   =  (xmax-xmin)/m_w;
 
-	//graph center position
-	int Xg = (m_rCltRect.right() + m_rCltRect.left())/2;
-	// curves center position
+    //graph center position
+    int Xg = (m_rCltRect.right() + m_rCltRect.left())/2;
+    // curves center position
     int Xc = int((xmin+xmax)/2.0/m_scalex);
-	// center graph in drawing rectangle
-	m_ptoffset.rx() = (Xg-Xc);
-	return true;
+    // center graph in drawing rectangle
+    m_ptoffset.rx() = (Xg-Xc);
+    return true;
 }
 
 
 
 void Graph::SetXUnit(double f){
-	xunit = f;
+    xunit = f;
 }
 
 void Graph::SetXTitle(QString str)
 {
-	m_XTitle = str;
+    m_XTitle = str;
 }
 
 
 
 void Graph::SetXVariable(int const & X)
 {
-	m_X = X;
+    m_X = X;
 }
 
 
 
 
 void Graph::SetYMin(double f){
-	ymin = f;
+    ymin = f;
 }
 
 void Graph::SetYMinorUnit(double f){
-	m_YMinorUnit = f;
+    m_YMinorUnit = f;
 }
 
 
 void Graph::SetYMax(double f){
-	ymax = f;
+    ymax = f;
 }
 
 void Graph::SetY0(double f){
-	yo = f;
+    yo = f;
 }
 
 void Graph::SetYTitle(QString str)
 {
-	m_YTitle = str;
+    m_YTitle = str;
 }
 
 void Graph::SetYUnit(double f){
-	yunit = f;
+    yunit = f;
 }
 
 
 
 bool Graph::SetYScale()
 {
-	int nc;
-	CCurve *pCurve;
+    int nc;
+    CCurve *pCurve;
 
-	if(m_bAutoY)
-	{
-		bool bCurve = false;
-		if (m_oaCurves.size())
-		{
-			//init only if we have a curve
-			for (nc=0; nc < m_oaCurves.size(); nc++)
-			{
+    if(m_bAutoY)
+    {
+        bool bCurve = false;
+        if (m_oaCurves.size())
+        {
+            //init only if we have a curve
+            for (nc=0; nc < m_oaCurves.size(); nc++)
+            {
                 pCurve = m_oaCurves[nc];
-				if ((pCurve->IsVisible() ||pCurve->PointsVisible())  && pCurve->n>0)
-					{
-						bCurve = true;
-						break;
-					}
-			}
-		}
-		if(bCurve)
-		{
-			Cymin =  9999999.0;
-			Cymax = -9999999.0;
-			for (nc=0; nc < m_oaCurves.size(); nc++)
-			{
+                if ((pCurve->IsVisible() ||pCurve->PointsVisible())  && pCurve->n>0)
+                    {
+                        bCurve = true;
+                        break;
+                    }
+            }
+        }
+        if(bCurve)
+        {
+            Cymin =  9999999.0;
+            Cymax = -9999999.0;
+            for (nc=0; nc < m_oaCurves.size(); nc++)
+            {
                 pCurve = m_oaCurves[nc];
-				if ((pCurve->IsVisible() ||pCurve->PointsVisible()) && pCurve->n>0)
-				{
-					Cymin = qMin(Cymin, pCurve->GetyMin());
-					Cymax = qMax(Cymax, pCurve->GetyMax());
-				}
-			}
-			if(Cymax<=Cymin)
-			{
-				Cymax = (Cymin+1.0)*2.0;
-			}
+                if ((pCurve->IsVisible() ||pCurve->PointsVisible()) && pCurve->n>0)
+                {
+                    Cymin = qMin(Cymin, pCurve->GetyMin());
+                    Cymax = qMax(Cymax, pCurve->GetyMax());
+                }
+            }
+            if(Cymax<=Cymin)
+            {
+                Cymax = (Cymin+1.0)*2.0;
+            }
 
-			if(m_Type == 1)
-			{
-				ymin = qMin(ymin, Cymin);
-				ymax = qMax(ymax, Cymax);
-			}
-			else
-			{
-				ymin = Cymin;
-				ymax = Cymax;
-			}
-			if(Cymin>=0.0) ymin = 0.0;
-			if(Cymax<=0.0) ymax = 0.0;
-		}
-		else
-		{
-			// until things are made clear
-			for (int nc=0; nc < m_oaCurves.size(); nc++)
-			{
+            if(m_Type == 1)
+            {
+                ymin = qMin(ymin, Cymin);
+                ymax = qMax(ymax, Cymax);
+            }
+            else
+            {
+                ymin = Cymin;
+                ymax = Cymax;
+            }
+            if(Cymin>=0.0) ymin = 0.0;
+            if(Cymax<=0.0) ymax = 0.0;
+        }
+        else
+        {
+            // until things are made clear
+            for (int nc=0; nc < m_oaCurves.size(); nc++)
+            {
                 pCurve = m_oaCurves[nc];
-				if ((pCurve->IsVisible() ||pCurve->PointsVisible())  && pCurve->n>0)
-				{
-					ymin = qMin(ymin, pCurve->y[0]);
-					ymax = qMax(ymax, pCurve->y[0]);
-				}
-			}
-		}
-		yo=0.0;
+                if ((pCurve->IsVisible() ||pCurve->PointsVisible())  && pCurve->n>0)
+                {
+                    ymin = qMin(ymin, pCurve->y[0]);
+                    ymax = qMax(ymax, pCurve->y[0]);
+                }
+            }
+        }
+        yo=0.0;
 
-		if (fabs((ymin-ymax)/ymin)<0.001)
-		{
-			if(fabs(ymin)<0.00001) ymax = 1.0;
-			else
-			{
-				ymax = 2.0 * ymin;
-				if(ymax < ymin)
-				{
-					double tmp = ymax;
-					ymax = ymin;
-					ymin = tmp;
-				}
-			}
-		}
+        if (fabs((ymin-ymax)/ymin)<0.001)
+        {
+            if(fabs(ymin)<0.00001) ymax = 1.0;
+            else
+            {
+                ymax = 2.0 * ymin;
+                if(ymax < ymin)
+                {
+                    double tmp = ymax;
+                    ymax = ymin;
+                    ymin = tmp;
+                }
+            }
+        }
 
-		if(m_h<=0.0) return false;
+        if(m_h<=0.0) return false;
 
-		if (!m_bYInverted)
-		{
-			m_scaley   = -(ymax-ymin)/m_h;
-		}
-		else
-		{
-			m_scaley   =  (ymax-ymin)/m_h;
-		}
+        if (!m_bYInverted)
+        {
+            m_scaley   = -(ymax-ymin)/m_h;
+        }
+        else
+        {
+            m_scaley   =  (ymax-ymin)/m_h;
+        }
 
-		//try to set an automatic scale for Y Axis
-		SetAutoYUnit();
-	}
-	else
-	{
-		//scales are set manually
-		if(m_h<=0) return false;
+        //try to set an automatic scale for Y Axis
+        SetAutoYUnit();
+    }
+    else
+    {
+        //scales are set manually
+        if(m_h<=0) return false;
 
-		if (!m_bYInverted)
-		{
-			m_scaley   = -(ymax-ymin)/m_h;
-		}
-		else
-		{
-			m_scaley   =  (ymax-ymin)/m_h;
-		}
+        if (!m_bYInverted)
+        {
+            m_scaley   = -(ymax-ymin)/m_h;
+        }
+        else
+        {
+            m_scaley   =  (ymax-ymin)/m_h;
+        }
 
-		if (yunit<1.0)
-		{
+        if (yunit<1.0)
+        {
             exp_y = int(log10(yunit*1.00001)-1);
-			exp_y = qMax(-4, exp_y);
-		}
+            exp_y = qMax(-4, exp_y);
+        }
         else  exp_y = int(log10(yunit*1.00001));
 
-	}
+    }
 
-	//graph center position
-	int Yg = (m_rCltRect.top() + m_rCltRect.bottom())/2;
-	// curves center position
+    //graph center position
+    int Yg = (m_rCltRect.top() + m_rCltRect.bottom())/2;
+    // curves center position
     int Yc = int((ymin+ymax)/2.0/m_scaley);
-	// center graph in drawing rectangle
-	m_ptoffset.ry() = (Yg-Yc);
+    // center graph in drawing rectangle
+    m_ptoffset.ry() = (Yg-Yc);
 
-	return true;
+    return true;
 }
 
 void Graph::SetYMajGrid(bool const &state, QColor const &clr, int const &style, int const &width)
 {
-	m_bYMajGrid = state;
-	m_YMajClr   = clr;
-	m_YMajStyle = style;
-	m_YMajWidth = width;
+    m_bYMajGrid = state;
+    m_YMajClr   = clr;
+    m_YMajStyle = style;
+    m_YMajWidth = width;
 }
 
 
 void Graph::SetYMajGrid(bool const &bGrid)
 {
-	m_bYMajGrid = bGrid;
+    m_bYMajGrid = bGrid;
 }
 
 void Graph::SetYMinGrid(bool state, bool bAuto, QColor clr, int style, int width, double unit)
 {
-	m_bYMinGrid = state;
-	m_bYAutoMinGrid = bAuto;
-	m_YMinClr   = clr;
-	m_YMinStyle = style;
-	m_YMinWidth = width;
-	if(unit>0.0) m_YMinorUnit  = unit;
+    m_bYMinGrid = state;
+    m_bYAutoMinGrid = bAuto;
+    m_YMinClr   = clr;
+    m_YMinStyle = style;
+    m_YMinWidth = width;
+    if(unit>0.0) m_YMinorUnit  = unit;
 }
 
 
 void Graph::SetYMinGrid(bool const &bGrid)
 {
-	m_bYMinGrid = bGrid;
+    m_bYMinGrid = bGrid;
 }
 
 
 
 void Graph::SetYVariable(int const & Y)
 {
-	m_Y = Y;
+    m_Y = Y;
 }
 
 
@@ -1336,99 +1336,99 @@ int Graph::yToClient(double y)
 
 CCurve*  Graph::GetClosestPoint(const double &x, const double &y, double &xSel, double &ySel, int &nSel)
 {
-	static int i, n1;
-	static double dist, dmax, x1, y1;
-	dmax = 1.e40;
-	CCurve *pOldCurve, *pCurveSel;
-	pCurveSel = nullptr;
-	
-	for(i=0; i<m_oaCurves.size(); i++)
-	{
+    static int i, n1;
+    static double dist, dmax, x1, y1;
+    dmax = 1.e40;
+    CCurve *pOldCurve, *pCurveSel;
+    pCurveSel = nullptr;
+    
+    for(i=0; i<m_oaCurves.size(); i++)
+    {
         pOldCurve = m_oaCurves.at(i);
-		pOldCurve->GetClosestPoint(x, y, x1, y1, dist, n1);
-		if(dist<dmax)
-		{
-			dmax = dist;
-			xSel = x1;
-			ySel = y1;
-			pCurveSel = pOldCurve;
-			nSel = i;
-		}
-	}
-	return pCurveSel;
+        pOldCurve->GetClosestPoint(x, y, x1, y1, dist, n1);
+        if(dist<dmax)
+        {
+            dmax = dist;
+            xSel = x1;
+            ySel = y1;
+            pCurveSel = pOldCurve;
+            nSel = i;
+        }
+    }
+    return pCurveSel;
 }
 
 
 CCurve* Graph::GetCurvePoint(const int &xClt, const int &yClt,int &nSel)
 {
-	static int i, n, xc, yc;
-	static double dist, x1, y1, x,y;
-	CCurve *pOldCurve;
+    static int i, n, xc, yc;
+    static double dist, x1, y1, x,y;
+    CCurve *pOldCurve;
 
-	x= ClientTox(xClt);
-	y= ClientToy(yClt);
-	for(i=0; i<m_oaCurves.size(); i++)
-	{
+    x= ClientTox(xClt);
+    y= ClientToy(yClt);
+    for(i=0; i<m_oaCurves.size(); i++)
+    {
         pOldCurve = m_oaCurves.at(i);
-		pOldCurve->GetClosestPoint(x, y, x1, y1, dist, n);
+        pOldCurve->GetClosestPoint(x, y, x1, y1, dist, n);
 
-		xc = xToClient(x1);
-		yc = yToClient(y1);
+        xc = xToClient(x1);
+        yc = yToClient(y1);
 
-		if((xClt-xc)*(xClt-xc) + (yClt-yc)*(yClt-yc) <16)//sqrt(16) pixels distance
-		{
-			nSel = n;
-			return pOldCurve;
-		}
-	}
-	nSel = -1;
-	return  nullptr;
+        if((xClt-xc)*(xClt-xc) + (yClt-yc)*(yClt-yc) <16)//sqrt(16) pixels distance
+        {
+            nSel = n;
+            return pOldCurve;
+        }
+    }
+    nSel = -1;
+    return  nullptr;
 }
 
 
 bool Graph::SelectPoint(QString const &CurveName, int sel)
 {
-	QString str;
-	CCurve *pCurve = nullptr;
-	
-	if(sel<0) 
-	{
-//		pCurve->SetSelected(-1);
-		return false;				
-	}		
-	
-	for(int i=0; i<m_oaCurves.size(); i++)
-	{
+    QString str;
+    CCurve *pCurve = nullptr;
+    
+    if(sel<0) 
+    {
+//        pCurve->SetSelected(-1);
+        return false;                
+    }        
+    
+    for(int i=0; i<m_oaCurves.size(); i++)
+    {
         pCurve = m_oaCurves.at(i);
-		pCurve->GetTitle(str);
-		if(str == CurveName)
-		{
-			if(sel>pCurve->GetCount())
-			{
-				pCurve->SetSelected(-1);
-				return false;				
-			}
-			else
-			{
-				pCurve->SetSelected(sel);
-				return true;
-			}
-		}
-	}
-//	pCurve->SetSelected(-1);
-	return false;
+        pCurve->GetTitle(str);
+        if(str == CurveName)
+        {
+            if(sel>pCurve->GetCount())
+            {
+                pCurve->SetSelected(-1);
+                return false;                
+            }
+            else
+            {
+                pCurve->SetSelected(sel);
+                return true;
+            }
+        }
+    }
+//    pCurve->SetSelected(-1);
+    return false;
 }
 
 
 
 void Graph::DeselectPoint()
 {
-	CCurve *pCurve;
-	for(int i=0; i<m_oaCurves.size(); i++)
-	{
+    CCurve *pCurve;
+    for(int i=0; i<m_oaCurves.size(); i++)
+    {
         pCurve = m_oaCurves.at(i);
-		pCurve->SetSelected(-1);
-	}
+        pCurve->SetSelected(-1);
+    }
 }
 
 

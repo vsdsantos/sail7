@@ -41,7 +41,7 @@
 
 
 //3D analysis parameters
-#define MAXCHORDPANELS	   50
+#define MAXCHORDPANELS       50
 #define VLMMAXMATSIZE    5000
 #define VLMHALF          2500
 #define VLMMAXRHS         100 // max number of points which may be calculated in a single sequence

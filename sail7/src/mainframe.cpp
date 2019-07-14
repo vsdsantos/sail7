@@ -10,22 +10,22 @@
 #include "./mainframe.h"
 #include "./globals.h"
 #include "./sail7/sail7.h"
-#include "./sail7/SectionViewWidget.h"
-#include "./sail7/BoatDlg.h"
-#include "./sail7/BoatAnalysisDlg.h"
-#include "./sail7/BoatPolarDlg.h"
-#include "./sail7/GL3DScales.h"
-#include "./sail7/GL3dBodyDlg.h"
-#include "./sail7/SailDlg.h"
+#include "./sail7/sectionviewwidget.h"
+#include "./sail7/boatdlg.h"
+#include "./sail7/boatanalysisDlg.h"
+#include "./sail7/boatpolardlg.h"
+#include "./sail7/gl3dscales.h"
+#include "./sail7/gl3dbodydlg.h"
+#include "./sail7/saildlg.h"
 
-#include "./sail7/BodyTransDlg.h"
-#include "./misc/AboutS7.h"
-#include "./misc/ObjectPropsDlg.h"
-#include "./misc/LinePickerDlg.h"
-#include "./misc/TranslatorDlg.h"
+#include "./sail7/bodytransdlg.h"
+#include "./misc/abouts7.h"
+#include "./misc/objectpropsdlg.h"
+#include "./misc/linepickerdlg.h"
+#include "./misc/translatordlg.h"
 #include "./graph/graphdlg.h"
-#include "./objects/BoatPolar.h"
-#include "./objects/BoatOpp.h"
+#include "./objects/boatpolar.h"
+#include "./objects/boatopp.h"
 
 #include <QtCore>
 #include <QApplication>
@@ -51,7 +51,7 @@ QPointer<MainFrame> MainFrame::_self = nullptr;
 MainFrame::MainFrame(QWidget *parent, Qt::WindowFlags flags)
     : QMainWindow(parent, flags)
 {
-    m_VersionName = QString::fromLatin1("sail7 v0.06 alpha");
+    m_VersionName = QString::fromLatin1("sail7 v1.0");
 
 
     setWindowTitle(m_VersionName);
@@ -308,7 +308,7 @@ void MainFrame::CreateActions()
     languageAct->setStatusTip(tr("Define the default language for the application"));
     connect(languageAct, SIGNAL(triggered()), this, SLOT(OnLanguage()));
 
-    restoreToolbarsAct	 = new QAction(tr("Restore toolbars"), this);
+    restoreToolbarsAct     = new QAction(tr("Restore toolbars"), this);
     restoreToolbarsAct->setStatusTip(tr("Restores the toolbars to their original state"));
     connect(restoreToolbarsAct, SIGNAL(triggered()), this, SLOT(OnRestoreToolbars()));
 
@@ -558,7 +558,7 @@ void MainFrame::CreateSail7Actions()
 
     Sail73DScalesAct = new QAction(tr("3D Scales"), this);
     Sail73DScalesAct->setStatusTip(tr("Define the scales for the 3D display of lift, moment, drag, and downwash"));
-    //	Sail73DScalesAct->setCheckable(true);
+    //    Sail73DScalesAct->setCheckable(true);
     connect(Sail73DScalesAct, SIGNAL(triggered()), m_pSail7, SLOT(OnGL3DScale()));
 
     Sail73DLightAct = new QAction(tr("3D Light"), this);
@@ -584,7 +584,7 @@ void MainFrame::CreateSail7Actions()
 
     defineBoatPolar = new QAction(tr("Define an Analysis")+" \t(F6)", this);
     defineBoatPolar->setStatusTip(tr("Define an analysis for the current boat"));
-    //	defineWPolar->setShortcut(tr("F6"));
+    //    defineWPolar->setShortcut(tr("F6"));
     connect(defineBoatPolar, SIGNAL(triggered()), m_pSail7, SLOT(OnDefineBoatPolar()));
 
     editBoatPolar= new QAction(tr("Edit ...")+" \t(Shift+F6)", this);
@@ -886,7 +886,7 @@ void MainFrame::DeleteBoat(Boat *pThisBoat, bool bResultsOnly)
         {
             m_oaBoat.removeAt(i);
             delete pBoat;
-            if(pBoat == m_pSail7->m_pCurBoat)	m_pSail7->m_pCurBoat = nullptr;
+            if(pBoat == m_pSail7->m_pCurBoat)    m_pSail7->m_pCurBoat = nullptr;
             break;
         }
     }
@@ -1024,7 +1024,7 @@ void MainFrame::keyReleaseEvent(QKeyEvent *event)
 {
     if(m_pSail7)
     {
-        /*		if (event->key()==Qt::Key_Control)
+        /*        if (event->key()==Qt::Key_Control)
         {
             pSail7->m_bArcball = false;
             UpdateView();
@@ -1054,7 +1054,7 @@ bool MainFrame::LoadSettings()
         if(SettingsFormat != SETTINGSFORMAT) return false;
 
         m_StyleName = settings.value("StyleName","").toString();
-        //		if(!m_StyleName.length()) return false;
+        //        if(!m_StyleName.length()) return false;
 
         m_GraphExportFilter = settings.value("GraphExportFilter",".csv").toString();
 
@@ -1239,7 +1239,7 @@ void MainFrame::OnInsertProject()
     PathName = QFileDialog::getOpenFileName(this, tr("Open File"),
                                             m_LastDirName,
                                             tr("Project file (*.sl7)"));
-    if(!PathName.length())		return;
+    if(!PathName.length())        return;
     int pos = PathName.lastIndexOf("/");
     if(pos>0) m_LastDirName = PathName.left(pos);
 
@@ -1524,7 +1524,7 @@ void MainFrame::OnSelChangeBoat(int i)
     // then updates SailPolar combobox
     // and selects either the current SailPolar
     // or the first one in the list, if any
-    //	pSAil7->StopAnimate();
+    //    pSAil7->StopAnimate();
     QString strong;
 
     if (i >=0) strong = m_pctrlBoat->itemText(i);
@@ -1689,7 +1689,7 @@ bool MainFrame::SaveProject(QString PathName)
 
     if(!PathName.length())
     {
-        if(FileName.right(1)=="*") 	FileName = FileName.left(FileName.length()-1);
+        if(FileName.right(1)=="*")     FileName = FileName.left(FileName.length()-1);
         FileName.replace("/", " ");
 
 
@@ -2073,9 +2073,9 @@ void MainFrame::UpdateBoats()
 
 void MainFrame::UpdateBoatPolars()
 {
-    //	fills the combobox with BoatPolar names associated to Sail7's current wing
-    //	then selects Sail7 current BoatPolar if any, else selects the first, if any
-    //	else disables the combobox
+    //    fills the combobox with BoatPolar names associated to Sail7's current wing
+    //    then selects Sail7 current BoatPolar if any, else selects the first, if any
+    //    else disables the combobox
     BoatPolar *pBoatPolar;
     QString BoatName;
     int i;
@@ -2091,7 +2091,7 @@ void MainFrame::UpdateBoatPolars()
     if(!BoatName.length())
     {
         m_pSail7->m_pCurBoatPolar = nullptr;
-        //		pSail7->SetBoatPolar();
+        //        pSail7->SetBoatPolar();
         m_pctrlBoatPolar->setEnabled(false);
         UpdateBoatOpps();
         return;
@@ -2125,16 +2125,16 @@ void MainFrame::UpdateBoatPolars()
             {
                 // if error, select the first
                 m_pctrlBoatPolar->setCurrentIndex(0);
-                //				m_pctrlBoatPolar->GetLBText(0, strong);
-                //				m_pSail7->SetBoatPolar(false, strong);
+                //                m_pctrlBoatPolar->GetLBText(0, strong);
+                //                m_pSail7->SetBoatPolar(false, strong);
             }
         }
         //... else select the first
         else
         {
             m_pctrlBoatPolar->setCurrentIndex(0);
-            //			m_pctrlBoatPolar->GetLBText(0, strong);
-            //			m_pSail7->SetBoatPolar(false, strong);
+            //            m_pctrlBoatPolar->GetLBText(0, strong);
+            //            m_pSail7->SetBoatPolar(false, strong);
         }
 
     }
@@ -2144,7 +2144,7 @@ void MainFrame::UpdateBoatPolars()
         m_pctrlBoatPolar->setEnabled(false);
         m_pSail7->m_pCurBoatPolar = nullptr;
         m_pSail7->m_pCurBoatOpp = nullptr;
-        //		m_pSail7->SetBoatPolar();
+        //        m_pSail7->SetBoatPolar();
     }
 }
 

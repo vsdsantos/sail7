@@ -1,9 +1,9 @@
 /****************************************************************************
 
-	Global Functions 
-	Copyright (C) 2008-2010 Andre Deperrois 
+    Global Functions 
+    Copyright (C) 2008-2010 Andre Deperrois 
 
-	All rights reserved
+    All rights reserved
 
 *****************************************************************************/
 
@@ -63,8 +63,8 @@ void Trace(QString msg, int n);
 void Trace(QString msg, double f);
 
 void SetUnits(int LUnit, int AUnit, int SUnit, int WUnit, int FUnit, int MUnit,
-			  double &mtoUnit, double &m2toUnit, double &mstoUnit,  double &kgtoUnit,
-			  double &NtoUnit, double &NmtoUnit);
+              double &mtoUnit, double &m2toUnit, double &mstoUnit,  double &kgtoUnit,
+              double &NtoUnit, double &NmtoUnit);
 
 Qt::PenStyle GetStyle(int s);
 
