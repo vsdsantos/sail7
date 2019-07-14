@@ -26,19 +26,19 @@
 #include <QSettings>
 #include <QTimer>
 
-#include "../objects/BoatOpp.h"
-#include "../objects/BoatPolar.h"
-#include "../objects/Sail.h"
-#include "../objects/ArcBall.h"
-#include "../objects/Panel.h"
-#include "../misc/W3dPrefsDlg.h"
-#include "../misc/FloatEdit.h"
-#include "../misc/LineButton.h"
-#include "../misc/LineCbBox.h"
-#include "../misc/LineDelegate.h"
-#include "../misc/GLLightDlg.h"
+#include "../objects/boatopp.h"
+#include "../objects/boatpolar.h"
+#include "../objects/sail.h"
+#include "../objects/arcball.h"
+#include "../objects/panel.h"
+#include "../misc/w3dprefsdlg.h"
+#include "../misc/floatedit.h"
+#include "../misc/linebutton.h"
+#include "../misc/linecbbox.h"
+#include "../misc/linedelegate.h"
+#include "../misc/gllightdlg.h"
 #include "../graph/qgraph.h"
-#include "BoatAnalysisDlg.h"
+#include "boatanalysisDlg.h"
 
 
 class MainFrame;
@@ -268,12 +268,12 @@ class Sail7 : public QWidget
     private:
         ArcBall m_ArcBall;
 
-        QList<void *> *m_poaSail;			// a pointer to the array of sail objects
-        QList<void *> *m_poaHull;			// a pointer to the array of hull objects
-        QList<void *> *m_poaRig;			// a pointer to the array of rig objects
-        QList<Boat *> *m_poaBoat;			// a pointer to the array of boat objects
-        QList<BoatPolar *> *m_poaBoatPolar;		// a pointer to the boat polar array
-        QList<BoatOpp *> *m_poaBoatOpp;		// a pointer to the boat OpPoint array
+        QList<void *> *m_poaSail;            // a pointer to the array of sail objects
+        QList<void *> *m_poaHull;            // a pointer to the array of hull objects
+        QList<void *> *m_poaRig;            // a pointer to the array of rig objects
+        QList<Boat *> *m_poaBoat;            // a pointer to the array of boat objects
+        QList<BoatPolar *> *m_poaBoatPolar;        // a pointer to the boat polar array
+        QList<BoatOpp *> *m_poaBoatOpp;        // a pointer to the boat OpPoint array
 
         Boat *m_pCurBoat;
         BoatPolar *m_pCurBoatPolar;
@@ -281,7 +281,7 @@ class Sail7 : public QWidget
 
         BoatAnalysisDlg m_PanelDlg;              // the dialog class which manages the Panel calculations
 
-        QPoint m_BoatPlrLegendOffset;		// client offset position for wing polar legend
+        QPoint m_BoatPlrLegendOffset;        // client offset position for wing polar legend
 
 
         bool m_bResetTextLegend;
@@ -319,7 +319,7 @@ class Sail7 : public QWidget
         bool m_bStoreOpp;
         bool m_bIs2DScaleSet;
         bool m_bIs3DScaleSet;
-        //	bool m_bShowLight; // true if the virtual light is to be displayed
+        //    bool m_bShowLight; // true if the virtual light is to be displayed
         bool m_bglLight;   // true if lighting is to be activate
         bool m_bXPressed, m_bYPressed;
         bool m_bWindFront, m_bWindRear;
@@ -332,11 +332,11 @@ class Sail7 : public QWidget
 
         double m_ControlMin, m_ControlMax, m_ControlDelta;
 
-        double m_LastBoatOpp;			// last BoatOPP selected, try to set the same if it exists, for the new polar
+        double m_LastBoatOpp;            // last BoatOPP selected, try to set the same if it exists, for the new polar
         W3dPrefsDlg m_3DPrefsDlg;
 
         QTimer *m_pTimerBoatOpp;
-        int m_posAnimateBOpp;			// the current ctrl index for BOpp animation
+        int m_posAnimateBOpp;            // the current ctrl index for BOpp animation
 
         QPoint m_PointDown, m_LastPoint;
         QRect m_r3DCltRect;
@@ -392,11 +392,11 @@ class Sail7 : public QWidget
 
         double *m_paij;    // coefficient matrix
         double *m_paijRef; // coefficient matrix
-        double *m_pRHS;			// RHS vector
-        double *m_pRHSRef;		// RHS vector
+        double *m_pRHS;            // RHS vector
+        double *m_pRHSRef;        // RHS vector
 
-        static CPanel* s_pPanel;		// the panel array for the currently loaded UFO
-        static Vector3d* s_pNode;		// the node array for the currently loaded UFO
+        static CPanel* s_pPanel;        // the panel array for the currently loaded UFO
+        static Vector3d* s_pNode;        // the node array for the currently loaded UFO
         static Vector3d* s_pMemNode;         // used if the analysis should be performed on the tilted geometry
         static Vector3d* s_pWakeNode;        // the reference current wake node array
         static Vector3d* s_pRefWakeNode;     // the reference wake node array if wake needs to be reset

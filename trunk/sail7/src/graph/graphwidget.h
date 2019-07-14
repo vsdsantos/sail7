@@ -1,9 +1,9 @@
 /****************************************************************************
 
-	GraphWidget Class
+    GraphWidget Class
         Copyright (C) 2008 Andre Deperrois 
 
-	All rights reserved
+    All rights reserved
 
 
 *****************************************************************************/
@@ -17,26 +17,26 @@
 
 class GraphWidget : public QWidget
 {
-	friend class XFoilAnalysisDlg;
-	friend class LLTAnalysisDlg;
-	friend class BatchDlg;
+    friend class XFoilAnalysisDlg;
+    friend class LLTAnalysisDlg;
+    friend class BatchDlg;
 
 public:
-		GraphWidget();
+        GraphWidget();
 
 protected:
-	void paintEvent(QPaintEvent *event);
-	void resizeEvent (QResizeEvent *event);
+    void paintEvent(QPaintEvent *event);
+    void resizeEvent (QResizeEvent *event);
 
-	void SetTitle(QString &Title, QPoint &Place);
+    void SetTitle(QString &Title, QPoint &Place);
 
-/*	QWidget *ScalePage;
-	QWidget *AxisPage;
-	QWidget *FontPage;
-	QWidget *BackPage;*/
-	QPoint m_TitlePosition;
-	QString m_GraphTitle;
-	QGraph *m_pGraph;
+/*    QWidget *ScalePage;
+    QWidget *AxisPage;
+    QWidget *FontPage;
+    QWidget *BackPage;*/
+    QPoint m_TitlePosition;
+    QString m_GraphTitle;
+    QGraph *m_pGraph;
 
 };
 

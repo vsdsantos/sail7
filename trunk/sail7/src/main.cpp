@@ -22,7 +22,7 @@
 
 
 #include <QApplication>
-#include "sail7Application.h"
+#include "sail7application.h"
 #include "mainframe.h"
 #include <QDate>
 #include <QMessageBox>

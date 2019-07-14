@@ -31,11 +31,11 @@ void ExpFormat(double &f, int &exp)
         return;
     }
     double f1 = fabs(f);
-    //	int sgn = int(f/f1);
+    //    int sgn = int(f/f1);
     if(f1<1)
-        exp = (int)log10(f1)-1;
+        exp = int(log10(f1)-1);
     else
-        exp = (int)log10(f1);
+        exp = int(log10(f1));
 
     f = f/pow(10.0,exp);
 }
@@ -50,7 +50,7 @@ bool Gauss(double *A, int n, double *B, int m, bool *pbCancel)
     pa = A;
     for (row = 0; row < (n - 1); row++, pa += n)
     {
-        //		qApp->processEvents();
+        //        qApp->processEvents();
         if(*pbCancel) return false;
         //  find the pivot row
         A_pivot_row = pa;
@@ -104,7 +104,7 @@ bool Gauss(double *A, int n, double *B, int m, bool *pbCancel)
     pa = A + (n - 1) * n;
     for (row = n - 1; row >= 0; pa -= n, row--)
     {
-        //		qApp->processEvents();
+        //        qApp->processEvents();
         if(*pbCancel) return false;
 
         if ( *(pa + row) == 0.0 )
@@ -640,7 +640,7 @@ void Trace(int n)
 
 void Trace(QString msg)
 {
-    //	if(!((CXFLR5App*)AfxGetApp())->bTrace) return;
+    //    if(!((CXFLR5App*)AfxGetApp())->bTrace) return;
     QString FileName = QDir::tempPath() + "/Trace.log";
     QFile *tf = new QFile(FileName);
     if (!tf->open(QIODevice::ReadWrite | QIODevice::Text)) return;
@@ -662,7 +662,7 @@ void Trace(QString msg)
 
 void Trace(QString msg, int n)
 {
-    //	if(!((CXFLR5App*)AfxGetApp())->bTrace) return;
+    //    if(!((CXFLR5App*)AfxGetApp())->bTrace) return;
     QString FileName = QDir::tempPath() + "/Trace.log";
     QFile *tf = new QFile(FileName);
     if (!tf->open(QIODevice::ReadWrite | QIODevice::Text)) return;
@@ -687,7 +687,7 @@ void Trace(QString msg, int n)
 
 void Trace(QString msg, double f)
 {
-    //	if(!((CXFLR5App*)AfxGetApp())->bTrace) return;
+    //    if(!((CXFLR5App*)AfxGetApp())->bTrace) return;
     QString FileName = QDir::tempPath() + "/Trace.log";
     QFile *tf = new QFile(FileName);
     if (!tf->open(QIODevice::ReadWrite | QIODevice::Text)) return;
@@ -729,7 +729,7 @@ void WriteCOLORREF(QDataStream &ar, QColor const &color)
 
 void WriteCString(QDataStream &ar, QString const &strong)
 {
-    qint8 qi = strong.length();
+    qint8 qi = qint8(strong.length());
 
     QByteArray textline;
     char *text;
@@ -751,9 +751,9 @@ double GLGetRed(double tau)
 
 double GLGetGreen(double tau)
 {
-    if(tau<0.f || tau>1.0) 	return 0.0;
-    else if(tau<1.0/4.0) 	return (4.0*tau);
-    else if(tau>3.0/4.0) 	return (1.0-4.0*(tau-3.0/4.0));
+    if(tau<0.0 || tau>1.0)  return 0.0;
+    else if(tau<1.0/4.0)    return (4.0*tau);
+    else if(tau>3.0/4.0)    return (1.0-4.0*(tau-3.0/4.0));
     else                    return 1.0;
 }
 
@@ -768,7 +768,7 @@ double GLGetBlue(double tau)
 
 void ReadValues(QString line, int &res, double &x, double &y, double &z)
 {
-    /*	char *sx = new char[30];
+    /*    char *sx = new char[30];
     char *sy = new char[30];
     char *text;*/
     QString str;
@@ -1145,13 +1145,13 @@ bool SplineInterpolation(int n, double *x, double *y, double *a, double *b, doub
     //
     // This sets a linear system of size 4n which is solved by the Gauss algorithm for coefs a,b,c and d
     // The RHS vector is
-    //	  a[0]
-    //	  b[0]
-    //	  c[0]
-    //	  d[0]
-    //	  a[1]
+    //      a[0]
+    //      b[0]
+    //      c[0]
+    //      d[0]
+    //      a[1]
     //    ...
-    //	  d[n-1]
+    //      d[n-1]
     //
 
     if(n>50) return false;
@@ -1164,7 +1164,7 @@ bool SplineInterpolation(int n, double *x, double *y, double *a, double *b, doub
     memset(RHS, 0, ulong(4*n)*sizeof(double));
 
     size = 4*n;
-    //	Interpolation conditions
+    //    Interpolation conditions
     for (i=0; i<n; i++)
     {
         //pj(x[i]) = y[i]
@@ -1208,7 +1208,7 @@ bool SplineInterpolation(int n, double *x, double *y, double *a, double *b, doub
         RHS[3*n+i]   = 0.0;
     }
 
-    //	second order derivative is zero at end points = "natural spline"
+    //    second order derivative is zero at end points = "natural spline"
     M[2*n*size]     = 6.0*x[0];
     M[2*n*size+1]   = 2.0;
     RHS[2*n]        = 0.0;
@@ -1506,13 +1506,13 @@ bool Intersect(Vector3d const &LA, Vector3d const &LB, Vector3d const &TA, Vecto
     //
     // Returns the intersection of a ray with the object's panels
     // The ray is defined by a mouse click and is perpendicular to the viewport
-    //	A is the ray's origin,
-    //	U is the ray's direction
-    //	LA, LB, TA, TB define a quadrangle in 3D space.
-    //	N is the normal to the quadrangle
-    //	I is the resulting intersection point of the ray and the quadrangle, if inside the quadrangle
-    //	dist = |AI|
-    //	The return value is true if intersection inside the quadrangle, false otherwise
+    //    A is the ray's origin,
+    //    U is the ray's direction
+    //    LA, LB, TA, TB define a quadrangle in 3D space.
+    //    N is the normal to the quadrangle
+    //    I is the resulting intersection point of the ray and the quadrangle, if inside the quadrangle
+    //    dist = |AI|
+    //    The return value is true if intersection inside the quadrangle, false otherwise
     //
     static Vector3d P, W, V, T;
     bool b1, b2, b3, b4;
@@ -1590,7 +1590,7 @@ bool Intersect(Vector3d const &LA, Vector3d const &LB, Vector3d const &TA, Vecto
 
 double Cofactor44(double *aij, int &i, int &j)
 {
-    //returns the complex cofactor	of element i,j, in the 4x4 matrix aij
+    //returns the complex cofactor    of element i,j, in the 4x4 matrix aij
     int p,q;
     double a33[9];
 
@@ -1621,7 +1621,7 @@ double Cofactor44(double *aij, int &i, int &j)
 
 double Det44(double *aij)
 {
-    //	returns the determinant of a 4x4 matrix
+    //    returns the determinant of a 4x4 matrix
 
     static int i,j,k,l,p,q;
     static double sign;
@@ -1698,13 +1698,13 @@ bool Invert44(double*ain, double *aout)
 
 double SplineBlend(int const &index, int const &degree, double const &t, double *knots)
 {
-    //	Calculate the blending value, this is done recursively.
-    //	If the numerator and denominator are 0 the expression is 0.
-    //	If the denominator is 0 the expression is 0
+    //    Calculate the blending value, this is done recursively.
+    //    If the numerator and denominator are 0 the expression is 0.
+    //    If the denominator is 0 the expression is 0
     //
-    //	   index    is the control point's index
-    //	   degree   is the spline's degree
-    //	   t        is the spline parameter
+    //       index    is the control point's index
+    //       degree   is the spline's degree
+    //       t        is the spline parameter
     //
     static double eps = 1.e-6;
 

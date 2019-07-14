@@ -15,7 +15,7 @@
 #include "graph/qgraph.h"
 #include "graph/curve.h"
 #include "sail7/sail7.h"
-#include "sail7/SailDlg.h"
+#include "sail7/saildlg.h"
 #include "twodwidget.h"
 
 MainFrame *TwoDWidget::s_pMainFrame=nullptr;
@@ -138,13 +138,13 @@ void TwoDWidget::contextMenuEvent (QContextMenuEvent * pEvent)
 
 void TwoDWidget::resizeEvent(QResizeEvent *)
 {
-    //	MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
+    //    MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
 
     if(m_iView==SAIL7VIEW && s_pSail7)
     {
         s_pSail7->m_bIs2DScaleSet = false;
         s_pSail7->Set2DScale();
-        //		if(pSail7->m_iView==SAILOPPVIEW)   pSail7->SetWingLegendPos();
+        //        if(pSail7->m_iView==SAILOPPVIEW)   pSail7->SetWingLegendPos();
         if(s_pSail7->m_iView==SAILPOLARVIEW) s_pSail7->SetBoatPlrLegendPos();
     }
     else

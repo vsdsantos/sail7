@@ -1,7 +1,7 @@
 /****************************************************************************
 
     Curve Class
-	Copyright (C) 2003-2008 Andre Deperrois 
+    Copyright (C) 2003-2008 Andre Deperrois 
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -29,273 +29,273 @@
 CCurve::CCurve()
 {
     CurveColor = QColor(255,0,0,127);
-	memset(x,0,sizeof(x));
-	memset(y,0,sizeof(y));
-	n=0;
-	m_CurveName = "";
-	m_bIsVisible = true;
-	m_bShowPoints = false;
-	CurveWidth = 1;
+    memset(x,0,sizeof(x));
+    memset(y,0,sizeof(y));
+    n=0;
+    m_CurveName = "";
+    m_bIsVisible = true;
+    m_bShowPoints = false;
+    CurveWidth = 1;
     CurveStyle = Qt::SolidLine;
-	m_iSelected = -1;
+    m_iSelected = -1;
 }
 
 
 int CCurve::AddPoint(double xn, double yn)
 {
-	x[n] = xn;
-	y[n] = yn;
-	n++;
-	return n;
+    x[n] = xn;
+    y[n] = yn;
+    n++;
+    return n;
 }
 
 
 void CCurve::Copy(CCurve *pCurve)
 {
-	if(!pCurve) return;
-	int i;
-	n  = pCurve->n;
-	for (i=0; i<n ;i++)
-	{
-		x[i] = pCurve->x[i];
-		y[i] = pCurve->y[i];
-	}
-	CurveColor = pCurve->CurveColor;
-	CurveStyle = pCurve->CurveStyle;
-	CurveWidth = pCurve->CurveWidth;
-	m_bIsVisible = pCurve->m_bIsVisible;
-	m_bShowPoints = pCurve->m_bShowPoints;
-	m_CurveName = pCurve->m_CurveName;
+    if(!pCurve) return;
+    int i;
+    n  = pCurve->n;
+    for (i=0; i<n ;i++)
+    {
+        x[i] = pCurve->x[i];
+        y[i] = pCurve->y[i];
+    }
+    CurveColor = pCurve->CurveColor;
+    CurveStyle = pCurve->CurveStyle;
+    CurveWidth = pCurve->CurveWidth;
+    m_bIsVisible = pCurve->m_bIsVisible;
+    m_bShowPoints = pCurve->m_bShowPoints;
+    m_CurveName = pCurve->m_CurveName;
 }
 
 
 QColor CCurve::GetColor()
 {
-	return CurveColor;
+    return CurveColor;
 }
 
 void CCurve::GetBWStyle(QColor &color, int &style, int &width)
 {
-	color = CurveColor;
-	style = CurveStyle;
-	width = CurveWidth;
-//	GetBWColor(color, style, width);
+    color = CurveColor;
+    style = CurveStyle;
+    width = CurveWidth;
+//    GetBWColor(color, style, width);
 }
 
 
 Vector3d CCurve::GetPoint(int ref)
 {
-	Vector3d r;
-	if(ref<0 || ref>=n){
-		r.x = 0.0;
-		r.y = 0.0;
-	}
-	else{
-		r.x = x[ref];
-		r.y = y[ref];
-	}
-	return r;
+    Vector3d r;
+    if(ref<0 || ref>=n){
+        r.x = 0.0;
+        r.y = 0.0;
+    }
+    else{
+        r.x = x[ref];
+        r.y = y[ref];
+    }
+    return r;
 }
 
 
 
 int CCurve::GetClosestPoint(double xs, double ys, double &dist )
 {
-	Graph *pGraph = (Graph*)m_pParentGraph;
-	static int ref;
-	static double d2;
-	ref = -1;
-	dist = 1.e10;
-	if (n<1) return -1;
-	for(int i=0; i<n; i++)
-	{
-		d2 =   (xs-x[i])*(xs-x[i])/pGraph->GetXScale()/pGraph->GetXScale() 
-			 + (ys-y[i])*(ys-y[i])/pGraph->GetYScale()/pGraph->GetYScale();
-		if (d2<dist)
-		{
-			dist = d2;
-			ref = i;
-		}
-	}
-	return ref;
+    Graph *pGraph = (Graph*)m_pParentGraph;
+    static int ref;
+    static double d2;
+    ref = -1;
+    dist = 1.e10;
+    if (n<1) return -1;
+    for(int i=0; i<n; i++)
+    {
+        d2 =   (xs-x[i])*(xs-x[i])/pGraph->GetXScale()/pGraph->GetXScale() 
+             + (ys-y[i])*(ys-y[i])/pGraph->GetYScale()/pGraph->GetYScale();
+        if (d2<dist)
+        {
+            dist = d2;
+            ref = i;
+        }
+    }
+    return ref;
 }
 
 void CCurve::GetClosestPoint(double xs, double ys, double &dist ,int &n)
 {
-	Graph *pGraph = (Graph*)m_pParentGraph;
-	static double d2;
-	dist = 1.e10;
-	if (n<1) return;
-	for(int i=0; i<n; i++)
-	{
-		d2 =   (xs-x[i])*(xs-x[i])/pGraph->GetXScale()/pGraph->GetXScale()
-			 + (ys-y[i])*(ys-y[i])/pGraph->GetYScale()/pGraph->GetYScale();
-		if (d2<dist)
-		{
-			dist = d2;
-			n = i;
-		}
-	}
+    Graph *pGraph = (Graph*)m_pParentGraph;
+    static double d2;
+    dist = 1.e10;
+    if (n<1) return;
+    for(int i=0; i<n; i++)
+    {
+        d2 =   (xs-x[i])*(xs-x[i])/pGraph->GetXScale()/pGraph->GetXScale()
+             + (ys-y[i])*(ys-y[i])/pGraph->GetYScale()/pGraph->GetYScale();
+        if (d2<dist)
+        {
+            dist = d2;
+            n = i;
+        }
+    }
 }
 
 
 void CCurve::GetClosestPoint(double const &xs, double const &ys, double &xSel, double &ySel, double &dist, int &nSel)
 {
-//	Graph *pGraph = (Graph*)m_pParentGraph;
-	static double d2;
-	dist = 1.e40;
+//    Graph *pGraph = (Graph*)m_pParentGraph;
+    static double d2;
+    dist = 1.e40;
 
-	for(int i=0; i<n; i++)
-	{
-		d2 =   (xs-x[i])*(xs-x[i]) + (ys-y[i])*(ys-y[i]);
-		if (d2<dist)
-		{
-			dist = d2;
-			xSel = x[i];
-			ySel = y[i];
-			nSel = i;
-		}
-	}
+    for(int i=0; i<n; i++)
+    {
+        d2 =   (xs-x[i])*(xs-x[i]) + (ys-y[i])*(ys-y[i]);
+        if (d2<dist)
+        {
+            dist = d2;
+            xSel = x[i];
+            ySel = y[i];
+            nSel = i;
+        }
+    }
 }
 
 
 
 int CCurve::GetCount()
 {
-	return n;
+    return n;
 }
 
 
 int CCurve::GetStyle()
 {
-	return CurveStyle;
+    return CurveStyle;
 }
 
 
 
 void CCurve::GetTitle(QString &string)
 {
-	string =  m_CurveName;
+    string =  m_CurveName;
 }
 
 
 QString CCurve::GetTitle()
 {
-	return m_CurveName;
+    return m_CurveName;
 }
 
 
 
 int CCurve::GetWidth()
 {
-	return CurveWidth;
+    return CurveWidth;
 }
 
 
 double CCurve::GetxMin()
 {
-	double xMin = 99999999.0;
-//	if(n==0) xmin = .0; 
-//	else
-		for(int i=0; i<n;i++)
-			xMin = qMin(xMin, x[i]);
-	return xMin;
+    double xMin = 99999999.0;
+//    if(n==0) xmin = .0; 
+//    else
+        for(int i=0; i<n;i++)
+            xMin = qMin(xMin, x[i]);
+    return xMin;
 }
 
 
 double CCurve::GetxMax()
 {
-	double xMax = -99999999.0;
-//	if(n==0) xmax = 1.0; 
-//	else
-		for(int i=0; i<n;i++)
-			xMax = qMax(xMax, x[i]);
-	return xMax;
+    double xMax = -99999999.0;
+//    if(n==0) xmax = 1.0; 
+//    else
+        for(int i=0; i<n;i++)
+            xMax = qMax(xMax, x[i]);
+    return xMax;
 }
 
 
 double CCurve::GetyMin()
 {
-	double yMin = 99999999.0;
-//	if(n==0) ymin = .0; 
-//	else
-		for(int i=0; i<n;i++)
-			yMin = qMin(yMin, y[i]);
-	return yMin;
+    double yMin = 99999999.0;
+//    if(n==0) ymin = .0; 
+//    else
+        for(int i=0; i<n;i++)
+            yMin = qMin(yMin, y[i]);
+    return yMin;
 }
 
 
 double CCurve::GetyMax()
 {
-	double yMax = -99999999.0;
-//	if(n==0) ymax = 1.0; 
-//	else
-		for(int i=0; i<n;i++)
-			yMax = qMax(yMax, y[i]);
-	return yMax;
+    double yMax = -99999999.0;
+//    if(n==0) ymax = 1.0; 
+//    else
+        for(int i=0; i<n;i++)
+            yMax = qMax(yMax, y[i]);
+    return yMax;
 }
 
 
 bool CCurve::IsVisible()
 {
-	return m_bIsVisible;
+    return m_bIsVisible;
 }
 
 
 bool CCurve::PointsVisible()
 {
-	return m_bShowPoints;
+    return m_bShowPoints;
 }
 
 
 void CCurve::ResetCurve()
 {
-	n = 0;
+    n = 0;
 }
 
 
 void CCurve::SetTitle(QString Title)
 {
-	m_CurveName = Title;
+    m_CurveName = Title;
 }
 
 
 void CCurve::SetColor(QColor clr)
 {
-	CurveColor = clr;
+    CurveColor = clr;
 }
 
 
 void CCurve::SetSelected(int n)
 {
-	m_iSelected = n;
+    m_iSelected = n;
 }
 
 void CCurve::SetStyle(int nStyle)
 {
-	CurveStyle = nStyle;
+    CurveStyle = nStyle;
 }
 
 
 void CCurve::SetWidth(int nWidth)
 {
-	CurveWidth = nWidth;
+    CurveWidth = nWidth;
 }
 
 
 void CCurve::SetVisible(bool bVisible)
 {
-	m_bIsVisible = bVisible;
+    m_bIsVisible = bVisible;
 }
 
 void CCurve::ShowPoints(bool bShow)
 {
-	m_bShowPoints = bShow;
+    m_bShowPoints = bShow;
 }
 
 
 
 int CCurve::GetSelected()
 {
-	return m_iSelected;
+    return m_iSelected;
 }

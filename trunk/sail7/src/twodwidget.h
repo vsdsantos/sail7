@@ -28,7 +28,7 @@ class TwoDWidget : public QWidget
 
 public:
     TwoDWidget(QWidget *parent = nullptr);
-    //	void UpdateView();
+    //    void UpdateView();
 
 
 protected:

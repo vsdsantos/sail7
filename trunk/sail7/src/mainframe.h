@@ -27,10 +27,10 @@
 #include "threedwidget.h"
 #include "params.h"
 #include "graph/qgraph.h"
-#include "objects/Panel.h"
-#include "misc/DisplaySettingsDlg.h"
-#include "misc/RenameDlg.h"
-#include "misc/UnitsDlg.h"
+#include "objects/panel.h"
+#include "misc/displaysettingsdlg.h"
+#include "misc/renamedlg.h"
+#include "misc/unitsdlg.h"
 
 class Sail7;
 class GL3DScales;
@@ -222,8 +222,8 @@ class MainFrame : public QMainWindow
         bool m_bSaved;
         bool m_bSaveSettings;
         bool m_bReverseZoom;                    // true if the rolling forward zooms in
-        //	bool m_bSaveOpps, m_bSaveWOpps;
-        //	bool m_bHighlightOpp, m_bHighlightWOpp;
+        //    bool m_bSaveOpps, m_bSaveWOpps;
+        //    bool m_bHighlightOpp, m_bHighlightWOpp;
 
 
         QString m_ProjectName, m_FileName, m_LanguageFilePath, m_XMLPath;
@@ -260,16 +260,16 @@ class MainFrame : public QMainWindow
 
         double m_aij[VLMMAXMATSIZE*VLMMAXMATSIZE];    // coefficient matrix
         double m_aijRef[VLMMAXMATSIZE*VLMMAXMATSIZE]; // coefficient matrix
-        double m_RHS[VLMMAXMATSIZE*VLMMAXRHS];			// RHS vector
-        double m_RHSRef[VLMMAXMATSIZE*VLMMAXRHS];		// RHS vector
+        double m_RHS[VLMMAXMATSIZE*VLMMAXRHS];            // RHS vector
+        double m_RHSRef[VLMMAXMATSIZE*VLMMAXRHS];        // RHS vector
 
 
-        Vector3d m_Node[2*VLMMAXMATSIZE];		// the node array for the currently loaded UFO
-        Vector3d m_TempWakeNode[2*VLMMAXMATSIZE];	// the temporary wake node array during relaxation calc
+        Vector3d m_Node[2*VLMMAXMATSIZE];        // the node array for the currently loaded UFO
+        Vector3d m_TempWakeNode[2*VLMMAXMATSIZE];    // the temporary wake node array during relaxation calc
         Vector3d m_MemNode[2*VLMMAXMATSIZE];         // used if the analysis should be performed on the tilted geometry
         Vector3d m_WakeNode[2*VLMMAXMATSIZE];        // the reference current wake node array
         Vector3d m_RefWakeNode[2*VLMMAXMATSIZE];     // the reference wake node array if wake needs to be reset
-        CPanel m_Panel[VLMMAXMATSIZE];		// the panel array for the currently loaded UFO
+        CPanel m_Panel[VLMMAXMATSIZE];        // the panel array for the currently loaded UFO
         CPanel m_MemPanel[VLMMAXMATSIZE];           // used if the analysis should be performed on the tilted geometry
         CPanel m_WakePanel[VLMMAXMATSIZE];          // the reference current wake panel array
         CPanel m_RefWakePanel[VLMMAXMATSIZE];       // the reference wake panel array if wake needs to be reset
