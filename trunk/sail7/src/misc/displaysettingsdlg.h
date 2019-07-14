@@ -29,10 +29,12 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <QLabel>
-#include "colorbutton.h"
+
 #include "../graph/qgraph.h"
 
-
+class MainFrame;
+class Sail7;
+class ColorButton;
 class DisplaySettingsDlg : public QDialog
 {
     Q_OBJECT
@@ -57,15 +59,13 @@ private:
     QPushButton *m_pctrlTextClr;
     QPushButton *m_pctrlTextFont;
     QPushButton *m_pctrlGraphSettings;
-    QPushButton *OKButton, *CancelButton;
+    QPushButton *m_pctrlOKButton, *m_pctrlCancelButton;
     QCheckBox *m_pctrlReverseZoom, *m_pctrlAlphaChannel;
 
     QComboBox *m_pctrlStyles;
     QString m_StyleName;
-    QPushButton *OK, *Cancel;
+    QPushButton *m_pctrlOK, *m_pctrlCancel;
 
-    static void *s_pMainFrame;
-    static void *s_pSail7;
     QColor m_BackgroundColor;
     QColor m_TextColor;
     QFont m_TextFont;
@@ -74,6 +74,9 @@ private:
     bool m_bIsGraphModified;
     bool m_bReverseZoom, m_bAlphaChannel;
 
+
+    static MainFrame *s_pMainFrame;
+    static Sail7 *s_pSail7;
 };
 
 

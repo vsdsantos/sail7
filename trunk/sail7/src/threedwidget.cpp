@@ -12,7 +12,7 @@
 #include <QtDebug>
 #include "mainframe.h"
 #include "sail7/sail7.h"
-#include "sail7/sailwwidget.h"
+#include "sail7/sailviewwidget.h"
 #include "sail7/gl3dbodydlg.h"
 #include "threedwidget.h"
 

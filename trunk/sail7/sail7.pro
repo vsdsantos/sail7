@@ -153,14 +153,16 @@ HEADERS  += \
     src/sail7/saildlg.h \
     src/sail7/saildomdoc.h \
     src/sail7/sailtabledelegate.h \
-    src/sail7/sailwwidget.h \
     src/sail7/scalesaildlg.h \
     src/sail7/sectionviewwidget.h \
     src/sail7application.h \
     src/threedwidget.h \
     src/twodwidget.h \
+    src/sail7/sailviewwidget.h
 
-RESOURCES +=  sail7.qrc
+RESOURCES += \ 
+    images.qrc \
+    icons.qrc
 
 
 OBJECTS_DIR = ./objects
@@ -184,6 +186,35 @@ linux-g++{
     target.path = $$BINDIR
 }
 
+
+
+macx{
+    DESTDIR = ../
+#    CONFIG += i386
+    QMAKE_MAC_SDK = macosx
+#    QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.4
+
+    OTHER_FILES += ./mac/Info.plist
+    QMAKE_INFO_PLIST = ./mac/Info.plist
+    ICON = ./mac/Sail7.icns
+
+#message($$OUT_PWD)
+#    LIBS += -F$$OUT_PWD/../xflr5-engine
+#    LIBS += -framework xflr5-engine
+#    LIBS += -F$$OUT_PWD/../XFoil-lib
+#    LIBS += -framework XFoil
+
+
+    # make the app find the libs:
+    QMAKE_RPATHDIR = @executable_path/../Frameworks
+
+    LIBS += -framework CoreFoundation
+
+    #other files to be bundled
+    LicenseFile.files = $$PWD/license.txt
+    LicenseFile.path = Contents
+    QMAKE_BUNDLE_DATA += LicenseFile
+}
 
 
 

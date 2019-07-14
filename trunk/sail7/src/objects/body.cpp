@@ -1327,9 +1327,7 @@ void Body::SetPanelPos()
 }
 
 
-
-
-void Body::Translate(double XTrans, double YTrans, double ZTrans, bool bFrameOnly, int FrameID)
+void Body::Translate(double XTrans, double , double ZTrans, bool bFrameOnly, int FrameID)
 {
     int i,j;
     for (i=0; i<FrameSize(); i++)

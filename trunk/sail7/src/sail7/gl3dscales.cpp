@@ -294,7 +294,6 @@ void GL3DScales::SetupLayout()
 void GL3DScales::InitDialog()
 {
     if(!s_pMainFrame) return;
-    Sail7* pSail7 = (Sail7*)s_pSail7;
     MainFrame* pMainFrame = (MainFrame*)s_pMainFrame;
     QString str;
 
@@ -399,7 +398,7 @@ void GL3DScales::OnVelocitySet()
 }
 
 
-void GL3DScales::showEvent(QShowEvent *event)
+void GL3DScales::showEvent(QShowEvent *)
 {
     InitDialog();
     SetControls();
@@ -445,7 +444,6 @@ void GL3DScales::SetStreamControls()
 
 bool GL3DScales::LoadSettings(QSettings *pSettings)
 {
-    Sail7 *pSail7 = (Sail7*)s_pSail7;
     int l,d,v;
     l=d=v=50;
 
@@ -484,7 +482,6 @@ bool GL3DScales::LoadSettings(QSettings *pSettings)
 
 bool GL3DScales::SaveSettings(QSettings *pSettings)
 {
-    Sail7 *pSail7 = (Sail7*)s_pSail7;
 //    ReadStreamParams();
     pSettings->beginGroup("GL3DScales");
     {

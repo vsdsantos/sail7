@@ -21,7 +21,7 @@ SailTableDelegate::SailTableDelegate(QObject *parent)
 }
 
 
-QWidget *SailTableDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex & index ) const
+QWidget *SailTableDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &, const QModelIndex & index ) const
 {
     if(index.column()!=5)
     {

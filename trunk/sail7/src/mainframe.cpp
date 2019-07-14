@@ -6,6 +6,18 @@
 
 *****************************************************************************/
 
+#include <QtCore>
+#include <QApplication>
+#include <QDesktopWidget>
+#include <QDockWidget>
+#include <QDir>
+#include <QMenuBar>
+#include <QMessageBox>
+#include <QPluginLoader>
+#include <QAction>
+#include <QFileDialog>
+#include <QFontDatabase>
+#include <QDesktopServices>
 
 #include "./mainframe.h"
 #include "./globals.h"
@@ -27,22 +39,10 @@
 #include "./objects/boatpolar.h"
 #include "./objects/boatopp.h"
 
-#include <QtCore>
-#include <QApplication>
-#include <QDesktopWidget>
-#include <QDockWidget>
-#include <QDir>
-#include <QMenuBar>
-#include <QMessageBox>
-#include <QPluginLoader>
-#include <QAction>
-#include <QFileDialog>
-#include <QDesktopServices>
 
-#ifdef Q_WS_MAC
-#include <CoreFoundation/CoreFoundation.h>
-#endif
-
+//#ifdef Q_WS_MAC
+//#include <CoreFoundation/CoreFoundation.h>
+//#endif
 
 
 
@@ -55,7 +55,7 @@ MainFrame::MainFrame(QWidget *parent, Qt::WindowFlags flags)
 
 
     setWindowTitle(m_VersionName);
-    setWindowIcon(QIcon(":/images/sail7_512.png"));
+    setWindowIcon(QIcon(":/icons/s7.png"));
 
     if(!QGLFormat::hasOpenGL())
     {
@@ -78,10 +78,9 @@ MainFrame::MainFrame(QWidget *parent, Qt::WindowFlags flags)
     m_BackgroundColor = QColor(0, 5, 10);
     m_TextColor       = QColor(220,220,220);
 
-    m_TextFont.setStyleHint(QFont::TypeWriter, QFont::OpenGLCompatible);
-    m_TextFont.setFamily(m_TextFont.defaultFamily());
+    m_TextFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
     m_TextFont.setPointSize(10);
-    m_TextFont.setStyleStrategy(QFont::OpenGLCompatible);
+
 
     m_RefGraph.SetGraphName("Reference Graph");
 
@@ -330,7 +329,7 @@ void MainFrame::CreateActions()
         connect(recentFileActs[i], SIGNAL(triggered()), this, SLOT(openRecentFile()));
     }
 
-    styleAct = new QAction(tr("General Display Settings"), this);
+    styleAct = new QAction(tr("Preferences"), this);
     styleAct->setStatusTip(tr("Define the color and font options for all views and graphs"));
     connect(styleAct, SIGNAL(triggered()), this, SLOT(OnStyle()));
 
@@ -1414,8 +1413,6 @@ void MainFrame::OnRestoreToolbars()
 }
 
 
-
-
 void MainFrame::OnSaveProject()
 {
     if (!m_ProjectName.length() || m_ProjectName=="*")
@@ -1593,7 +1590,6 @@ void MainFrame::OnSelChangeBoatOpp(int i)
         }
     }
 }
-
 
 
 void MainFrame::OnStyle()

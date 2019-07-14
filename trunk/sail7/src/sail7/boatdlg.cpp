@@ -753,8 +753,6 @@ void BoatDlg::OnOK()
 }
 
 
-
-
 void BoatDlg::OnCancel()
 {
     if(m_bChanged)
@@ -767,33 +765,32 @@ void BoatDlg::OnCancel()
 }
 
 
-void BoatDlg::OnSailItemClicked(const QModelIndex &index)
+void BoatDlg::OnSailItemClicked(const QModelIndex &)
 {
 //    m_iSailSelection = index.row();
     SetControls();
 }
 
 
-void BoatDlg::OnSailCellChanged(QWidget *pWidget)
+void BoatDlg::OnSailCellChanged(QWidget *)
 {
     ReadData();
     m_bChanged = true;
 }
 
 
-void BoatDlg::OnHullItemClicked(const QModelIndex &index)
+void BoatDlg::OnHullItemClicked(const QModelIndex &)
 {
 //    m_iHullSelection = index.row();
     SetControls();
 }
 
 
-void BoatDlg::OnHullCellChanged(QWidget *pWidget)
+void BoatDlg::OnHullCellChanged(QWidget *)
 {
     ReadData();
     m_bChanged = true;
 }
-
 
 
 void BoatDlg::ReadData()
