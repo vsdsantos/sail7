@@ -72,6 +72,22 @@ Sail7::Sail7(QWidget *parent) : QWidget(parent)
 {
     m_GLList = 0;
 
+    m_LastBoatOpp = 0.0;
+    m_NSurfaces = 0;
+    m_nNodes = 0;
+
+    m_pRHS = nullptr;
+    m_pRHSRef = nullptr;
+    m_poaBoat = nullptr;
+    m_poaBoatPolar = nullptr;
+    m_poaBoatOpp = nullptr;
+    m_poaHull = nullptr;
+    m_poaRig = nullptr;
+    m_poaSail = nullptr;
+    m_pCurBoat = nullptr;
+    m_pCurBoatPolar = nullptr;
+    m_pCurBoatOpp = nullptr;
+
     m_iView = SAIL3DVIEW;
     m_iBoatPlrView = 4;
 
@@ -185,14 +201,13 @@ Sail7::Sail7(QWidget *parent) : QWidget(parent)
     m_PixText = QPixmap(":/images/sail7_512.png");
     m_PixText.fill(Qt::transparent);
 
-
-    SetupLayout();
-    Connect();
+    setupLayout();
+    connectSignals();
 }
 
 
 
-void Sail7::SetupLayout()
+void Sail7::setupLayout()
 {
     QSizePolicy szPolicyExpanding;
     szPolicyExpanding.setHorizontalPolicy(QSizePolicy::Expanding);
@@ -483,7 +498,7 @@ void Sail7::SetupLayout()
 
 
 
-void Sail7::Connect()
+void Sail7::connectSignals()
 {
     //Connect signals to slots
     connect(m_pctrlSequence, SIGNAL(clicked()), this, SLOT(OnSequence()));

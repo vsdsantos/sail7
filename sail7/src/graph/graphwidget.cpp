@@ -38,7 +38,7 @@ void GraphWidget::SetTitle(QString &Title, QPoint &Place)
     m_TitlePosition = Place;
 }
 
-void GraphWidget::paintEvent(QPaintEvent *  event )
+void GraphWidget::paintEvent(QPaintEvent *  event)
 {
     if(!m_pGraph) return;
     QPainter painter(this);
@@ -49,7 +49,6 @@ void GraphWidget::paintEvent(QPaintEvent *  event )
 
     painter.setBackgroundMode(Qt::OpaqueMode);
     painter.setBackground(Bck);
-    QRect rect(10, 20, 80, 60);
 
     QPen mypen;
     mypen.setColor(QColor(255,0,0));
@@ -75,7 +74,7 @@ void GraphWidget::paintEvent(QPaintEvent *  event )
 
 
 
-void GraphWidget::resizeEvent ( QResizeEvent * event )
+void GraphWidget::resizeEvent (QResizeEvent *)
 {
     QRect r = rect();
     if(m_pGraph) m_pGraph->SetDrawRect(r);

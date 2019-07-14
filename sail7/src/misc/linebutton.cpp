@@ -72,7 +72,7 @@ int &LineButton::GetWidth()
 }
 
 
-void LineButton::paintEvent ( QPaintEvent * event )
+void LineButton::paintEvent (QPaintEvent *)
 {
     QColor ContourColor = Qt::gray;
 

@@ -482,7 +482,7 @@ bool GLLightDlg::SaveSettings(QSettings *pSettings)
     return true;
 }
 
-void GLLightDlg::showEvent(QShowEvent *event)
+void GLLightDlg::showEvent(QShowEvent *)
 {
     SetParams();
     SetEnabled();
