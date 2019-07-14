@@ -698,7 +698,7 @@ void SailViewWidget::GLRenderSail()
 
             glScaled(m_glScaled, m_glScaled, m_glScaled);
             glTranslated(m_glRotCenter.x, m_glRotCenter.y, m_glRotCenter.z);
-            if(s_bAxes) m_p3DWidget->GLDrawAxes(1.0/m_glScaled, s_pSail7->m_3DAxisColor, s_pSail7->m_3DAxisStyle, s_pSail7->m_3DAxisWidth);
+            if(s_bAxes) m_p3DWidget->GLDrawAxes(1.0/m_glScaled, W3dPrefsDlg::s_3DAxisColor, W3dPrefsDlg::s_3DAxisStyle, W3dPrefsDlg::s_3DAxisWidth);
 
             if(s_bglLight)
             {
@@ -962,7 +962,7 @@ void SailViewWidget::keyPressEvent(QKeyEvent *event)
 
 void SailViewWidget::UpdateView()
 {
-    if(isVisible()) m_p3DWidget->updateGL();
+    if(isVisible()) m_p3DWidget->update();
 }
 
 

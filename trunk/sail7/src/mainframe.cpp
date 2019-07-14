@@ -281,10 +281,14 @@ void MainFrame::CreateActions()
     closeProjectAct->setStatusTip(tr("Save and close the current project"));
     connect(closeProjectAct, SIGNAL(triggered()), this, SLOT(OnNewProject()));
 
-    openAct = new QAction(QIcon(":/images/open.png"), tr("&Open..."), this);
-    openAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_O));
-    openAct->setStatusTip(tr("Open an existing file"));
-    connect(openAct, SIGNAL(triggered()), this, SLOT(OnLoadFile()));
+    m_pOpenAct = new QAction(QIcon(":/images/open.png"), tr("&Open"), this);
+    m_pOpenAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_O));
+    m_pOpenAct->setStatusTip(tr("Open an existing file"));
+    connect(m_pOpenAct, SIGNAL(triggered()), this, SLOT(OnLoadFile()));
+
+    m_pOpenLast = new QAction(QIcon(":/images/open.png"), tr("&Open the last project file"), this);
+    m_pOpenLast->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_O));
+    connect(m_pOpenLast, SIGNAL(triggered()), SLOT(OnLoadLastFile()));
 
     insertAct = new QAction(tr("&Insert Project..."), this);
     insertAct->setStatusTip(tr("Insert an existing project in the current project"));
@@ -472,7 +476,7 @@ void MainFrame::CreateDockWindows()
 
 
     Sail7::s_p2DWidget = m_p2DWidget;
-    Sail7::s_p3DWidget = m_p3DWidget;
+    Sail7::s_p3dWidget = m_p3DWidget;
     m_pSail7->m_ArcBall.m_p3dWidget  = m_p3DWidget;
     m_pSail7->m_poaBoat      = &m_oaBoat;
     m_pSail7->m_poaBoatPolar = &m_oaBoatPolar;
@@ -495,13 +499,13 @@ void MainFrame::CreateDockWindows()
 }
 
 
-
 void MainFrame::CreateMainMenu()
 {
     // Create common File, View and Help menus
     fileMenu = menuBar()->addMenu(tr("&File"));
     fileMenu->addAction(newProjectAct);
-    fileMenu->addAction(openAct);
+    fileMenu->addAction(m_pOpenAct);
+    fileMenu->addAction(m_pOpenLast);
     fileMenu->addAction(insertAct);
     fileMenu->addAction(closeProjectAct);
     fileMenu->addSeparator();
@@ -796,7 +800,7 @@ void MainFrame::CreateSail7Toolbar()
 
     m_pctrlSail7ToolBar = addToolBar(tr("UFO"));
     m_pctrlSail7ToolBar->addAction(newProjectAct);
-    m_pctrlSail7ToolBar->addAction(openAct);
+    m_pctrlSail7ToolBar->addAction(m_pOpenAct);
     m_pctrlSail7ToolBar->addAction(saveAct);
 
     m_pctrlSail7ToolBar->addSeparator();
@@ -1310,6 +1314,30 @@ void MainFrame::OnLoadFile()
     if(!LoadFile(PathName))
     {
 
+    }
+
+    m_pSail7->SetBoat();
+    UpdateBoats();
+
+    m_pSail7->Set2DScale();
+    m_pSail7->SetControls();
+    UpdateView();
+}
+
+
+
+void MainFrame::OnLoadLastFile()
+{
+    if(!m_RecentFiles.size()) return;
+    QString PathName;
+    PathName = m_RecentFiles.at(0);
+
+    if(!PathName.length()) return;
+    int pos = PathName.lastIndexOf("/");
+    if(pos>0) m_LastDirName = PathName.left(pos);
+
+    if(!LoadFile(PathName))
+    {
     }
 
     m_pSail7->SetBoat();

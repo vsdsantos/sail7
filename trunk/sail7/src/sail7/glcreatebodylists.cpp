@@ -18,7 +18,7 @@
 static Vector3d m_T[(NXPOINTS+1)*(NHOOPPOINTS+1)]; //temporary points to save calculation times for body NURBS surfaces
 
 
-void GLCreateBody3DSplines(void *pParent, int iList, Body *pBody, int nx, int nh)
+void GLCreateBody3DSplines(MainFrame *pMainFrame, GLuint iList, Body *pBody, int nx, int nh)
 {
     int i,j,k,l;
     int p;
@@ -28,7 +28,7 @@ void GLCreateBody3DSplines(void *pParent, int iList, Body *pBody, int nx, int nh
     double xinc, hinc, u;
     Vector3d N, LATB, TALB;
     Vector3d LA, LB, TA, TB;
-    MainFrame *pMainFrame = (MainFrame*)pParent;
+
 
     nx = qMin(nx, NXPOINTS);
     nh = qMax(3, nh);
@@ -37,10 +37,10 @@ void GLCreateBody3DSplines(void *pParent, int iList, Body *pBody, int nx, int nh
     p = 0;
     for (k=0; k<=nx; k++)
     {
-        u = (double)k / (double)nx;
+        u = double(k) / double(nx);
         for (l=0; l<=nh; l++)
         {
-            v = (double)l / (double)nh;
+            v = double(l) / double(nh);
             pBody->GetPoint(u,  v, true, m_T[p]);
             p++;
         }
@@ -153,7 +153,7 @@ void GLCreateBody3DSplines(void *pParent, int iList, Body *pBody, int nx, int nh
 
         glColor3d(W3dPrefsDlg::s_OutlineColor.redF(), W3dPrefsDlg::s_OutlineColor.greenF(), W3dPrefsDlg::s_OutlineColor.blueF());
 
-        xinc = 0.1; hinc=1./(double)(nh-1);
+        xinc = 0.1; hinc=1./double(nh-1);
         u=0.0; v = 0.0;
 
         // sides
@@ -218,14 +218,12 @@ void GLCreateBody3DSplines(void *pParent, int iList, Body *pBody, int nx, int nh
 
 
 
-void GLCreateBody3DFlatPanels(void *pParent, int iList, Body *pBody)
+void GLCreateBody3DFlatPanels(MainFrame *pMainFrame, GLuint iList, Body *pBody)
 {
     int j,k;
     QColor color;
     int style, width;
     Vector3d P1, P2, P3, P4, N, P1P3, P2P4, Tj, Tjp1;
-
-    MainFrame *pMainFrame = (MainFrame*)pParent;
 
     glNewList(iList,GL_COMPILE);
     {
@@ -367,7 +365,7 @@ void GLCreateBody3DFlatPanels(void *pParent, int iList, Body *pBody)
 
 
 
-void GLCreateBodyMesh(void *pParent, int iList, Body *pBody)
+void GLCreateBodyMesh(MainFrame *pMainFrame, GLuint iList, Body *pBody)
 {
     if(!pBody) return;
 
@@ -377,8 +375,6 @@ void GLCreateBodyMesh(void *pParent, int iList, Body *pBody)
     Vector3d N, LATB, TALB, LA, LB, TA, TB;
     Vector3d PLA, PLB, PTA, PTB;
     QColor color;
-
-    MainFrame *pMainFrame = (MainFrame*)pParent;
 
     nx = pBody->m_nxPanels;
     nh = pBody->m_nhPanels;
@@ -403,8 +399,8 @@ void GLCreateBodyMesh(void *pParent, int iList, Body *pBody)
             {
                 for (j=0; j<pBody->m_xPanels[i]; j++)
                 {
-                    dj  = (double) j   /(double)(pBody->m_xPanels[i]);
-                    dj1 = (double)(j+1)/(double)(pBody->m_xPanels[i]);
+                    dj  = double(j)  /double(pBody->m_xPanels[i]);
+                    dj1 = double(j+1)/double(pBody->m_xPanels[i]);
 
                     //body left side
                     for (k=0; k<pBody->SideLineCount()-1; k++)
@@ -437,7 +433,7 @@ void GLCreateBodyMesh(void *pParent, int iList, Body *pBody)
 
                             for (l=0; l<pBody->m_hPanels[k]; l++)
                             {
-                                dl1  = (double) (l+1)   /(double)(pBody->m_hPanels[k]);
+                                dl1  = double(l+1)   /double(pBody->m_hPanels[k]);
                                 LA = PLB * (1.0- dl1) + PLA * dl1;
                                 TA = PTB * (1.0- dl1) + PTA * dl1;
 
@@ -486,7 +482,7 @@ void GLCreateBodyMesh(void *pParent, int iList, Body *pBody)
 
                             for (l=0; l<pBody->m_hPanels[k]; l++)
                             {
-                                dl1  = (double) (l+1)   /(double)(pBody->m_hPanels[k]);
+                                dl1  = double(l+1)   /double(pBody->m_hPanels[k]);
                                 LA = PLB * (1.0- dl1) + PLA * dl1;
                                 TA = PTB * (1.0- dl1) + PTA * dl1;
 
@@ -529,8 +525,8 @@ void GLCreateBodyMesh(void *pParent, int iList, Body *pBody)
             {
                 for (j=0; j<pBody->m_xPanels[i]; j++)
                 {
-                    dj  = (double) j   /(double)(pBody->m_xPanels[i]);
-                    dj1 = (double)(j+1)/(double)(pBody->m_xPanels[i]);
+                    dj  = double(j)  /double(pBody->m_xPanels[i]);
+                    dj1 = double(j+1)/double(pBody->m_xPanels[i]);
 
                     //body left side
                     for (k=0; k<pBody->SideLineCount()-1; k++)
@@ -563,7 +559,7 @@ void GLCreateBodyMesh(void *pParent, int iList, Body *pBody)
 
                             for (l=0; l<pBody->m_hPanels[k]; l++)
                             {
-                                dl1  = (double) (l+1)   /(double)(pBody->m_hPanels[k]);
+                                dl1  = double(l+1)   /double(pBody->m_hPanels[k]);
                                 LA = PLB * (1.0- dl1) + PLA * dl1;
                                 TA = PTB * (1.0- dl1) + PTA * dl1;
 
@@ -612,7 +608,7 @@ void GLCreateBodyMesh(void *pParent, int iList, Body *pBody)
 
                             for (l=0; l<pBody->m_hPanels[k]; l++)
                             {
-                                dl1  = (double) (l+1)   /(double)(pBody->m_hPanels[k]);
+                                dl1  = double(l+1)   /double(pBody->m_hPanels[k]);
                                 LA = PLB * (1.0- dl1) + PLA * dl1;
                                 TA = PTB * (1.0- dl1) + PTA * dl1;
 
@@ -645,7 +641,7 @@ void GLCreateBodyMesh(void *pParent, int iList, Body *pBody)
             uk  = pBody->s_XPanelPos[k];
             for (l=0; l<=nh; l++)
             {
-                v = (double)l / (double)(nh);
+                v = double(l) / double(nh);
                 pBody->GetPoint(uk,  v, true, m_T[p]);
                 p++;
             }

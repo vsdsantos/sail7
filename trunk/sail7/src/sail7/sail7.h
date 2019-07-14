@@ -160,15 +160,15 @@ class Sail7 : public QWidget
 
         static MainFrame *s_pMainFrame;
         static TwoDWidget *s_p2DWidget;
-        static ThreeDWidget *s_p3DWidget;
+        static ThreeDWidget *s_p3dWidget;
 
         //____________________Methods________________________________________
         void contextMenuEvent (QContextMenuEvent * event);
         void keyPressEvent(QKeyEvent *event);
         void keyReleaseEvent(QKeyEvent *event);
         void wheelEvent(QWheelEvent *event);
-        void mousePressEvent(QMouseEvent *event);
-        void mouseReleaseEvent(QMouseEvent *event);
+        void mousePressEvent(QMouseEvent *pEvent);
+        void mouseReleaseEvent(QMouseEvent *pEvent);
         void mouseDoubleClickEvent(QMouseEvent *event);
         void mouseMoveEvent(QMouseEvent *event);
         void showEvent(QShowEvent *event);
@@ -181,15 +181,10 @@ class Sail7 : public QWidget
         void GLCreateSurfSpeeds();
         void GLCreateCpLegendClr(QRect cltRect);
 
-        void PaintPanelForceLegendText(QPainter &painter, double rmin, double rmax);
-        void PaintCpLegendText(QPainter &painter);
-
         void SetScale();
         void SetBoat(QString BoatName="");
         void SetBoatPolar(BoatPolar *pBoatPolar=nullptr, QString BoatPlrName = "");
         bool SetBoatOpp(bool bCurrent=true, double x=0);
-
-        void DrawTextLegend();
 
         void GetDistrib(int const &NPanels, const int &DistType, const int &k, double &tau1, double &tau2);
         void PanelAnalyze(double V0, double VMax, double VDelta, bool bSequence);
@@ -232,7 +227,7 @@ class Sail7 : public QWidget
         void GLCreateBodyLists();
         void GLCallViewLists();
         void GLCreateSailMesh(Vector3d *pNode, CPanel *pPanel);
-        void GLCreateSailGeom(int GLList, Sail *pSail, Vector3d Position);
+        void GLCreateSailGeom(GLuint GLList, Sail *pSail, Vector3d Position);
         void GLCreateWaterList();
         void GLCreateWindList();
         void GLCreateStreamLines();
@@ -242,8 +237,8 @@ class Sail7 : public QWidget
         void GLCreateBodyMesh(Vector3d* pNode, CPanel *pPanel);
         void GLCreatePanelNormals();
 
-        void PaintBoatLegend(QPainter &painter, QRect rect);
-        void PaintBoatOppLegend(QPainter &painter, QRect rect);
+        QString makeBoatLegend();
+        QString makeBoatOppLegend();
 
         void DrawBoatPolarLegend(QPainter &painter, QPoint place, int bottom);
 
@@ -285,7 +280,6 @@ class Sail7 : public QWidget
 
 
         bool m_bResetTextLegend;
-        QPixmap m_PixText;
 
         int m_iView;
         int m_iBoatPlrView;
@@ -327,7 +321,7 @@ class Sail7 : public QWidget
         double m_ForceMin, m_ForceMax;
         double m_ClipPlanePos;
         double m_glScaled;
-        double m_GLScale;
+        float m_GLScale;
         double MatIn[4][4], MatOut[4][4];
 
         double m_ControlMin, m_ControlMax, m_ControlDelta;

@@ -40,6 +40,8 @@ class DisplaySettingsDlg : public QDialog
     Q_OBJECT
 
     friend class MainFrame;
+    friend class ThreeDWidget;
+
 public:
     DisplaySettingsDlg();
     void InitDialog();

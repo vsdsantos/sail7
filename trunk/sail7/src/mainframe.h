@@ -107,6 +107,7 @@ class MainFrame : public QMainWindow
         void OnNewProject();
         void OnLanguage();
         void OnLoadFile();
+        void OnLoadLastFile();
         void OnLogFile();
         void OnResetCurGraphScales();
         void OnResetSettings();
@@ -179,7 +180,7 @@ class MainFrame : public QMainWindow
 
         //MainFrame actions
         QAction *restoreToolbarsAct, *exportCurGraphAct, *resetCurGraphScales;
-        QAction *openAct, *insertAct, *styleAct;
+        QAction *m_pOpenAct, *m_pOpenLast, *insertAct, *styleAct;
         QAction *saveAct, *saveProjectAsAct,*newProjectAct, *closeProjectAct;
         QAction *unitsAct;
         QAction *languageAct;
