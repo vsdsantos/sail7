@@ -194,7 +194,7 @@ class Sail7 : public QWidget
         void GetDistrib(int const &NPanels, const int &DistType, const int &k, double &tau1, double &tau2);
         void PanelAnalyze(double V0, double VMax, double VDelta, bool bSequence);
         void PaintView(QPainter &painter);
-        void SetupLayout();
+        void setupLayout();
         void SetControls();
         void SetViewControls();
         void SetBoatPolarGraphTitles(Graph* pGraph);
@@ -203,7 +203,7 @@ class Sail7 : public QWidget
         void UpdateView();
         void UpdateUnits();
 
-        void Connect();
+        void connectSignals();
 
         void FillComboBoxes(bool bEnable = true);
         void UpdateCurve();

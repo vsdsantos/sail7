@@ -172,6 +172,8 @@ DESTDIR     = .
 
 win32 {
     RC_FILE = win/Sail7.rc
+
+    LIBS += -lopenGL32
 }
 
 

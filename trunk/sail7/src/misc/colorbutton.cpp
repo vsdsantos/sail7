@@ -27,18 +27,21 @@ ColorButton::ColorButton()
     m_Color = Qt::darkGray;
 }
 
+
 void ColorButton::SetColor(QColor const & color)
 {
     m_Color = color;
     update();
 }
 
+
 QColor &ColorButton::GetColor()
 {
     return m_Color;
 }
 
-void ColorButton::paintEvent ( QPaintEvent * event )
+
+void ColorButton::paintEvent (QPaintEvent *)
 {
     QColor paintcolor;
 
@@ -68,16 +71,6 @@ void ColorButton::paintEvent ( QPaintEvent * event )
     painter.drawRect(r);
 
 }
-
-
-
-
-
-
-
-
-
-
 
 
 
