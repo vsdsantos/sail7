@@ -24,7 +24,7 @@
 
 
 #include "saildlg.h"
-#include "sailwwidget.h"
+#include "sailviewwidget.h"
 #include "../mainframe.h"
 #include "../globals.h"
 #include "../threedwidget.h"
@@ -217,7 +217,7 @@ bool SailDlg::InitDialog(Sail *pSail)
 }
 
 
-void SailDlg::SetSailData(Sail* pSail)
+void SailDlg::SetSailData(Sail* )
 {
     m_pctrlSailName->setText(m_pSail->m_SailName);
     m_pctrlSailColor->SetColor(m_pSail->m_SailColor);
@@ -675,7 +675,7 @@ void SailDlg::keyPressEvent(QKeyEvent *event)
 }
 
 
-void SailDlg::closeEvent(QCloseEvent *event)
+void SailDlg::closeEvent(QCloseEvent *)
 {    
     s_WindowPos = pos();
     s_WindowSize = size();
@@ -683,15 +683,14 @@ void SailDlg::closeEvent(QCloseEvent *event)
 }
 
 
-void SailDlg::showEvent(QShowEvent *event)
+void SailDlg::showEvent(QShowEvent *)
 {
     m_pSailWidget->Set3DScale();
     //    UpdateView();
 }
 
 
-
-void SailDlg::resizeEvent(QResizeEvent *event)
+void SailDlg::resizeEvent(QResizeEvent *)
 {
     int wc    = (int)((double)m_pctrlSectionTable->width() *0.9/ (double)m_pSectionModel->columnCount());
     for(int ic=0; ic<m_pSectionModel->columnCount(); ic++)
@@ -921,7 +920,7 @@ void SailDlg::OnPointCellChanged(QWidget *)
 
 
 
-void SailDlg::OnSectionCellChanged(QWidget *pWidget)
+void SailDlg::OnSectionCellChanged(QWidget *)
 {
     m_bChanged = true;
     ReadSectionData();

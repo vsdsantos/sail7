@@ -29,7 +29,7 @@
 #include "./boatpolardlg.h"
 #include "./boatdlg.h"
 #include "./gl3dbodydlg.h"
-#include "./sailwwidget.h"
+#include "./sailviewwidget.h"
 #include "./saildlg.h"
 #include "./glcreatebodylists.h"
 #include "./gl3dscales.h"

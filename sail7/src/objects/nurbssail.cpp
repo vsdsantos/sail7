@@ -343,7 +343,7 @@ void NURBSSail::Duplicate(Sail *pSail)
 }
 
 
-bool NURBSSail::Import(QFile *pFile)
+bool NURBSSail::Import(QFile *)
 {
     return false;
 }
@@ -423,7 +423,7 @@ void NURBSSail::ScaleSail(double XFactor, double YFactor, double ZFactor)
 }
 
 
-void NURBSSail::DrawFrame(int iSection, QPainter &painter, double const &scalex, double const &scaley, QPoint const &Offset, bool bSelected)
+void NURBSSail::DrawFrame(int iSection, QPainter &painter, double const &scalex, double const &scaley, QPoint const &Offset, bool )
 {
     // cuts the spline surface along the section with index iSection
     // finds the u0 nd u1 parameters at each end of the section
@@ -435,7 +435,6 @@ void NURBSSail::DrawFrame(int iSection, QPainter &painter, double const &scalex,
 
     QPoint From, To;
     Vector3d Pt, is;
-    double px;
 
     is.x = pFrame->m_CtrlPoint.last().x - pFrame->m_CtrlPoint.first().x;
     is.y = 0.0;
@@ -443,7 +442,7 @@ void NURBSSail::DrawFrame(int iSection, QPainter &painter, double const &scalex,
     is.Normalize();
 
     Pt = GetSectionPoint(iSection, 0.0);
-    px = Pt.x*is.x + (Pt.z-pFrame->m_Position.z)*is.z;
+    double px = Pt.x*is.x + (Pt.z-pFrame->m_Position.z)*is.z;
 
     //use the drawing opportunity to get the section's camber
     m_oaSection[iSection]->m_c = Pt.y;

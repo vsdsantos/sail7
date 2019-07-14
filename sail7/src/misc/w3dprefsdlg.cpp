@@ -34,7 +34,7 @@ bool W3dPrefsDlg::s_bWakePanels = false;
 int W3dPrefsDlg::s_VLMStyle       = 0;
 int W3dPrefsDlg::s_VLMWidth       = 1;
 QColor W3dPrefsDlg::s_VLMColor       = QColor(180,180,180);
-int W3dPrefsDlg::s_3DAxisStyle    = 3;
+int W3dPrefsDlg::s_3DAxisStyle    = 4;
 int W3dPrefsDlg::s_3DAxisWidth    = 1;
 QColor W3dPrefsDlg::s_3DAxisColor    = QColor(150,150,150);
 int W3dPrefsDlg::s_OutlineStyle   = 0;
@@ -419,7 +419,7 @@ void W3dPrefsDlg::LoadSettings(QSettings *pSettings)
     int r,g,b;
     pSettings->beginGroup("3DPrefs");
     {
-//        s_3DAxisStyle   = pSettings->value("3DAxisStyle",Qt::DashDotDotLine).toInt();
+        s_3DAxisStyle   = pSettings->value("3DAxisStyle",4).toInt();
         s_3DAxisWidth   = pSettings->value("3DAXisWidth",1).toInt();
         r = pSettings->value("3DAxisColorRed",255).toInt();
         g = pSettings->value("3DAxisColorGreen",255).toInt();

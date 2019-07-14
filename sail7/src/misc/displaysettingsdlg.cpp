@@ -19,10 +19,6 @@
 
 *****************************************************************************/
 
-#include "displaysettingsdlg.h"
-#include "../mainframe.h"
-#include "../graph/graphdlg.h"
-#include "../sail7/sail7.h"
 #include <QApplication>
 #include <QGroupBox>
 #include <QColorDialog>
@@ -30,36 +26,45 @@
 #include <QStyleFactory>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QFontDatabase>
+
+#include "displaysettingsdlg.h"
+#include "../mainframe.h"
+#include "../graph/graphdlg.h"
+#include "../sail7/sail7.h"
+#include "colorbutton.h"
 
 
-void * DisplaySettingsDlg::s_pMainFrame = nullptr;
-void * DisplaySettingsDlg::s_pSail7 = nullptr;
+MainFrame * DisplaySettingsDlg::s_pMainFrame = nullptr;
+Sail7 * DisplaySettingsDlg::s_pSail7 = nullptr;
 
 
 DisplaySettingsDlg::DisplaySettingsDlg()
 {
-    setWindowTitle(tr("General Display Settings"));
+    setWindowTitle(tr("Preferences"));
+
+    m_TextFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
 
     m_bIsGraphModified = false;
     m_bReverseZoom = false;
     m_bAlphaChannel = false;
     SetupLayout();
 
-    connect(m_pctrlStyles, SIGNAL(activated(const QString &)),this, SLOT(OnStyleChanged(const QString &)));
+    connect(m_pctrlStyles,        SIGNAL(activated(const QString &)), SLOT(OnStyleChanged(const QString &)));
 
-    connect(m_pctrlBackColor, SIGNAL(clicked()),this, SLOT(OnBackgroundColor()));
-    connect(m_pctrlGraphSettings, SIGNAL(clicked()),this, SLOT(OnGraphSettings()));
-    connect(m_pctrlTextClr, SIGNAL(clicked()),this, SLOT(OnTextColor()));
-    connect(m_pctrlTextFont, SIGNAL(clicked()),this, SLOT(OnTextFont()));
+    connect(m_pctrlBackColor,     SIGNAL(clicked()), SLOT(OnBackgroundColor()));
+    connect(m_pctrlGraphSettings, SIGNAL(clicked()), SLOT(OnGraphSettings()));
+    connect(m_pctrlTextClr,       SIGNAL(clicked()), SLOT(OnTextColor()));
+    connect(m_pctrlTextFont,      SIGNAL(clicked()), SLOT(OnTextFont()));
 
-    connect(OKButton, SIGNAL(clicked()),this, SLOT(accept()));
-    connect(CancelButton, SIGNAL(clicked()), this, SLOT(reject()));
+    connect(m_pctrlOKButton,      SIGNAL(clicked()), SLOT(accept()));
+    connect(m_pctrlCancelButton,  SIGNAL(clicked()), SLOT(reject()));
 }
 
 
 void DisplaySettingsDlg::SetupLayout()
 {
-    QVBoxLayout *MainLayout = new QVBoxLayout;
+    QVBoxLayout *pMainLayout = new QVBoxLayout;
 
     m_pctrlStyles = new QComboBox;
 
@@ -78,61 +83,66 @@ void DisplaySettingsDlg::SetupLayout()
 
     m_pctrlGraphSettings  = new QPushButton(tr("All Graph Settings"));
     m_pctrlGraphSettings->setMinimumWidth(120);
-    QHBoxLayout *GraphLayout = new QHBoxLayout;
-    GraphLayout->addWidget(m_pctrlGraphSettings);
-    QGroupBox *GraphBox = new QGroupBox(tr("Graph Settings"));
-    GraphBox->setLayout(GraphLayout);
-
+    QHBoxLayout *pGraphLayout = new QHBoxLayout;
+    {
+        pGraphLayout->addWidget(m_pctrlGraphSettings);
+    }
+    QGroupBox *pGraphBox = new QGroupBox(tr("Graph Settings"));
+    pGraphBox->setLayout(pGraphLayout);
 
     QHBoxLayout *BackLayout = new QHBoxLayout;
-    m_pctrlBackColor      = new ColorButton;
-    m_pctrlBackColor->setMinimumWidth(120);
-    BackLayout->addWidget(m_pctrlBackColor);
-    QGroupBox *BackBox = new QGroupBox(tr("Background Color"));
-    BackBox->setLayout(BackLayout);
+    {
+        m_pctrlBackColor      = new ColorButton;
+        m_pctrlBackColor->setMinimumWidth(120);
+        BackLayout->addWidget(m_pctrlBackColor);
+    }
+    QGroupBox *pBackBox = new QGroupBox(tr("Background Color"));
+    pBackBox->setLayout(BackLayout);
 
-    QHBoxLayout *FontLayout = new QHBoxLayout;
-    m_pctrlTextFont       = new QPushButton;
-    m_pctrlTextClr        = new QPushButton(tr("Text Color"));
-    m_pctrlTextFont->setMinimumWidth(120);
-    m_pctrlTextClr->setMinimumWidth(120);
-    FontLayout->addWidget(m_pctrlTextFont);
-    FontLayout->addWidget(m_pctrlTextClr);
-    QGroupBox *FontBox = new QGroupBox(tr("Font"));
-    FontBox->setLayout(FontLayout);
+    QHBoxLayout *pFontLayout = new QHBoxLayout;
+    {
+        m_pctrlTextFont       = new QPushButton;
+        m_pctrlTextClr        = new QPushButton(tr("Text Color"));
+        m_pctrlTextFont->setMinimumWidth(120);
+        m_pctrlTextClr->setMinimumWidth(120);
+        pFontLayout->addWidget(m_pctrlTextFont);
+        pFontLayout->addWidget(m_pctrlTextClr);
+    }
+    QGroupBox *pFontBox = new QGroupBox(tr("Font"));
+    pFontBox->setLayout(pFontLayout);
 
     m_pctrlReverseZoom = new QCheckBox(tr("Reverse zoom direction using mouse wheel"));
     m_pctrlAlphaChannel = new QCheckBox(tr("Enable 3D transparency"));
 
-    QHBoxLayout *CommandButtons = new QHBoxLayout;
-    OKButton = new QPushButton(tr("OK"));
-    OKButton->setAutoDefault(false);
-    CancelButton = new QPushButton(tr("Cancel"));
-    CancelButton->setAutoDefault(false);
-    CommandButtons->addStretch(1);
-    CommandButtons->addWidget(OKButton);
-    CommandButtons->addStretch(1);
-    CommandButtons->addWidget(CancelButton);
-    CommandButtons->addStretch(1);
+    QHBoxLayout *pCommandButtons = new QHBoxLayout;
+    {
+        m_pctrlOKButton = new QPushButton(tr("OK"));
+        m_pctrlOKButton->setAutoDefault(false);
+        m_pctrlCancelButton = new QPushButton(tr("Cancel"));
+        m_pctrlCancelButton->setAutoDefault(false);
+        pCommandButtons->addStretch(1);
+        pCommandButtons->addWidget(m_pctrlOKButton);
+        pCommandButtons->addWidget(m_pctrlCancelButton);
+    }
 
-    MainLayout->addStretch(1);
-    MainLayout->addWidget(m_pctrlStyles);
-    MainLayout->addStretch(1);
-    MainLayout->addWidget(BackBox);
-    MainLayout->addStretch(1);
-    MainLayout->addWidget(FontBox);
-    MainLayout->addStretch(1);
-    MainLayout->addWidget(GraphBox);
-    MainLayout->addStretch(1);
-    MainLayout->addWidget(m_pctrlReverseZoom);
-    MainLayout->addStretch(1);
-    MainLayout->addWidget(m_pctrlAlphaChannel);
-    MainLayout->addSpacing(20);
-    MainLayout->addStretch(1);
-    MainLayout->addLayout(CommandButtons);
-    MainLayout->addStretch(1);
+    pMainLayout->addStretch(1);
+    pMainLayout->addWidget(m_pctrlStyles);
+    pMainLayout->addStretch(1);
+    pMainLayout->addWidget(pBackBox);
+    pMainLayout->addStretch(1);
+    pMainLayout->addWidget(pFontBox);
+    pMainLayout->addStretch(1);
+    pMainLayout->addWidget(pGraphBox);
+    pMainLayout->addStretch(1);
+    pMainLayout->addWidget(m_pctrlReverseZoom);
+    pMainLayout->addStretch(1);
+    pMainLayout->addWidget(m_pctrlAlphaChannel);
+    pMainLayout->addSpacing(20);
+    pMainLayout->addStretch(1);
+    pMainLayout->addLayout(pCommandButtons);
+    pMainLayout->addStretch(1);
 
-    setLayout(MainLayout);
+    setLayout(pMainLayout);
 }
 
 
@@ -189,10 +199,9 @@ void DisplaySettingsDlg::OnBackgroundColor()
 void DisplaySettingsDlg::reject()
 {
 //    MainFrame *pMainFrame = (MainFrame*)m_pMainFrame;
-    Sail7 *pSail7 = (Sail7*)s_pSail7;
     for(int ig=0; ig<4; ig++)
     {
-        pSail7->m_BoatGraph[ig].CopySettings(&m_MemGraph);
+        s_pSail7->m_BoatGraph[ig].CopySettings(&m_MemGraph);
     }
     QDialog::reject();
 }
@@ -202,15 +211,13 @@ void DisplaySettingsDlg::reject()
 void DisplaySettingsDlg::OnGraphSettings()
 {
     if(!m_pRefGraph) return;
-//    MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
-    Sail7 *pSail7 = (Sail7*)s_pSail7;
 
     GraphDlg dlg;
 
-    dlg.m_GraphArray[0] = pSail7->m_BoatGraph;
-    dlg.m_GraphArray[1] = pSail7->m_BoatGraph+1;
-    dlg.m_GraphArray[2] = pSail7->m_BoatGraph+2;
-    dlg.m_GraphArray[3] = pSail7->m_BoatGraph+3;
+    dlg.m_GraphArray[0] = s_pSail7->m_BoatGraph;
+    dlg.m_GraphArray[1] = s_pSail7->m_BoatGraph+1;
+    dlg.m_GraphArray[2] = s_pSail7->m_BoatGraph+2;
+    dlg.m_GraphArray[3] = s_pSail7->m_BoatGraph+3;
 
     dlg.m_NGraph = 4;
 
@@ -251,9 +258,8 @@ void DisplaySettingsDlg::OnTextColor()
 
 void DisplaySettingsDlg::OnTextFont()
 {
-    bool ok;
+    bool ok=false;
     QFont TextFont;
-    TextFont.setStyleHint(QFont::TypeWriter, QFont::OpenGLCompatible);
 
 #ifdef Q_WS_MAC
     //20090604 Mac OS Native font dialog does not work well under QT 4.5.1

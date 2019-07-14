@@ -6,7 +6,6 @@
         <file>images/OnPolarView.png</file>
         <file>images/OnWOppView.png</file>
         <file>images/Sailboat_256.png</file>
-        <file>images/sail7_512.png</file>
         <file>images/Sailboat.png</file>
         <file>images/splash.png</file>
         <file>images/OnUndo.png</file>
@@ -21,6 +20,5 @@
         <file>images/OnZView.png</file>
         <file>images/OnIsoView.png</file>
         <file>images/OnXView.png</file>
-        <file>images/sail7_64.png</file>
     </qresource>
 </RCC>

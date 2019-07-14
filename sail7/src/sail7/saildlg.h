@@ -22,7 +22,7 @@
 #include <QAction>
 #include <QStackedWidget>
 
-#include "./sailwwidget.h"
+#include "./sailviewwidget.h"
 #include "./sectionviewwidget.h"
 #include "../misc/colorbutton.h"
 #include "../misc/floateditdelegate.h"

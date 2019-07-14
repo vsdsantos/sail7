@@ -1,4 +1,4 @@
-#include "sailwwidget.h"
+#include "sailviewwidget.h"
 #include "sail7.h"
 #include "saildlg.h"
 #include "../mainframe.h"
@@ -966,9 +966,7 @@ void SailViewWidget::UpdateView()
 }
 
 
-
-
-void SailViewWidget::closeEvent(QCloseEvent *event)
+void SailViewWidget::closeEvent(QCloseEvent *)
 {
     s_WindowPos = pos();
     s_WindowSize = size();
@@ -976,7 +974,7 @@ void SailViewWidget::closeEvent(QCloseEvent *event)
 }
 
 
-void SailViewWidget::hideEvent(QHideEvent *event)
+void SailViewWidget::hideEvent(QHideEvent *)
 {
     s_WindowPos = pos();
     s_WindowSize = size();
@@ -984,7 +982,7 @@ void SailViewWidget::hideEvent(QHideEvent *event)
 }
 
 
-void SailViewWidget::showEvent(QShowEvent *event)
+void SailViewWidget::showEvent(QShowEvent *)
 {
     move(s_WindowPos);
     resize(s_WindowSize);
