@@ -20,5 +20,8 @@
         <file>images/OnZView.png</file>
         <file>images/OnIsoView.png</file>
         <file>images/OnXView.png</file>
+        <file>images/sail7_512.png</file>
+        <file>images/sail7.png</file>
     </qresource>
 </RCC>
+ 

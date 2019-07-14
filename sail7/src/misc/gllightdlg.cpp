@@ -294,7 +294,7 @@ void GLLightDlg::Apply()
     ReadParams();
 
     ThreeDWidget *p3DWidget = (ThreeDWidget*)m_p3DWidget;
-    p3DWidget->updateGL();
+    p3DWidget->update();
 }
 
 
@@ -318,7 +318,7 @@ void GLLightDlg::OnDefaults()
 
     SetParams();
     SetEnabled();
-    p3DWidget->updateGL();
+    p3DWidget->update();
 }
 
 

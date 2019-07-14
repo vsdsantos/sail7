@@ -867,10 +867,10 @@ void GL3dBodyDlg::GLDrawBodyFrameScale()
 
     QFontMetrics fm(s_pMainFrame->m_TextFont);
     double LabelWidth;
-    double h2 = (double)m_3dWidget.geometry().height() /2.0;
-    double w2 = (double)m_3dWidget.geometry().width()  /2.0;
-    if(w2>h2) LabelWidth = (double)fm.width("-12.34") / w2;
-    else      LabelWidth = (double)fm.width("-12.34") /h2;
+    double h2 = double(m_3dWidget.geometry().height()) /2.0;
+    double w2 = double(m_3dWidget.geometry().width())  /2.0;
+    if(w2>h2) LabelWidth = double(fm.width("-12.34")) / w2;
+    else      LabelWidth = double(fm.width("-12.34")) /h2;
 
     glEnable(GL_DEPTH_TEST);
     glDisable (GL_LINE_STIPPLE);
@@ -886,13 +886,13 @@ void GL3dBodyDlg::GLDrawBodyFrameScale()
         {
             for(i=0; i<fabs(1.0-m_FrameScaledOffset.x)/m_BodyGridDlg->m_Unit2/m_FrameScale; i++)
             {
-                glVertex2d(m_FrameScaledOffset.x+(double)i*m_BodyGridDlg->m_Unit2*m_FrameScale, m_FrameScaledOffset.y+0.00);
-                glVertex2d(m_FrameScaledOffset.x+(double)i*m_BodyGridDlg->m_Unit2*m_FrameScale, m_FrameScaledOffset.y-0.02);
+                glVertex2d(m_FrameScaledOffset.x+double(i)*m_BodyGridDlg->m_Unit2*m_FrameScale, m_FrameScaledOffset.y+0.00);
+                glVertex2d(m_FrameScaledOffset.x+double(i)*m_BodyGridDlg->m_Unit2*m_FrameScale, m_FrameScaledOffset.y-0.02);
             }
             for(i=1; i<fabs(m_FrameScaledOffset.x-m_VerticalSplit)/m_BodyGridDlg->m_Unit2/m_FrameScale; i++)
             {
-                glVertex2d(m_FrameScaledOffset.x-(double)i*m_BodyGridDlg->m_Unit2*m_FrameScale, m_FrameScaledOffset.y+0.00);
-                glVertex2d(m_FrameScaledOffset.x-(double)i*m_BodyGridDlg->m_Unit2*m_FrameScale, m_FrameScaledOffset.y-0.02);
+                glVertex2d(m_FrameScaledOffset.x-double(i)*m_BodyGridDlg->m_Unit2*m_FrameScale, m_FrameScaledOffset.y+0.00);
+                glVertex2d(m_FrameScaledOffset.x-double(i)*m_BodyGridDlg->m_Unit2*m_FrameScale, m_FrameScaledOffset.y-0.02);
             }
         }
         glEnd();
@@ -900,21 +900,19 @@ void GL3dBodyDlg::GLDrawBodyFrameScale()
         glColor3d(s_pMainFrame->m_TextColor.redF(),s_pMainFrame->m_TextColor.greenF(),s_pMainFrame->m_TextColor.blueF());
         for(i=0; i<fabs(1.0-m_FrameScaledOffset.x)/m_BodyGridDlg->m_Unit2/m_FrameScale; i++)
         {
-            strong = QString("%1").arg((double)i*unit, 6,'f', 2);
-            m_3dWidget.renderText(m_FrameScaledOffset.x+(double)i*m_BodyGridDlg->m_Unit2*m_FrameScale-LabelWidth/2,
+            strong = QString("%1").arg(double(i)*unit, 6,'f', 2);
+            m_3dWidget.glRenderText(m_FrameScaledOffset.x+double(i)*m_BodyGridDlg->m_Unit2*m_FrameScale-LabelWidth/2,
                                     m_FrameScaledOffset.y-0.04,
                                     0.0,
-                                    strong,
-                                    s_pMainFrame->m_TextFont);
+                                    strong);
         }
         for(i=1; i<fabs(m_FrameScaledOffset.x-(m_VerticalSplit))/m_BodyGridDlg->m_Unit2/m_FrameScale; i++)
         {
-            strong = QString("%1").arg(-(double)i*unit, 6,'f', 2);
-            m_3dWidget.renderText(m_FrameScaledOffset.x-(double)i*m_BodyGridDlg->m_Unit2*m_FrameScale-LabelWidth/2,
+            strong = QString("%1").arg(-double(i)*unit, 6,'f', 2);
+            m_3dWidget.glRenderText(m_FrameScaledOffset.x-double(i)*m_BodyGridDlg->m_Unit2*m_FrameScale-LabelWidth/2,
                                     m_FrameScaledOffset.y-0.04,
                                     0.0,
-                                    strong,
-                                    s_pMainFrame->m_TextFont);
+                                    strong);
         }
     }
 
@@ -925,13 +923,13 @@ void GL3dBodyDlg::GLDrawBodyFrameScale()
         {
             for(i=0; i<fabs(m_glTop-m_FrameScaledOffset.y)/m_BodyGridDlg->m_Unit2/m_FrameScale; i++)
             {
-                glVertex2d(m_FrameScaledOffset.x+ 0.00, m_FrameScaledOffset.y+(double)i*m_BodyGridDlg->m_Unit2*m_FrameScale);
-                glVertex2d(m_FrameScaledOffset.x- 0.02, m_FrameScaledOffset.y+(double)i*m_BodyGridDlg->m_Unit2*m_FrameScale);
+                glVertex2d(m_FrameScaledOffset.x+ 0.00, m_FrameScaledOffset.y+double(i)*m_BodyGridDlg->m_Unit2*m_FrameScale);
+                glVertex2d(m_FrameScaledOffset.x- 0.02, m_FrameScaledOffset.y+double(i)*m_BodyGridDlg->m_Unit2*m_FrameScale);
             }
             for(i=1; i<fabs(-1.0-m_FrameScaledOffset.y)/m_BodyGridDlg->m_Unit2/m_FrameScale; i++)
             {
-                glVertex2d(m_FrameScaledOffset.x+ 0.00, m_FrameScaledOffset.y-(double)i*m_BodyGridDlg->m_Unit2*m_FrameScale);
-                glVertex2d(m_FrameScaledOffset.x- 0.02, m_FrameScaledOffset.y-(double)i*m_BodyGridDlg->m_Unit2*m_FrameScale);
+                glVertex2d(m_FrameScaledOffset.x+ 0.00, m_FrameScaledOffset.y-double(i)*m_BodyGridDlg->m_Unit2*m_FrameScale);
+                glVertex2d(m_FrameScaledOffset.x- 0.02, m_FrameScaledOffset.y-double(i)*m_BodyGridDlg->m_Unit2*m_FrameScale);
             }
         }
         glEnd();
@@ -939,17 +937,17 @@ void GL3dBodyDlg::GLDrawBodyFrameScale()
         glColor3d(s_pMainFrame->m_TextColor.redF(),s_pMainFrame->m_TextColor.greenF(),s_pMainFrame->m_TextColor.blueF());
         for(i=0; i<fabs(m_glTop-m_FrameScaledOffset.y)/m_BodyGridDlg->m_Unit2/m_FrameScale; i++)
         {
-            strong = QString("%1").arg((double)i*unit, 6,'f', 2);
-            m_3dWidget.renderText(m_FrameScaledOffset.x- 0.02 -LabelWidth,
-                                    m_FrameScaledOffset.y+(double)i*m_BodyGridDlg->m_Unit2*m_FrameScale,
+            strong = QString("%1").arg(double(i)*unit, 6,'f', 2);
+            m_3dWidget.glRenderText(m_FrameScaledOffset.x- 0.02 -LabelWidth,
+                                    m_FrameScaledOffset.y+double(i)*m_BodyGridDlg->m_Unit2*m_FrameScale,
                                     0.0,
                                     strong);
         }
         for(i=1; i<fabs(-1.0-m_FrameScaledOffset.y)/m_BodyGridDlg->m_Unit2/m_FrameScale; i++)
         {
-            strong = QString("%1").arg(-(double)i*unit, 6,'f', 2);
-            m_3dWidget.renderText(m_FrameScaledOffset.x- 0.02 -LabelWidth,
-                                    m_FrameScaledOffset.y-(double)i*m_BodyGridDlg->m_Unit2*m_FrameScale,
+            strong = QString("%1").arg(-double(i)*unit, 6,'f', 2);
+            m_3dWidget.glRenderText(m_FrameScaledOffset.x- 0.02 -LabelWidth,
+                                    m_FrameScaledOffset.y-double(i)*m_BodyGridDlg->m_Unit2*m_FrameScale,
                                     0.0,
                                     strong);
         }
@@ -985,13 +983,13 @@ void GL3dBodyDlg::GLDrawBodyLineScale()
         {
             for(i=0;  i<fabs(m_VerticalSplit-m_BodyScaledOffset.x)/m_BodyGridDlg->m_Unit/m_BodyScale; i++)
             {
-                glVertex2d(m_BodyScaledOffset.x+(double)i*m_BodyGridDlg->m_Unit*m_BodyScale, m_BodyScaledOffset.y+0.00);
-                glVertex2d(m_BodyScaledOffset.x+(double)i*m_BodyGridDlg->m_Unit*m_BodyScale, m_BodyScaledOffset.y-0.02);
+                glVertex2d(m_BodyScaledOffset.x+double(i)*m_BodyGridDlg->m_Unit*m_BodyScale, m_BodyScaledOffset.y+0.00);
+                glVertex2d(m_BodyScaledOffset.x+double(i)*m_BodyGridDlg->m_Unit*m_BodyScale, m_BodyScaledOffset.y-0.02);
             }
             for(i=1; i<fabs(m_BodyScaledOffset.x-(-1.0))/m_BodyGridDlg->m_Unit/m_BodyScale; i++)
             {
-                glVertex2d(m_BodyScaledOffset.x-(double)i*m_BodyGridDlg->m_Unit*m_BodyScale,m_BodyScaledOffset.y+0.00);
-                glVertex2d(m_BodyScaledOffset.x-(double)i*m_BodyGridDlg->m_Unit*m_BodyScale,m_BodyScaledOffset.y-0.02);
+                glVertex2d(m_BodyScaledOffset.x-double(i)*m_BodyGridDlg->m_Unit*m_BodyScale,m_BodyScaledOffset.y+0.00);
+                glVertex2d(m_BodyScaledOffset.x-double(i)*m_BodyGridDlg->m_Unit*m_BodyScale,m_BodyScaledOffset.y-0.02);
             }
         }
         glEnd();
@@ -999,16 +997,16 @@ void GL3dBodyDlg::GLDrawBodyLineScale()
         glColor3d(s_pMainFrame->m_TextColor.redF(),s_pMainFrame->m_TextColor.greenF(),s_pMainFrame->m_TextColor.blueF());
         for(i=0; i<fabs(m_VerticalSplit-m_BodyScaledOffset.x)/m_BodyGridDlg->m_Unit/m_BodyScale; i++)
         {
-            strong = QString("%1").arg((double)i*unit, 6,'f', 2);
-            m_3dWidget.renderText(m_BodyScaledOffset.x+(double)i*m_BodyGridDlg->m_Unit*m_BodyScale - LabelWidth/2.0,
+            strong = QString("%1").arg(double(i)*unit, 6,'f', 2);
+            m_3dWidget.glRenderText(m_BodyScaledOffset.x+double(i)*m_BodyGridDlg->m_Unit*m_BodyScale - LabelWidth/2.0,
                                 m_BodyScaledOffset.y-0.04,
                                 0.0,
                                strong);
         }
         for(i=1; i<fabs(m_BodyScaledOffset.x-(-1.0))/m_BodyGridDlg->m_Unit/m_BodyScale; i++)
         {
-            strong = QString("%1").arg(-(double)i*unit, 6,'f', 2);
-            m_3dWidget.renderText(m_BodyScaledOffset.x-(double)i*m_BodyGridDlg->m_Unit*m_BodyScale - LabelWidth/2.0,
+            strong = QString("%1").arg(-double(i)*unit, 6,'f', 2);
+            m_3dWidget.glRenderText(m_BodyScaledOffset.x-double(i)*m_BodyGridDlg->m_Unit*m_BodyScale - LabelWidth/2.0,
                                 m_BodyScaledOffset.y-0.04,
                                 0.0,
                                 strong);
@@ -1023,30 +1021,30 @@ void GL3dBodyDlg::GLDrawBodyLineScale()
         {
             for(i=0; i<fabs(m_glTop-m_BodyScaledOffset.y)/m_BodyScale/m_BodyGridDlg->m_Unit; i++)
             {
-                glVertex2d(m_BodyScaledOffset.x+ 0.00, m_BodyScaledOffset.y+(double)i*m_BodyGridDlg->m_Unit*m_BodyScale);
-                glVertex2d(m_BodyScaledOffset.x- 0.02, m_BodyScaledOffset.y+(double)i*m_BodyGridDlg->m_Unit*m_BodyScale);
+                glVertex2d(m_BodyScaledOffset.x+ 0.00, m_BodyScaledOffset.y+double(i)*m_BodyGridDlg->m_Unit*m_BodyScale);
+                glVertex2d(m_BodyScaledOffset.x- 0.02, m_BodyScaledOffset.y+double(i)*m_BodyGridDlg->m_Unit*m_BodyScale);
             }
             for(i=1; i<fabs(m_HorizontalSplit-m_BodyScaledOffset.y)/m_BodyScale/m_BodyGridDlg->m_Unit; i++)
             {
-                glVertex2d(m_BodyScaledOffset.x+ 0.00, m_BodyScaledOffset.y-(double)i*m_BodyGridDlg->m_Unit*m_BodyScale);
-                glVertex2d(m_BodyScaledOffset.x- 0.02, m_BodyScaledOffset.y-(double)i*m_BodyGridDlg->m_Unit*m_BodyScale);
+                glVertex2d(m_BodyScaledOffset.x+ 0.00, m_BodyScaledOffset.y-double(i)*m_BodyGridDlg->m_Unit*m_BodyScale);
+                glVertex2d(m_BodyScaledOffset.x- 0.02, m_BodyScaledOffset.y-double(i)*m_BodyGridDlg->m_Unit*m_BodyScale);
             }
         }
         glEnd();
         glColor3d(s_pMainFrame->m_TextColor.redF(),s_pMainFrame->m_TextColor.greenF(),s_pMainFrame->m_TextColor.blueF());
         for(i=0; i<fabs(m_glTop-m_BodyScaledOffset.y)/m_BodyScale/m_BodyGridDlg->m_Unit; i++)
         {
-            strong = QString("%1").arg((double)i*unit, 6,'f', 2);
-            m_3dWidget.renderText(m_BodyScaledOffset.x- 0.02 - LabelWidth,
-                                    m_BodyScaledOffset.y+(double)i*m_BodyGridDlg->m_Unit*m_BodyScale,
+            strong = QString("%1").arg(double(i)*unit, 6,'f', 2);
+            m_3dWidget.glRenderText(m_BodyScaledOffset.x- 0.02 - LabelWidth,
+                                    m_BodyScaledOffset.y+double(i)*m_BodyGridDlg->m_Unit*m_BodyScale,
                                     0.0,
                                     strong);
         }
         for(i=1; i<fabs(m_HorizontalSplit-m_BodyScaledOffset.y)/m_BodyScale/m_BodyGridDlg->m_Unit; i++)
         {
-            strong = QString("%1").arg(-(double)i*unit, 6,'f', 2);
-            m_3dWidget.renderText(m_BodyScaledOffset.x- 0.02 - LabelWidth,
-                                    m_BodyScaledOffset.y-(double)i*m_BodyGridDlg->m_Unit*m_BodyScale,
+            strong = QString("%1").arg(-double(i)*unit, 6,'f', 2);
+            m_3dWidget.glRenderText(m_BodyScaledOffset.x- 0.02 - LabelWidth,
+                                    m_BodyScaledOffset.y-double(i)*m_BodyGridDlg->m_Unit*m_BodyScale,
                                     0.0,
                                     strong);
         }
@@ -1120,16 +1118,16 @@ void GL3dBodyDlg::GLCreateBodyGrid()
                 {
                     for(i=start; i<fabs(1.0-m_FrameScaledOffset.x)/m_BodyGridDlg->m_Unit2/m_FrameScale; i++)
                     {
-                        glVertex2d(+(double)i*m_BodyGridDlg->m_Unit2,
+                        glVertex2d(+double(i)*m_BodyGridDlg->m_Unit2,
                                    (-1.0-m_FrameScaledOffset.y)    /m_FrameScale);
-                        glVertex2d(+(double)i*m_BodyGridDlg->m_Unit2,
+                        glVertex2d(+double(i)*m_BodyGridDlg->m_Unit2,
                                    (m_glTop-m_FrameScaledOffset.y) /m_FrameScale);
                     }
                     for(i=start; i<fabs(m_FrameScaledOffset.x-m_VerticalSplit)/m_BodyGridDlg->m_Unit2/m_FrameScale; i++)
                     {
-                        glVertex2d((-(double)i*m_BodyGridDlg->m_Unit2),
+                        glVertex2d((-double(i)*m_BodyGridDlg->m_Unit2),
                                    (-1.0-m_FrameScaledOffset.y)    /m_FrameScale);
-                        glVertex2d((-(double)i*m_BodyGridDlg->m_Unit2),
+                        glVertex2d((-double(i)*m_BodyGridDlg->m_Unit2),
                                    (m_glTop-m_FrameScaledOffset.y) /m_FrameScale);
                     }
                 }
@@ -1140,17 +1138,17 @@ void GL3dBodyDlg::GLCreateBodyGrid()
                     for(i=start; i<fabs(m_glTop-m_FrameScaledOffset.y)/m_BodyGridDlg->m_Unit2/m_FrameScale; i++)
                     {
                         glVertex2d((m_VerticalSplit-m_FrameScaledOffset.x)/m_FrameScale,
-                                   +(double)i*m_BodyGridDlg->m_Unit2);
+                                   +double(i)*m_BodyGridDlg->m_Unit2);
                         glVertex2d(( 1.0 -m_FrameScaledOffset.x)          /m_FrameScale,
-                                   +(double)i*m_BodyGridDlg->m_Unit2);
+                                   +double(i)*m_BodyGridDlg->m_Unit2);
                     }
 
                     for(i=start; i<fabs(-1.0-m_FrameScaledOffset.y)/m_BodyGridDlg->m_Unit2/m_FrameScale; i++)
                     {
                         glVertex2d((m_VerticalSplit-m_FrameScaledOffset.x)/m_FrameScale,
-                                   -(double)i*m_BodyGridDlg->m_Unit2);
+                                   -double(i)*m_BodyGridDlg->m_Unit2);
                         glVertex2d(( 1.0 -m_FrameScaledOffset.x)          /m_FrameScale,
-                                   -(double)i*m_BodyGridDlg->m_Unit2);
+                                   -double(i)*m_BodyGridDlg->m_Unit2);
                     }
                 }
             }
@@ -1178,16 +1176,16 @@ void GL3dBodyDlg::GLCreateBodyGrid()
                 {
                     for(i=start; i<fabs(1.0-m_FrameScaledOffset.x)/m_BodyGridDlg->m_MinorUnit2/m_FrameScale; i++)
                     {
-                        glVertex2d(+(double)i*m_BodyGridDlg->m_MinorUnit2,
+                        glVertex2d(+double(i)*m_BodyGridDlg->m_MinorUnit2,
                                    (-1.0-m_FrameScaledOffset.y)/m_FrameScale);
-                        glVertex2d(+(double)i*m_BodyGridDlg->m_MinorUnit2,
+                        glVertex2d(+double(i)*m_BodyGridDlg->m_MinorUnit2,
                                    (m_glTop-m_FrameScaledOffset.y)     /m_FrameScale);
                     }
                     for(i=start; i<fabs(m_FrameScaledOffset.x-(m_VerticalSplit))/m_BodyGridDlg->m_MinorUnit2/m_FrameScale; i++)
                     {
-                        glVertex2d((-(double)i*m_BodyGridDlg->m_MinorUnit2),
+                        glVertex2d((-double(i)*m_BodyGridDlg->m_MinorUnit2),
                                    (-1.0-m_FrameScaledOffset.y)  /m_FrameScale);
-                        glVertex2d((-(double)i*m_BodyGridDlg->m_MinorUnit2),
+                        glVertex2d((-double(i)*m_BodyGridDlg->m_MinorUnit2),
                                    (m_glTop-m_FrameScaledOffset.y) /m_FrameScale);
                     }
                 }
@@ -1198,17 +1196,17 @@ void GL3dBodyDlg::GLCreateBodyGrid()
                     for(i=start; i<fabs(m_glTop-m_FrameScaledOffset.y)/m_BodyGridDlg->m_MinorUnit2/m_FrameScale; i++)
                     {
                         glVertex2d((m_VerticalSplit-m_FrameScaledOffset.x)/m_FrameScale,
-                                   +(double)i*m_BodyGridDlg->m_MinorUnit2);
+                                   +double(i)*m_BodyGridDlg->m_MinorUnit2);
                         glVertex2d(( 1.0 -m_FrameScaledOffset.x)          /m_FrameScale,
-                                   +(double)i*m_BodyGridDlg->m_MinorUnit2);
+                                   +double(i)*m_BodyGridDlg->m_MinorUnit2);
                     }
 
                     for(i=start; i<fabs(-1.0-m_FrameScaledOffset.y)/m_BodyGridDlg->m_MinorUnit2/m_FrameScale; i++)
                     {
                         glVertex2d((m_VerticalSplit-m_FrameScaledOffset.x)/m_FrameScale,
-                                   -(double)i*m_BodyGridDlg->m_MinorUnit2);
+                                   -double(i)*m_BodyGridDlg->m_MinorUnit2);
                         glVertex2d(( 1.0 -m_FrameScaledOffset.x)          /m_FrameScale,
-                                   -(double)i*m_BodyGridDlg->m_MinorUnit2);
+                                   -double(i)*m_BodyGridDlg->m_MinorUnit2);
                     }
                 }
             }
@@ -1277,13 +1275,13 @@ void GL3dBodyDlg::GLCreateBodyGrid()
                 {
                     for(i=start; i<fabs(m_VerticalSplit-m_BodyScaledOffset.x)/m_BodyScale/m_BodyGridDlg->m_Unit; i++)
                     {
-                        glVertex2d(+(double)i*m_BodyGridDlg->m_Unit, (m_HorizontalSplit-m_BodyScaledOffset.y)/m_BodyScale);
-                        glVertex2d(+(double)i*m_BodyGridDlg->m_Unit, (m_glTop-m_BodyScaledOffset.y)          /m_BodyScale);
+                        glVertex2d(+double(i)*m_BodyGridDlg->m_Unit, (m_HorizontalSplit-m_BodyScaledOffset.y)/m_BodyScale);
+                        glVertex2d(+double(i)*m_BodyGridDlg->m_Unit, (m_glTop-m_BodyScaledOffset.y)          /m_BodyScale);
                     }
                     for(i=start; i<fabs(m_BodyScaledOffset.x-(-1.0))/m_BodyScale/m_BodyGridDlg->m_Unit; i++)
                     {
-                        glVertex2d((-(double)i*m_BodyGridDlg->m_Unit),(m_HorizontalSplit-m_BodyScaledOffset.y)/m_BodyScale);
-                        glVertex2d((-(double)i*m_BodyGridDlg->m_Unit),(m_glTop-m_BodyScaledOffset.y)          /m_BodyScale);
+                        glVertex2d((-double(i)*m_BodyGridDlg->m_Unit),(m_HorizontalSplit-m_BodyScaledOffset.y)/m_BodyScale);
+                        glVertex2d((-double(i)*m_BodyGridDlg->m_Unit),(m_glTop-m_BodyScaledOffset.y)          /m_BodyScale);
                     }
                 }
                 //Main Y Grid
@@ -1293,14 +1291,14 @@ void GL3dBodyDlg::GLCreateBodyGrid()
                 {
                     for(i=start; i<fabs(m_glTop-m_BodyScaledOffset.y)/m_BodyScale/m_BodyGridDlg->m_Unit; i++)
                     {
-                        glVertex2d((m_VerticalSplit-m_BodyScaledOffset.x)/m_BodyScale, +(double)i*m_BodyGridDlg->m_Unit);
-                        glVertex2d((-1.0 -m_BodyScaledOffset.x)          /m_BodyScale, +(double)i*m_BodyGridDlg->m_Unit);
+                        glVertex2d((m_VerticalSplit-m_BodyScaledOffset.x)/m_BodyScale, +double(i)*m_BodyGridDlg->m_Unit);
+                        glVertex2d((-1.0 -m_BodyScaledOffset.x)          /m_BodyScale, +double(i)*m_BodyGridDlg->m_Unit);
                     }
 
                     for(i=start; i<fabs(m_HorizontalSplit-m_BodyScaledOffset.y)/m_BodyScale/m_BodyGridDlg->m_Unit; i++)
                     {
-                        glVertex2d((m_VerticalSplit-m_BodyScaledOffset.x)/m_BodyScale, -(double)i*m_BodyGridDlg->m_Unit);
-                        glVertex2d((-1.0 -m_BodyScaledOffset.x)          /m_BodyScale, -(double)i*m_BodyGridDlg->m_Unit);
+                        glVertex2d((m_VerticalSplit-m_BodyScaledOffset.x)/m_BodyScale, -double(i)*m_BodyGridDlg->m_Unit);
+                        glVertex2d((-1.0 -m_BodyScaledOffset.x)          /m_BodyScale, -double(i)*m_BodyGridDlg->m_Unit);
                     }
                 }
             }
@@ -1329,13 +1327,13 @@ void GL3dBodyDlg::GLCreateBodyGrid()
                 {
                     for(i=start; i<fabs(m_VerticalSplit-m_BodyScaledOffset.x)/m_BodyScale/m_BodyGridDlg->m_MinorUnit; i++)
                     {
-                        glVertex2d(+(double)i*m_BodyGridDlg->m_MinorUnit,(m_HorizontalSplit-m_BodyScaledOffset.y)/m_BodyScale);
-                        glVertex2d(+(double)i*m_BodyGridDlg->m_MinorUnit,(m_glTop          -m_BodyScaledOffset.y)/m_BodyScale);
+                        glVertex2d(+double(i)*m_BodyGridDlg->m_MinorUnit,(m_HorizontalSplit-m_BodyScaledOffset.y)/m_BodyScale);
+                        glVertex2d(+double(i)*m_BodyGridDlg->m_MinorUnit,(m_glTop          -m_BodyScaledOffset.y)/m_BodyScale);
                     }
                     for(i=start; i<fabs(m_BodyScaledOffset.x-(-1.0))/m_BodyScale/m_BodyGridDlg->m_MinorUnit; i++)
                     {
-                        glVertex2d((-(double)i*m_BodyGridDlg->m_MinorUnit),(m_HorizontalSplit-m_BodyScaledOffset.y)/m_BodyScale);
-                        glVertex2d((-(double)i*m_BodyGridDlg->m_MinorUnit),(m_glTop          -m_BodyScaledOffset.y)/m_BodyScale);
+                        glVertex2d((-double(i)*m_BodyGridDlg->m_MinorUnit),(m_HorizontalSplit-m_BodyScaledOffset.y)/m_BodyScale);
+                        glVertex2d((-double(i)*m_BodyGridDlg->m_MinorUnit),(m_glTop          -m_BodyScaledOffset.y)/m_BodyScale);
                     }
                 }
                 //Minor Y Grid
@@ -1345,14 +1343,14 @@ void GL3dBodyDlg::GLCreateBodyGrid()
                 {
                     for(i=start; i<fabs(m_glTop-m_BodyScaledOffset.y)/m_BodyScale/m_BodyGridDlg->m_MinorUnit; i++)
                     {
-                        glVertex2d((m_VerticalSplit -m_BodyScaledOffset.x)/m_BodyScale, +(double)i*m_BodyGridDlg->m_MinorUnit);
-                        glVertex2d((-1.0            -m_BodyScaledOffset.x)/m_BodyScale, +(double)i*m_BodyGridDlg->m_MinorUnit);
+                        glVertex2d((m_VerticalSplit -m_BodyScaledOffset.x)/m_BodyScale, +double(i)*m_BodyGridDlg->m_MinorUnit);
+                        glVertex2d((-1.0            -m_BodyScaledOffset.x)/m_BodyScale, +double(i)*m_BodyGridDlg->m_MinorUnit);
                     }
 
                     for(i=start; i<fabs(m_HorizontalSplit-m_BodyScaledOffset.y)/m_BodyScale/m_BodyGridDlg->m_MinorUnit; i++)
                     {
-                        glVertex2d((m_VerticalSplit -m_BodyScaledOffset.x)/m_BodyScale,  -(double)i*m_BodyGridDlg->m_MinorUnit);
-                        glVertex2d((-1.0            -m_BodyScaledOffset.x)/m_BodyScale, -(double)i*m_BodyGridDlg->m_MinorUnit);
+                        glVertex2d((m_VerticalSplit -m_BodyScaledOffset.x)/m_BodyScale,  -double(i)*m_BodyGridDlg->m_MinorUnit);
+                        glVertex2d((-1.0            -m_BodyScaledOffset.x)/m_BodyScale, -double(i)*m_BodyGridDlg->m_MinorUnit);
                     }
                 }
             }
@@ -1497,13 +1495,13 @@ void GL3dBodyDlg::GLDrawBodyLegend()
         int dD = fm.height();
 
         strong = QString(tr("Frame %1")).arg(m_pBody->m_iActiveFrame+1,2);
-        m_3dWidget.renderText(m_FrameRect.left() +dD ,dD,strong, s_pMainFrame->m_TextFont);
+        m_3dWidget.renderText(m_FrameRect.left() +dD ,dD,strong);
 
         strong = QString(tr("Scale = %1")).arg(m_FrameScale/m_BodyRefScale,4,'f',2);
-        m_3dWidget.renderText(m_FrameRect.left() +dD ,2*dD,strong, s_pMainFrame->m_TextFont);
+        m_3dWidget.renderText(m_FrameRect.left() +dD ,2*dD,strong);
 
         strong = QString(tr("Scale = %1")).arg(m_BodyScale/m_BodyRefScale,4,'f',2);
-        m_3dWidget.renderText(m_BodyLineRect.left() +dD ,dD,strong, s_pMainFrame->m_TextFont);
+        m_3dWidget.renderText(m_BodyLineRect.left() +dD ,dD,strong);
 
         if(m_FrameRect.contains(m_MousePos))
         {
@@ -1513,11 +1511,11 @@ void GL3dBodyDlg::GLDrawBodyLegend()
 
             strong = QString("y = %1 ").arg(real.x * s_pMainFrame->m_mtoUnit,9,'f',3);
             strong += strLengthUnit;
-            m_3dWidget.renderText(m_FrameRect.left() +dD ,3*dD,strong, s_pMainFrame->m_TextFont);
+            m_3dWidget.renderText(m_FrameRect.left() +dD ,3*dD,strong);
 
             strong = QString("z = %1 ").arg(real.y * s_pMainFrame->m_mtoUnit,9,'f',3);
             strong += strLengthUnit;
-            m_3dWidget.renderText(m_FrameRect.left() +dD ,4*dD,strong, s_pMainFrame->m_TextFont);
+            m_3dWidget.renderText(m_FrameRect.left() +dD ,4*dD,strong);
         }
         else if(m_BodyLineRect.contains(m_MousePos))
         {
@@ -1527,11 +1525,11 @@ void GL3dBodyDlg::GLDrawBodyLegend()
 
             strong = QString("x = %1 ").arg(real.x * s_pMainFrame->m_mtoUnit,9,'f',3);
             strong += strLengthUnit;
-            m_3dWidget.renderText(m_BodyLineRect.left() +dD ,2*dD,strong, s_pMainFrame->m_TextFont);
+            m_3dWidget.renderText(m_BodyLineRect.left() +dD ,2*dD,strong);
 
             strong = QString("z = %1 ").arg(real.y * s_pMainFrame->m_mtoUnit,9,'f',3);
             strong += strLengthUnit;
-            m_3dWidget.renderText(m_BodyLineRect.left() +dD ,3*dD,strong, s_pMainFrame->m_TextFont);
+            m_3dWidget.renderText(m_BodyLineRect.left() +dD ,3*dD,strong);
         }
     }
 }
@@ -3281,22 +3279,22 @@ void GL3dBodyDlg::SetRectangles()
 
     V1.Set(m_3dWidget.m_GLViewRect.left, m_3dWidget.m_GLViewRect.top, 0.0);
     V2.Set(m_VerticalSplit,                m_HorizontalSplit,             0.0);
-    m_3dWidget.GLToClient(V1, P1);
-    m_3dWidget.GLToClient(V2, P2);
+    m_3dWidget.GL2dToClient(V1, P1);
+    m_3dWidget.GL2dToClient(V2, P2);
     m_BodyLineRect.setTopLeft(P1);
     m_BodyLineRect.setBottomRight(P2);
 
     V1.Set(m_VerticalSplit,                 m_3dWidget.m_GLViewRect.top,    0.0);
     V2.Set(m_3dWidget.m_GLViewRect.right, m_3dWidget.m_GLViewRect.bottom, 0.0);
-    m_3dWidget.GLToClient(V1, P1);
-    m_3dWidget.GLToClient(V2, P2);
+    m_3dWidget.GL2dToClient(V1, P1);
+    m_3dWidget.GL2dToClient(V2, P2);
     m_FrameRect.setTopLeft(P1);
     m_FrameRect.setBottomRight(P2);
 
     V1.Set(m_3dWidget.m_GLViewRect.left, m_HorizontalSplit,                0.0);
     V2.Set(m_VerticalSplit,                m_3dWidget.m_GLViewRect.bottom, 0.0);
-    m_3dWidget.GLToClient(V1, P1);
-    m_3dWidget.GLToClient(V2, P2);
+    m_3dWidget.GL2dToClient(V1, P1);
+    m_3dWidget.GL2dToClient(V2, P2);
     m_BodyRect.setTopLeft(P1);
     m_BodyRect.setBottomRight(P2);
 }
@@ -3313,10 +3311,10 @@ void GL3dBodyDlg::SetBodyScale()
     m_bIs3DScaleSet = true;
 
 
-    m_UFOOffset.x = (GLfloat)(m_3dWidget.m_GLViewRect.left + m_VerticalSplit  )/2.0;
-    m_UFOOffset.y = (GLfloat)(m_3dWidget.m_GLViewRect.bottom + m_HorizontalSplit)/2.0;
+    m_UFOOffset.x = (m_3dWidget.m_GLViewRect.left + m_VerticalSplit  )/2.0;
+    m_UFOOffset.y = (m_3dWidget.m_GLViewRect.bottom + m_HorizontalSplit)/2.0;
   
-    m_glScaled = (GLfloat)(3./4.* (m_VerticalSplit+1.0) / m_pBody->Length());
+    m_glScaled = (3./4.* (m_VerticalSplit+1.0) / m_pBody->Length());
 
     m_ArcBall.GetMatrix();
     Vector3d eye(0.0,0.0,1.0);
@@ -3824,7 +3822,7 @@ void GL3dBodyDlg::TakePicture()
 
 void GL3dBodyDlg::UpdateView()
 {
-    if(isVisible()) m_3dWidget.updateGL();
+    if(isVisible()) m_3dWidget.update();
 }
 
 

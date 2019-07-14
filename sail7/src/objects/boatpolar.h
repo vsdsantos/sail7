@@ -30,7 +30,7 @@ public:
     BoatPolar();
     void AddPoint(BoatOpp *pBOpp);
     bool SerializeBoatPlr(QDataStream &ar, bool bIsStoring);
-    void *GetBoatPlrVariable(enumPolarVar iVar);
+    QList<double> *GetBoatPlrVariable(enumPolarVar iVar);
     void GetPolarProperties(QString &PolarProperties, int FileType=1, bool bData=false);
     void Export(QTextStream &out, int FileType=1, bool bDataOnly=false);
     void ResetBoatPlr();

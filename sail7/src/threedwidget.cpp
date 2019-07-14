@@ -10,18 +10,21 @@
 #include <QtOpenGL>
 #include <math.h>
 #include <QtDebug>
+
 #include "mainframe.h"
 #include "sail7/sail7.h"
 #include "sail7/sailviewwidget.h"
 #include "sail7/gl3dbodydlg.h"
 #include "threedwidget.h"
+#include "globals.h"
+#include "sail7/gl3dscales.h"
 
 Sail7 *ThreeDWidget::s_pSail7 = nullptr;
 MainFrame *ThreeDWidget::s_pMainFrame = nullptr;
 
 
 ThreeDWidget::ThreeDWidget(QWidget *parent)
-    : QGLWidget(parent)
+    : QOpenGLWidget(parent)
 {
     m_pParent = parent;
     m_iView = GLSAIL7VIEW;
@@ -29,6 +32,17 @@ ThreeDWidget::ThreeDWidget(QWidget *parent)
 
     setMouseTracking(true);
     setCursor(Qt::CrossCursor);
+
+    //create a default pix from a random image - couldn't find a better way to do this
+    m_PixText = QPixmap(":/images/sail7_512.png");
+    m_PixText.fill(Qt::transparent);
+
+    m_pctrlBtData = new QLabel(this);
+    m_pctrlBtData->setTextFormat(Qt::PlainText);
+    m_pctrlBtOppData = new QLabel(this);
+    m_pctrlBtOppData->setTextFormat(Qt::PlainText);
+    m_pctrlBtOppData->setWordWrap(false);
+    m_pctrlBtOppData->setAlignment(Qt::AlignLeft);
 }
 
 
@@ -173,7 +187,7 @@ void ThreeDWidget::wheelEvent(QWheelEvent *event)
 
 void ThreeDWidget::initializeGL()
 {
-    glClearColor(s_pMainFrame->m_BackgroundColor.redF(), s_pMainFrame->m_BackgroundColor.greenF(), s_pMainFrame->m_BackgroundColor.blueF(),0.0);
+    glClearColor(float(s_pMainFrame->m_BackgroundColor.redF()), float(s_pMainFrame->m_BackgroundColor.greenF()), float(s_pMainFrame->m_BackgroundColor.blueF()), 0.0f);
 }
 
 
@@ -226,32 +240,35 @@ void ThreeDWidget::keyReleaseEvent(QKeyEvent *event)
 * Calls the paintGL() method, then overlays the text using the widget's QPainter
 * @param event
 */
-void ThreeDWidget::paintEvent(QPaintEvent *event)
+void ThreeDWidget::paintEvent(QPaintEvent *)
 {
     paintGL();
     QPainter painter(this);
 
     if(m_iView==GLSAIL7VIEW)
     {
-        if(s_pSail7->m_bResetTextLegend)
-        {
-            s_pSail7->DrawTextLegend();
-        }
-
 //        painter.setBackgroundMode(Qt::TransparentMode);
 //        painter.setCompositionMode(QPainter::CompositionMode_DestinationOver);
 //        painter.setOpacity(1);
-        painter.drawPixmap(0,0, s_pSail7->m_PixText);
     }
 
-    event->accept();
+    if(!m_PixText.isNull())
+    {
+        painter.drawPixmap(0,0, m_PixText);
+/*        if(s_pSail7->m_b3DCp && s_pSail7->m_pCurBoatOpp)
+        {
+            QFile file("/home/techwinder/tmp/pixmap.png");
+            file.open(QIODevice::WriteOnly);
+            m_PixText.save(&file, "PNG");
+        }*/
+    }
 }
 
 
 
 void ThreeDWidget::paintGL()
 {
-    qreal pixelRatio = 1;
+    int pixelRatio = 1;
 #if QT_VERSION >= 0x050000
     pixelRatio = devicePixelRatio();
 #endif
@@ -363,6 +380,14 @@ void ThreeDWidget::resizeGL(int width, int height)
         pDlg->m_bIs3DScaleSet = false;
         pDlg->Set3DScale();*/
     }
+
+    if(!m_PixText.isNull())
+    {
+        m_PixText= m_PixText.scaled(rect().size()*devicePixelRatio());
+        m_PixText.fill(Qt::transparent);
+    }
+
+    showEvent(nullptr);
 }
 
 
@@ -388,7 +413,7 @@ void ThreeDWidget::GLSetupLight(GLLightDlg *pglLightParams, double Offset_y, flo
     float fLightSpecular0[4];
     float fLightPosition0[4];
 
-    if(LightFactor>1.0) LightFactor = 1.0f;
+    if(LightFactor>1.0f) LightFactor = 1.0f;
 
     LightFactor = .1f;
 
@@ -433,10 +458,6 @@ void ThreeDWidget::GLSetupLight(GLLightDlg *pglLightParams, double Offset_y, flo
     {
         glEnable(GL_COLOR_MATERIAL);
         glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
-//        glColorMaterial(GL_FRONT, GL_AMBIENT);
-//        glColorMaterial(GL_FRONT, GL_DIFFUSE);
-//        glColorMaterial(GL_FRONT, GL_SPECULAR);
-
     }
     else
     {
@@ -455,12 +476,10 @@ void ThreeDWidget::GLSetupLight(GLLightDlg *pglLightParams, double Offset_y, flo
     if(pglLightParams->s_bShade)      glShadeModel(GL_SMOOTH);     else glShadeModel(GL_FLAT);
 
     if(pglLightParams->s_bLocalView) glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER ,0);
-    else                           glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER ,1);
+    else                             glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER ,1);
 
     glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 }
-
-
 
 
 void ThreeDWidget::GLDrawAxes(double length, QColor AxisColor, int AxisStyle, int AxisWidth)
@@ -501,7 +520,7 @@ void ThreeDWidget::GLDrawAxes(double length, QColor AxisColor, int AxisStyle, in
     glEnd();
     glDisable (GL_LINE_STIPPLE);
     //XLabel
-    renderText( l, 0.0, 0.0, "X", s_pMainFrame->m_TextFont);
+//    glRenderText(l, 0.0, 0.0, "X");
 
 
     // Y axis____________
@@ -522,7 +541,7 @@ void ThreeDWidget::GLDrawAxes(double length, QColor AxisColor, int AxisStyle, in
     glEnd();
     glDisable (GL_LINE_STIPPLE);
     //Y Label
-    renderText( 0.0, l, 0.0, "Y", s_pMainFrame->m_TextFont);
+//    glRenderText(0.0, l, 0.0, "Y");
 
 
     // Z axis____________
@@ -543,7 +562,7 @@ void ThreeDWidget::GLDrawAxes(double length, QColor AxisColor, int AxisStyle, in
     glEnd();
     glDisable (GL_LINE_STIPPLE);
     //ZLabel
-    renderText( 0.0, 0.0, l, "Z", s_pMainFrame->m_TextFont);
+//    glRenderText( 0.0, 0.0, l, "Z");
 
     glDisable (GL_LINE_STIPPLE);
 }
@@ -551,7 +570,6 @@ void ThreeDWidget::GLDrawAxes(double length, QColor AxisColor, int AxisStyle, in
 
 void ThreeDWidget::CreateArcballList(ArcBall &ArcBall, double GLScale)
 {
-    int row, col, NumAngles, NumCircles;
     double R, lat_incr, lon_incr, phi, theta;
     ArcBall.GetMatrix();
     Vector3d eye(0.0,0.0,1.0);
@@ -567,18 +585,18 @@ void ThreeDWidget::CreateArcballList(ArcBall &ArcBall, double GLScale)
 
         R = ArcBall.ab_sphere;
 
-        NumAngles  = 50;
-        NumCircles =  6;
+        int NumAngles  = 50;
+        int NumCircles =  6;
         lat_incr =  90.0 / NumAngles;
         lon_incr = 360.0 / NumCircles;
 
-        for (col = 0; col < NumCircles; col++)
+        for (int col = 0; col < NumCircles; col++)
         {
             glBegin(GL_LINE_STRIP);
             {
                 phi = (col * lon_incr) * PI/180.0;
 
-                for (row = 1; row < NumAngles-1; row++)
+                for (int row = 1; row < NumAngles-1; row++)
                 {
                     theta = (row * lat_incr) * PI/180.0;
                     glVertex3d(R*cos(phi)*cos(theta)*GLScale, R*sin(theta)*GLScale, R*sin(phi)*cos(theta)*GLScale);
@@ -589,7 +607,7 @@ void ThreeDWidget::CreateArcballList(ArcBall &ArcBall, double GLScale)
             {
                 phi = (col * lon_incr ) * PI/180.0;
 
-                for (row = 1; row < NumAngles-1; row++)
+                for (int row = 1; row < NumAngles-1; row++)
                 {
                     theta = -(row * lat_incr) * PI/180.0;
                     glVertex3d(R*cos(phi)*cos(theta)*GLScale, R*sin(theta)*GLScale, R*sin(phi)*cos(theta)*GLScale);
@@ -602,7 +620,7 @@ void ThreeDWidget::CreateArcballList(ArcBall &ArcBall, double GLScale)
         glBegin(GL_LINE_STRIP);
         {
             theta = 0.;
-            for(col=1; col<35; col++)
+            for(int col=1; col<35; col++)
             {
                 phi = (0.0 + double(col)*360.0/72.0) * PI/180.0;
                 glVertex3d(R * cos(phi) * cos(theta)*GLScale, R * sin(theta)*GLScale, R * sin(phi) * cos(theta)*GLScale);
@@ -613,7 +631,7 @@ void ThreeDWidget::CreateArcballList(ArcBall &ArcBall, double GLScale)
         glBegin(GL_LINE_STRIP);
         {
             theta = 0.;
-            for(col=1; col<35; col++)
+            for(int col=1; col<35; col++)
             {
                 phi = (0.0 + double(col)*360.0/72.0) * PI/180.0;
                 glVertex3d(R * cos(-phi) * cos(theta)*GLScale, R * sin(theta)*GLScale, R * sin(-phi) * cos(theta)*GLScale);
@@ -630,7 +648,7 @@ void ThreeDWidget::CreateArcballList(ArcBall &ArcBall, double GLScale)
         glColor3d(0.3,0.1,.2);
         glLineWidth(2.0);
 
-        NumAngles  = 10;
+        int NumAngles  = 10;
 
         lat_incr = 30.0 / NumAngles;
         lon_incr = 30.0 / NumAngles;
@@ -639,7 +657,7 @@ void ThreeDWidget::CreateArcballList(ArcBall &ArcBall, double GLScale)
         {
             phi = 0.0;//longitude
 
-            for (row = -NumAngles; row < NumAngles; row++)
+            for (int row = -NumAngles; row < NumAngles; row++)
             {
                 theta = (row * lat_incr) * PI/180.0;
                 glVertex3d(R*cos(phi)*cos(theta)*GLScale, R*sin(theta)*GLScale, R*sin(phi)*cos(theta)*GLScale);
@@ -650,7 +668,7 @@ void ThreeDWidget::CreateArcballList(ArcBall &ArcBall, double GLScale)
         glBegin(GL_LINE_STRIP);
         {
             theta = 0.;
-            for(col=-NumAngles; col<NumAngles; col++)
+            for(int col=-NumAngles; col<NumAngles; col++)
             {
                 phi = (0.0 + double(col)*30.0/NumAngles) * PI/180.0;
                 glVertex3d(R * cos(phi) * cos(theta)*GLScale, R * sin(theta)*GLScale, R * sin(phi) * cos(theta)*GLScale);
@@ -662,7 +680,7 @@ void ThreeDWidget::CreateArcballList(ArcBall &ArcBall, double GLScale)
 }
 
 
-void ThreeDWidget::GLCreateCylinderList(int GLList, QColor cr, double rbase, double rtop, double hbase, double htop, int NumArcs, int NumHeight)
+void ThreeDWidget::GLCreateCylinderList(GLuint GLList, QColor cr, double rbase, double rtop, double hbase, double htop, int NumArcs, int NumHeight)
 {
     //
     // Create a list for a vertical cone
@@ -938,7 +956,7 @@ void ThreeDWidget::GLDrawCube(Vector3d Pt, double side)
 
 
 
-void ThreeDWidget::GLCreateCubeList(int GLList, double side)
+void ThreeDWidget::GLCreateCubeList(GLuint GLList, double side)
 {
     //
     // Render the sphere representing the light or point masses
@@ -960,7 +978,7 @@ void ThreeDWidget::GLCreateCubeList(int GLList, double side)
 
 
 
-void ThreeDWidget::GLCreateSphereList(int GLList, double radius, int NumLongitudes, int NumLatitudes)
+void ThreeDWidget::GLCreateSphereList(GLuint GLList, double radius, int NumLongitudes, int NumLatitudes)
 {
     //
     // Render the sphere representing the light or point masses
@@ -1092,19 +1110,17 @@ void ThreeDWidget::ClientToGL(QPoint const &point, Vector3d &real)
 }
 
 
-
-void ThreeDWidget::GLToClient(Vector3d const &real, QPoint &point)
+void ThreeDWidget::GL2dToClient(Vector3d const &real, QPoint &point)
 {
     //
     //converts an opengl 2D vector to screen client coordinates
     //
-    double dx, dy, h2, w2;
 
-    h2 = m_GLViewRect.height() /2.0;
-    w2 = m_GLViewRect.width()  /2.0;
+    double h2 = m_GLViewRect.height() /2.0;
+    double w2 = m_GLViewRect.width()  /2.0;
 
-    dx = ( real.x + w2)/2.0;
-    dy = (-real.y + h2)/2.0;
+    double dx = ( real.x + w2)/2.0;
+    double dy = (-real.y + h2)/2.0;
 
     if(w2>h2)
     {
@@ -1117,7 +1133,6 @@ void ThreeDWidget::GLToClient(Vector3d const &real, QPoint &point)
         point.setY(int(dy * geometry().height()));
     }
 }
-
 
 
 void ThreeDWidget::GLInverseMatrix(double MatIn[][4], double MatOut[][4])
@@ -1133,3 +1148,241 @@ void ThreeDWidget::GLInverseMatrix(double MatIn[][4], double MatOut[][4])
         }
     }
 }
+
+
+QPoint ThreeDWidget::worldToScreen(Vector3d v)
+{
+    QVector4D v4(v.xf(), v.yf(), v.zf(), 1.0);
+
+    QMatrix4x4 mvMatrix, pMatrix, pvmMatrix;
+
+    QOpenGLFunctions glFuncs(QOpenGLContext::currentContext());
+
+    glFuncs.glGetFloatv(GL_MODELVIEW_MATRIX, mvMatrix.data());
+    glFuncs.glGetFloatv(GL_PROJECTION_MATRIX, pMatrix.data());
+
+    pvmMatrix = pMatrix * mvMatrix;
+
+    QVector4D vS = pvmMatrix * v4;
+    QPoint pt(int((vS.x()+1.0f)*width()/2), int((1.0f-vS.y())*height()/2));
+    return pt;
+}
+
+
+void ThreeDWidget::glRenderText(double x, double y, double z, const QString & str, QColor textColor)
+{
+    QPoint point = worldToScreen(Vector3d(x,y,z));
+    point *= devicePixelRatio();
+    if(!m_PixText.isNull())
+    {
+        QPainter paint(&m_PixText);
+        paint.save();
+        QPen textPen(textColor);
+        paint.setPen(textPen);
+        QFont font(paint.font());
+        font.setPointSize(paint.font().pointSize()*devicePixelRatio());
+        paint.setFont(font);
+        paint.drawText(point, str);
+        paint.restore();
+    }
+}
+
+
+void ThreeDWidget::glRenderText(int x, int y, const QString & str, QColor textColor)
+{
+    if(!m_PixText.isNull())
+    {
+        QPainter paint(&m_PixText);
+        paint.save();
+        QPen textPen(textColor);
+        paint.setPen(textPen);
+        QFont font(paint.font());
+        font.setPointSize(paint.font().pointSize()*devicePixelRatio());
+        paint.setFont(font);
+        paint.drawText(x*devicePixelRatio(),y*devicePixelRatio(), str);
+        paint.restore();
+    }
+}
+
+
+void ThreeDWidget::renderText(int x, int y, QString const &text)
+{
+    QPainter painter(&m_PixText);
+    painter.drawText(x,y,text);
+}
+
+
+void ThreeDWidget::setBoatData(QString const &data)
+{
+    //reset style, just in case settings have changed
+    setLabelFont();
+    m_pctrlBtData->setText(data);
+    showEvent(nullptr);
+}
+
+
+void ThreeDWidget::setBoatOppData(QString const &data)
+{
+    //reset style, just in case settings have changed
+    setLabelFont();
+
+    m_pctrlBtOppData->setText(data);
+    showEvent(nullptr);
+}
+
+
+void ThreeDWidget::showEvent(QShowEvent *)
+{
+    m_pctrlBtData->adjustSize();
+    QPoint pos1(5, height()-m_pctrlBtData->height()-5);
+    m_pctrlBtData->move(pos1);
+
+    m_pctrlBtOppData->adjustSize();
+    QPoint pos2(width()-5-m_pctrlBtOppData->width(), height()-m_pctrlBtOppData->height()-5);
+    m_pctrlBtOppData->move(pos2);
+}
+
+
+void ThreeDWidget::setLabelFont()
+{
+    QPalette palette;
+    palette.setColor(QPalette::WindowText, s_pMainFrame->m_TextColor);
+
+    m_pctrlBtData->setFont(s_pMainFrame->m_TextFont);
+    m_pctrlBtData->setPalette(palette);
+
+    m_pctrlBtOppData->setFont(s_pMainFrame->m_TextFont);
+    m_pctrlBtOppData->setPalette(palette);
+
+}
+
+
+
+/**
+ * Paints and overlays the labels associated to the Cp color scale in the 3D view
+ * @param painter the painter associated to the 3D widget
+ */
+void ThreeDWidget::PaintCpLegendText()
+{
+    if (!s_pSail7->m_b3DCp || !s_pSail7->m_pCurBoatOpp ) return;
+
+    QString strong;
+
+    if(m_PixText.isNull())
+        return;
+
+    m_PixText.fill(Qt::transparent);
+
+    QRect pixrect = m_PixText.rect();
+
+    QPainter painter(&m_PixText);
+    painter.save();
+
+    painter.setFont(s_pMainFrame->m_TextFont);
+    painter.setRenderHint(QPainter::Antialiasing);
+
+    QFontMetrics fm(s_pMainFrame->m_TextFont);
+    int back = fm.averageCharWidth() * 5;
+
+    double h = pixrect.height();
+    double y0 = 2.*h/5.0;
+
+    int ixPos  = pixrect.width()-back;
+
+    int dy     = int(h/40.0);
+    int iyPos  = int(y0 - 12.0*dy);
+
+
+    double range = GL3DScales::s_LegendMax - GL3DScales::s_LegendMin;
+    double delta = range / 20;
+
+
+    QPen textPen(s_pMainFrame->m_TextColor);
+    painter.setPen(textPen);
+    painter.setRenderHint(QPainter::Antialiasing);
+
+    strong = "Cp";
+    int labellength = fm.width(strong)+5;
+    painter.drawText(ixPos-labellength, iyPos-dy, strong);
+
+    for (int i=0; i<=20; i ++)
+    {
+        double f = GL3DScales::s_LegendMax - double(i) * delta;
+        strong = QString("%1").arg(f, 5,'f',2);
+        labellength = (fm.width(strong)+5);
+        painter.drawText(ixPos-labellength, iyPos+i*dy, strong);
+    }
+
+    painter.restore();
+}
+
+/**
+ * Paints the labels associated to the Panel forces color scale in the 3D view
+ * @param painter the painter to write on
+ */
+void ThreeDWidget::PaintPanelForceLegendText(double rmin, double rmax)
+{
+    if(!s_pSail7->m_pCurBoatPolar || !s_pSail7->m_pCurBoatOpp) return;
+    if(!s_pSail7->m_bPanelForce) return;
+
+    if(m_PixText.isNull())
+        return;
+
+    QString strForce, strong;
+    m_PixText.fill(Qt::transparent);
+
+    QRect pixrect = m_PixText.rect();
+
+    int labellength;
+    double f=0;
+    double range=0, delta=0;
+
+    GetForceUnit(strForce, s_pMainFrame->m_ForceUnit);
+
+    QPainter painter(&m_PixText);
+
+    painter.save();
+    painter.setFont(s_pMainFrame->m_TextFont);
+    painter.setRenderHint(QPainter::Antialiasing);
+    QPen textPen(s_pMainFrame->m_TextColor);
+    painter.setPen(textPen);
+
+
+    //define the range of values to set the colors in accordance
+    range = rmax - rmin;
+
+
+    QFontMetrics fm(s_pMainFrame->m_TextFont);
+    int back = fm.averageCharWidth() * 5;
+
+    double h = double(pixrect.height());
+    double y0 = 2.*h/5.0;
+
+
+    int ixPos, iyPos, dy;
+
+    ixPos  = pixrect.width()-back;
+
+    dy     = int(h/40.0);
+    iyPos  = int(y0 - 12.0*dy);
+
+    delta = range / 20.0;
+
+
+    labellength = fm.width(strForce)+5;
+    painter.drawText(ixPos-labellength, iyPos-dy, strForce);
+
+
+    for (int i=0; i<=20; i++)
+    {
+        f = rmin + double(i) * delta;
+        strong = QString("%1").arg(f, 5,'f',2);
+        labellength = (fm.width(strong)+5);
+        painter.drawText(ixPos-labellength, iyPos+i*dy, strong);
+    }
+
+    painter.restore();
+}
+
+
+

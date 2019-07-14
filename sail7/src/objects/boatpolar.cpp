@@ -293,18 +293,18 @@ bool BoatPolar::SerializeBoatPlr(QDataStream &ar, bool bIsStoring)
         ar >> n;
         for (i=0; i<n; i++)
         {
-            ar >> f;                m_Ctrl.append(f);
+            ar >> f;                m_Ctrl.append(double(f));
             if(PolarFormat>=100391)
             {
-                ar >> f >> g;       m_Lift.append(f); m_Drag.append(g);
+                ar >> f >> g;       m_Lift.append(double(f)); m_Drag.append(double(g));
             }
             else
             {
                 m_Lift.append(0.0); m_Drag.append(0.0);
             }
-            ar >>f>>g>>h;             m_FFFx.append(f);  m_FFFy.append(g);  m_FFFz.append(h);
-            ar >>f>>g>>h;             m_Fx.append(f);  m_Fy.append(g);  m_Fz.append(h);
-            ar >>f>>g>>h;             m_Mx.append(f);  m_My.append(g);  m_Mz.append(h);
+            ar >>f>>g>>h;             m_FFFx.append(double(f));  m_FFFy.append(g);        m_FFFz.append(double(h));
+            ar >>f>>g>>h;             m_Fx.append(double(f));    m_Fy.append(double(g));  m_Fz.append(double(h));
+            ar >>f>>g>>h;             m_Mx.append(double(f));    m_My.append(double(g));  m_Mz.append(double(h));
         }
     }
     return true;
@@ -312,11 +312,10 @@ bool BoatPolar::SerializeBoatPlr(QDataStream &ar, bool bIsStoring)
 
 
 
-
-void * BoatPolar::GetBoatPlrVariable(enumPolarVar iVar)
+QList <double> * BoatPolar::GetBoatPlrVariable(enumPolarVar iVar)
 {
     // returns a pointer to the variable array defined by its index iVar
-    void * pVar;
+    QList <double> * pVar;
     switch (iVar)
     {
         case CTRL:
@@ -363,9 +362,6 @@ void * BoatPolar::GetBoatPlrVariable(enumPolarVar iVar)
             break;
         case MZ:
             pVar = &m_Mz;
-            break;
-        default:
-            pVar = &m_Ctrl;
             break;
     }
     return pVar;
