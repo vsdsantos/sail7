@@ -15,7 +15,7 @@
 #include <QVector>
 
 #include "../globals.h"
-#include "../twodwidget.h"
+#include "../view/twodwidget.h"
 #include "../misc/floatedit.h"
 #include "../objects/sail.h"
 #include "../objects/sailsection.h"

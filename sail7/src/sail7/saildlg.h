@@ -29,7 +29,7 @@
 #include "../objects/arcball.h"
 #include "../objects/cubicspline.h"
 #include "../objects/sail.h"
-#include "../threedwidget.h"
+#include "../view/threedwidget.h"
 
 
 class SailDlg : public QDialog

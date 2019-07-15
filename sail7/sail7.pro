@@ -84,8 +84,8 @@ SOURCES += \
     src/sail7/scalesaildlg.cpp \
     src/sail7/sectionviewwidget.cpp \
     src/sail7application.cpp \
-    src/threedwidget.cpp \
-    src/twodwidget.cpp \
+    src/view/threedwidget.cpp \
+    src/view/twodwidget.cpp \
 
 HEADERS  += \
     src/globals.h \
@@ -156,8 +156,8 @@ HEADERS  += \
     src/sail7/scalesaildlg.h \
     src/sail7/sectionviewwidget.h \
     src/sail7application.h \
-    src/threedwidget.h \
-    src/twodwidget.h \
+    src/view/threedwidget.h \
+    src/view/twodwidget.h \
     src/sail7/sailviewwidget.h
 
 RESOURCES += \ 

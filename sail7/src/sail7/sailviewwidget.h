@@ -2,7 +2,7 @@
 #define VIEWWINDOW_H
 
 #include "../objects/sail.h"
-#include "../threedwidget.h"
+#include "../view/threedwidget.h"
 #include <QCheckBox>
 #include <QAction>
 #include <QToolButton>

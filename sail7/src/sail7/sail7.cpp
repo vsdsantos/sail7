@@ -35,7 +35,7 @@
 #include "./gl3dscales.h"
 #include "../globals.h"
 #include "../mainframe.h"
-#include "../twodwidget.h"
+#include "../view/twodwidget.h"
 #include "../objects/nurbssail.h"
 #include "../objects/sailcutsail.h"
 #include "../misc/progressdlg.h"

@@ -13,10 +13,10 @@
 #include <QOpenGLWidget>
 #include <QLabel>
 
-#include "params.h"
-#include "objects/arcball.h"
-#include "objects/rectangle.h"
-#include "misc/gllightdlg.h"
+#include "../params.h"
+#include "../objects/arcball.h"
+#include "../objects/rectangle.h"
+#include "../misc/gllightdlg.h"
 
 class Sail7;
 class MainFrame;
