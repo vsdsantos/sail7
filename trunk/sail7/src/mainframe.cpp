@@ -335,7 +335,7 @@ void MainFrame::CreateActions()
 
     styleAct = new QAction(tr("Preferences"), this);
     styleAct->setStatusTip(tr("Define the color and font options for all views and graphs"));
-    connect(styleAct, SIGNAL(triggered()), this, SLOT(OnStyle()));
+    connect(styleAct, SIGNAL(triggered()), SLOT(OnDisplayOptions()));
 
 
     exportCurGraphAct = new QAction(tr("Export Graph"), this);
@@ -1620,7 +1620,7 @@ void MainFrame::OnSelChangeBoatOpp(int i)
 }
 
 
-void MainFrame::OnStyle()
+void MainFrame::OnDisplayOptions()
 {
     m_DisplaySettingsDlg.move(m_DlgPos);
     m_DisplaySettingsDlg.m_BackgroundColor = m_BackgroundColor;
@@ -1651,6 +1651,8 @@ void MainFrame::OnStyle()
     }
     m_DlgPos = m_DisplaySettingsDlg.pos();
 
+    m_p3DWidget->initializeGL();
+    m_p3DWidget->setLabelFont();
     UpdateView();
 }
 

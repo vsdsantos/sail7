@@ -274,6 +274,8 @@ void ThreeDWidget::paintGL()
 #endif
     setupViewPort(width() * pixelRatio, height() * pixelRatio);
 
+    glClearColor(float(s_pMainFrame->m_BackgroundColor.redF()), float(s_pMainFrame->m_BackgroundColor.greenF()), float(s_pMainFrame->m_BackgroundColor.blueF()), 0.0f);
+
     if(m_iView==GLSAIL7VIEW)
     {
         s_pSail7->GLDraw3D();
@@ -295,8 +297,6 @@ void ThreeDWidget::paintGL()
         pDlg->GLRenderSail();
     }
 }
-
-
 
 
 void ThreeDWidget::setupViewPort(int width, int height)
@@ -1253,7 +1253,6 @@ void ThreeDWidget::setLabelFont()
 
     m_pctrlBtOppData->setFont(s_pMainFrame->m_TextFont);
     m_pctrlBtOppData->setPalette(palette);
-
 }
 
 
