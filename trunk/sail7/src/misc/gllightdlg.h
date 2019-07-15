@@ -30,6 +30,8 @@
 #include <QSlider>
 #include <QSettings>
 
+
+class ThreeDWidget;
 class GLLightDlg : public QDialog
 {
     Q_OBJECT
@@ -85,9 +87,7 @@ private:
     QPushButton *m_pctrlDefaults, *m_pctrlClose;
 
 private:
-    void *m_pGL3dBodyDlg;
-    void *m_pGL3dWingDlg;
-    void *m_p3DWidget;
+    ThreeDWidget *m_p3DWidget;
 
     static float s_Ambient, s_Diffuse, s_Specular;
     static float s_MatAmbient, s_MatDiffuse, s_MatSpecular, s_MatEmission;

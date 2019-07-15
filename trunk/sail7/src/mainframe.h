@@ -23,8 +23,8 @@
 #include <QList>
 #include <QStringList>
 
-#include "twodwidget.h"
-#include "threedwidget.h"
+#include "view/twodwidget.h"
+#include "view/threedwidget.h"
 #include "params.h"
 #include "graph/qgraph.h"
 #include "objects/panel.h"

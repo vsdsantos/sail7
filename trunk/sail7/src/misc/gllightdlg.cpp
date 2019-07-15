@@ -19,14 +19,17 @@
 
 *****************************************************************************/
 
-#include "gllightdlg.h"
-#include "../threedwidget.h"
+
 #include <QGroupBox>
 #include <QGridLayout>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QtDebug>
+
+
+#include "gllightdlg.h"
+#include "../view/threedwidget.h"
 
 float GLLightDlg::s_Ambient, GLLightDlg::s_Diffuse, GLLightDlg::s_Specular;
 float GLLightDlg::s_MatAmbient, GLLightDlg::s_MatDiffuse, GLLightDlg::s_MatSpecular, GLLightDlg::s_MatEmission;
@@ -41,8 +44,6 @@ bool GLLightDlg::s_bLight;
 
 GLLightDlg::GLLightDlg()
 {
-    m_pGL3dBodyDlg = m_pGL3dWingDlg = nullptr;
-
     m_Size = 5.0;
     SetDefaults(m_Size);
 
@@ -293,12 +294,11 @@ void GLLightDlg::Apply()
 {
     ReadParams();
 
-    ThreeDWidget *p3DWidget = (ThreeDWidget*)m_p3DWidget;
-    p3DWidget->update();
+    m_p3DWidget->update();
 }
 
 
-void GLLightDlg::OnSlider(int pos)
+void GLLightDlg::OnSlider(int )
 {
     Apply();
 }
@@ -312,13 +312,11 @@ void GLLightDlg::OnChanged()
 
 void GLLightDlg::OnDefaults()
 {
-    ThreeDWidget *p3DWidget = (ThreeDWidget*)m_p3DWidget;
-
     SetDefaults(m_Size);
 
     SetParams();
     SetEnabled();
-    p3DWidget->update();
+    m_p3DWidget->update();
 }
 
 
@@ -327,14 +325,14 @@ void GLLightDlg::ReadParams(void)
 {
     s_bLight = m_pctrlLight->isChecked();
 
-    s_Red     = (float)m_pctrlRed->value()    /100.0f;
-    s_Green   = (float)m_pctrlGreen->value()  /100.0f;
-    s_Blue    = (float)m_pctrlBlue->value()   /100.0f;
+    s_Red     = float(m_pctrlRed->value())    /100.0f;
+    s_Green   = float(m_pctrlGreen->value())  /100.0f;
+    s_Blue    = float(m_pctrlBlue->value())   /100.0f;
 
-    s_MatAmbient    = (float)m_pctrlMatAmbient->value()    /100.0f;
-    s_MatSpecular   = (float)m_pctrlMatSpecular->value()   /100.0f;
-    s_MatDiffuse    = (float)m_pctrlMatDiffuse->value()    /100.0f;
-    s_MatEmission   = (float)m_pctrlMatEmission->value()   /100.0f;
+    s_MatAmbient    = float(m_pctrlMatAmbient->value())    /100.0f;
+    s_MatSpecular   = float(m_pctrlMatSpecular->value())   /100.0f;
+    s_MatDiffuse    = float(m_pctrlMatDiffuse->value())    /100.0f;
+    s_MatEmission   = float(m_pctrlMatEmission->value())   /100.0f;
     s_iMatShininess = m_pctrlMatShininess->value();
 
     s_bCullFaces     = m_pctrlCullFaces->isChecked();
@@ -345,13 +343,13 @@ void GLLightDlg::ReadParams(void)
     s_bDepthTest     = m_pctrlDepthTest->isChecked();
 
     float factor = 10.0f;
-    s_XLight  = ((float)m_pctrlXLight->value()-50.0f)/factor;
-    s_YLight  = ((float)m_pctrlYLight->value()-50.0f)/factor;
-    s_ZLight  = ((float)m_pctrlZLight->value())/factor;
+    s_XLight  = (float(m_pctrlXLight->value())-50.0f)/factor;
+    s_YLight  = (float(m_pctrlYLight->value())-50.0f)/factor;
+    s_ZLight  =  float(m_pctrlZLight->value())/factor;
 
-    s_Ambient     = (float)m_pctrlAmbient->value()  / 100.0f;
-    s_Diffuse     = (float)m_pctrlDiffuse->value()  / 100.0f;
-    s_Specular    = (float)m_pctrlSpecular->value() / 100.0f;
+    s_Ambient     = float(m_pctrlAmbient->value())  / 100.0f;
+    s_Diffuse     = float(m_pctrlDiffuse->value())  / 100.0f;
+    s_Specular    = float(m_pctrlSpecular->value()) / 100.0f;
 }
 
 
@@ -359,23 +357,23 @@ void GLLightDlg::SetParams(void)
 {
     m_pctrlLight->setChecked(s_bLight);
 
-    m_pctrlAmbient->setValue(   (int)(s_Ambient  *100.0));
-    m_pctrlDiffuse->setValue(   (int)(s_Diffuse  *100.0));
-    m_pctrlSpecular->setValue(  (int)(s_Specular *100.0));
+    m_pctrlAmbient->setValue(   int(s_Ambient  *100.0f));
+    m_pctrlDiffuse->setValue(   int(s_Diffuse  *100.0f));
+    m_pctrlSpecular->setValue(  int(s_Specular *100.0f));
 
     float factor = 10.0f;
-    m_pctrlXLight->setValue((int)((s_XLight+5.0)*factor));
-    m_pctrlYLight->setValue((int)((s_YLight+5.0)*factor));
-    m_pctrlZLight->setValue((int)((s_ZLight)*factor));
+    m_pctrlXLight->setValue(int((s_XLight+5.0f)*factor));
+    m_pctrlYLight->setValue(int((s_YLight+5.0f)*factor));
+    m_pctrlZLight->setValue(int((s_ZLight)*factor));
 
-    m_pctrlRed->setValue(  (int)(s_Red  *100.0));
-    m_pctrlGreen->setValue((int)(s_Green*100.0));
-    m_pctrlBlue->setValue( (int)(s_Blue *100.0));
+    m_pctrlRed->setValue(  int(s_Red  *100.0f));
+    m_pctrlGreen->setValue(int(s_Green*100.0f));
+    m_pctrlBlue->setValue( int(s_Blue *100.0f));
 
-    m_pctrlMatAmbient->setValue(   (int)(s_MatAmbient *100.0));
-    m_pctrlMatDiffuse->setValue(   (int)(s_MatDiffuse *100.0));
-    m_pctrlMatSpecular->setValue(  (int)(s_MatSpecular*100.0));
-    m_pctrlMatEmission->setValue(  (int)(s_MatEmission*100.0));
+    m_pctrlMatAmbient->setValue(   int(s_MatAmbient *100.0f));
+    m_pctrlMatDiffuse->setValue(   int(s_MatDiffuse *100.0f));
+    m_pctrlMatSpecular->setValue(  int(s_MatSpecular*100.0f));
+    m_pctrlMatEmission->setValue(  int(s_MatEmission*100.0f));
     m_pctrlMatShininess->setValue(s_iMatShininess);
 
     m_pctrlCullFaces->setChecked(s_bCullFaces);
@@ -393,20 +391,20 @@ bool GLLightDlg::LoadSettings(QSettings *pSettings)
     pSettings->beginGroup("GLLight");
     {
     //  we're reading/loading
-        s_Diffuse           = pSettings->value("Diffuse",0.26).toDouble();
-        s_Ambient           = pSettings->value("Ambient",0.18).toDouble();
-        s_Specular          = pSettings->value("Specular",0.05).toDouble();
-        s_MatAmbient        = pSettings->value("MatAmbient",-0.51).toDouble();
-        s_MatDiffuse        = pSettings->value("MatDiffuse",-0.43).toDouble();
-        s_MatSpecular       = pSettings->value("MatSpecular",-0.08).toDouble();
-        s_MatEmission       = pSettings->value("MatEmission",-0.04).toDouble();
-        s_iMatShininess     = pSettings->value("MatShininess",0).toDouble();
-        s_XLight            = pSettings->value("XLight", 0.56).toDouble();
-        s_YLight            = pSettings->value("YLight", 0.02).toDouble();
-        s_ZLight            = pSettings->value("ZLight", 0.68).toDouble();
-        s_Red               = pSettings->value("RedLight",1.0).toDouble();
-        s_Green             = pSettings->value("GreenLight",1.0).toDouble();
-        s_Blue              = pSettings->value("BlueLight",1.0).toDouble();
+        s_Diffuse           = pSettings->value("Diffuse",0.26f).toFloat();
+        s_Ambient           = pSettings->value("Ambient",0.18f).toFloat();
+        s_Specular          = pSettings->value("Specular",0.05f).toFloat();
+        s_MatAmbient        = pSettings->value("MatAmbient",-0.51f).toFloat();
+        s_MatDiffuse        = pSettings->value("MatDiffuse",-0.43f).toFloat();
+        s_MatSpecular       = pSettings->value("MatSpecular",-0.08f).toFloat();
+        s_MatEmission       = pSettings->value("MatEmission",-0.04f).toFloat();
+        s_iMatShininess     = pSettings->value("MatShininess",0).toInt();
+        s_XLight            = pSettings->value("XLight", 0.56f).toFloat();
+        s_YLight            = pSettings->value("YLight", 0.02f).toFloat();
+        s_ZLight            = pSettings->value("ZLight", 0.68f).toFloat();
+        s_Red               = pSettings->value("RedLight",1.0f).toFloat();
+        s_Green             = pSettings->value("GreenLight",1.0f).toFloat();
+        s_Blue              = pSettings->value("BlueLight",1.0f).toFloat();
         s_bCullFaces        = pSettings->value("CullFaces",false).toBool();
         s_bSmooth           = pSettings->value("Smooth",true).toBool();
         s_bShade            = pSettings->value("Shade",true).toBool();
@@ -420,7 +418,7 @@ bool GLLightDlg::LoadSettings(QSettings *pSettings)
 }
 
 
-void GLLightDlg::SetDefaults(double size)
+void GLLightDlg::SetDefaults(double )
 {
     s_Red   = 1.0f;
     s_Green = 1.0f;
@@ -436,9 +434,9 @@ void GLLightDlg::SetDefaults(double size)
     s_MatEmission  = -0.06f;
     s_iMatShininess = 0;
 
-    s_XLight   =  0.56f * m_Size;//.2
-    s_YLight   =  0.02f * m_Size;//1.2
-    s_ZLight   =  5.0f * m_Size;//20
+    s_XLight   =  0.56f * float(m_Size);//.2
+    s_YLight   =  0.02f * float(m_Size);//1.2
+    s_ZLight   =  5.0f  * float(m_Size);//20
 
     s_bLight = true;
     s_bCullFaces = false;

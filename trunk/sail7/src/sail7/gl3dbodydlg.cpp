@@ -21,7 +21,7 @@
 
 
 #include "../mainframe.h"
-#include "../threedwidget.h"
+#include "../view/threedwidget.h"
 #include "../globals.h"
 #include "../misc/linepickerdlg.h"
 #include "../misc/gllightdlg.h"

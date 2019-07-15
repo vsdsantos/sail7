@@ -11,13 +11,14 @@
 #include <math.h>
 #include <QtDebug>
 
-#include "mainframe.h"
-#include "sail7/sail7.h"
-#include "sail7/sailviewwidget.h"
-#include "sail7/gl3dbodydlg.h"
+
 #include "threedwidget.h"
-#include "globals.h"
-#include "sail7/gl3dscales.h"
+#include "../mainframe.h"
+#include "../sail7/sail7.h"
+#include "../sail7/sailviewwidget.h"
+#include "../sail7/gl3dbodydlg.h"
+#include "../globals.h"
+#include "../sail7/gl3dscales.h"
 
 Sail7 *ThreeDWidget::s_pSail7 = nullptr;
 MainFrame *ThreeDWidget::s_pMainFrame = nullptr;

@@ -21,9 +21,8 @@
 *****************************************************************************/
 
 
-#include "../threedwidget.h"
+#include "../view/threedwidget.h"
 #include "arcball.h"
-#include <QtOpenGL>
 #include "math.h"
 
 

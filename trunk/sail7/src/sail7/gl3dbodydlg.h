@@ -40,7 +40,7 @@
 #include "../misc/floatedit.h"
 #include "../misc/linebutton.h"
 #include "../objects/body.h"
-#include "../threedwidget.h"
+#include "../view/threedwidget.h"
 
 
 class MainFrame;

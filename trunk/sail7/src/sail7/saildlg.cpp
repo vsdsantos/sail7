@@ -27,7 +27,7 @@
 #include "sailviewwidget.h"
 #include "../mainframe.h"
 #include "../globals.h"
-#include "../threedwidget.h"
+#include "../view/threedwidget.h"
 #include "../objects/nurbssail.h"
 #include "../objects/sailcutsail.h"
 #include "sail7.h"

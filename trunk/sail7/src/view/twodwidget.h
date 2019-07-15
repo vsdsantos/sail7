@@ -12,7 +12,7 @@
 #define TwoDWidget_H
 
 #include <QWidget>
-#include "params.h"
+#include "../params.h"
 
 class MainFrame;
 class Sail7;

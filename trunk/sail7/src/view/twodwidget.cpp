@@ -11,11 +11,11 @@
 //#include <QtGui>
 #include <QMenu>
 #include <math.h>
-#include "mainframe.h"
-#include "graph/qgraph.h"
-#include "graph/curve.h"
-#include "sail7/sail7.h"
-#include "sail7/saildlg.h"
+#include "../mainframe.h"
+#include "../graph/qgraph.h"
+#include "../graph/curve.h"
+#include "../sail7/sail7.h"
+#include "../sail7/saildlg.h"
 #include "twodwidget.h"
 
 MainFrame *TwoDWidget::s_pMainFrame=nullptr;
