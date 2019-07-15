@@ -118,7 +118,7 @@ class MainFrame : public QMainWindow
         void OnSelChangeBoatOpp(int i);
         void OnSelChangeBoatPolar(int i);
         void OnSaveProject();
-        void OnStyle();
+        void OnDisplayOptions();
         void OnUnits();
         void openRecentFile();
 
