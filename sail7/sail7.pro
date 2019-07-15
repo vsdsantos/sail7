@@ -80,10 +80,13 @@ SOURCES += \
     src/sail7/saildlg.cpp \
     src/sail7/saildomdoc.cpp \
     src/sail7/sailtabledelegate.cpp \
-    src/sail7/sailviewwidget.cpp \
+    src/sail7/sailviewwt.cpp \
     src/sail7/scalesaildlg.cpp \
     src/sail7/sectionviewwidget.cpp \
     src/sail7application.cpp \
+    src/view/glhullview.cpp \
+    src/view/glsail7view.cpp \
+    src/view/glsailview.cpp \
     src/view/threedwidget.cpp \
     src/view/twodwidget.cpp \
 
@@ -153,12 +156,15 @@ HEADERS  += \
     src/sail7/saildlg.h \
     src/sail7/saildomdoc.h \
     src/sail7/sailtabledelegate.h \
+    src/sail7/sailviewwt.h \
     src/sail7/scalesaildlg.h \
     src/sail7/sectionviewwidget.h \
     src/sail7application.h \
+    src/view/glhullview.h \
+    src/view/glsail7view.h \
+    src/view/glsailview.h \
     src/view/threedwidget.h \
-    src/view/twodwidget.h \
-    src/sail7/sailviewwidget.h
+    src/view/twodwidget.h
 
 RESOURCES += \ 
     images.qrc \

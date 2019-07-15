@@ -43,13 +43,14 @@
 
 class MainFrame;
 class TwoDWidget;
-class ThreeDWidget;
+class glSail7View;
 
 class Sail7 : public QWidget
 {
     friend class MainFrame;
     friend class TwoDWidget;
     friend class ThreeDWidget;
+    friend class glSail7View;
     friend class GL3DScales;
     friend class GLLightDlg;
     friend class SailPolarDlg;
@@ -59,7 +60,7 @@ class Sail7 : public QWidget
     friend class Boat;
     friend class DisplaySettingsDlg;
     friend class SailDlg;
-    friend class SailViewWidget;
+    friend class SailViewWt;
     friend class GL3dBodyDlg;
 
     Q_OBJECT
@@ -160,7 +161,7 @@ class Sail7 : public QWidget
 
         static MainFrame *s_pMainFrame;
         static TwoDWidget *s_p2DWidget;
-        static ThreeDWidget *s_p3dWidget;
+        static glSail7View *s_pglSail7View;
 
         //____________________Methods________________________________________
         void contextMenuEvent (QContextMenuEvent * event);

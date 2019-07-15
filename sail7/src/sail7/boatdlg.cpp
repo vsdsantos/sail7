@@ -517,7 +517,7 @@ void BoatDlg::OnEditHull()
     //Get a pointer to the currently selected Hull
     int iSelect = m_pctrlHullTable->currentIndex().row();
     if(iSelect<0 || iSelect>=m_pBoat->m_poaHull.size()) return;
-    Body *pCurHull = (Body*)m_pBoat->m_poaHull.at(iSelect);
+    Body *pCurHull = m_pBoat->m_poaHull.at(iSelect);
 
     Body memBody;
     memBody.Duplicate(pCurHull);

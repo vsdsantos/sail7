@@ -1,28 +1,38 @@
-#include "sailviewwidget.h"
-#include "sail7.h"
-#include "saildlg.h"
-#include "../mainframe.h"
-#include "../globals.h"
+/****************************************************************************
+
+    SailViewWt Class
+    Copyright (C) 2019 Andre Deperrois
+    (C) All rights reserved
+
+*****************************************************************************/
+
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QtDebug>
 
-
-MainFrame *SailViewWidget::s_pMainFrame;
-Sail7 *SailViewWidget::s_pSail7;
-SailDlg *SailViewWidget::s_pSailDlg;
-
-QPoint SailViewWidget::s_WindowPos=QPoint(500,100);
-QSize  SailViewWidget::s_WindowSize = QSize(500,400);
-bool SailViewWidget::s_bWindowMaximized = false;
+#include "sailviewwt.h"
+#include "sail7.h"
+#include "saildlg.h"
+#include "../mainframe.h"
+#include "../globals.h"
+#include "../view/glsailview.h"
 
 
-bool SailViewWidget::s_bAxes = true;
-bool SailViewWidget::s_bSurfaces = true;
-bool SailViewWidget::s_bOutline = true;
-bool SailViewWidget::s_bCtrlPoints = true;
-bool SailViewWidget::s_bVLMPanels = true;
-bool SailViewWidget::s_bglLight = true;
+MainFrame *SailViewWt::s_pMainFrame;
+Sail7 *SailViewWt::s_pSail7;
+SailDlg *SailViewWt::s_pSailDlg;
+
+QPoint SailViewWt::s_WindowPos=QPoint(500,100);
+QSize  SailViewWt::s_WindowSize = QSize(500,400);
+bool SailViewWt::s_bWindowMaximized = false;
+
+
+bool SailViewWt::s_bAxes = true;
+bool SailViewWt::s_bSurfaces = true;
+bool SailViewWt::s_bOutline = true;
+bool SailViewWt::s_bCtrlPoints = true;
+bool SailViewWt::s_bVLMPanels = true;
+bool SailViewWt::s_bglLight = true;
 
 
 #define SECTIONHIGHLIGHT 6779
@@ -33,7 +43,7 @@ bool SailViewWidget::s_bglLight = true;
 #define SIDEPOINTS 23
 
 
-SailViewWidget::SailViewWidget()
+SailViewWt::SailViewWt() : QWidget()
 {
     setWindowTitle("Sail view");
     setWindowFlags(Qt::Dialog);
@@ -60,7 +70,7 @@ SailViewWidget::SailViewWidget()
 }
 
 
-void SailViewWidget::Connect()
+void SailViewWt::Connect()
 {
     connect(m_pctrlIso, SIGNAL(clicked()),this, SLOT(On3DIso()));
     connect(m_pctrlX, SIGNAL(clicked()),this, SLOT(On3DFront()));
@@ -78,7 +88,7 @@ void SailViewWidget::Connect()
 }
 
 
-void SailViewWidget::InitDialog(Sail *pSail)
+void SailViewWt::InitDialog(Sail *pSail)
 {
     m_pSail = pSail;
     m_pctrlSurfaces->setChecked(s_bSurfaces);
@@ -95,18 +105,18 @@ void SailViewWidget::InitDialog(Sail *pSail)
 
 
 
-void SailViewWidget::SetupLayout()
+void SailViewWt::SetupLayout()
 {
     setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 
     QVBoxLayout *MainLayout = new QVBoxLayout;
     {
-        m_p3DWidget = new ThreeDWidget(this);
-        m_p3DWidget->m_iView = GLSAILVIEW;
-        m_p3DWidget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-        m_p3DWidget->setMinimumWidth(200);
-        m_p3DWidget->setMinimumHeight(300);
-        m_ArcBall.m_p3dWidget = m_p3DWidget;
+        m_pglSailView = new glSailView(this);
+        m_pglSailView->m_iView = GLSAILVIEW;
+        m_pglSailView->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+        m_pglSailView->setMinimumWidth(200);
+        m_pglSailView->setMinimumHeight(300);
+        m_ArcBall.m_p3dWidget = m_pglSailView;
 
         QHBoxLayout *AxisViewLayout = new QHBoxLayout;
         {
@@ -151,7 +161,7 @@ void SailViewWidget::SetupLayout()
             AxisViewLayout->addWidget(m_pctrlIso);
             AxisViewLayout->addStretch();
         }
-        MainLayout->addWidget(m_p3DWidget);
+        MainLayout->addWidget(m_pglSailView);
         MainLayout->addLayout(AxisViewLayout);
 
         QHBoxLayout *ViewSettingsLayout = new QHBoxLayout;
@@ -189,7 +199,7 @@ void SailViewWidget::SetupLayout()
 }
 
 
-void SailViewWidget::Set3DScale()
+void SailViewWt::Set3DScale()
 {
     m_glViewportTrans.Set(0.0,0.0,0.0);
     m_bIs3DScaleSet = true;
@@ -214,7 +224,7 @@ void SailViewWidget::Set3DScale()
 
 
 
-void SailViewWidget::OnAxes()
+void SailViewWt::OnAxes()
 {
     s_bAxes = m_pctrlAxes->isChecked();
     //    m_bResetglBody2D = true;
@@ -222,7 +232,7 @@ void SailViewWidget::OnAxes()
 }
 
 
-void SailViewWidget::OnLight()
+void SailViewWt::OnLight()
 {
     s_bglLight = m_pctrlLight->isChecked();
     UpdateView();
@@ -230,7 +240,7 @@ void SailViewWidget::OnLight()
 
 
 
-void SailViewWidget::On3DIso()
+void SailViewWt::On3DIso()
 {
     UncheckPresetViews();
     m_pctrlIso->setChecked(true);
@@ -257,7 +267,7 @@ void SailViewWidget::On3DIso()
 }
 
 
-void SailViewWidget::On3DTop()
+void SailViewWt::On3DTop()
 {
     UncheckPresetViews();
     m_pctrlZ->setChecked(true);
@@ -267,7 +277,7 @@ void SailViewWidget::On3DTop()
 }
 
 
-void SailViewWidget::On3DLeft()
+void SailViewWt::On3DLeft()
 {
     UncheckPresetViews();
     m_pctrlY->setChecked(true);
@@ -277,7 +287,7 @@ void SailViewWidget::On3DLeft()
 }
 
 
-void SailViewWidget::On3DFront()
+void SailViewWt::On3DFront()
 {
     UncheckPresetViews();
     m_pctrlX->setChecked(true);
@@ -290,7 +300,7 @@ void SailViewWidget::On3DFront()
 }
 
 
-void SailViewWidget::On3DReset()
+void SailViewWt::On3DReset()
 {
     m_glViewportTrans.Set(0.0, 0.0, 0.0);
     m_bPickCenter   = false;
@@ -303,7 +313,7 @@ void SailViewWidget::On3DReset()
 }
 
 
-void SailViewWidget::On3DPickCenter()
+void SailViewWt::On3DPickCenter()
 {
     m_bPickCenter = true;
     m_pctrlPickCenter->setChecked(true);
@@ -311,27 +321,27 @@ void SailViewWidget::On3DPickCenter()
 
 
 
-void SailViewWidget::OnPanels()
+void SailViewWt::OnPanels()
 {
     s_bVLMPanels = m_pctrlPanels->isChecked();
     UpdateView();
 }
 
 
-void SailViewWidget::OnSurfaces()
+void SailViewWt::OnSurfaces()
 {
     s_bSurfaces = m_pctrlSurfaces->isChecked();
     UpdateView();
 }
 
 
-void SailViewWidget::OnOutline()
+void SailViewWt::OnOutline()
 {
     s_bOutline = m_pctrlOutline->isChecked();
     UpdateView();
 }
 
-void SailViewWidget::OnCtrlPoints()
+void SailViewWt::OnCtrlPoints()
 {
     s_bCtrlPoints = m_pctrlPoints->isChecked();
     UpdateView();
@@ -339,7 +349,7 @@ void SailViewWidget::OnCtrlPoints()
 
 
 
-void SailViewWidget::UncheckPresetViews()
+void SailViewWt::UncheckPresetViews()
 {
     m_pctrlX->setChecked(false);
     m_pctrlY->setChecked(false);
@@ -348,7 +358,7 @@ void SailViewWidget::UncheckPresetViews()
 }
 
 
-void SailViewWidget::Set3DRotationCenter()
+void SailViewWt::Set3DRotationCenter()
 {
     //adjust the new rotation center after a translation or a rotation
 
@@ -364,7 +374,7 @@ void SailViewWidget::Set3DRotationCenter()
 }
 
 
-void SailViewWidget::Set3DRotationCenter(QPoint point)
+void SailViewWt::Set3DRotationCenter(QPoint point)
 {
     //adjusts the new rotation center after the user has picked a point on the screen
     //finds the closest sail point under the screen point,
@@ -375,7 +385,7 @@ void SailViewWidget::Set3DRotationCenter(QPoint point)
 
     i=-1;
 
-    m_p3DWidget->ClientToGL(point, B);
+    m_pglSailView->ClientToGL(point, B);
 
     B.x += -m_SailOffset.x - m_glViewportTrans.x*m_glScaled;
     B.y += -m_SailOffset.y + m_glViewportTrans.y*m_glScaled;
@@ -410,7 +420,7 @@ void SailViewWidget::Set3DRotationCenter(QPoint point)
     if(Intersect(LA, LB, TA, TB, Vector3d(0.0,-1.0,0.0), AA, U, I, dist))
     {
         //        smooth visual transition
-        m_p3DWidget->GLInverseMatrix(MatIn, MatOut);
+        m_pglSailView->GLInverseMatrix(MatIn, MatOut);
 
         U.x = (-I.x -m_glRotCenter.x)/30.0;
         U.y = (-I.y -m_glRotCenter.y)/30.0;
@@ -430,7 +440,7 @@ void SailViewWidget::Set3DRotationCenter(QPoint point)
 
 
 
-void SailViewWidget::GLCreateSailGeom()
+void SailViewWt::GLCreateSailGeom()
 {
     if(m_pSail->m_oaSection.size()<2) return;
     s_pSail7->GLCreateSailGeom(SAILSURFACE, m_pSail, Vector3d(0.0,0.0,0.0));
@@ -438,7 +448,7 @@ void SailViewWidget::GLCreateSailGeom()
 
 
 
-void SailViewWidget::GLCreateSailMesh()
+void SailViewWt::GLCreateSailMesh()
 {
     //    MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
     QColor color;
@@ -500,7 +510,7 @@ void SailViewWidget::GLCreateSailMesh()
 
 
 
-void SailViewWidget::GLCreateCtrlPoints()
+void SailViewWt::GLCreateCtrlPoints()
 {
     glNewList(SAILCTRLPOINTS, GL_COMPILE);
     {
@@ -524,7 +534,7 @@ void SailViewWidget::GLCreateCtrlPoints()
                     }
                     else                     glColor3d(.5,.5,.5);
 
-                    m_p3DWidget->GLDrawCube(m_pSail->m_oaSection[j]->m_CtrlPoint[kc], .015/m_glScaled);
+                    m_pglSailView->GLDrawCube(m_pSail->m_oaSection[j]->m_CtrlPoint[kc], .015/m_glScaled);
                 }
             }
         }
@@ -540,7 +550,7 @@ void SailViewWidget::GLCreateCtrlPoints()
 }
 
 
-void SailViewWidget::GLCreateSectionHighlight()
+void SailViewWt::GLCreateSectionHighlight()
 {
     if(m_pSail->m_oaSection.size()<2) return;
 
@@ -571,7 +581,7 @@ void SailViewWidget::GLCreateSectionHighlight()
 
 
 
-void SailViewWidget::GLDraw3D()
+void SailViewWt::GLDraw3D()
 {
     glClearColor(s_pMainFrame->m_BackgroundColor.redF(), s_pMainFrame->m_BackgroundColor.greenF(), s_pMainFrame->m_BackgroundColor.blueF(),0.0);
 
@@ -587,7 +597,7 @@ void SailViewWidget::GLDraw3D()
             glDeleteLists(ARCBALL,2);
             m_GLList-=2;
         }
-        m_p3DWidget->CreateArcballList(m_ArcBall, 1.0);
+        m_pglSailView->CreateArcballList(m_ArcBall, 1.0);
         m_GLList+=2;
         m_bResetglArcball = false;
     }
@@ -644,7 +654,7 @@ void SailViewWidget::GLDraw3D()
 }
 
 
-void SailViewWidget::GLRenderSail()
+void SailViewWt::GLRenderSail()
 {
     //    int width;
     //    width = m_rCltRect.width();
@@ -662,7 +672,7 @@ void SailViewWidget::GLRenderSail()
 
         glPushMatrix();
         {
-            m_p3DWidget->GLSetupLight(&s_pSail7->m_GLLightDlg, m_SailOffset.y, 1.0);
+            m_pglSailView->GLSetupLight(&s_pSail7->m_GLLightDlg, m_SailOffset.y, 1.0);
 
             glLoadIdentity();
 
@@ -698,7 +708,7 @@ void SailViewWidget::GLRenderSail()
 
             glScaled(m_glScaled, m_glScaled, m_glScaled);
             glTranslated(m_glRotCenter.x, m_glRotCenter.y, m_glRotCenter.z);
-            if(s_bAxes) m_p3DWidget->GLDrawAxes(1.0/m_glScaled, W3dPrefsDlg::s_3DAxisColor, W3dPrefsDlg::s_3DAxisStyle, W3dPrefsDlg::s_3DAxisWidth);
+            if(s_bAxes) m_pglSailView->GLDrawAxes(1.0/m_glScaled, W3dPrefsDlg::s_3DAxisColor, W3dPrefsDlg::s_3DAxisStyle, W3dPrefsDlg::s_3DAxisWidth);
 
             if(s_bglLight)
             {
@@ -721,7 +731,6 @@ void SailViewWidget::GLRenderSail()
             if(s_bOutline && glIsList(SECTIONHIGHLIGHT))                   glCallList(SECTIONHIGHLIGHT);
             if(s_bVLMPanels && m_pSail  && glIsList(SAILMESHPANELS))       glCallList(SAILMESHPANELS);
             if(s_bCtrlPoints && m_pSail && glIsList(SAILCTRLPOINTS))       glCallList(SAILCTRLPOINTS);
-
         }
         glPopMatrix();
     }
@@ -730,7 +739,7 @@ void SailViewWidget::GLRenderSail()
 }
 
 
-void SailViewWidget::mouseDoubleClickEvent(QMouseEvent *event)
+void SailViewWt::mouseDoubleClickEvent(QMouseEvent *event)
 {
     QPoint point(event->pos().x(), event->pos().y());
 
@@ -741,17 +750,16 @@ void SailViewWidget::mouseDoubleClickEvent(QMouseEvent *event)
 }
 
 
-
-void SailViewWidget::mouseMoveEvent(QMouseEvent *event)
+void SailViewWt::mouseMoveEvent(QMouseEvent *event)
 {
     QPoint point(event->pos().x(), event->pos().y());
-    QPoint glPoint(event->pos().x() + m_p3DWidget->geometry().x(), event->pos().y()+m_p3DWidget->geometry().y());
+    QPoint glPoint(event->pos().x() + m_pglSailView->geometry().x(), event->pos().y()+m_pglSailView->geometry().y());
     Vector3d Real;
 
     if(!hasFocus()) setFocus();
 
     QPoint Delta(point.x() - m_LastPoint.x(), point.y() - m_LastPoint.y());
-    m_p3DWidget->ClientToGL(point, Real);
+    m_pglSailView->ClientToGL(point, Real);
 
     bool bCtrl = false;
 
@@ -759,20 +767,20 @@ void SailViewWidget::mouseMoveEvent(QMouseEvent *event)
 
     if (event->buttons()   & Qt::LeftButton)
     {
-        if(bCtrl&& m_p3DWidget->geometry().contains(glPoint))
+        if(bCtrl&& m_pglSailView->geometry().contains(glPoint))
         {
             //rotate
             UncheckPresetViews();
-            m_ArcBall.Move(point.x(), m_p3DWidget->rect().height()-point.y());
+            m_ArcBall.Move(point.x(), m_pglSailView->rect().height()-point.y());
             UpdateView();
         }
         else if(m_bTrans)
         {
             //translate
-            if(m_p3DWidget->geometry().contains(glPoint))
+            if(m_pglSailView->geometry().contains(glPoint))
             {
-                m_glViewportTrans.x += GLfloat(Delta.x()*2.0/m_glScaled/m_p3DWidget->rect().width());
-                m_glViewportTrans.y += GLfloat(Delta.y()*2.0/m_glScaled/m_p3DWidget->rect().width());
+                m_glViewportTrans.x += GLfloat(Delta.x()*2.0/m_glScaled/m_pglSailView->rect().width());
+                m_glViewportTrans.y += GLfloat(Delta.y()*2.0/m_glScaled/m_pglSailView->rect().width());
 
                 m_glRotCenter.x = MatOut[0][0]*(m_glViewportTrans.x) + MatOut[0][1]*(-m_glViewportTrans.y) + MatOut[0][2]*m_glViewportTrans.z;
                 m_glRotCenter.y = MatOut[1][0]*(m_glViewportTrans.x) + MatOut[1][1]*(-m_glViewportTrans.y) + MatOut[1][2]*m_glViewportTrans.z;
@@ -788,7 +796,7 @@ void SailViewWidget::mouseMoveEvent(QMouseEvent *event)
         if(m_pSail)
         {
             UncheckPresetViews();
-            m_ArcBall.Move(point.x(), m_p3DWidget->rect().height()-point.y());
+            m_ArcBall.Move(point.x(), m_pglSailView->rect().height()-point.y());
             UpdateView();
         }
     }
@@ -797,25 +805,25 @@ void SailViewWidget::mouseMoveEvent(QMouseEvent *event)
 }
 
 
-void SailViewWidget::mousePressEvent(QMouseEvent *event)
+void SailViewWt::mousePressEvent(QMouseEvent *event)
 {
     // the event has been sent by GLWidget, so event is in GL Widget coordinates
     // but m_3DWingRect is in window client coordinates
     // the difference is m_p3DWidget->geometry() !
 
     QPoint point(event->pos().x(), event->pos().y());
-    QPoint glPoint(event->pos().x() + m_p3DWidget->geometry().x(), event->pos().y()+m_p3DWidget->geometry().y());
+    QPoint glPoint(event->pos().x() + m_pglSailView->geometry().x(), event->pos().y()+m_pglSailView->geometry().y());
 
     Vector3d Real;
     bool bCtrl = false;
     if(event->modifiers() & Qt::ControlModifier) bCtrl =true;
 
-    m_p3DWidget->ClientToGL(point, Real);
+    m_pglSailView->ClientToGL(point, Real);
 
     if (event->buttons() & Qt::MidButton)
     {
         m_bArcBall = true;
-        m_ArcBall.Start(event->pos().x(), m_p3DWidget->rect().height()-event->pos().y());
+        m_ArcBall.Start(event->pos().x(), m_pglSailView->rect().height()-event->pos().y());
         m_bCrossPoint = true;
 
         Set3DRotationCenter();
@@ -834,15 +842,15 @@ void SailViewWidget::mousePressEvent(QMouseEvent *event)
         {
             m_bTrans=true;
 
-            if(m_pSail && m_p3DWidget->geometry().contains(glPoint))
+            if(m_pSail && m_pglSailView->geometry().contains(glPoint))
             {
-                m_ArcBall.Start(point.x(), m_p3DWidget->rect().height()-point.y());
+                m_ArcBall.Start(point.x(), m_pglSailView->rect().height()-point.y());
                 m_bCrossPoint = true;
                 Set3DRotationCenter();
                 if (!bCtrl)
                 {
                     m_bTrans = true;
-                    m_p3DWidget->setCursor(Qt::ClosedHandCursor);
+                    m_pglSailView->setCursor(Qt::ClosedHandCursor);
                 }
                 else
                 {
@@ -861,9 +869,9 @@ void SailViewWidget::mousePressEvent(QMouseEvent *event)
 
 
 
-void SailViewWidget::mouseReleaseEvent(QMouseEvent *)
+void SailViewWt::mouseReleaseEvent(QMouseEvent *)
 {
-    m_p3DWidget->setCursor(Qt::CrossCursor);
+    m_pglSailView->setCursor(Qt::CrossCursor);
 
     m_bTrans = false;
 
@@ -887,11 +895,11 @@ void SailViewWidget::mouseReleaseEvent(QMouseEvent *)
 
 
 
-void  SailViewWidget::wheelEvent(QWheelEvent *event)
+void  SailViewWt::wheelEvent(QWheelEvent *event)
 {
-    if(m_p3DWidget->rect().contains(event->pos()))
+    if(m_pglSailView->rect().contains(event->pos()))
     {
-        QPoint point(event->pos().x() - m_p3DWidget->geometry().x(), event->pos().y() - m_p3DWidget->geometry().y());
+        QPoint point(event->pos().x() - m_pglSailView->geometry().x(), event->pos().y() - m_pglSailView->geometry().y());
         //The mouse button has been wheeled
         //Process the message
         //    point is in client coordinates
@@ -907,7 +915,7 @@ void  SailViewWidget::wheelEvent(QWheelEvent *event)
 
 
 
-void SailViewWidget::GLInverseMatrix()
+void SailViewWt::GLInverseMatrix()
 {
     //Step 1. Transpose the 3x3 rotation portion of the 4x4 matrix to get the inverse rotation
     int i,j;
@@ -922,7 +930,7 @@ void SailViewWidget::GLInverseMatrix()
 }
 
 
-void SailViewWidget::keyPressEvent(QKeyEvent *event)
+void SailViewWt::keyPressEvent(QKeyEvent *event)
 {
     bool bShift = false;
     bool bCtrl  = false;
@@ -960,21 +968,13 @@ void SailViewWidget::keyPressEvent(QKeyEvent *event)
 }
 
 
-void SailViewWidget::UpdateView()
+void SailViewWt::UpdateView()
 {
-    if(isVisible()) m_p3DWidget->update();
+    if(isVisible()) m_pglSailView->update();
 }
 
 
-void SailViewWidget::closeEvent(QCloseEvent *)
-{
-    s_WindowPos = pos();
-    s_WindowSize = size();
-    s_bWindowMaximized = isMaximized();
-}
-
-
-void SailViewWidget::hideEvent(QHideEvent *)
+void SailViewWt::closeEvent(QCloseEvent *)
 {
     s_WindowPos = pos();
     s_WindowSize = size();
@@ -982,7 +982,15 @@ void SailViewWidget::hideEvent(QHideEvent *)
 }
 
 
-void SailViewWidget::showEvent(QShowEvent *)
+void SailViewWt::hideEvent(QHideEvent *)
+{
+    s_WindowPos = pos();
+    s_WindowSize = size();
+    s_bWindowMaximized = isMaximized();
+}
+
+
+void SailViewWt::showEvent(QShowEvent *)
 {
     move(s_WindowPos);
     resize(s_WindowSize);

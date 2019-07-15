@@ -40,11 +40,11 @@
 #include "../misc/floatedit.h"
 #include "../misc/linebutton.h"
 #include "../objects/body.h"
-#include "../view/threedwidget.h"
 
 
 class MainFrame;
 class GLLightDlg;
+class glHullView;
 
 class GL3dBodyDlg : public QDialog
 {
@@ -52,7 +52,7 @@ class GL3dBodyDlg : public QDialog
     friend class MainFrame;
     friend class Sail7;
     friend class QMiarex;
-    friend class ThreeDWidget;
+    friend class glHullView;
     friend class GLLightDlg;
     friend class BodyScaleDlg;
     friend class ManageBodiesDlg;
@@ -103,7 +103,7 @@ private slots:
     void OnOK();
 
 private:
-    void wheelEvent(QWheelEvent *event);
+    void wheelEvent(QWheelEvent *pEvent);
     void mouseMoveEvent(QMouseEvent *event);
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
@@ -172,7 +172,7 @@ private:
 private:
     static MainFrame *s_pMainFrame;
     static GLLightDlg *s_pGLLightDlg;
-    ThreeDWidget m_3dWidget;
+    glHullView *m_p3dHullView;
 
     static QPoint s_WindowPos;
     static QSize  s_WindowSize;
@@ -284,7 +284,7 @@ private:
     Vector3d m_glRotCenter;    // the center of rotation in object coordinates... is also the opposite of the translation vector
     QRect m_BodyLineRect;
     QRect m_FrameRect;
-    QRect m_BodyRect;
+    QRect m_3dBodyRect;
     QRect m_rCltRect;
 
 };

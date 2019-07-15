@@ -15,7 +15,7 @@
 #include "threedwidget.h"
 #include "../mainframe.h"
 #include "../sail7/sail7.h"
-#include "../sail7/sailviewwidget.h"
+#include "../sail7/sailviewwt.h"
 #include "../sail7/gl3dbodydlg.h"
 #include "../globals.h"
 #include "../sail7/gl3dscales.h"
@@ -24,10 +24,8 @@ Sail7 *ThreeDWidget::s_pSail7 = nullptr;
 MainFrame *ThreeDWidget::s_pMainFrame = nullptr;
 
 
-ThreeDWidget::ThreeDWidget(QWidget *parent)
-    : QOpenGLWidget(parent)
+ThreeDWidget::ThreeDWidget(QWidget *parent) : QOpenGLWidget(parent)
 {
-    m_pParent = parent;
     m_iView = GLSAIL7VIEW;
     setAutoFillBackground(false);
 
@@ -47,192 +45,44 @@ ThreeDWidget::ThreeDWidget(QWidget *parent)
 }
 
 
-void ThreeDWidget::contextMenuEvent (QContextMenuEvent * event)
-{
-    QPoint ScreenPt = event->globalPos();
-    if(s_pSail7)
-    {
-        if(m_iView == GLSAIL7VIEW)
-        {
-            s_pMainFrame->Sail3DCtxMenu->exec(ScreenPt);
-        }
-        else  if(m_iView ==GLBODYVIEW)
-        {
-            GL3dBodyDlg *pDlg = (GL3dBodyDlg*)m_pParent;
-            pDlg->ShowContextMenu(event);
-        }
-        else if (m_iView==GLSAILVIEW)
-        {
-//            ViewWindow *pDlg = (ViewWindow*)m_pParent;
-//            pDlg->ShowContextMenu(event);
-        }
-    }
-}
-
-
-void ThreeDWidget::mousePressEvent(QMouseEvent *event)
-{
-//    MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
-    if(s_pSail7)
-    {
-        if(m_iView == GLSAIL7VIEW)
-        {
-            s_pSail7->mousePressEvent(event);
-        }
-        else  if(m_iView ==GLBODYVIEW)
-        {
-            GL3dBodyDlg *pDlg = (GL3dBodyDlg*)m_pParent;
-            pDlg->mousePressEvent(event);
-        }
-        else if (m_iView==GLSAILVIEW)
-        {
-            SailViewWidget *pDlg = (SailViewWidget*)m_pParent;
-            pDlg->mousePressEvent(event);
-        }
-    }
-}
-
-
-void ThreeDWidget::mouseReleaseEvent(QMouseEvent *event)
-{
-//    MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
-    if(s_pSail7)
-    {
-        if(m_iView == GLSAIL7VIEW)
-        {
-            s_pSail7->mouseReleaseEvent(event);
-        }
-        else  if(m_iView ==GLBODYVIEW)
-        {
-            GL3dBodyDlg *pDlg = (GL3dBodyDlg*)m_pParent;
-            pDlg->mouseReleaseEvent(event);
-        }
-        else if (m_iView==GLSAILVIEW)
-        {
-            SailViewWidget *pDlg = (SailViewWidget*)m_pParent;
-            pDlg->mouseReleaseEvent(event);
-        }
-    }
-}
-
-
-void ThreeDWidget::mouseMoveEvent(QMouseEvent *event)
-{
-//    MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
-    if(s_pSail7)
-    {
-        if(m_iView==GLSAIL7VIEW)
-        {
-            s_pSail7->mouseMoveEvent(event);
-        }
-        else  if(m_iView ==GLBODYVIEW)
-        {
-            GL3dBodyDlg *pDlg = (GL3dBodyDlg*)m_pParent;
-            pDlg->mouseMoveEvent(event);
-        }
-        else if (m_iView==GLSAILVIEW)
-        {
-            SailViewWidget *pDlg = (SailViewWidget*)m_pParent;
-            pDlg->mouseMoveEvent(event);
-        }
-    }
-}
-
-
-
-void ThreeDWidget::mouseDoubleClickEvent ( QMouseEvent * event )
-{
-//    MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
-    if(s_pSail7)
-    {
-        if(m_iView == GLSAIL7VIEW)
-        {
-            s_pSail7->mouseDoubleClickEvent(event);
-        }
-        else  if(m_iView ==GLBODYVIEW)
-        {
-            GL3dBodyDlg *pDlg = (GL3dBodyDlg*)m_pParent;
-            pDlg->mouseDoubleClickEvent(event);
-        }
-        else if (m_iView==GLSAILVIEW)
-        {
-            SailViewWidget *pDlg = (SailViewWidget*)m_pParent;
-            pDlg->mouseDoubleClickEvent(event);
-        }
-    }
-}
-
-
-void ThreeDWidget::wheelEvent(QWheelEvent *event)
-{
-//    MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
-    if(s_pSail7)
-    {
-        if(m_iView == GLSAIL7VIEW)
-        {
-            s_pSail7->wheelEvent(event);
-        }
-        else  if(m_iView ==GLBODYVIEW)
-        {
-            GL3dBodyDlg *pDlg = (GL3dBodyDlg*)m_pParent;
-            pDlg->wheelEvent(event);
-        }
-        else if (m_iView==GLSAILVIEW)
-        {
-            SailViewWidget *pDlg = (SailViewWidget*)m_pParent;
-            pDlg->wheelEvent(event);
-        }
-    }
-}
-
-
 void ThreeDWidget::initializeGL()
 {
     glClearColor(float(s_pMainFrame->m_BackgroundColor.redF()), float(s_pMainFrame->m_BackgroundColor.greenF()), float(s_pMainFrame->m_BackgroundColor.blueF()), 0.0f);
 }
 
 
-void ThreeDWidget::keyPressEvent(QKeyEvent *event)
+
+void ThreeDWidget::paintGL()
 {
-    if(s_pSail7)
-    {
-        if(m_iView == GLSAIL7VIEW)
-        {
-            s_pSail7->keyPressEvent(event);
-        }
-        else  if(m_iView ==GLBODYVIEW)
-        {
-            GL3dBodyDlg *pDlg = (GL3dBodyDlg*)m_pParent;
-            pDlg->keyPressEvent(event);
-        }
-        else if (m_iView==GLSAILVIEW)
-        {
-            SailViewWidget *pDlg = (SailViewWidget*)m_pParent;
-            pDlg->keyPressEvent(event);
-        }
-    }
+    int pixelRatio = 1;
+#if QT_VERSION >= 0x050000
+    pixelRatio = devicePixelRatio();
+#endif
+    setupViewPort(width() * pixelRatio, height() * pixelRatio);
+
+    glClearColor(float(s_pMainFrame->m_BackgroundColor.redF()), float(s_pMainFrame->m_BackgroundColor.greenF()), float(s_pMainFrame->m_BackgroundColor.blueF()), 0.0f);
 }
 
 
-void ThreeDWidget::keyReleaseEvent(QKeyEvent *event)
+void ThreeDWidget::resizeGL(int width, int height)
 {
-    if(s_pSail7)
+    double w = double(width);
+    double h = double(height);
+    double s = 1.0;
+
+    setupViewPort(width, height);
+
+    glLoadIdentity();
+    if(w>h) m_GLViewRect.SetRect(-s, s*h/w, s, -s*h/w);
+    else    m_GLViewRect.SetRect(-s*w/h, s, s*w/h, -s*h/w);
+
+    if(!m_PixText.isNull())
     {
-        if(m_iView == GLSAIL7VIEW)
-        {
-            s_pSail7->keyReleaseEvent(event);
-        }
-        else  if(m_iView ==GLBODYVIEW)
-        {
-            GL3dBodyDlg *pDlg = (GL3dBodyDlg*)m_pParent;
-            pDlg->keyReleaseEvent(event);
-        }
-        else if (m_iView==GLSAILVIEW)
-        {
-/*            ViewWindow *pDlg = (ViewWindow*)m_pParent;
-            pDlg->keyReleaseEvent(event);*/
-        }
+        m_PixText= m_PixText.scaled(rect().size()*devicePixelRatio());
+        m_PixText.fill(Qt::transparent);
     }
+
+    showEvent(nullptr);
 }
 
 
@@ -266,40 +116,6 @@ void ThreeDWidget::paintEvent(QPaintEvent *)
 }
 
 
-
-void ThreeDWidget::paintGL()
-{
-    int pixelRatio = 1;
-#if QT_VERSION >= 0x050000
-    pixelRatio = devicePixelRatio();
-#endif
-    setupViewPort(width() * pixelRatio, height() * pixelRatio);
-
-    glClearColor(float(s_pMainFrame->m_BackgroundColor.redF()), float(s_pMainFrame->m_BackgroundColor.greenF()), float(s_pMainFrame->m_BackgroundColor.blueF()), 0.0f);
-
-    if(m_iView==GLSAIL7VIEW)
-    {
-        s_pSail7->GLDraw3D();
-        if(s_pSail7->m_iView==SAIL3DVIEW) s_pSail7->GLRenderView();
-    }
-    else  if(m_iView ==GLBODYVIEW)
-    {
-        GL3dBodyDlg *pDlg = (GL3dBodyDlg*)m_pParent;
-        pDlg->GLDraw3D();
-        pDlg->GLRenderBody();
-    }
-    else if (m_iView==GLBOATVIEW)
-    {
-    }
-    else if (m_iView==GLSAILVIEW)
-    {
-        SailViewWidget *pDlg = (SailViewWidget*)m_pParent;
-        pDlg->GLDraw3D();
-        pDlg->GLRenderSail();
-    }
-}
-
-
 void ThreeDWidget::setupViewPort(int width, int height)
 {
     makeCurrent();
@@ -320,77 +136,6 @@ void ThreeDWidget::setupViewPort(int width, int height)
 #endif
     glMatrixMode(GL_MODELVIEW);
 }
-
-
-void ThreeDWidget::resizeGL(int width, int height)
-{    
-    /*
-    double w, h;
-//    MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
-    int side = qMax(width, height);
-    w = (double)width;
-    h = (double)height;
-
-    glViewport((width - side) / 2, (height - side) / 2, side, side);
-//    d = qMax(w,h);
-//    glViewport(0,0, d, d);
-
-
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    double s = 1.0;
-    glOrtho(-s,s,-s,s,-100.0*s,100.0*s);
-//    glFrustum(-1.0, +1.0, -1.0, 1.0, 5.0, 60.0);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    if(w>h)    m_GLViewRect.SetRect(-s, s*h/w, s, -s*h/w);
-    else    m_GLViewRect.SetRect(-s*w/h, s, s*w/h, -s*h/w);*/
-
-    double w, h, s;
-    w = double(width);
-    h = double(height);
-    s = 1.0;
-
-
-    setupViewPort(width, height);
-
-    glLoadIdentity();
-    if(w>h)    m_GLViewRect.SetRect(-s, s*h/w, s, -s*h/w);
-    else    m_GLViewRect.SetRect(-s*w/h, s, s*w/h, -s*h/w);
-
-
-    if(s_pSail7 && m_iView == GLSAIL7VIEW)
-    {
-        s_pSail7->m_ArcBall.GetMatrix();
-//        pSail7->SetScale(m_rCltRect);
-        s_pSail7->m_bIs3DScaleSet = false;
-        s_pSail7->Set3DScale();
-    }
-    else if(m_iView == GLBODYVIEW)
-    {
-        GL3dBodyDlg *pDlg = (GL3dBodyDlg*)m_pParent;
-        pDlg->m_bIs3DScaleSet = false;
-        pDlg->SetRectangles();
-        pDlg->SetBodyLineScale();
-        pDlg->SetFrameScale();
-        pDlg->SetBodyScale();
-    }
-    else if(m_iView==GLSAILVIEW)
-    {
-/*        SailViewWidget *pDlg = (SailViewWidget*)m_pParent;
-        pDlg->m_bIs3DScaleSet = false;
-        pDlg->Set3DScale();*/
-    }
-
-    if(!m_PixText.isNull())
-    {
-        m_PixText= m_PixText.scaled(rect().size()*devicePixelRatio());
-        m_PixText.fill(Qt::transparent);
-    }
-
-    showEvent(nullptr);
-}
-
 
 
 void ThreeDWidget::GLSetupLight(GLLightDlg *pglLightParams, double Offset_y, float LightFactor)

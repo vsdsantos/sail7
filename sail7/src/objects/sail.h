@@ -29,7 +29,7 @@ class Sail
     friend class Sail7;
     friend class Boat;
     friend class SailDlg;
-    friend class SailViewWidget;
+    friend class SailViewWt;
     friend class BoatDlg;
     friend class BoatPolarDlg;
     friend class BoatAnalysisDlg;
@@ -39,6 +39,7 @@ class Sail
     friend class NURBSSail;
     friend class SailcutSail;
     friend class SailDomDoc;
+    friend class glSailView;
 
 public:
     Sail();

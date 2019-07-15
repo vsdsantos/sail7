@@ -18,6 +18,15 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 *****************************************************************************/
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QGroupBox>
+#include <QAction>
+#include <QMenu>
+#include <QMessageBox>
+#include <QHeaderView>
+#include <math.h>
 
 
 #include "../mainframe.h"
@@ -30,15 +39,7 @@
 #include "./bodyscaledlg.h"
 #include "./gl3dbodydlg.h"
 #include "./glcreatebodylists.h"
-#include <QGridLayout>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
-#include <QGroupBox>
-#include <QAction>
-#include <QMenu>
-#include <QMessageBox>
-#include <QHeaderView>
-#include <math.h>
+#include "../view/glhullview.h"
 
 //2D
 #define BODYAXIALLINES      1304
@@ -84,22 +85,10 @@ GL3dBodyDlg::GL3dBodyDlg(QWidget *pParent): QDialog(pParent)
 {
     setWindowTitle(tr("Body Edition"));
     setWindowFlags(Qt::Window);
-//    setSizeGripEnabled(true);
 
-/*    qDebug()<<"_____N=10:";
-    int N=10;
-//    qDebug()<<(int)7.1 <<(int)7.5<< (int)7.5001<< (int)7.9<< (int)(N/2) << (int)((double)N/2.0);
-    for(int i=0; i<N; i++)
-    {
-        m_TmpPic.m_SplineSurface.Weight(i, N);
-    }
-    qDebug()<<"_____N=11:";
-    N=11;
-//    qDebug()<<(int)7.1 <<(int)7.5<< (int)7.5001<< (int)7.9<< (int)(N/2) << (int)((double)N/2.0);
-    for(int i=0; i<N; i++)
-    {
-        m_TmpPic.m_SplineSurface.Weight(i, N);
-    }*/
+    m_p3dHullView = new glHullView(this);
+    m_p3dHullView->m_iView = GLBODYVIEW;
+    m_ArcBall.set3dWidget(m_p3dHullView);
 
     m_BodyGridDlg = new BodyGridDlg(this);
     m_pBody = nullptr;
@@ -867,8 +856,8 @@ void GL3dBodyDlg::GLDrawBodyFrameScale()
 
     QFontMetrics fm(s_pMainFrame->m_TextFont);
     double LabelWidth;
-    double h2 = double(m_3dWidget.geometry().height()) /2.0;
-    double w2 = double(m_3dWidget.geometry().width())  /2.0;
+    double h2 = double(m_p3dHullView->geometry().height()) /2.0;
+    double w2 = double(m_p3dHullView->geometry().width())  /2.0;
     if(w2>h2) LabelWidth = double(fm.width("-12.34")) / w2;
     else      LabelWidth = double(fm.width("-12.34")) /h2;
 
@@ -901,7 +890,7 @@ void GL3dBodyDlg::GLDrawBodyFrameScale()
         for(i=0; i<fabs(1.0-m_FrameScaledOffset.x)/m_BodyGridDlg->m_Unit2/m_FrameScale; i++)
         {
             strong = QString("%1").arg(double(i)*unit, 6,'f', 2);
-            m_3dWidget.glRenderText(m_FrameScaledOffset.x+double(i)*m_BodyGridDlg->m_Unit2*m_FrameScale-LabelWidth/2,
+            m_p3dHullView->glRenderText(m_FrameScaledOffset.x+double(i)*m_BodyGridDlg->m_Unit2*m_FrameScale-LabelWidth/2,
                                     m_FrameScaledOffset.y-0.04,
                                     0.0,
                                     strong);
@@ -909,7 +898,7 @@ void GL3dBodyDlg::GLDrawBodyFrameScale()
         for(i=1; i<fabs(m_FrameScaledOffset.x-(m_VerticalSplit))/m_BodyGridDlg->m_Unit2/m_FrameScale; i++)
         {
             strong = QString("%1").arg(-double(i)*unit, 6,'f', 2);
-            m_3dWidget.glRenderText(m_FrameScaledOffset.x-double(i)*m_BodyGridDlg->m_Unit2*m_FrameScale-LabelWidth/2,
+            m_p3dHullView->glRenderText(m_FrameScaledOffset.x-double(i)*m_BodyGridDlg->m_Unit2*m_FrameScale-LabelWidth/2,
                                     m_FrameScaledOffset.y-0.04,
                                     0.0,
                                     strong);
@@ -938,7 +927,7 @@ void GL3dBodyDlg::GLDrawBodyFrameScale()
         for(i=0; i<fabs(m_glTop-m_FrameScaledOffset.y)/m_BodyGridDlg->m_Unit2/m_FrameScale; i++)
         {
             strong = QString("%1").arg(double(i)*unit, 6,'f', 2);
-            m_3dWidget.glRenderText(m_FrameScaledOffset.x- 0.02 -LabelWidth,
+            m_p3dHullView->glRenderText(m_FrameScaledOffset.x- 0.02 -LabelWidth,
                                     m_FrameScaledOffset.y+double(i)*m_BodyGridDlg->m_Unit2*m_FrameScale,
                                     0.0,
                                     strong);
@@ -946,7 +935,7 @@ void GL3dBodyDlg::GLDrawBodyFrameScale()
         for(i=1; i<fabs(-1.0-m_FrameScaledOffset.y)/m_BodyGridDlg->m_Unit2/m_FrameScale; i++)
         {
             strong = QString("%1").arg(-double(i)*unit, 6,'f', 2);
-            m_3dWidget.glRenderText(m_FrameScaledOffset.x- 0.02 -LabelWidth,
+            m_p3dHullView->glRenderText(m_FrameScaledOffset.x- 0.02 -LabelWidth,
                                     m_FrameScaledOffset.y-double(i)*m_BodyGridDlg->m_Unit2*m_FrameScale,
                                     0.0,
                                     strong);
@@ -964,8 +953,8 @@ void GL3dBodyDlg::GLDrawBodyLineScale()
 
     QFontMetrics fm(s_pMainFrame->m_TextFont);
     double LabelWidth;
-    double h2 = (double)m_3dWidget.geometry().height() /2.0;
-    double w2 = (double)m_3dWidget.geometry().width()  /2.0;
+    double h2 = (double)m_p3dHullView->geometry().height() /2.0;
+    double w2 = (double)m_p3dHullView->geometry().width()  /2.0;
     if(w2>h2) LabelWidth = (double)fm.width("-12.34") / w2;
     else      LabelWidth = (double)fm.width("-12.34") /h2;
 
@@ -998,7 +987,7 @@ void GL3dBodyDlg::GLDrawBodyLineScale()
         for(i=0; i<fabs(m_VerticalSplit-m_BodyScaledOffset.x)/m_BodyGridDlg->m_Unit/m_BodyScale; i++)
         {
             strong = QString("%1").arg(double(i)*unit, 6,'f', 2);
-            m_3dWidget.glRenderText(m_BodyScaledOffset.x+double(i)*m_BodyGridDlg->m_Unit*m_BodyScale - LabelWidth/2.0,
+            m_p3dHullView->glRenderText(m_BodyScaledOffset.x+double(i)*m_BodyGridDlg->m_Unit*m_BodyScale - LabelWidth/2.0,
                                 m_BodyScaledOffset.y-0.04,
                                 0.0,
                                strong);
@@ -1006,7 +995,7 @@ void GL3dBodyDlg::GLDrawBodyLineScale()
         for(i=1; i<fabs(m_BodyScaledOffset.x-(-1.0))/m_BodyGridDlg->m_Unit/m_BodyScale; i++)
         {
             strong = QString("%1").arg(-double(i)*unit, 6,'f', 2);
-            m_3dWidget.glRenderText(m_BodyScaledOffset.x-double(i)*m_BodyGridDlg->m_Unit*m_BodyScale - LabelWidth/2.0,
+            m_p3dHullView->glRenderText(m_BodyScaledOffset.x-double(i)*m_BodyGridDlg->m_Unit*m_BodyScale - LabelWidth/2.0,
                                 m_BodyScaledOffset.y-0.04,
                                 0.0,
                                 strong);
@@ -1035,7 +1024,7 @@ void GL3dBodyDlg::GLDrawBodyLineScale()
         for(i=0; i<fabs(m_glTop-m_BodyScaledOffset.y)/m_BodyScale/m_BodyGridDlg->m_Unit; i++)
         {
             strong = QString("%1").arg(double(i)*unit, 6,'f', 2);
-            m_3dWidget.glRenderText(m_BodyScaledOffset.x- 0.02 - LabelWidth,
+            m_p3dHullView->glRenderText(m_BodyScaledOffset.x- 0.02 - LabelWidth,
                                     m_BodyScaledOffset.y+double(i)*m_BodyGridDlg->m_Unit*m_BodyScale,
                                     0.0,
                                     strong);
@@ -1043,7 +1032,7 @@ void GL3dBodyDlg::GLDrawBodyLineScale()
         for(i=1; i<fabs(m_HorizontalSplit-m_BodyScaledOffset.y)/m_BodyScale/m_BodyGridDlg->m_Unit; i++)
         {
             strong = QString("%1").arg(-double(i)*unit, 6,'f', 2);
-            m_3dWidget.glRenderText(m_BodyScaledOffset.x- 0.02 - LabelWidth,
+            m_p3dHullView->glRenderText(m_BodyScaledOffset.x- 0.02 - LabelWidth,
                                     m_BodyScaledOffset.y-double(i)*m_BodyGridDlg->m_Unit*m_BodyScale,
                                     0.0,
                                     strong);
@@ -1362,13 +1351,9 @@ void GL3dBodyDlg::GLCreateBodyGrid()
 }
 
 
-
-
 void GL3dBodyDlg::GLDraw3D()
 {
-    MainFrame * pMainFrame =(MainFrame*)s_pMainFrame;
-
-    glClearColor(pMainFrame->m_BackgroundColor.redF(), pMainFrame->m_BackgroundColor.greenF(), pMainFrame->m_BackgroundColor.blueF(),0.0);
+    glClearColor(s_pMainFrame->m_BackgroundColor.redF(), s_pMainFrame->m_BackgroundColor.greenF(), s_pMainFrame->m_BackgroundColor.blueF(),0.0);
 
     if((m_bResetglBody2D || m_bResetglBodyPoints) && m_pBody)
     {
@@ -1418,7 +1403,7 @@ void GL3dBodyDlg::GLDraw3D()
             glDeleteLists(ARCBALL,2);
             m_GLList-=2;
         }
-        m_3dWidget.CreateArcballList(m_ArcBall, 1.0);
+        m_p3dHullView->CreateArcballList(m_ArcBall, 1.0);
         m_GLList+=2;
     }
 
@@ -1467,7 +1452,7 @@ void GL3dBodyDlg::GLDrawBodyLegend()
 //    style = 0;
     width = 3;
 
-    glLineWidth((float)width);
+    glLineWidth(width);
     glLineStipple (1, 0xFFFF);// Solid
     glColor3d(color.redF(),color.greenF(),color.blueF());
 
@@ -1477,8 +1462,8 @@ void GL3dBodyDlg::GLDrawBodyLegend()
     glEnd();
 
     glBegin(GL_LINES);
-        glVertex2d(m_VerticalSplit, m_3dWidget.m_GLViewRect.bottom);
-        glVertex2d(m_VerticalSplit, m_3dWidget.m_GLViewRect.top );
+        glVertex2d(m_VerticalSplit, m_p3dHullView->m_GLViewRect.bottom);
+        glVertex2d(m_VerticalSplit, m_p3dHullView->m_GLViewRect.top );
     glEnd();
 
 
@@ -1490,18 +1475,18 @@ void GL3dBodyDlg::GLDrawBodyLegend()
 
         // Draw the labels
         Vector3d real;
-        m_3dWidget.ClientToGL(m_MousePos, real);
+        m_p3dHullView->ClientToGL(m_MousePos, real);
         QFontMetrics fm(s_pMainFrame->m_TextFont);
         int dD = fm.height();
 
         strong = QString(tr("Frame %1")).arg(m_pBody->m_iActiveFrame+1,2);
-        m_3dWidget.renderText(m_FrameRect.left() +dD ,dD,strong);
+        m_p3dHullView->renderText(m_FrameRect.left() +dD ,dD,strong);
 
         strong = QString(tr("Scale = %1")).arg(m_FrameScale/m_BodyRefScale,4,'f',2);
-        m_3dWidget.renderText(m_FrameRect.left() +dD ,2*dD,strong);
+        m_p3dHullView->renderText(m_FrameRect.left() +dD ,2*dD,strong);
 
         strong = QString(tr("Scale = %1")).arg(m_BodyScale/m_BodyRefScale,4,'f',2);
-        m_3dWidget.renderText(m_BodyLineRect.left() +dD ,dD,strong);
+        m_p3dHullView->renderText(m_BodyLineRect.left() +dD ,dD,strong);
 
         if(m_FrameRect.contains(m_MousePos))
         {
@@ -1511,11 +1496,11 @@ void GL3dBodyDlg::GLDrawBodyLegend()
 
             strong = QString("y = %1 ").arg(real.x * s_pMainFrame->m_mtoUnit,9,'f',3);
             strong += strLengthUnit;
-            m_3dWidget.renderText(m_FrameRect.left() +dD ,3*dD,strong);
+            m_p3dHullView->renderText(m_FrameRect.left() +dD ,3*dD,strong);
 
             strong = QString("z = %1 ").arg(real.y * s_pMainFrame->m_mtoUnit,9,'f',3);
             strong += strLengthUnit;
-            m_3dWidget.renderText(m_FrameRect.left() +dD ,4*dD,strong);
+            m_p3dHullView->renderText(m_FrameRect.left() +dD ,4*dD,strong);
         }
         else if(m_BodyLineRect.contains(m_MousePos))
         {
@@ -1525,11 +1510,11 @@ void GL3dBodyDlg::GLDrawBodyLegend()
 
             strong = QString("x = %1 ").arg(real.x * s_pMainFrame->m_mtoUnit,9,'f',3);
             strong += strLengthUnit;
-            m_3dWidget.renderText(m_BodyLineRect.left() +dD ,2*dD,strong);
+            m_p3dHullView->renderText(m_BodyLineRect.left() +dD ,2*dD,strong);
 
             strong = QString("z = %1 ").arg(real.y * s_pMainFrame->m_mtoUnit,9,'f',3);
             strong += strLengthUnit;
-            m_3dWidget.renderText(m_BodyLineRect.left() +dD ,3*dD,strong);
+            m_p3dHullView->renderText(m_BodyLineRect.left() +dD ,3*dD,strong);
         }
     }
 }
@@ -1645,7 +1630,7 @@ void GL3dBodyDlg::GLRenderBody()
 
         glPushMatrix();
         {
-            m_3dWidget.GLSetupLight((GLLightDlg*)s_pGLLightDlg, m_BodyOffset.y, 1.0);
+            m_p3dHullView->GLSetupLight(s_pGLLightDlg, m_BodyOffset.y, 1.0);
 
             glLoadIdentity();
 
@@ -1681,7 +1666,7 @@ void GL3dBodyDlg::GLRenderBody()
             glScaled(m_glScaled, m_glScaled, m_glScaled);
             glTranslated(m_glRotCenter.x, m_glRotCenter.y, m_glRotCenter.z);
 
-            if(s_bAxes)  m_3dWidget.GLDrawAxes(1.0, W3dPrefsDlg::s_3DAxisColor, W3dPrefsDlg::s_3DAxisStyle, W3dPrefsDlg::s_3DAxisWidth);
+            if(s_bAxes)  m_p3dHullView->GLDrawAxes(1.0, W3dPrefsDlg::s_3DAxisColor, W3dPrefsDlg::s_3DAxisStyle, W3dPrefsDlg::s_3DAxisWidth);
 
 
             if(m_bglLight)
@@ -1844,9 +1829,9 @@ void GL3dBodyDlg::mouseDoubleClickEvent(QMouseEvent *event)
 //    bool bCtrl = false;
 //    if(event->modifiers() & Qt::ControlModifier) bCtrl =true;
 
-    m_3dWidget.ClientToGL(point, Real);
+    m_p3dHullView->ClientToGL(point, Real);
 
-    if(m_3dWidget.geometry().contains(point)) m_3dWidget.setFocus();
+    if(m_p3dHullView->geometry().contains(point)) m_p3dHullView->setFocus();
 
     Set3DRotationCenter(point);
     m_bPickCenter = false;
@@ -1856,9 +1841,9 @@ void GL3dBodyDlg::mouseDoubleClickEvent(QMouseEvent *event)
 
 void GL3dBodyDlg::mouseMoveEvent(QMouseEvent *event)
 {
-    static int n;
-    static Vector3d Real;
-    static QPoint Delta, point;
+    int n;
+    Vector3d Real;
+    QPoint Delta, point;
 
     point = event->pos();
 
@@ -1866,9 +1851,9 @@ void GL3dBodyDlg::mouseMoveEvent(QMouseEvent *event)
 
     Delta.setX(point.x() - m_LastPoint.x());
     Delta.setY(point.y() - m_LastPoint.y());
-    m_3dWidget.ClientToGL(point, Real);
+    m_p3dHullView->ClientToGL(point, Real);
 
-    if(!m_3dWidget.hasFocus()) m_3dWidget.setFocus();
+    if(!m_p3dHullView->hasFocus()) m_p3dHullView->setFocus();
 
     bool bCtrl = false;
 
@@ -1876,19 +1861,19 @@ void GL3dBodyDlg::mouseMoveEvent(QMouseEvent *event)
 
     if (event->buttons()   & Qt::LeftButton)
     {
-        if(bCtrl&& m_BodyRect.contains(point))
+        if(bCtrl&& m_3dBodyRect.contains(point))
         {
             //rotate
-            m_ArcBall.Move(point.x(), m_3dWidget.geometry().height()-point.y());
+            m_ArcBall.Move(point.x(), m_p3dHullView->geometry().height()-point.y());
             UpdateView();
         }
         else if(m_bTrans)
         {
             //translate
-            if(m_BodyRect.contains(point))
+            if(m_3dBodyRect.contains(point))
             {
-                m_glViewportTrans.x += (GLfloat)(Delta.x()*2.0/m_glScaled/m_3dWidget.geometry().width());
-                m_glViewportTrans.y += (GLfloat)(Delta.y()*2.0/m_glScaled/m_3dWidget.geometry().width());
+                m_glViewportTrans.x += GLfloat(Delta.x()*2.0/m_glScaled/m_p3dHullView->geometry().width());
+                m_glViewportTrans.y += GLfloat(Delta.y()*2.0/m_glScaled/m_p3dHullView->geometry().width());
 
                 m_glRotCenter.x = MatOut[0][0]*(m_glViewportTrans.x) + MatOut[0][1]*(-m_glViewportTrans.y) + MatOut[0][2]*m_glViewportTrans.z;
                 m_glRotCenter.y = MatOut[1][0]*(m_glViewportTrans.x) + MatOut[1][1]*(-m_glViewportTrans.y) + MatOut[1][2]*m_glViewportTrans.z;
@@ -1898,8 +1883,8 @@ void GL3dBodyDlg::mouseMoveEvent(QMouseEvent *event)
             }
             else if (m_BodyLineRect.contains(point) && m_pBody)
             {
-                m_BodyOffset.x  +=  (double)Delta.x()*2.0/(double)m_3dWidget.geometry().width()/m_BodyScale;
-                m_BodyOffset.y  += -(double)Delta.y()*2.0/(double)m_3dWidget.geometry().width()/m_BodyScale;
+                m_BodyOffset.x  +=  (double)Delta.x()*2.0/(double)m_p3dHullView->geometry().width()/m_BodyScale;
+                m_BodyOffset.y  += -(double)Delta.y()*2.0/(double)m_p3dHullView->geometry().width()/m_BodyScale;
                 m_BodyScaledOffset.Set((1.0-m_BodyScale)*m_BodyScalingCenter.x + m_BodyScale * m_BodyOffset.x,
                                        (1.0-m_BodyScale)*m_BodyScalingCenter.y + m_BodyScale * m_BodyOffset.y,
                                        0.0);
@@ -1907,8 +1892,8 @@ void GL3dBodyDlg::mouseMoveEvent(QMouseEvent *event)
             }
             else if(m_FrameRect.contains(point) && m_pFrame)
             {
-                m_FrameOffset.x +=  (double)Delta.x()*2.0/(double)m_3dWidget.geometry().width()/m_FrameScale;
-                m_FrameOffset.y += -(double)Delta.y()*2.0/(double)m_3dWidget.geometry().width()/m_FrameScale;
+                m_FrameOffset.x +=  (double)Delta.x()*2.0/(double)m_p3dHullView->geometry().width()/m_FrameScale;
+                m_FrameOffset.y += -(double)Delta.y()*2.0/(double)m_p3dHullView->geometry().width()/m_FrameScale;
                 m_FrameScaledOffset.Set((1.0-m_FrameScale)*m_FrameScalingCenter.x + m_FrameScale * m_FrameOffset.x,
                                         (1.0-m_FrameScale)*m_FrameScalingCenter.y + m_FrameScale * m_FrameOffset.y,
                                         0.0);
@@ -1976,10 +1961,10 @@ void GL3dBodyDlg::mouseMoveEvent(QMouseEvent *event)
     }
     else if (event->buttons() & Qt::MidButton)
     {
-        if(m_BodyRect.contains(point))
+        if(m_3dBodyRect.contains(point))
         {
             //rotate
-            m_ArcBall.Move(point.x(), m_3dWidget.geometry().height()-point.y());
+            m_ArcBall.Move(point.x(), m_p3dHullView->geometry().height()-point.y());
             UpdateView();
         }
     }
@@ -2020,53 +2005,54 @@ void GL3dBodyDlg::mouseMoveEvent(QMouseEvent *event)
 }
 
 
-void GL3dBodyDlg::mousePressEvent(QMouseEvent *event)
+void GL3dBodyDlg::mousePressEvent(QMouseEvent *pEvent)
 {
     int iF;
-    QPoint point(event->pos().x(), event->pos().y());
+    QPoint point(pEvent->pos().x(), pEvent->pos().y());
 
     Vector3d Real;
     bool bCtrl = false;
     bool bShift = false;
-    if(event->modifiers() & Qt::ControlModifier) bCtrl =true;
-    if(event->modifiers() & Qt::ShiftModifier) bShift =true;
+    if(pEvent->modifiers() & Qt::ControlModifier) bCtrl =true;
+    if(pEvent->modifiers() & Qt::ShiftModifier) bShift =true;
 
-    m_3dWidget.ClientToGL(point, Real);
+    m_p3dHullView->ClientToGL(point, Real);
 
-    if(m_3dWidget.geometry().contains(point)) m_3dWidget.setFocus();
+    if(m_p3dHullView->geometry().contains(point)) m_p3dHullView->setFocus();
 
 
-    if(m_bPickCenter)
+    if (pEvent->buttons() & Qt::MidButton)
     {
-        Set3DRotationCenter(point);
-        m_bPickCenter = false;
-        m_pctrlPickCenter->setChecked(false);
-    }
-    if (event->buttons() & Qt::MidButton)
-    {
-        if(m_BodyRect.contains(point))
+        if(m_3dBodyRect.contains(point))
         {
             m_bArcball = true;
-            m_ArcBall.Start(event->pos().x(), m_3dWidget.geometry().height()-event->pos().y());
+            m_ArcBall.Start(pEvent->pos().x(), m_p3dHullView->geometry().height()-pEvent->pos().y());
             m_bCrossPoint = true;
 
             Set3DRotationCenter();
             UpdateView();
         }
     }
-    else if (event->buttons() & Qt::LeftButton)
+    else if (pEvent->buttons() & Qt::LeftButton)
     {
-        m_ptPopUp = event->pos();
+        m_ptPopUp = pEvent->pos();
         m_bTrans=true;
-        if(m_pBody && m_BodyRect.contains(point))
+
+        if(m_bPickCenter)
         {
-            m_ArcBall.Start(point.x(), m_3dWidget.geometry().height()-point.y());
+            Set3DRotationCenter(point);
+            m_bPickCenter = false;
+            m_pctrlPickCenter->setChecked(false);
+        }
+        else if(m_pBody && m_3dBodyRect.contains(point))
+        {
+            m_ArcBall.Start(point.x(), m_p3dHullView->geometry().height()-point.y());
             m_bCrossPoint = true;
             Set3DRotationCenter();
             if (!bCtrl)
             {
                 m_bTrans = true;
-                m_3dWidget.setCursor(Qt::ClosedHandCursor);
+                m_p3dHullView->setCursor(Qt::ClosedHandCursor);
             }
             else
             {
@@ -2114,7 +2100,7 @@ void GL3dBodyDlg::mousePressEvent(QMouseEvent *event)
                 m_pctrlPointTable->selectRow(m_pFrame->m_iSelect);
             }
         }
-        if(m_bTrans && !bCtrl)    m_3dWidget.setCursor(Qt::ClosedHandCursor);
+        if(m_bTrans && !bCtrl)    m_p3dHullView->setCursor(Qt::ClosedHandCursor);
     }
     
 
@@ -2130,7 +2116,7 @@ void GL3dBodyDlg::mouseReleaseEvent(QMouseEvent *event)
 {
     QPoint point(event->pos().x(), event->pos().y());
 
-    m_3dWidget.setCursor(Qt::CrossCursor);
+    m_p3dHullView->setCursor(Qt::CrossCursor);
 
     if(!m_bTrans)
     {
@@ -3060,10 +3046,8 @@ void GL3dBodyDlg::Set3DRotationCenter()
 {
     //adjust the new rotation center after a translation or a rotation
 
-    int i,j;
-
-    for(i=0; i<4; i++)
-        for(j=0; j<4; j++)
+    for(int i=0; i<4; i++)
+        for(int j=0; j<4; j++)
             MatOut[i][j] =  m_ArcBall.ab_quat[i*4+j];
 
     m_glRotCenter.x = MatOut[0][0]*(m_glViewportTrans.x) + MatOut[0][1]*(-m_glViewportTrans.y) + MatOut[0][2]*m_glViewportTrans.z;
@@ -3083,7 +3067,7 @@ void GL3dBodyDlg::Set3DRotationCenter(QPoint point)
 
     i=-1;
 
-    m_3dWidget.ClientToGL(point, B);
+    m_p3dHullView->ClientToGL(point, B);
 
     B.x += -m_UFOOffset.x - m_glViewportTrans.x*m_glScaled;
     B.y += -m_UFOOffset.y + m_glViewportTrans.y*m_glScaled;
@@ -3220,19 +3204,19 @@ bool GL3dBodyDlg::SetBody(Body *pBody)
 
 void GL3dBodyDlg::SetBodyLineScale()
 {
-    if(m_pBody) m_BodyScale = (m_VerticalSplit-m_3dWidget.m_GLViewRect.left)*.7/m_pBody->Length();
+    if(m_pBody) m_BodyScale = (m_VerticalSplit-m_p3dHullView->m_GLViewRect.left)*.7/m_pBody->Length();
     else        return;
 
-    m_BodyOffset.Set((m_3dWidget.m_GLViewRect.left+m_VerticalSplit)/2.0-m_pBody->Length()/2.0-m_pBody->LeadingPoint().x,
-                     (m_3dWidget.m_GLViewRect.top+m_HorizontalSplit)/2.0,
+    m_BodyOffset.Set((m_p3dHullView->m_GLViewRect.left+m_VerticalSplit)/2.0-m_pBody->Length()/2.0-m_pBody->LeadingPoint().x,
+                     (m_p3dHullView->m_GLViewRect.top+m_HorizontalSplit)/2.0,
                       0.0);
 
     m_BodyScaledOffset.Set((1.0 - m_BodyScale)*m_BodyScalingCenter.x + m_BodyScale * m_BodyOffset.x,
                            (1.0 - m_BodyScale)*m_BodyScalingCenter.y + m_BodyScale * m_BodyOffset.y,
                             0.0);
     m_BodyRefScale  = m_BodyScale;
-    m_BodyScalingCenter.x  = (m_VerticalSplit                + m_3dWidget.m_GLViewRect.left)   /2.0;
-    m_BodyScalingCenter.y  = (m_3dWidget.m_GLViewRect.top  + m_HorizontalSplit)                /2.0;
+    m_BodyScalingCenter.x  = (m_VerticalSplit                + m_p3dHullView->m_GLViewRect.left)   /2.0;
+    m_BodyScalingCenter.y  = (m_p3dHullView->m_GLViewRect.top  + m_HorizontalSplit)                /2.0;
 }
 
 
@@ -3251,8 +3235,8 @@ void GL3dBodyDlg::SetFrameScale()
     }
     else m_FrameScale = 1.0;
 
-    m_FrameOffset.Set((m_VerticalSplit + m_3dWidget.m_GLViewRect.right)/2.0,
-                   (m_3dWidget.m_GLViewRect.top +m_3dWidget.m_GLViewRect.bottom)/2.0,
+    m_FrameOffset.Set((m_VerticalSplit + m_p3dHullView->m_GLViewRect.right)/2.0,
+                   (m_p3dHullView->m_GLViewRect.top +m_p3dHullView->m_GLViewRect.bottom)/2.0,
                    0.0);
 
 
@@ -3261,8 +3245,8 @@ void GL3dBodyDlg::SetFrameScale()
                         0.0);
 
     m_FrameRefScale = m_FrameScale;
-    m_FrameScalingCenter.x = (m_VerticalSplit                + m_3dWidget.m_GLViewRect.right)  /2.0;
-    m_FrameScalingCenter.y = (m_3dWidget.m_GLViewRect.top  + m_3dWidget.m_GLViewRect.bottom) /2.0;
+    m_FrameScalingCenter.x = (m_VerticalSplit                + m_p3dHullView->m_GLViewRect.right)  /2.0;
+    m_FrameScalingCenter.y = (m_p3dHullView->m_GLViewRect.top  + m_p3dHullView->m_GLViewRect.bottom) /2.0;
 
 
 }
@@ -3272,31 +3256,31 @@ void GL3dBodyDlg::SetRectangles()
     Vector3d V1, V2;
     QPoint P1, P2;
 
-    m_glTop = m_3dWidget.m_GLViewRect.top;
+    m_glTop = m_p3dHullView->m_GLViewRect.top;
 
-    m_VerticalSplit     = m_3dWidget.m_GLViewRect.width()  /6.0;
-    m_HorizontalSplit   = m_3dWidget.m_GLViewRect.height() /6.0;
+    m_VerticalSplit     = m_p3dHullView->m_GLViewRect.width()  /6.0;
+    m_HorizontalSplit   = m_p3dHullView->m_GLViewRect.height() /6.0;
 
-    V1.Set(m_3dWidget.m_GLViewRect.left, m_3dWidget.m_GLViewRect.top, 0.0);
+    V1.Set(m_p3dHullView->m_GLViewRect.left, m_p3dHullView->m_GLViewRect.top, 0.0);
     V2.Set(m_VerticalSplit,                m_HorizontalSplit,             0.0);
-    m_3dWidget.GL2dToClient(V1, P1);
-    m_3dWidget.GL2dToClient(V2, P2);
+    m_p3dHullView->GL2dToClient(V1, P1);
+    m_p3dHullView->GL2dToClient(V2, P2);
     m_BodyLineRect.setTopLeft(P1);
     m_BodyLineRect.setBottomRight(P2);
 
-    V1.Set(m_VerticalSplit,                 m_3dWidget.m_GLViewRect.top,    0.0);
-    V2.Set(m_3dWidget.m_GLViewRect.right, m_3dWidget.m_GLViewRect.bottom, 0.0);
-    m_3dWidget.GL2dToClient(V1, P1);
-    m_3dWidget.GL2dToClient(V2, P2);
+    V1.Set(m_VerticalSplit,                 m_p3dHullView->m_GLViewRect.top,    0.0);
+    V2.Set(m_p3dHullView->m_GLViewRect.right, m_p3dHullView->m_GLViewRect.bottom, 0.0);
+    m_p3dHullView->GL2dToClient(V1, P1);
+    m_p3dHullView->GL2dToClient(V2, P2);
     m_FrameRect.setTopLeft(P1);
     m_FrameRect.setBottomRight(P2);
 
-    V1.Set(m_3dWidget.m_GLViewRect.left, m_HorizontalSplit,                0.0);
-    V2.Set(m_VerticalSplit,                m_3dWidget.m_GLViewRect.bottom, 0.0);
-    m_3dWidget.GL2dToClient(V1, P1);
-    m_3dWidget.GL2dToClient(V2, P2);
-    m_BodyRect.setTopLeft(P1);
-    m_BodyRect.setBottomRight(P2);
+    V1.Set(m_p3dHullView->m_GLViewRect.left, m_HorizontalSplit,                0.0);
+    V2.Set(m_VerticalSplit,                m_p3dHullView->m_GLViewRect.bottom, 0.0);
+    m_p3dHullView->GL2dToClient(V1, P1);
+    m_p3dHullView->GL2dToClient(V2, P2);
+    m_3dBodyRect.setTopLeft(P1);
+    m_3dBodyRect.setBottomRight(P2);
 }
 
 
@@ -3311,8 +3295,8 @@ void GL3dBodyDlg::SetBodyScale()
     m_bIs3DScaleSet = true;
 
 
-    m_UFOOffset.x = (m_3dWidget.m_GLViewRect.left + m_VerticalSplit  )/2.0;
-    m_UFOOffset.y = (m_3dWidget.m_GLViewRect.bottom + m_HorizontalSplit)/2.0;
+    m_UFOOffset.x = (m_p3dHullView->m_GLViewRect.left + m_VerticalSplit  )/2.0;
+    m_UFOOffset.y = (m_p3dHullView->m_GLViewRect.bottom + m_HorizontalSplit)/2.0;
   
     m_glScaled = (3./4.* (m_VerticalSplit+1.0) / m_pBody->Length());
 
@@ -3391,12 +3375,8 @@ void GL3dBodyDlg::SetupLayout()
     szPolicyMaximum.setHorizontalPolicy(QSizePolicy::Maximum);
     szPolicyMaximum.setVerticalPolicy(QSizePolicy::Maximum);
 
-    m_3dWidget.m_pParent = this;
-    m_3dWidget.m_iView = GLBODYVIEW;
-    m_ArcBall.m_p3dWidget = &m_3dWidget;
 
-
-    QVBoxLayout *ControlsLayout = new QVBoxLayout;
+    QVBoxLayout *pControlsLayout = new QVBoxLayout;
     {
         QGridLayout *ThreeDParams = new QGridLayout;
         {
@@ -3514,14 +3494,14 @@ void GL3dBodyDlg::SetupLayout()
             CommandButtons->addWidget(m_pctrlCancel);
         }
 
-        ControlsLayout->addLayout(AxisView);
-        ControlsLayout->addLayout(ThreeDViewControls);
-        ControlsLayout->addLayout(ThreeDParams);
-        ControlsLayout->addLayout(ThreeDView);
-        ControlsLayout->addStretch(1);
-        ControlsLayout->addLayout(ActionButtons);
-        ControlsLayout->addStretch(1);
-        ControlsLayout->addLayout(CommandButtons);
+        pControlsLayout->addLayout(AxisView);
+        pControlsLayout->addLayout(ThreeDViewControls);
+        pControlsLayout->addLayout(ThreeDParams);
+        pControlsLayout->addLayout(ThreeDView);
+        pControlsLayout->addStretch(1);
+        pControlsLayout->addLayout(ActionButtons);
+        pControlsLayout->addStretch(1);
+        pControlsLayout->addLayout(CommandButtons);
     }
 
 
@@ -3664,17 +3644,19 @@ void GL3dBodyDlg::SetupLayout()
             AllControls->addStretch(1);
             AllControls->addLayout(FramePointLayout);
             AllControls->addStretch(1);
-            AllControls->addLayout(ControlsLayout);
+            AllControls->addLayout(pControlsLayout);
         }
         m_pctrlControlsWidget->setLayout(AllControls);
     }
 
 
-    QVBoxLayout *MainLayout = new QVBoxLayout;
-    MainLayout->addWidget(&m_3dWidget,2);
-    MainLayout->addWidget(m_pctrlControlsWidget,1);
+    QVBoxLayout *pMainLayout = new QVBoxLayout;
+    {
+        pMainLayout->addWidget(m_p3dHullView,2);
+        pMainLayout->addWidget(m_pctrlControlsWidget,1);
+    }
 
-    setLayout(MainLayout);
+    setLayout(pMainLayout);
 
     for (i=1; i<6; i++)
     {
@@ -3776,11 +3758,11 @@ void GL3dBodyDlg::ShowContextMenu(QContextMenuEvent * event)
     QPoint CltPt = event->pos();
     m_ptPopUp.rx() = CltPt.x();
     m_ptPopUp.ry() = CltPt.y();
-    m_3dWidget.ClientToGL(m_ptPopUp, m_RealPopUp);
+    m_p3dHullView->ClientToGL(m_ptPopUp, m_RealPopUp);
 
     CtxMenu->exec(event->globalPos());
 
-    m_3dWidget.setCursor(Qt::CrossCursor);
+    m_p3dHullView->setCursor(Qt::CrossCursor);
 }
 
 
@@ -3822,25 +3804,25 @@ void GL3dBodyDlg::TakePicture()
 
 void GL3dBodyDlg::UpdateView()
 {
-    if(isVisible()) m_3dWidget.update();
+    if(isVisible()) m_p3dHullView->update();
 }
 
 
-void  GL3dBodyDlg::wheelEvent(QWheelEvent *event)
+void  GL3dBodyDlg::wheelEvent(QWheelEvent *pEvent)
 {
-    QPoint point(event->pos().x() - m_3dWidget.geometry().x(), event->pos().y() - m_3dWidget.geometry().y());
+    QPoint point(pEvent->pos().x() - m_p3dHullView->geometry().x(), pEvent->pos().y() - m_p3dHullView->geometry().y());
     //The mouse button has been wheeled
     //Process the message
 //    point is in client coordinates
 
-    if(m_BodyRect.contains(point))
+    if(m_3dBodyRect.contains(point))
     {
-        if(event->delta()<0) m_glScaled *= (GLfloat)1.06;
+        if(pEvent->delta()<0) m_glScaled *= (GLfloat)1.06;
         else                 m_glScaled /= (GLfloat)1.06;
     }
     else if(m_BodyLineRect.contains(point))
     {
-        if(event->delta()<0) m_BodyScale *= 1.06;
+        if(pEvent->delta()<0) m_BodyScale *= 1.06;
         else                 m_BodyScale /= 1.06;
         m_BodyScaledOffset.Set((1.0 - m_BodyScale)*m_BodyScalingCenter.x + m_BodyScale * m_BodyOffset.x,
                            (1.0 - m_BodyScale)*m_BodyScalingCenter.y + m_BodyScale * m_BodyOffset.y,
@@ -3849,7 +3831,7 @@ void  GL3dBodyDlg::wheelEvent(QWheelEvent *event)
     }
     else if(m_FrameRect.contains(point))
     {
-        if(event->delta()<0) m_FrameScale *= 1.06;
+        if(pEvent->delta()<0) m_FrameScale *= 1.06;
         else                 m_FrameScale /= 1.06;
         m_FrameScaledOffset.Set((1.0 - m_FrameScale)*m_FrameScalingCenter.x + m_FrameScale * m_FrameOffset.x,
                                 (1.0 - m_FrameScale)*m_FrameScalingCenter.y + m_FrameScale * m_FrameOffset.y,

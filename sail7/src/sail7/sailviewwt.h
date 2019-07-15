@@ -1,25 +1,38 @@
+/****************************************************************************
+
+    SailViewWt Class
+    Copyright (C) 2019 Andre Deperrois
+    (C) All rights reserved
+
+*****************************************************************************/
+
 #ifndef VIEWWINDOW_H
 #define VIEWWINDOW_H
 
-#include "../objects/sail.h"
-#include "../view/threedwidget.h"
 #include <QCheckBox>
 #include <QAction>
 #include <QToolButton>
 #include <QWidget>
+#include <QPushButton>
+
+
+
+#include "../objects/sail.h"
+#include "../objects/arcball.h"
 
 class SailDlg;
 class MainFrame;
 class Sail7;
+class glSailView;
 
 #define SAILCTRLPOINTS 3322
 
-class SailViewWidget : public QWidget
+class SailViewWt : public QWidget
 {
     Q_OBJECT
 
 public:
-    SailViewWidget();
+    SailViewWt();
 
 private slots:
     void OnAxes();
@@ -70,7 +83,7 @@ public:
     static QSize  s_WindowSize;
     static bool s_bWindowMaximized;
 
-    ThreeDWidget *m_p3DWidget;
+    glSailView *m_pglSailView;
 
 
     QCheckBox *m_pctrlAxes, *m_pctrlSurfaces, *m_pctrlOutline, *m_pctrlPoints, *m_pctrlPanels, *m_pctrlLight;
