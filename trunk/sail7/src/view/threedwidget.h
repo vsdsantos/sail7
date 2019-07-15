@@ -34,22 +34,15 @@ class ThreeDWidget : public QOpenGLWidget
 
 public:
     ThreeDWidget(QWidget *parent = nullptr);
+    virtual ~ThreeDWidget() {}
 
     void renderText(int x, int y, QString const &text);
 
-
     void paintEvent(QPaintEvent *event);
     void initializeGL();
-    void keyPressEvent(QKeyEvent *event);
-    void keyReleaseEvent(QKeyEvent *event);
     void resizeGL(int width, int height);
     void paintGL();//virtual override
-    void contextMenuEvent (QContextMenuEvent * event);
-    void mousePressEvent(QMouseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
-    void mouseDoubleClickEvent (QMouseEvent *event);
-    void wheelEvent (QWheelEvent *event );
+
     void showEvent(QShowEvent *pEvent);
 
 
@@ -78,14 +71,13 @@ public:
     void setBoatData(QString const &data);
     void setBoatOppData(QString const &data);
 
-private:
+protected:
     void PaintCpLegendText();
     void PaintPanelForceLegendText(double rmin, double rmax);
 
-private slots:
+protected slots:
 
-private:
-    void *m_pParent;
+protected:
     static Sail7 *s_pSail7;
     static MainFrame *s_pMainFrame;
 

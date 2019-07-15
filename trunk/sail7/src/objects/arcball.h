@@ -70,11 +70,9 @@
 #define ARBCALL_H
 
 
-
 #include "../objects/vector3d.h"
 #include "../objects/quaternion.h"
 #include <QRect>
-
 
 
 /**
@@ -84,8 +82,16 @@
  *
    Based on the code provided by Bradley Smith http://rainwarrior.ca/dragon/arcball.html
 */
+
+class ThreeDWidget;
+
 class ArcBall
 {
+    friend class SailViewWt;
+    friend class GL3dBodyDlg;
+    friend class Sail7;
+    friend class ThreeDWidget;
+
 public:
     ArcBall(void);
 
@@ -97,16 +103,18 @@ public:
     void Start(int mx, int my);
     void Move(int mx, int my);
     void GetMatrix();
-    void SphereCoords(int const &mx, int const &my, Vector3d &V);// find the intersection with the sphere
-    void PlanarCoords(int const &mx, int const &my, Vector3d &V);// get intersection with plane for "trackball" style rotation
+    void SphereCoords(int mx, int my, Vector3d &V);// find the intersection with the sphere
+    void PlanarCoords(int mx, int my, Vector3d &V);// get intersection with plane for "trackball" style rotation
     void EdgeCoords(Vector3d m, Vector3d &V);    // find the intersection with the plane through the visible edge
     void RotateCrossPoint();
     void QuatIdentity(float* q);    // reset the rotation matrix
     void QuatCopy(float* dst, float* src);// copy a rotation matrix
     void QuattoMatrix(float* q, Quaternion Qt);// convert the quaternion into a rotation matrix
     void QuatNext(float* dest, float* left, float* right);// multiply two rotation matrices
-    void ClientToGL(int const &x, int const &y, double &glx, double &gly);
+    void ClientToGL(int x, int y, double &glx, double &gly);
 
+    void set3dWidget(ThreeDWidget *p3dWt) {m_p3dWidget=p3dWt;}
+private:
     float ab_quat[16];
     float ab_last[16];
     float ab_next[16];
@@ -125,7 +133,6 @@ public:
     bool ab_planar;
     double ab_planedist;
 
-    void *m_p3dWidget;
 
     Vector3d ab_start;
     Vector3d ab_curr;
@@ -151,6 +158,10 @@ public:
     double t, ac, c2, q, b, delta, a;
     double x2, y2, z2, xy, xz, yz, wx, wy, wz;
     double ax,ay,az;
+
+private:
+    ThreeDWidget *m_p3dWidget;
+
 };
 #endif
  

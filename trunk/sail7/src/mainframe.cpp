@@ -29,6 +29,7 @@
 #include "./sail7/gl3dscales.h"
 #include "./sail7/gl3dbodydlg.h"
 #include "./sail7/saildlg.h"
+#include "view/glsail7view.h"
 
 #include "./sail7/bodytransdlg.h"
 #include "./misc/abouts7.h"
@@ -265,7 +266,7 @@ void MainFrame::closeEvent (QCloseEvent * event)
 void MainFrame::contextMenuEvent (QContextMenuEvent * event)
 {
     if(m_pctrlCentralWidget->currentIndex()==0) m_p2DWidget->contextMenuEvent(event);
-    else                                        m_p3DWidget->contextMenuEvent(event);
+    else                                        m_pglSail7View->contextMenuEvent(event);
 }
 
 
@@ -433,13 +434,13 @@ void MainFrame::CreateDockWindows()
     GL3dBodyDlg::s_pMainFrame          = this;
     SectionViewWidget::s_pMainFrame    = this;
     Sail::s_pMainFrame                = this;
-    SailViewWidget::s_pMainFrame       = this;
+    SailViewWt::s_pMainFrame       = this;
 
     m_pctrlSail7Widget = new QDockWidget("Sail7", this);
     m_pctrlSail7Widget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     addDockWidget(Qt::RightDockWidgetArea, m_pctrlSail7Widget);
     m_p2DWidget = new TwoDWidget(this);
-    m_p3DWidget = new ThreeDWidget(this);
+    m_pglSail7View = new glSail7View(this);
 
 
     m_pSail7 = new Sail7;
@@ -464,7 +465,7 @@ void MainFrame::CreateDockWindows()
 
     m_pctrlCentralWidget = new QStackedWidget;
     m_pctrlCentralWidget->addWidget(m_p2DWidget);
-    m_pctrlCentralWidget->addWidget(m_p3DWidget);
+    m_pctrlCentralWidget->addWidget(m_pglSail7View);
 
     setCentralWidget(m_pctrlCentralWidget);
 
@@ -476,8 +477,8 @@ void MainFrame::CreateDockWindows()
 
 
     Sail7::s_p2DWidget = m_p2DWidget;
-    Sail7::s_p3dWidget = m_p3DWidget;
-    m_pSail7->m_ArcBall.m_p3dWidget  = m_p3DWidget;
+    Sail7::s_pglSail7View = m_pglSail7View;
+    m_pSail7->m_ArcBall.set3dWidget(m_pglSail7View);
     m_pSail7->m_poaBoat      = &m_oaBoat;
     m_pSail7->m_poaBoatPolar = &m_oaBoatPolar;
     m_pSail7->m_poaBoatOpp   = &m_oaBoatOpp;
@@ -485,7 +486,7 @@ void MainFrame::CreateDockWindows()
 
     TwoDWidget::s_pSail7         = m_pSail7;
     ThreeDWidget::s_pSail7       = m_pSail7;
-    SailViewWidget::s_pSail7     = m_pSail7;
+    SailViewWt::s_pSail7     = m_pSail7;
     SailDlg::s_pSail7            = m_pSail7;
     BoatDlg::s_pSail7            = m_pSail7;
     BoatPolarDlg::s_pSail7       = m_pSail7;
@@ -1642,7 +1643,7 @@ void MainFrame::OnDisplayOptions()
         m_bAlphaChannel   = m_DisplaySettingsDlg.m_pctrlAlphaChannel->isChecked();
         m_pSail7->m_bResetglSailGeom = true;
         m_pSail7->m_bResetglLegend = true;
-        m_p3DWidget->initializeGL();
+        m_pglSail7View->initializeGL();
 
         if(m_DisplaySettingsDlg.m_bIsGraphModified)
         {
@@ -1651,8 +1652,8 @@ void MainFrame::OnDisplayOptions()
     }
     m_DlgPos = m_DisplaySettingsDlg.pos();
 
-    m_p3DWidget->initializeGL();
-    m_p3DWidget->setLabelFont();
+    m_pglSail7View->initializeGL();
+    m_pglSail7View->setLabelFont();
     UpdateView();
 }
 
@@ -2270,7 +2271,7 @@ void MainFrame::SetDlgPos(QDialog &Dlg)
 
 void MainFrame::OnSail7()
 {
-    m_p3DWidget->m_iView=GLSAIL7VIEW;
+    m_pglSail7View->m_iView=GLSAIL7VIEW;
 
     HideToolbars();
     HideControlWidgets();
@@ -2305,6 +2306,6 @@ void MainFrame::HideControlWidgets()
 
 void *MainFrame::Get3DWidget()
 {
-    return m_p3DWidget;
+    return m_pglSail7View;
 }
 

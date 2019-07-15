@@ -22,7 +22,7 @@
 #include <QAction>
 #include <QStackedWidget>
 
-#include "./sailviewwidget.h"
+#include "./sailviewwt.h"
 #include "./sectionviewwidget.h"
 #include "../misc/colorbutton.h"
 #include "../misc/floateditdelegate.h"
@@ -124,7 +124,7 @@ public:
     QLineEdit *m_pctrlWingName;
     ColorButton *m_pctrlSailColor;
 
-    SailViewWidget *m_pSailWidget;
+    SailViewWt *m_pSailWidget;
     SectionViewWidget *m_pSectionWidget;
 
 

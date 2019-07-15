@@ -24,7 +24,6 @@
 #include <QStringList>
 
 #include "view/twodwidget.h"
-#include "view/threedwidget.h"
 #include "params.h"
 #include "graph/qgraph.h"
 #include "objects/panel.h"
@@ -37,6 +36,7 @@ class GL3DScales;
 class Boat;
 class BoatPolar;
 class BoatOpp;
+class glSail7View;
 
 class MainFrame : public QMainWindow
 {
@@ -52,6 +52,7 @@ class MainFrame : public QMainWindow
     friend class SailDlg;
     friend class SailcutSail;
     friend class NURBSSail;
+    friend class glSail7View;
 
     Q_OBJECT
 
@@ -158,7 +159,7 @@ class MainFrame : public QMainWindow
 
         QStackedWidget *m_pctrlCentralWidget;
         TwoDWidget   *m_p2DWidget;
-        ThreeDWidget *m_p3DWidget;
+        glSail7View *m_pglSail7View;
 
         QDockWidget *m_pctrlSail7Widget;
         QDockWidget *m_pctrl3DScalesWidget;

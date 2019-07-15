@@ -24,7 +24,7 @@
 
 
 #include "saildlg.h"
-#include "sailviewwidget.h"
+#include "sailviewwt.h"
 #include "../mainframe.h"
 #include "../globals.h"
 #include "../view/threedwidget.h"
@@ -48,7 +48,7 @@ SailDlg::SailDlg(QWidget *pParent) : QDialog(pParent)
     setWindowTitle("Sail Edition");
     setWindowFlags(Qt::Window);
 
-    SailViewWidget::s_pSailDlg = this;
+    SailViewWt::s_pSailDlg = this;
 
     m_pSail=nullptr;
 
@@ -594,7 +594,7 @@ void SailDlg::SetupLayout()
     }
     QHBoxLayout *pMainLayout = new QHBoxLayout;
     {
-        m_pSailWidget = new SailViewWidget;
+        m_pSailWidget = new SailViewWt;
 
         QSplitter *pMainSplitter = new QSplitter;
         pMainSplitter->addWidget(m_pSailWidget);

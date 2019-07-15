@@ -157,7 +157,7 @@ void ArcBall::Move(int mx, int my)
     } 
     else
     {
-        SphereCoords((double)mx,(double)my, ab_curr);
+        SphereCoords(mx, my, ab_curr);
         if(ab_curr == ab_start)
         { 
             // avoid potential rare divide by tiny
@@ -219,17 +219,17 @@ void ArcBall::QuattoMatrix(float* q, Quaternion Qt)
     wy = Qt.a*Qt.qy;
     wz = Qt.a*Qt.qz;
 
-    q[0] = (float)(1 - 2*y2 - 2*z2);
-    q[1] = (float)(2*xy + 2*wz);
-    q[2] = (float)(2*xz - 2*wy);
+    q[0] = float(1 - 2*y2 - 2*z2);
+    q[1] = float(2*xy + 2*wz);
+    q[2] = float(2*xz - 2*wy);
 
-    q[4] = (float)(2*xy - 2*wz);
-    q[5] = (float)(1 - 2*x2 - 2*z2);
-    q[6] = (float)(2*yz + 2*wx);
+    q[4] = float(2*xy - 2*wz);
+    q[5] = float(1 - 2*x2 - 2*z2);
+    q[6] = float(2*yz + 2*wx);
 
-    q[8] = (float)(2*xz + 2*wy);
-    q[9] = (float)(2*yz - 2*wx);
-    q[10]= (float)(1 - 2*x2 - 2*y2);
+    q[8] = float(2*xz + 2*wy);
+    q[9] = float(2*yz - 2*wx);
+    q[10]= float(1 - 2*x2 - 2*y2);
 }
 
 /** multiply two rotation matrices*/
@@ -324,7 +324,7 @@ void ArcBall::SetZoom(double radius, Vector3d eye, Vector3d up)
 }
 
 
-void ArcBall::PlanarCoords(int const &mx, int const &my, Vector3d &V)
+void ArcBall::PlanarCoords(int mx, int my, Vector3d &V)
 {
     ClientToGL(mx, my, ax, ay);
 
@@ -337,7 +337,7 @@ void ArcBall::PlanarCoords(int const &mx, int const &my, Vector3d &V)
 }
 
 
-void ArcBall::SphereCoords(int const &mx, int const &my, Vector3d &V)
+void ArcBall::SphereCoords(int mx, int my, Vector3d &V)
 {
     // find the intersection with the sphere
 
@@ -354,7 +354,6 @@ void ArcBall::SphereCoords(int const &mx, int const &my, Vector3d &V)
 }
 
 
-
 /** begin arcball rotation*/
 void ArcBall::Start(int mx, int my)
 {
@@ -369,25 +368,24 @@ void ArcBall::Start(int mx, int my)
 
 
 /** Convert screen coordinates to GL view coordinates*/
-void ArcBall::ClientToGL(int const &x, int const &y, double &glx, double &gly)
+void ArcBall::ClientToGL(int x, int y, double &glx, double &gly)
 {
     double h2, w2;
 
     if(!m_p3dWidget) return;
-    ThreeDWidget *p3dWidget = (ThreeDWidget*)m_p3dWidget;
 
-    h2 = (double)p3dWidget->rect().height() /2.0;
-    w2 = (double)p3dWidget->rect().width()  /2.0;
+    h2 = m_p3dWidget->rect().height() /2;
+    w2 = m_p3dWidget->rect().width()  /2;
 
     if(w2>h2)
     {
-        glx = ((double)x - w2) / w2;
-        gly = ((double)y - h2) / w2;
+        glx = (double(x) - w2) / w2;
+        gly = (double(y) - h2) / w2;
     }
     else
     {
-        glx = ((double)x - w2) / h2;
-        gly = ((double)y - h2) / h2;
+        glx = (double(x) - w2) / h2;
+        gly = (double(y) - h2) / h2;
     }
 }
 
