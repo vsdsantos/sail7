@@ -794,14 +794,14 @@ void GraphDlg::SetParams()
     m_pctrlXAuto->setChecked(m_pGraph->GetAutoX());
     m_pctrlYAuto->setChecked(m_pGraph->GetAutoY());
 
-    m_pctrlXMin->SetValue(m_pGraph->GetXMin());
-    m_pctrlXMax->SetValue(m_pGraph->GetXMax());
-    m_pctrlXOrigin->SetValue(m_pGraph->GetX0());
-    m_pctrlXUnit->SetValue(m_pGraph->GetXUnit());
-    m_pctrlYMin->SetValue(m_pGraph->GetYMin());
-    m_pctrlYMax->SetValue(m_pGraph->GetYMax());
-    m_pctrlYOrigin->SetValue(m_pGraph->GetY0());
-    m_pctrlYUnit->SetValue(m_pGraph->GetYUnit());
+    m_pctrlXMin->setValue(m_pGraph->GetXMin());
+    m_pctrlXMax->setValue(m_pGraph->GetXMax());
+    m_pctrlXOrigin->setValue(m_pGraph->GetX0());
+    m_pctrlXUnit->setValue(m_pGraph->GetXUnit());
+    m_pctrlYMin->setValue(m_pGraph->GetYMin());
+    m_pctrlYMax->setValue(m_pGraph->GetYMax());
+    m_pctrlYOrigin->setValue(m_pGraph->GetY0());
+    m_pctrlYUnit->setValue(m_pGraph->GetYUnit());
 
     OnAutoX();
     OnAutoY();
@@ -836,7 +836,7 @@ void GraphDlg::SetParams()
     m_pctrlXMinGridStyle->SetStyle(style);
     m_pctrlXMinGridStyle->SetWidth(width);
     m_pctrlXMinGridStyle->setEnabled(bState);
-    m_pctrlXMinorUnit->SetValue(unit);
+    m_pctrlXMinorUnit->setValue(unit);
     m_pctrlAutoXMinUnit->setChecked(bAuto);
     m_pctrlAutoXMinUnit->setEnabled(bState);
     m_pctrlXMinorUnit->setEnabled(!bAuto && bState);
@@ -854,7 +854,7 @@ void GraphDlg::SetParams()
     m_pctrlYMinGridStyle->SetStyle(style);
     m_pctrlYMinGridStyle->SetWidth(width);
     m_pctrlYMinGridStyle->setEnabled(bState);
-    m_pctrlYMinorUnit->SetValue(unit);
+    m_pctrlYMinorUnit->setValue(unit);
     m_pctrlAutoYMinUnit->setChecked(bAuto);
     m_pctrlAutoYMinUnit->setEnabled(bState);
     m_pctrlYMinorUnit->setEnabled(!bAuto && bState);

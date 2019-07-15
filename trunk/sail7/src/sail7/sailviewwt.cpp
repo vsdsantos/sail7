@@ -66,17 +66,51 @@ SailViewWt::SailViewWt() : QWidget()
     m_ArcBall.m_pTransy  = &m_glViewportTrans.y;
 
     SetupLayout();
-    Connect();
+    connectSignals();
 }
 
 
-void SailViewWt::Connect()
+SailViewWt::~SailViewWt()
 {
-    connect(m_pctrlIso, SIGNAL(clicked()),this, SLOT(On3DIso()));
-    connect(m_pctrlX, SIGNAL(clicked()),this, SLOT(On3DFront()));
-    connect(m_pctrlY, SIGNAL(clicked()),this, SLOT(On3DLeft()));
-    connect(m_pctrlZ, SIGNAL(clicked()),this, SLOT(On3DTop()));
-    connect(m_pctrlReset, SIGNAL(clicked()),this, SLOT(On3DReset()));
+    if(glIsList(STREAMLINES))         glDeleteLists(STREAMLINES, 1);
+    if(glIsList(SURFACESPEEDS))       glDeleteLists(SURFACESPEEDS, 1);
+    if(glIsList(LIFTFORCE))           glDeleteLists(LIFTFORCE, 1);
+    if(glIsList(VLMMOMENTS))          glDeleteLists(VLMMOMENTS, 1);
+    if(glIsList(VLMCTRLPTS))          glDeleteLists(VLMCTRLPTS, 1);
+    if(glIsList(VLMVORTICES))         glDeleteLists(VLMVORTICES, 1);
+    if(glIsList(PANELCP))             glDeleteLists(PANELCP, 1);
+    if(glIsList(PANELCPLEGENDCOLOR))  glDeleteLists(PANELCPLEGENDCOLOR, 1);
+    if(glIsList(PANELFORCEARROWS))    glDeleteLists(PANELFORCEARROWS, 1);
+    if(glIsList(PANELFORCELEGENDTXT)) glDeleteLists(PANELFORCELEGENDTXT, 1);
+    if(glIsList(ARCBALL))             glDeleteLists(ARCBALL, 1);
+    if(glIsList(ARCPOINT))            glDeleteLists(ARCPOINT, 1);
+    if(glIsList(BODYGEOMBASE))        glDeleteLists(BODYGEOMBASE, 1);
+    if(glIsList(BODYMESHBASE))        glDeleteLists(BODYMESHBASE, 1);
+    if(glIsList(BODYCPBASE))          glDeleteLists(BODYCPBASE, 1);
+    if(glIsList(BODYFORCELISTBASE))   glDeleteLists(BODYFORCELISTBASE, 1);
+    if(glIsList(SAILGEOMBASE))        glDeleteLists(SAILGEOMBASE, 1);
+    if(glIsList(SAILMESHBASE))        glDeleteLists(SAILMESHBASE, 1);
+    if(glIsList(SAILCPBASE))          glDeleteLists(SAILCPBASE, 1);
+    if(glIsList(SAILFORCELISTBASE))   glDeleteLists(SAILFORCELISTBASE, 1);
+    if(glIsList(LIGHTSPHERE))         glDeleteLists(LIGHTSPHERE, 1);
+
+
+    if(glIsList(SECTIONHIGHLIGHT))    glDeleteLists(SECTIONHIGHLIGHT, 1);
+    if(glIsList(SAILSURFACE))         glDeleteLists(SAILSURFACE, 1);
+    if(glIsList(SAILMESHPANELS))      glDeleteLists(SAILMESHPANELS, 1);
+    if(glIsList(SAILMESHBACK))        glDeleteLists(SAILMESHBACK, 1);
+
+}
+
+
+
+void SailViewWt::connectSignals()
+{
+    connect(m_pctrlIso,        SIGNAL(clicked()),this, SLOT(On3DIso()));
+    connect(m_pctrlX,          SIGNAL(clicked()),this, SLOT(On3DFront()));
+    connect(m_pctrlY,          SIGNAL(clicked()),this, SLOT(On3DLeft()));
+    connect(m_pctrlZ,          SIGNAL(clicked()),this, SLOT(On3DTop()));
+    connect(m_pctrlReset,      SIGNAL(clicked()),this, SLOT(On3DReset()));
     connect(m_pctrlPickCenter, SIGNAL(clicked()),this, SLOT(On3DPickCenter()));
 
     connect(m_pctrlAxes,       SIGNAL(clicked()), this, SLOT(OnAxes()));
@@ -139,10 +173,10 @@ void SailViewWt::SetupLayout()
                 m_pctrlZ->setIconSize(QSize(32,32));
                 m_pctrlIso->setIconSize(QSize(32,32));
             }
-            m_pXView = new QAction(QIcon(":/images/OnXView.png"), tr("X View"), this);
-            m_pYView = new QAction(QIcon(":/images/OnYView.png"), tr("Y View"), this);
-            m_pZView = new QAction(QIcon(":/images/OnZView.png"), tr("Z View"), this);
-            m_pIsoView = new QAction(QIcon(":/images/OnIsoView.png"), tr("Iso View"), this);
+            m_pXView = new QAction(QIcon(":/icons/OnXView.png"), tr("X View"), this);
+            m_pYView = new QAction(QIcon(":/icons/OnYView.png"), tr("Y View"), this);
+            m_pZView = new QAction(QIcon(":/icons/OnZView.png"), tr("Z View"), this);
+            m_pIsoView = new QAction(QIcon(":/icons/OnIsoView.png"), tr("Iso View"), this);
             m_pXView->setCheckable(true);
             m_pYView->setCheckable(true);
             m_pZView->setCheckable(true);
@@ -893,8 +927,6 @@ void SailViewWt::mouseReleaseEvent(QMouseEvent *)
 }
 
 
-
-
 void  SailViewWt::wheelEvent(QWheelEvent *event)
 {
     if(m_pglSailView->rect().contains(event->pos()))
@@ -904,8 +936,8 @@ void  SailViewWt::wheelEvent(QWheelEvent *event)
         //Process the message
         //    point is in client coordinates
 
-        if(event->delta()<0) m_glScaled *= (GLfloat)1.06;
-        else                 m_glScaled /= (GLfloat)1.06;
+        if(event->delta()<0) m_glScaled *= 1.06;
+        else                 m_glScaled /= 1.06;
 
         m_bResetglCtrlPoints = true;
     }
@@ -932,9 +964,9 @@ void SailViewWt::GLInverseMatrix()
 
 void SailViewWt::keyPressEvent(QKeyEvent *event)
 {
-    bool bShift = false;
+//    bool bShift = false;
     bool bCtrl  = false;
-    if(event->modifiers() & Qt::ShiftModifier)   bShift =true;
+//    if(event->modifiers() & Qt::ShiftModifier)   bShift =true;
     if(event->modifiers() & Qt::ControlModifier) bCtrl =true;
 
     switch (event->key())

@@ -236,16 +236,16 @@ void SailDlg::SetSailData(Sail* )
         SailcutSail *pSCSail = (SailcutSail*)m_pSail;
         m_pctrlStackedSailWidget->setCurrentIndex(1);
 
-        m_pctrlLeechRound->SetValue(pSCSail->m_LeechRound);
-        m_pctrlLeechRoundPos->SetValue(pSCSail->m_LeechRoundPos*100.0);
+        m_pctrlLeechRound->setValue(pSCSail->m_LeechRound);
+        m_pctrlLeechRoundPos->setValue(pSCSail->m_LeechRoundPos*100.0);
 
-        m_pctrlGaffTwist->SetValue(pSCSail->m_Twist);
+        m_pctrlGaffTwist->setValue(pSCSail->m_Twist);
     }
 
-    m_pctrlNXPanels->SetValue(m_pSail->m_NXPanels);
-    m_pctrlNZPanels->SetValue(m_pSail->m_NZPanels);
+    m_pctrlNXPanels->setValue(m_pSail->m_NXPanels);
+    m_pctrlNZPanels->setValue(m_pSail->m_NZPanels);
 
-    m_pctrlLuffAngle->SetValue(m_pSail->m_LuffAngle);
+    m_pctrlLuffAngle->setValue(m_pSail->m_LuffAngle);
 
     m_iSection = 0;
     FillSectionTable();
@@ -278,15 +278,15 @@ void SailDlg::SetControls()
     if(m_pSail->IsNURBSSail())
     {
         NURBSSail * pNSail = dynamic_cast<NURBSSail*>(m_pSail);
-        m_pctrlNXDegree->SetValue(pNSail->m_SplineSurface.m_ivDegree);
-        m_pctrlNZDegree->SetValue(pNSail->m_SplineSurface.m_iuDegree);
+        m_pctrlNXDegree->setValue(pNSail->m_SplineSurface.m_ivDegree);
+        m_pctrlNZDegree->setValue(pNSail->m_SplineSurface.m_iuDegree);
         QString str = QString("(<%1)").arg(pNSail->m_SplineSurface.FramePointCount());
         m_pctrlNXDegMin->setText(str);
         str = QString("(<%1)").arg(pNSail->m_SplineSurface.m_pFrame.size());
         m_pctrlNZDegMin->setText(str);
 
-        m_pctrlEdgeWeightu->SetValue(pNSail->m_SplineSurface.m_EdgeWeightu);
-        m_pctrlEdgeWeightv->SetValue(pNSail->m_SplineSurface.m_EdgeWeightv);
+        m_pctrlEdgeWeightu->setValue(pNSail->m_SplineSurface.m_EdgeWeightu);
+        m_pctrlEdgeWeightv->setValue(pNSail->m_SplineSurface.m_EdgeWeightv);
     }
 }
 
@@ -449,31 +449,31 @@ void SailDlg::SetupLayout()
                 {
                     QToolBar *ActionButtons = new QToolBar(this);
                     {
-                        m_pZoomIn= new QAction(QIcon(":/images/OnZoomIn.png"), tr("Zoom in"), this);
+                        m_pZoomIn= new QAction(QIcon(":/icons/OnZoomIn.png"), tr("Zoom in"), this);
                         m_pZoomIn->setCheckable(true);
                         m_pZoomIn->setStatusTip(tr("Zoom the view by drawing a rectangle in the client area"));
 
-                        m_pZoomOut= new QAction(QIcon(":/images/OnZoomLess.png"), tr("Zoom Less"), this);
+                        m_pZoomOut= new QAction(QIcon(":/icons/OnZoomLess.png"), tr("Zoom Less"), this);
                         m_pZoomOut->setStatusTip(tr("Zoom Less"));
 
-                        m_pZoomYOnly= new QAction(QIcon(":/images/OnZoomYScale.png"), tr("Zoom Y Scale Only"), this);
+                        m_pZoomYOnly= new QAction(QIcon(":/icons/OnZoomYScale.png"), tr("Zoom Y Scale Only"), this);
                         m_pZoomYOnly->setCheckable(true);
                         m_pZoomYOnly->setStatusTip(tr("Zoom Y scale Only"));
 
-                        m_pResetXScale = new QAction(QIcon(":/images/OnResetXScale.png"), tr("Reset X Scale"), this);
+                        m_pResetXScale = new QAction(QIcon(":/icons/OnResetXScale.png"), tr("Reset X Scale"), this);
                         m_pResetXScale->setStatusTip(tr("Resets the scale to fit the current screen width"));
 
-                        m_pResetYScale = new QAction(QIcon(":/images/OnResetYScale.png"), tr("Reset Y Scale"), this);
+                        m_pResetYScale = new QAction(QIcon(":/icons/OnResetYScale.png"), tr("Reset Y Scale"), this);
                         m_pResetYScale->setStatusTip(tr("Resets the Y-scale to unity"));
 
-                        m_pResetScales= new QAction(QIcon(":/images/OnResetXYScale.png"), tr("Reset Scales")+"\t(R)", this);
+                        m_pResetScales= new QAction(QIcon(":/icons/OnResetXYScale.png"), tr("Reset Scales")+"\t(R)", this);
                         m_pResetScales->setStatusTip(tr("Resets the x and y scales to screen size"));
 
-                        m_pUndo = new QAction(QIcon(":/images/OnUndo.png"), tr("Undo"), this);
+                        m_pUndo = new QAction(QIcon(":/icons/OnUndo.png"), tr("Undo"), this);
                         m_pUndo->setShortcut(Qt::CTRL + Qt::Key_Z);
                         m_pUndo->setStatusTip(tr("Cancels the last modifiction made to the splines"));
 
-                        m_pRedo = new QAction(QIcon(":/images/OnRedo.png"), tr("Redo"), this);
+                        m_pRedo = new QAction(QIcon(":/icons/OnRedo.png"), tr("Redo"), this);
                         m_pRedo->setShortcut(Qt::CTRL + Qt::Key_Y);
                         m_pRedo->setStatusTip(tr("Restores the last cancelled modifiction made to the splines"));
 
@@ -823,11 +823,11 @@ void SailDlg::OnUpdate()
         NURBSSail *pNSail = dynamic_cast<NURBSSail*>(m_pSail);
         pNSail->m_SplineSurface.SetvDegree((int)m_pctrlNXDegree->Value());
         //the degree may have been adjusted, so set the returned value
-        m_pctrlNXDegree->SetValue(pNSail->m_SplineSurface.m_ivDegree);
+        m_pctrlNXDegree->setValue(pNSail->m_SplineSurface.m_ivDegree);
 
         pNSail->m_SplineSurface.SetuDegree((int)m_pctrlNZDegree->Value());
         //the degree may have been adjusted, so set the returned value
-        m_pctrlNZDegree->SetValue(pNSail->m_SplineSurface.m_iuDegree);
+        m_pctrlNZDegree->setValue(pNSail->m_SplineSurface.m_iuDegree);
 
         pNSail->m_SplineSurface.m_EdgeWeightu = m_pctrlEdgeWeightu->Value();
         pNSail->m_SplineSurface.m_EdgeWeightv = m_pctrlEdgeWeightv->Value();
@@ -1032,7 +1032,7 @@ void SailDlg::OnDeleteSection()
         if(oldDegree != newDegree)
         {
             //the degree has been adjusted, so set the returned value
-            m_pctrlNZDegree->SetValue(pNSail->m_SplineSurface.m_iuDegree);
+            m_pctrlNZDegree->setValue(pNSail->m_SplineSurface.m_iuDegree);
             QString strong = tr("The degree has been reduced to be less than the number of sections");
             QMessageBox::warning(window(), tr("Warning"), strong);
         }

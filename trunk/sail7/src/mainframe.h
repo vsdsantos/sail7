@@ -171,8 +171,6 @@ class MainFrame : public QMainWindow
         QMenu *fileMenu, *optionsMenu, *helpMenu;
 
 
-
-
         //Sail7 Menus
         QMenu *Sail7ViewMenu, *Sail7ObjectMenu, *Sail7PlrMenu, *Sail7OppMenu;
         QMenu *SailPlrCtxMenu, *Sail3DCtxMenu;

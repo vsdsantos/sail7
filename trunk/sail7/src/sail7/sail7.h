@@ -68,7 +68,7 @@ class Sail7 : public QWidget
 
     public:
         Sail7(QWidget *parent = nullptr);
-
+        ~Sail7();
 
     private slots:
 
@@ -229,8 +229,6 @@ class Sail7 : public QWidget
         void GLCallViewLists();
         void GLCreateSailMesh(Vector3d *pNode, CPanel *pPanel);
         void GLCreateSailGeom(GLuint GLList, Sail *pSail, Vector3d Position);
-        void GLCreateWaterList();
-        void GLCreateWindList();
         void GLCreateStreamLines();
 
         /** Creates the OpenGl list for lift and drag arrows.  Uses the force calculed in the Trefftz plane.*/

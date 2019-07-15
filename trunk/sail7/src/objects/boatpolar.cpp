@@ -615,7 +615,6 @@ void BoatPolar::ResetBoatPlr()
 }
 
 
-
 double BoatPolar::WindFactor(double z)
 {
     if(z>m_WindGradient[1][0]) return 1.0;

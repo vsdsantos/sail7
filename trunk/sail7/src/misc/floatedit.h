@@ -38,7 +38,7 @@ public:
     double Value();
     void SetMin(double f);
     void SetMax(double f);
-    void SetValue(double f);
+    void setValue(double f);
     void SetValueNoFormat(double f);
     void SetPrecision(int i);
     

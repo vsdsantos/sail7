@@ -35,11 +35,11 @@ public:
     void Export(QTextStream &out, int FileType=1, bool bDataOnly=false);
     void ResetBoatPlr();
     void DuplicateSpec(const BoatPolar *pBoatPolar);
+    double WindFactor(double z);
 
     static QString GetPolarVariableName(int iVar);
 
 private:
-    double WindFactor(double z);
 
     static void *s_pMainFrame;
     static void* s_pSail7;

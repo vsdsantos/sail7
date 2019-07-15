@@ -84,8 +84,8 @@ void BodyGridDlg::InitDialog()
     m_pctrlMinLine->SetStyle(m_MinStyle);
     m_pctrlMinLine->SetWidth(m_MinWidth);
     m_pctrlMinLine->SetColor(m_MinColor);
-    m_pctrlUnit->SetValue(m_Unit);
-    m_pctrlMinUnit->SetValue(m_MinorUnit);
+    m_pctrlUnit->setValue(m_Unit);
+    m_pctrlMinUnit->setValue(m_MinorUnit);
 
     m_pctrlGrid2->setChecked(m_bGrid2);
     m_pctrlLine2->SetStyle(m_Style2);
@@ -95,8 +95,8 @@ void BodyGridDlg::InitDialog()
     m_pctrlMinLine2->SetStyle(m_MinStyle2);
     m_pctrlMinLine2->SetWidth(m_MinWidth2);
     m_pctrlMinLine2->SetColor(m_MinColor2);
-    m_pctrlUnit2->SetValue(m_Unit2);
-    m_pctrlMinUnit2->SetValue(m_MinorUnit2);
+    m_pctrlUnit2->setValue(m_Unit2);
+    m_pctrlMinUnit2->setValue(m_MinorUnit2);
 
     EnableControls();
 }

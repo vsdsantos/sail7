@@ -1,6 +1,30 @@
 <RCC>
     <qresource prefix="/">
         <file>icons/s7.png</file>
+        <file>icons/copy.png</file>
+        <file>icons/cut.png</file>
+        <file>icons/new.png</file>
+        <file>icons/OnIsoView.png</file>
+        <file>icons/OnPolarView.png</file>
+        <file>icons/OnRedo.png</file>
+        <file>icons/OnResetGraphScale.png</file>
+        <file>icons/OnResetXScale.png</file>
+        <file>icons/OnResetXYScale.png</file>
+        <file>icons/OnResetYScale.png</file>
+        <file>icons/OnUndo.png</file>
+        <file>icons/OnWOppView.png</file>
+        <file>icons/OnXView.png</file>
+        <file>icons/OnYView.png</file>
+        <file>icons/OnZoomGraphX.png</file>
+        <file>icons/OnZoomGraphY.png</file>
+        <file>icons/OnZoomIn.png</file>
+        <file>icons/OnZoomLess.png</file>
+        <file>icons/OnZoomYScale.png</file>
+        <file>icons/OnZView.png</file>
+        <file>icons/open.png</file>
+        <file>icons/paste.png</file>
+        <file>icons/sail7.png</file>
+        <file>icons/save.png</file>
+        <file>icons/Sailboat_256.png</file>
     </qresource>
 </RCC>
- 

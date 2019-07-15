@@ -60,9 +60,7 @@ CPanel* Sail7::s_pMemPanel;           // used if the analysis should be performe
 CPanel* Sail7::s_pWakePanel;          // the reference current wake panel array
 CPanel* Sail7::s_pRefWakePanel;       // the reference wake panel array if wake needs to be reset
 
-#define WATERLIST 7778
-#define WINDLIST  7779
-#define NORMALLIST 7777
+
 
 #define SPANPOINTS 59
 #define SIDEPOINTS 51
@@ -113,6 +111,8 @@ Sail7::Sail7(QWidget *parent) : QWidget(parent)
     m_bWater         = false;
     m_bWindDirection = true;
     //    m_bShowLight     = false;
+    m_bStream        = false;
+    m_bSpeeds        = false;
     m_bglLight       = true;
     m_bSurfaces      = true;
     m_bOutline       = true;
@@ -200,6 +200,33 @@ Sail7::Sail7(QWidget *parent) : QWidget(parent)
     connectSignals();
 }
 
+
+Sail7::~Sail7()
+{
+    //cleanup
+    if(glIsList(STREAMLINES))         glDeleteLists(STREAMLINES, 1);
+    if(glIsList(SURFACESPEEDS))       glDeleteLists(SURFACESPEEDS, 1);
+    if(glIsList(LIFTFORCE))           glDeleteLists(LIFTFORCE, 1);
+    if(glIsList(VLMMOMENTS))          glDeleteLists(VLMMOMENTS, 1);
+    if(glIsList(VLMCTRLPTS))          glDeleteLists(VLMCTRLPTS, 1);
+    if(glIsList(VLMVORTICES))         glDeleteLists(VLMVORTICES, 1);
+    if(glIsList(PANELCP))             glDeleteLists(PANELCP, 1);
+    if(glIsList(PANELCPLEGENDCOLOR))  glDeleteLists(PANELCPLEGENDCOLOR, 1);
+    if(glIsList(PANELFORCEARROWS))    glDeleteLists(PANELFORCEARROWS, 1);
+    if(glIsList(PANELFORCELEGENDTXT)) glDeleteLists(PANELFORCELEGENDTXT, 1);
+    if(glIsList(ARCBALL))             glDeleteLists(ARCBALL, 1);
+    if(glIsList(ARCPOINT))            glDeleteLists(ARCPOINT, 1);
+    if(glIsList(BODYGEOMBASE))        glDeleteLists(BODYGEOMBASE, 1);
+    if(glIsList(BODYMESHBASE))        glDeleteLists(BODYMESHBASE, 1);
+    if(glIsList(BODYCPBASE))          glDeleteLists(BODYCPBASE, 1);
+    if(glIsList(BODYFORCELISTBASE))   glDeleteLists(BODYFORCELISTBASE, 1);
+    if(glIsList(SAILGEOMBASE))        glDeleteLists(SAILGEOMBASE, 1);
+    if(glIsList(SAILMESHBASE))        glDeleteLists(SAILMESHBASE, 1);
+    if(glIsList(SAILCPBASE))          glDeleteLists(SAILCPBASE, 1);
+    if(glIsList(SAILFORCELISTBASE))   glDeleteLists(SAILFORCELISTBASE, 1);
+    if(glIsList(LIGHTSPHERE))         glDeleteLists(LIGHTSPHERE, 1);
+
+}
 
 
 void Sail7::setupLayout()
@@ -407,10 +434,10 @@ void Sail7::setupLayout()
                         m_pctrlZ->setIconSize(QSize(32,32));
                         m_pctrlIso->setIconSize(QSize(32,32));
                     }
-                    m_pXView = new QAction(QIcon(":/images/OnXView.png"), tr("X View"), this);
-                    m_pYView = new QAction(QIcon(":/images/OnYView.png"), tr("Y View"), this);
-                    m_pZView = new QAction(QIcon(":/images/OnZView.png"), tr("Z View"), this);
-                    m_pIsoView = new QAction(QIcon(":/images/OnIsoView.png"), tr("Iso View"), this);
+                    m_pXView = new QAction(QIcon(":/icons/OnXView.png"), tr("X View"), this);
+                    m_pYView = new QAction(QIcon(":/icons/OnYView.png"), tr("Y View"), this);
+                    m_pZView = new QAction(QIcon(":/icons/OnZView.png"), tr("Z View"), this);
+                    m_pIsoView = new QAction(QIcon(":/icons/OnIsoView.png"), tr("Iso View"), this);
                     m_pXView->setCheckable(true);
                     m_pYView->setCheckable(true);
                     m_pZView->setCheckable(true);
@@ -912,22 +939,8 @@ void Sail7::GLDraw3D()
         m_GLList+=2;
     }
 
-    if(!glIsList(WATERLIST))
-    {
-        GLCreateWaterList();
-        m_GLList++;
-    }
-
-    if(m_bResetglOpp)
-    {
-        if(glIsList(WINDLIST))
-        {
-            glDeleteLists(WINDLIST, 1);
-            m_GLList--;
-        }
-        GLCreateWindList();
-        m_GLList++;
-    }
+    s_pglSail7View->GLCreateWaterList();
+    s_pglSail7View->GLCreateWindList(m_pCurBoat, m_pCurBoatPolar);
 
     if(!glIsList(LIGHTSPHERE))
     {
@@ -1073,7 +1086,7 @@ void Sail7::GLRenderView()
     //
     // Renders the OpenGl 3D view
     //
-
+    s_pglSail7View->makeCurrent();
     GLdouble pts[4];
 
     pts[0]= 0.0; pts[1]=0.0; pts[2]=-1.0; pts[3]= m_ClipPlanePos;  //x=m_VerticalSplit
@@ -1414,7 +1427,7 @@ int Sail7::CreateBodyElements(Body *pBody)
 
                     for (l=0; l<pBody->m_hPanels[k]; l++)
                     {
-                        dl1  = (double)(l+1) / (double)(pBody->m_hPanels[k]);
+                        dl1  = double(l+1) / double(pBody->m_hPanels[k]);
                         LA = PLB * (1.0- dl1) + PLA * dl1;
                         TA = PTB * (1.0- dl1) + PTA * dl1;
 
@@ -1518,7 +1531,7 @@ int Sail7::CreateBodyElements(Body *pBody)
             for (l=0; l<nh; l++)
             {
                 //start with left side... same as for wings
-                v = double(l+1) / (double)(nh);
+                v = double(l+1) / double(nh);
                 pBody->GetPoint(uk,  v, false, LA);
                 pBody->GetPoint(uk1, v, false, TA);
 
@@ -1705,111 +1718,11 @@ int Sail7::CreateBodyElements(Body *pBody)
 }
 
 
-void Sail7::GLCreateWindList()
-{
-    double s, h, height;
-    Vector3d w(1.0,0.0,0.0);
-    s=1.0;
-
-    if(!m_pCurBoat || !m_pCurBoatPolar) return;
-
-    height = m_pCurBoat->Height() * 2.0;
-
-    glNewList(WINDLIST, GL_COMPILE);
-    {
-        glLineWidth(2.0);
-        glColor3d(0.7,1.0,0.7);
-
-        for(int iw=0; iw<=10; iw++)
-        {
-            h = double(iw)/10.0 * height;
-
-            s = m_pCurBoatPolar->WindFactor(h);
-            //            p3DWidget->GLDrawCylinder(QColor(150,150,150), 0.13*s, 0.13*s, 0.0*s, 1.5*s, 31, 11);
-            //            p3DWidget->GLDrawCylinder(QColor(150,150,150), 0.31*s, 0.00*s, 1.5*s, 2.5*s, 31, 11);
-            s_pglSail7View->GLDrawArrow(Vector3d(0.0, 0.0, iw*height/10.0), w, s*2.0);
-
-            //            glTranslated(0.0, 0.0, height/10.0);
-        }
-
-        /*        glBegin(GL_LINE_STRIP);
-        {
-            for(int iw=0; iw<=100; iw++)
-            {
-                h = (double)iw/100.0 * height;
-                s = m_pCurBoatPolar->WindFactor(h);
-
-                glVertex3d(s*2.0, 0.0, iw*height/100.0);
-            }
-        }
-        glEnd();*/
-    }
-    glEndList();
-}
-
-
-
-#define WATERMESH 100
-void Sail7::GLCreateWaterList()
-{
-    QColor wColor(10, 70, 190);
-    glNewList(WATERLIST, GL_COMPILE);
-    {
-        glEnable (GL_BLEND);
-        glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glEnable(GL_DEPTH_TEST);
-        glEnable(GL_POLYGON_OFFSET_FILL);
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-        glPolygonOffset(1.0, 1.0);
-
-        /*        double ti, tip1, tj;
-        double lx=1.0, ly=5.;
-        for(int iw=0; iw<WATERMESH; iw++)
-        {
-            ti   = (double) iw   /WATERMESH;
-            tip1 = (double)(iw+1)/WATERMESH;
-
-            glBegin(GL_QUAD_STRIP);
-            {
-                wColor.setGreen((int)(70+23*sin(iw/PI/100)));
-                for(int jw=0; jw<WATERMESH; jw++)
-                {
-                    wColor.setBlue((int)(190+31*sin(jw/PI/100)));
-                    glColor4d(wColor.redF(), wColor.greenF(), wColor.blueF(), .5);
-
-
-                    tj = (double)jw/WATERMESH;
-
-                    glNormal3d(-2.*PI* lx* cos(ti*2*PI*lx)*cos(tj*2*PI*ly),
-                               +2.*PI* ly* sin(ti*2*PI*lx)*sin(tj*2*PI*ly),
-                               1.0/.37);
-                    glVertex3d(-20.+ti  *40.0, -20.+tj*40, 0.37* sin(ti*2*PI*lx)   * cos(tj*2*PI*ly));
-                    glVertex3d(-20.+tip1*40.0, -20.+tj*40, 0.37* sin(tip1*2*PI*lx) * cos(tj*2*PI*ly));
-                }
-            }
-            glEnd();
-        }*/
-        glColor4d(wColor.redF(), wColor.greenF(), wColor.blueF(), .3);
-        glBegin(GL_QUADS);
-        {
-            glNormal3d(0.0,0.0,1.0);
-            glVertex3d(-20.0, -20.0, 0.0);
-            glVertex3d(-20.0,  20.0, 0.0);
-            glVertex3d( 20.0,  20.0, 0.0);
-            glVertex3d( 20.0, -20.0, 0.0);
-        }
-        glEnd();
-    }
-    glEndList();
-}
-
-
 void Sail7::OnNewBoat()
 {
     //Define a Boat from scratch using the default values
     //On exit, check if the Boat's name is already used
-    int i;
-    Boat *pOldBoat;
+    Boat *pOldBoat = nullptr;
     Boat *pNewBoat= new Boat;
 
     BoatDlg dlg;
@@ -1821,7 +1734,7 @@ void Sail7::OnNewBoat()
     {
         s_pMainFrame->SetSaveState(false);
         bool bExists = false;
-        for(i=0; i<m_poaBoat->size(); i++)
+        for(int i=0; i<m_poaBoat->size(); i++)
         {
             pOldBoat = m_poaBoat->at(i);
             if(pNewBoat->m_BoatName == pOldBoat->m_BoatName)
@@ -5090,7 +5003,7 @@ void Sail7::OnReadAnalysisData()
     if(fabs(m_ControlDelta)<0.001)
     {
         m_ControlDelta = 0.001;
-        m_pctrlControlDelta->SetValue(0.001);
+        m_pctrlControlDelta->setValue(0.001);
     }
 }
 
@@ -5152,9 +5065,9 @@ void Sail7::SetAnalysisParams()
 {
     m_pctrlSequence->setChecked(m_bSequence);
     m_pctrlStoreOpp->setChecked(m_bStoreOpp);
-    m_pctrlControlMin->SetValue(m_ControlMin);
-    m_pctrlControlMax->SetValue(m_ControlMax);
-    m_pctrlControlDelta->SetValue(m_ControlDelta);
+    m_pctrlControlMin->setValue(m_ControlMin);
+    m_pctrlControlMax->setValue(m_ControlMax);
+    m_pctrlControlDelta->setValue(m_ControlDelta);
 
     m_pctrlAnalyze->setEnabled(m_pCurBoatPolar);
 

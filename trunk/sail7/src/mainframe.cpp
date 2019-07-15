@@ -52,7 +52,7 @@ QPointer<MainFrame> MainFrame::_self = nullptr;
 MainFrame::MainFrame(QWidget *parent, Qt::WindowFlags flags)
     : QMainWindow(parent, flags)
 {
-    m_VersionName = QString::fromLatin1("sail7 v1.0");
+    m_VersionName = QString::fromLatin1("sail7 v0.07");
 
 
     setWindowTitle(m_VersionName);
@@ -69,10 +69,11 @@ MainFrame::MainFrame(QWidget *parent, Qt::WindowFlags flags)
     m_SpeedUnit   = 0;
     m_ForceUnit   = 0;
     m_MomentUnit  = 0;
+    // set the defaults needed to initialize dockwindows
+    SetUnits(m_LengthUnit, m_AreaUnit, m_SpeedUnit, m_WeightUnit, m_ForceUnit, m_MomentUnit, m_mtoUnit, m_m2toUnit, m_mstoUnit, m_kgtoUnit, m_NtoUnit, m_NmtoUnit);
 
     m_pSail7 = nullptr;
 
-    CreateDockWindows();
     m_ProjectName.clear();
 
     m_BorderClr       = QColor(200,200,200);
@@ -101,7 +102,7 @@ MainFrame::MainFrame(QWidget *parent, Qt::WindowFlags flags)
     m_DlgPos = QPoint(int(r.width()/3), int(r.height()/3));
 
 
-
+    CreateDockWindows();
     if(LoadSettings())
     {
 #ifdef Q_WS_MAC
@@ -116,9 +117,6 @@ MainFrame::MainFrame(QWidget *parent, Qt::WindowFlags flags)
 
         m_pGL3DScales->LoadSettings(&settings);
     }
-
-    SetUnits(m_LengthUnit, m_AreaUnit, m_SpeedUnit, m_WeightUnit, m_ForceUnit, m_MomentUnit,
-             m_mtoUnit, m_m2toUnit, m_mstoUnit, m_kgtoUnit, m_NtoUnit, m_NmtoUnit);
 
     CreateActions();
     CreateMainMenu();
@@ -272,22 +270,22 @@ void MainFrame::contextMenuEvent (QContextMenuEvent * event)
 
 void MainFrame::CreateActions()
 {
-    newProjectAct = new QAction(QIcon(":/images/new.png"), tr("New Project"), this);
+    newProjectAct = new QAction(QIcon(":/icons/new.png"), tr("New Project"), this);
     newProjectAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_N));
     newProjectAct->setStatusTip(tr("Save and close the current project, create a new project"));
     connect(newProjectAct, SIGNAL(triggered()), this, SLOT(OnNewProject()));
 
-    closeProjectAct = new QAction(QIcon(":/images/new.png"), tr("Close the Project"), this);
+    closeProjectAct = new QAction(QIcon(":/icons/new.png"), tr("Close the Project"), this);
     closeProjectAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_W));
     closeProjectAct->setStatusTip(tr("Save and close the current project"));
     connect(closeProjectAct, SIGNAL(triggered()), this, SLOT(OnNewProject()));
 
-    m_pOpenAct = new QAction(QIcon(":/images/open.png"), tr("&Open"), this);
+    m_pOpenAct = new QAction(QIcon(":/icons/open.png"), tr("&Open"), this);
     m_pOpenAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_O));
     m_pOpenAct->setStatusTip(tr("Open an existing file"));
     connect(m_pOpenAct, SIGNAL(triggered()), this, SLOT(OnLoadFile()));
 
-    m_pOpenLast = new QAction(QIcon(":/images/open.png"), tr("&Open the last project file"), this);
+    m_pOpenLast = new QAction(QIcon(":/icons/open.png"), tr("&Open the last project file"), this);
     m_pOpenLast->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_O));
     connect(m_pOpenLast, SIGNAL(triggered()), SLOT(OnLoadLastFile()));
 
@@ -295,7 +293,7 @@ void MainFrame::CreateActions()
     insertAct->setStatusTip(tr("Insert an existing project in the current project"));
     connect(insertAct, SIGNAL(triggered()), this, SLOT(OnInsertProject()));
 
-    saveAct = new QAction(QIcon(":/images/save.png"), tr("Save"), this);
+    saveAct = new QAction(QIcon(":/icons/save.png"), tr("Save"), this);
     saveAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_S));
     saveAct->setStatusTip(tr("Save the project to disk"));
     connect(saveAct, SIGNAL(triggered()), this, SLOT(OnSaveProject()));
@@ -343,7 +341,7 @@ void MainFrame::CreateActions()
     exportCurGraphAct->setStatusTip(tr("Export the current graph data to a text file"));
     connect(exportCurGraphAct, SIGNAL(triggered()), this, SLOT(OnExportCurGraph()));
 
-    resetCurGraphScales = new QAction(QIcon(":/images/OnResetGraphScale.png"), tr("Reset Graph Scales")+"\t(R)", this);
+    resetCurGraphScales = new QAction(QIcon(":/icons/OnResetGraphScale.png"), tr("Reset Graph Scales")+"\t(R)", this);
     resetCurGraphScales->setStatusTip(tr("Restores the graph's x and y scales"));
     connect(resetCurGraphScales, SIGNAL(triggered()), this, SLOT(OnResetCurGraphScales()));
 
@@ -416,7 +414,7 @@ void MainFrame::CreateActions()
 
 void MainFrame::CreateDockWindows()
 {
-    Sail7::s_pMainFrame               = this;
+    Sail7::s_pMainFrame                = this;
     ThreeDWidget::s_pMainFrame         = this;
     TwoDWidget::s_pMainFrame           = this;
     ObjectPropsDlg::s_pMainFrame       = this;
@@ -425,7 +423,7 @@ void MainFrame::CreateDockWindows()
     BoatPolarDlg::s_pMainFrame         = this;
     BoatPolar::s_pMainFrame            = this;
     BoatOpp::s_pMainFrame              = this;
-    Body::s_pMainFrame                = this;
+    Body::s_pMainFrame                 = this;
     BoatAnalysisDlg::s_pMainFrame      = this;
     GL3DScales::s_pMainFrame           = this;
     DisplaySettingsDlg::s_pMainFrame   = this;
@@ -433,8 +431,8 @@ void MainFrame::CreateDockWindows()
     SailDlg::s_pMainFrame              = this;
     GL3dBodyDlg::s_pMainFrame          = this;
     SectionViewWidget::s_pMainFrame    = this;
-    Sail::s_pMainFrame                = this;
-    SailViewWt::s_pMainFrame       = this;
+    Sail::s_pMainFrame                 = this;
+    SailViewWt::s_pMainFrame           = this;
 
     m_pctrlSail7Widget = new QDockWidget("Sail7", this);
     m_pctrlSail7Widget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
@@ -546,12 +544,12 @@ void MainFrame::CreateSail7Actions()
     Sail7EditBoatAct->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_F3));
     connect(Sail7EditBoatAct, SIGNAL(triggered()), m_pSail7, SLOT(OnEditCurBoat()));
 
-    BoatPolarAct = new QAction(QIcon(":/images/OnPolarView.png"), tr("Polar View")+"\tF8", this);
+    BoatPolarAct = new QAction(QIcon(":/icons/OnPolarView.png"), tr("Polar View")+"\tF8", this);
     BoatPolarAct->setCheckable(true);
     BoatPolarAct->setStatusTip(tr("Switch to the Polar view"));
     connect(BoatPolarAct, SIGNAL(triggered()), m_pSail7, SLOT(OnSailPolarView()));
 
-    Boat3DAct = new QAction(QIcon(":/images/Sailboat_256.png"), tr("3D View")+"\tF4", this);
+    Boat3DAct = new QAction(QIcon(":/icons/Sailboat_256.png"), tr("3D View")+"\tF4", this);
     Boat3DAct->setCheckable(true);
     Boat3DAct->setStatusTip(tr("Switch to the 3D view"));
     connect(Boat3DAct, SIGNAL(triggered()), m_pSail7, SLOT(OnSail3DView()));
@@ -1064,6 +1062,19 @@ bool MainFrame::LoadSettings()
 
         m_LanguageFilePath = settings.value("LanguageFilePath").toString();
 
+        m_LengthUnit  = settings.value("LengthUnit").toInt();
+        m_AreaUnit    = settings.value("AreaUnit").toInt();
+        m_WeightUnit  = settings.value("WeightUnit").toInt();
+        m_SpeedUnit   = settings.value("SpeedUnit").toInt();
+        m_ForceUnit   = settings.value("ForceUnit").toInt();
+        m_MomentUnit  = settings.value("MomentUnit").toInt();
+        SetUnits(m_LengthUnit, m_AreaUnit, m_SpeedUnit, m_WeightUnit, m_ForceUnit, m_MomentUnit,
+                 m_mtoUnit, m_m2toUnit, m_mstoUnit, m_kgtoUnit, m_NtoUnit, m_NmtoUnit);
+
+        m_ImageDirName      = settings.value("ImageDirName").toString();
+        m_ExportLastDirName = settings.value("ExportLastDirName").toString();
+        m_XMLPath           = settings.value("XMLPath").toString();
+        m_LastDirName       = settings.value("LastDirName").toString();
 
         bFloat  = settings.value("Sail7_Float").toBool();
         pt.rx() = settings.value("Sail7_x").toInt();
@@ -1073,16 +1084,6 @@ bool MainFrame::LoadSettings()
         if(bFloat) m_pctrlSail7Widget->move(pt);
         m_pctrlSail7Widget->resize(size);
 
-        m_LastDirName       = settings.value("LastDirName").toString();
-        m_ImageDirName      = settings.value("ImageDirName").toString();
-        m_ExportLastDirName = settings.value("ExportLastDirName").toString();
-        m_XMLPath           = settings.value("XMLPath").toString();
-        m_LengthUnit  = settings.value("LengthUnit").toInt();
-        m_AreaUnit    = settings.value("AreaUnit").toInt();
-        m_WeightUnit  = settings.value("WeightUnit").toInt();
-        m_SpeedUnit   = settings.value("SpeedUnit").toInt();
-        m_ForceUnit   = settings.value("ForceUnit").toInt();
-        m_MomentUnit  = settings.value("MomentUnit").toInt();
         m_BackgroundColor.setRed(settings.value("BackgroundColorRed").toInt());
         m_BackgroundColor.setGreen(settings.value("BackgroundColorGreen").toInt());
         m_BackgroundColor.setBlue(settings.value("BackgroundColorBlue").toInt());

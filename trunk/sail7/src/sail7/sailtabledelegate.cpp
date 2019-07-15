@@ -55,7 +55,7 @@ void SailTableDelegate::setEditorData(QWidget *editor, const QModelIndex &index)
     {
         double value = index.model()->data(index, Qt::EditRole).toDouble();
         FloatEdit *floatEdit = static_cast<FloatEdit*>(editor);
-        floatEdit->SetValue(value);
+        floatEdit->setValue(value);
     }
     else
     {

@@ -27,6 +27,8 @@
 #include "../misc/floatedit.h"
 #include "../misc/floateditdelegate.h"
 
+class MainFrame;
+class Sail7;
 
 class BoatDlg : public QDialog
 {
@@ -77,14 +79,14 @@ private:
     void FillSailList();
     void FillHullList();
     void ReadData();
-    void SetSail(int iSelect){if(iSelect>=0) m_pctrlSailTable->selectRow(iSelect);};
-    void SetHull(int iSelect){if(iSelect>=0) m_pctrlHullTable->selectRow(iSelect);};
+    void SetSail(int iSelect){if(iSelect>=0) m_pctrlSailTable->selectRow(iSelect);}
+    void SetHull(int iSelect){if(iSelect>=0) m_pctrlHullTable->selectRow(iSelect);}
 
 
     //private variables:
 private:
-    static void *s_pMainFrame;
-    static void *s_pSail7;
+    static MainFrame *s_pMainFrame;
+    static Sail7 *s_pSail7;
 
     Boat *m_pBoat;
 

@@ -11,7 +11,9 @@
 
 #include "threedwidget.h"
 
+
 class SailViewWt;
+
 
 class glSailView : public ThreeDWidget
 {
@@ -27,6 +29,7 @@ class glSailView : public ThreeDWidget
         void keyPressEvent(QKeyEvent *event);
 
         void paintGL();//virtual override};
+
 
     private:
         SailViewWt *m_pSailViewWt;
