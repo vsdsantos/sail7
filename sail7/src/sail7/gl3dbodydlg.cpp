@@ -157,11 +157,11 @@ GL3dBodyDlg::GL3dBodyDlg(QWidget *pParent): QDialog(pParent)
     m_pShowCurFrameOnly = new QAction(tr("Show Current Frame Only"), this);
     m_pShowCurFrameOnly->setCheckable(true);
 
-    m_pUndo= new QAction(QIcon(":/images/OnUndo.png"), tr("Undo"), this);
+    m_pUndo= new QAction(QIcon(":/icons/OnUndo.png"), tr("Undo"), this);
     m_pUndo->setStatusTip(tr("Cancels the last modifiction made to the body"));
     connect(m_pUndo, SIGNAL(triggered()), this, SLOT(OnUndo()));
 
-    m_pRedo = new QAction(QIcon(":/images/OnRedo.png"), tr("Redo"), this);
+    m_pRedo = new QAction(QIcon(":/icons/OnRedo.png"), tr("Redo"), this);
     m_pRedo->setStatusTip(tr("Restores the last cancelled modification made to the body"));
     connect(m_pRedo, SIGNAL(triggered()), this, SLOT(OnRedo()));
 
@@ -227,7 +227,43 @@ GL3dBodyDlg::GL3dBodyDlg(QWidget *pParent): QDialog(pParent)
 GL3dBodyDlg::~GL3dBodyDlg()
 {
     delete m_BodyGridDlg;
+    //cleanup
+
+    if(glIsList(STREAMLINES))         glDeleteLists(STREAMLINES, 1);
+    if(glIsList(SURFACESPEEDS))       glDeleteLists(SURFACESPEEDS, 1);
+    if(glIsList(LIFTFORCE))           glDeleteLists(LIFTFORCE, 1);
+    if(glIsList(VLMMOMENTS))          glDeleteLists(VLMMOMENTS, 1);
+    if(glIsList(VLMCTRLPTS))          glDeleteLists(VLMCTRLPTS, 1);
+    if(glIsList(VLMVORTICES))         glDeleteLists(VLMVORTICES, 1);
+    if(glIsList(PANELCP))             glDeleteLists(PANELCP, 1);
+    if(glIsList(PANELCPLEGENDCOLOR))  glDeleteLists(PANELCPLEGENDCOLOR, 1);
+    if(glIsList(PANELFORCEARROWS))    glDeleteLists(PANELFORCEARROWS, 1);
+    if(glIsList(PANELFORCELEGENDTXT)) glDeleteLists(PANELFORCELEGENDTXT, 1);
+    if(glIsList(ARCBALL))             glDeleteLists(ARCBALL, 1);
+    if(glIsList(ARCPOINT))            glDeleteLists(ARCPOINT, 1);
+    if(glIsList(BODYGEOMBASE))        glDeleteLists(BODYGEOMBASE, 1);
+    if(glIsList(BODYMESHBASE))        glDeleteLists(BODYMESHBASE, 1);
+    if(glIsList(BODYCPBASE))          glDeleteLists(BODYCPBASE, 1);
+    if(glIsList(BODYFORCELISTBASE))   glDeleteLists(BODYFORCELISTBASE, 1);
+    if(glIsList(SAILGEOMBASE))        glDeleteLists(SAILGEOMBASE, 1);
+    if(glIsList(SAILMESHBASE))        glDeleteLists(SAILMESHBASE, 1);
+    if(glIsList(SAILCPBASE))          glDeleteLists(SAILCPBASE, 1);
+    if(glIsList(SAILFORCELISTBASE))   glDeleteLists(SAILFORCELISTBASE, 1);
+    if(glIsList(LIGHTSPHERE))         glDeleteLists(LIGHTSPHERE, 1);
+
+    if(glIsList(BODYAXIALLINES))    glDeleteLists(BODYAXIALLINES, 1);
+    if(glIsList(BODYFRAME))         glDeleteLists(BODYFRAME, 1);
+    if(glIsList(BODYFRAME3D))       glDeleteLists(BODYFRAME3D, 1);
+    if(glIsList(BODYFRAMEGRID))     glDeleteLists(BODYFRAMEGRID, 1);
+    if(glIsList(BODYLINEGRID))      glDeleteLists(BODYLINEGRID, 1);
+    if(glIsList(BODYPOINTS))        glDeleteLists(BODYPOINTS, 1);
+    if(glIsList(FRAMEPOINTS))       glDeleteLists(FRAMEPOINTS, 1);
+    if(glIsList(BODYOVERLAY))       glDeleteLists(BODYOVERLAY, 1);
+    if(glIsList(BODYFRAMESCALES))   glDeleteLists(BODYFRAMESCALES, 1);
+    if(glIsList(BODYLINESCALES))    glDeleteLists(BODYLINESCALES, 1);
+
 }
+
 
 void GL3dBodyDlg::FillFrameCell(int iItem, int iSubItem)
 {
@@ -3163,8 +3199,8 @@ void GL3dBodyDlg::SetControls()
     m_pctrlBodyStyle->SetWidth(m_pBody->m_BodyWidth);
     m_pctrlBodyStyle->SetColor(m_pBody->m_BodyColor);
 
-    m_pctrlNXPanels->SetValue(m_pBody->m_nxPanels);
-    m_pctrlNHoopPanels->SetValue(m_pBody->m_nhPanels);
+    m_pctrlNXPanels->setValue(m_pBody->m_nxPanels);
+    m_pctrlNHoopPanels->setValue(m_pBody->m_nhPanels);
 
     m_pctrlXDegree->setCurrentIndex(m_pBody->m_SplineSurface.m_iuDegree-1);
     m_pctrlHoopDegree->setCurrentIndex(m_pBody->m_SplineSurface.m_ivDegree-1);
@@ -3413,10 +3449,10 @@ void GL3dBodyDlg::SetupLayout()
                 m_pctrlZ->setIconSize(QSize(32,32));
                 m_pctrlIso->setIconSize(QSize(32,32));
             }
-            m_pXView = new QAction(QIcon(":/images/OnXView.png"), tr("X View"), this);
-            m_pYView = new QAction(QIcon(":/images/OnYView.png"), tr("Y View"), this);
-            m_pZView = new QAction(QIcon(":/images/OnZView.png"), tr("Z View"), this);
-            m_pIsoView = new QAction(QIcon(":/images/OnIsoView.png"), tr("Iso View"), this);
+            m_pXView = new QAction(QIcon(":/icons/OnXView.png"), tr("X View"), this);
+            m_pYView = new QAction(QIcon(":/icons/OnYView.png"), tr("Y View"), this);
+            m_pZView = new QAction(QIcon(":/icons/OnZView.png"), tr("Z View"), this);
+            m_pIsoView = new QAction(QIcon(":/icons/OnIsoView.png"), tr("Iso View"), this);
             m_pXView->setCheckable(true);
             m_pYView->setCheckable(true);
             m_pZView->setCheckable(true);
@@ -3462,8 +3498,8 @@ void GL3dBodyDlg::SetupLayout()
 
         QHBoxLayout *ActionButtons = new QHBoxLayout;
         {
-            m_pctrlUndo = new QPushButton(QIcon(":/images/OnUndo.png"), tr("Undo"));
-            m_pctrlRedo = new QPushButton(QIcon(":/images/OnRedo.png"), tr("Redo"));
+            m_pctrlUndo = new QPushButton(QIcon(":/icons/OnUndo.png"), tr("Undo"));
+            m_pctrlRedo = new QPushButton(QIcon(":/icons/OnRedo.png"), tr("Redo"));
             m_pctrlMenuButton = new QPushButton(tr("Other"));
 
             BodyMenu = new QMenu(tr("Actions..."),this);

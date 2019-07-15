@@ -10,12 +10,19 @@
 #ifndef GLSAIL7VIEW_H
 #define GLSAIL7VIEW_H
 
-#include "threedwidget.h"
+#define WATERLIST 7778
+#define WINDLIST  7779
+#define NORMALLIST 7777
 
+#include "threedwidget.h"
+class Boat;
+class BoatPolar;
 class glSail7View : public ThreeDWidget
 {
     public:
         glSail7View(QWidget *parent = nullptr);
+        ~glSail7View();
+
         void contextMenuEvent (QContextMenuEvent * event);
         void mousePressEvent(QMouseEvent *event);
         void mouseReleaseEvent(QMouseEvent *event);
@@ -27,6 +34,9 @@ class glSail7View : public ThreeDWidget
 
         void resizeGL(int width, int height);
         void paintGL();//virtual override
+        void GLCreateWaterList();
+        void GLCreateWindList(Boat *pBoat, BoatPolar *pBtPolar);
 };
 
 #endif // GLSAILVIEW_H
+

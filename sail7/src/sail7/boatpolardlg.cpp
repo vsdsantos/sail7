@@ -275,8 +275,8 @@ void BoatPolarDlg::InitDialog(Boat *pBoat, BoatPolar *pBoatPolar)
     if(pBoatPolar) s_BoatPolar.DuplicateSpec(pBoatPolar);
 
     m_pctrlGroundEffect->setChecked(s_BoatPolar.m_bGround);
-    m_pctrlXCmRef->SetValue(s_BoatPolar.m_CoG.x*s_pMainFrame->m_mtoUnit);
-    m_pctrlZCmRef->SetValue(s_BoatPolar.m_CoG.z*s_pMainFrame->m_mtoUnit);
+    m_pctrlXCmRef->setValue(s_BoatPolar.m_CoG.x*s_pMainFrame->m_mtoUnit);
+    m_pctrlZCmRef->setValue(s_BoatPolar.m_CoG.z*s_pMainFrame->m_mtoUnit);
 
     //fill the wind gradient table
     QModelIndex ind;
@@ -362,14 +362,14 @@ void BoatPolarDlg::OnUnit()
     if(m_pctrlUnit1->isChecked())
     {
         s_UnitType   = 1;
-        m_pctrlViscosity->SetValue(s_BoatPolar.m_Viscosity);
+        m_pctrlViscosity->setValue(s_BoatPolar.m_Viscosity);
         m_pctrlDensityUnit->setText("kg/m3");
         m_pctrlViscosityUnit->setText("m"+QString::fromUtf8("²")+"/s");
     }
     else
     {
         s_UnitType   = 2;
-        m_pctrlViscosity->SetValue(s_BoatPolar.m_Viscosity* 10.7182881);
+        m_pctrlViscosity->setValue(s_BoatPolar.m_Viscosity* 10.7182881);
         m_pctrlDensityUnit->setText("slugs/ft3");
         m_pctrlViscosityUnit->setText("ft"+QString::fromUtf8("²")+"/s");
     }
@@ -388,7 +388,7 @@ void BoatPolarDlg::SetDensity()
         else if(exp<-4) precision = 4;
         else precision = 3-exp;
         m_pctrlDensity->SetPrecision(precision);
-        m_pctrlDensity->SetValue(s_BoatPolar.m_Density);
+        m_pctrlDensity->setValue(s_BoatPolar.m_Density);
     }
     else
     {
@@ -397,7 +397,7 @@ void BoatPolarDlg::SetDensity()
         else if(exp<-4) precision = 4;
         else precision = 3-exp;
         m_pctrlDensity->SetPrecision(precision);
-        m_pctrlDensity->SetValue(s_BoatPolar.m_Density* 0.00194122);
+        m_pctrlDensity->setValue(s_BoatPolar.m_Density* 0.00194122);
     }
 }
 

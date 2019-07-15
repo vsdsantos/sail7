@@ -31,9 +31,8 @@ FloatEdit::FloatEdit(QWidget *pParent)
     v->setRange(-1.e10, 1.e10, 1000);
     setValidator(v);
     setAlignment(Qt::AlignRight);
-    SetValue(0.0);
+    setValue(0.0);
 }
-
 
 
 FloatEdit::FloatEdit(double d, int precision)
@@ -44,7 +43,7 @@ FloatEdit::FloatEdit(double d, int precision)
     v->setRange(-1.e10, 1.e10, 1000);
     setValidator(v);
     setAlignment(Qt::AlignRight);
-    SetValue(d);
+    setValue(d);
 }
 
 
@@ -173,7 +172,7 @@ void FloatEdit::DefineValue(double f)
     m_Value = f;
 }
 
-void FloatEdit::SetValue(double f)
+void FloatEdit::setValue(double f)
 {
     QString str;
     m_Value = f;

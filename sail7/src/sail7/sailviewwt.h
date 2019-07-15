@@ -33,6 +33,7 @@ class SailViewWt : public QWidget
 
 public:
     SailViewWt();
+    ~SailViewWt();
 
 private slots:
     void OnAxes();
@@ -59,7 +60,7 @@ public:
     void hideEvent(QHideEvent *event);
     void showEvent(QShowEvent *event);
 
-    void Connect();
+    void connectSignals();
     void GLDraw3D();
     void GLInverseMatrix();
     void GLRenderSail();

@@ -43,9 +43,9 @@ ScaleSailDlg::ScaleSailDlg(void *pParent)
 void ScaleSailDlg::InitDialog(Sail *pSail)
 {
     m_pSail = pSail;
-    m_pctrlXScaleFactor->SetValue(m_XFactor);
-    m_pctrlYScaleFactor->SetValue(m_YFactor);
-    m_pctrlZScaleFactor->SetValue(m_ZFactor);
+    m_pctrlXScaleFactor->setValue(m_XFactor);
+    m_pctrlYScaleFactor->setValue(m_YFactor);
+    m_pctrlZScaleFactor->setValue(m_ZFactor);
 
     m_pctrlXScaleFactor->setFocus();
 

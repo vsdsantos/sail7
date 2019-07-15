@@ -18,6 +18,13 @@ glSail7View::glSail7View(QWidget *parent) : ThreeDWidget (parent)
 }
 
 
+glSail7View::~glSail7View()
+{
+    if(glIsList(WATERLIST))           glDeleteLists(WATERLIST,  1);
+    if(glIsList(WINDLIST))            glDeleteLists(WINDLIST,   1);
+    if(glIsList(NORMALLIST))          glDeleteLists(NORMALLIST, 1);
+}
+
 void glSail7View::contextMenuEvent (QContextMenuEvent * event)
 {
     s_pMainFrame->Sail3DCtxMenu->exec(event->pos());
@@ -87,3 +94,76 @@ void glSail7View::resizeGL(int width, int height)
 
 }
 
+
+void glSail7View::GLCreateWaterList()
+{
+    if(glIsList(WATERLIST)) return;
+
+    QColor wColor(10, 70, 190);
+    glNewList(WATERLIST, GL_COMPILE);
+    {
+        glEnable (GL_BLEND);
+        glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_POLYGON_OFFSET_FILL);
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        glPolygonOffset(1.0, 1.0);
+
+        glColor4d(wColor.redF(), wColor.greenF(), wColor.blueF(), .3);
+        glBegin(GL_QUADS);
+        {
+            glNormal3d(0.0,0.0,1.0);
+            glVertex3d(-20.0, -20.0, 0.0);
+            glVertex3d(-20.0,  20.0, 0.0);
+            glVertex3d( 20.0,  20.0, 0.0);
+            glVertex3d( 20.0, -20.0, 0.0);
+        }
+        glEnd();
+    }
+    glEndList();
+}
+
+
+void glSail7View::GLCreateWindList(Boat*pBoat, BoatPolar *pBtPolar)
+{
+    if(glIsList(WINDLIST)) return;
+
+    double s=0, h=0, height=0;
+    Vector3d w(1.0,0.0,0.0);
+    s=1.0;
+
+    if(!pBoat || !pBtPolar) return;
+
+    height = pBoat->Height() * 2.0;
+
+    glNewList(WINDLIST, GL_COMPILE);
+    {
+        glLineWidth(2.0);
+        glColor3d(0.7,1.0,0.7);
+
+        for(int iw=0; iw<=10; iw++)
+        {
+            h = double(iw)/10.0 * height;
+
+            s = pBtPolar->WindFactor(h);
+            //            p3DWidget->GLDrawCylinder(QColor(150,150,150), 0.13*s, 0.13*s, 0.0*s, 1.5*s, 31, 11);
+            //            p3DWidget->GLDrawCylinder(QColor(150,150,150), 0.31*s, 0.00*s, 1.5*s, 2.5*s, 31, 11);
+            GLDrawArrow(Vector3d(0.0, 0.0, iw*height/10.0), w, s*2.0);
+
+            //            glTranslated(0.0, 0.0, height/10.0);
+        }
+
+        /*        glBegin(GL_LINE_STRIP);
+        {
+            for(int iw=0; iw<=100; iw++)
+            {
+                h = (double)iw/100.0 * height;
+                s = m_pCurBoatPolar->WindFactor(h);
+
+                glVertex3d(s*2.0, 0.0, iw*height/100.0);
+            }
+        }
+        glEnd();*/
+    }
+    glEndList();
+}

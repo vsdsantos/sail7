@@ -20,12 +20,14 @@
 #include <QSlider>
 #include <QLabel>
 #include <QSettings>
-#include "../misc/floatedit.h"
 
 
 
 typedef enum {LEADINGEDGE, TRAILINGEDGE, YLINE, ZLINE} enumStreamLine;
 
+class Sail7;
+class MainFrame;
+class FloatEdit;
 
 class GL3DScales : public QWidget
 {
@@ -65,15 +67,16 @@ private:
     QCheckBox *m_pctrlAutoCpScale;
     FloatEdit    *m_pctrlLegendMin, *m_pctrlLegendMax;
 
-    FloatEdit *m_pctrlNXPoint, *m_pctrlDeltaL, *m_pctrlXFactor;
+    FloatEdit *m_pctrlNXPoint;
+    FloatEdit *m_pctrlDeltaL, *m_pctrlXFactor;
     FloatEdit *m_pctrlXOffset, *m_pctrlYOffset, *m_pctrlZOffset;
     FloatEdit *m_pctrlNStreamLines, *m_pctrlStreamLineSpacing;
     QRadioButton *m_pctrlLE, *m_pctrlTE, *m_pctrlYLine, *m_pctrlZLine;
 
     QLabel *m_pctrlLengthUnit1, *m_pctrlLengthUnit2, *m_pctrlLengthUnit3, *m_pctrlLengthUnit4, *m_pctrlLengthUnit5;
 
-    static void *s_pSail7;
-    static void *s_pMainFrame;
+    static Sail7 *s_pSail7;
+    static MainFrame *s_pMainFrame;
 
     static     bool s_bAutoCpScale;
 

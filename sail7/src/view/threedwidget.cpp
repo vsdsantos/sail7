@@ -33,7 +33,7 @@ ThreeDWidget::ThreeDWidget(QWidget *parent) : QOpenGLWidget(parent)
     setCursor(Qt::CrossCursor);
 
     //create a default pix from a random image - couldn't find a better way to do this
-    m_PixText = QPixmap(":/images/sail7_512.png");
+    m_PixText = QPixmap(":/images/splash.png");
     m_PixText.fill(Qt::transparent);
 
     m_pctrlBtData = new QLabel(this);

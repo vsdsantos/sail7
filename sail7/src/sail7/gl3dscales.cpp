@@ -19,18 +19,20 @@
 
 *****************************************************************************/
 
-#include "../sail7/sail7.h"
-#include "../mainframe.h"
-#include "../globals.h"
-#include "gl3dscales.h"
 #include <QGridLayout>
 #include <QGroupBox>
 #include <QDockWidget>
 #include <QAction>
 #include <QtDebug>
 
-void *GL3DScales::s_pSail7     = nullptr;
-void *GL3DScales::s_pMainFrame = nullptr;
+#include "../sail7/sail7.h"
+#include "../mainframe.h"
+#include "../globals.h"
+#include "gl3dscales.h"
+#include "../misc/floatedit.h"
+
+Sail7 *GL3DScales::s_pSail7     = nullptr;
+MainFrame *GL3DScales::s_pMainFrame = nullptr;
 
 bool GL3DScales::s_bAutoCpScale = true;
 
@@ -86,20 +88,22 @@ GL3DScales::GL3DScales(QWidget *pParent) : QWidget(pParent)
 
 void GL3DScales::SetControls()
 {
-    MainFrame* pMainFrame = (MainFrame*)s_pMainFrame;
     if(s_pos==LEADINGEDGE)       m_pctrlLE->setChecked(true);
     else if(s_pos==TRAILINGEDGE) m_pctrlTE->setChecked(true);
     else if(s_pos==YLINE)        m_pctrlYLine->setChecked(true);
     else if(s_pos==ZLINE)        m_pctrlZLine->setChecked(true);
 
-    m_pctrlDeltaL->SetValue(s_DeltaL  * pMainFrame->m_mtoUnit);
-    m_pctrlXOffset->SetValue(s_XOffset* pMainFrame->m_mtoUnit);
-    m_pctrlYOffset->SetValue(s_YOffset* pMainFrame->m_mtoUnit);
-    m_pctrlZOffset->SetValue(s_ZOffset* pMainFrame->m_mtoUnit);
-    m_pctrlXFactor->SetValue(s_XFactor);
-    m_pctrlNXPoint->SetValue(s_NX);
-    m_pctrlNStreamLines->SetValue(s_NStreamLines);
-    m_pctrlStreamLineSpacing->SetValue(s_StreamlineSpacing);
+    if(s_pMainFrame)
+    {
+        m_pctrlDeltaL->setValue(s_DeltaL  * s_pMainFrame->m_mtoUnit);
+        m_pctrlXOffset->setValue(s_XOffset* s_pMainFrame->m_mtoUnit);
+        m_pctrlYOffset->setValue(s_YOffset* s_pMainFrame->m_mtoUnit);
+        m_pctrlZOffset->setValue(s_ZOffset* s_pMainFrame->m_mtoUnit);
+    }
+    m_pctrlXFactor->setValue(s_XFactor);
+    m_pctrlNXPoint->setValue(s_NX);
+    m_pctrlNStreamLines->setValue(s_NStreamLines);
+    m_pctrlStreamLineSpacing->setValue(s_StreamlineSpacing);
 
     SetStreamControls();
 }
@@ -294,10 +298,9 @@ void GL3DScales::SetupLayout()
 void GL3DScales::InitDialog()
 {
     if(!s_pMainFrame) return;
-    MainFrame* pMainFrame = (MainFrame*)s_pMainFrame;
     QString str;
 
-    GetLengthUnit(str, pMainFrame->m_LengthUnit);
+    GetLengthUnit(str, s_pMainFrame->m_LengthUnit);
     m_pctrlLengthUnit1->setText(str);
     m_pctrlLengthUnit2->setText(str);
     m_pctrlLengthUnit3->setText(str);
@@ -305,8 +308,8 @@ void GL3DScales::InitDialog()
     m_pctrlLengthUnit5->setText(str);
 
     m_pctrlAutoCpScale->setChecked(s_bAutoCpScale);
-    m_pctrlLegendMin->SetValue(s_LegendMin);
-    m_pctrlLegendMax->SetValue(s_LegendMax);
+    m_pctrlLegendMin->setValue(s_LegendMin);
+    m_pctrlLegendMax->setValue(s_LegendMax);
     m_pctrlLegendMin->setEnabled(!s_bAutoCpScale);
     m_pctrlLegendMax->setEnabled(!s_bAutoCpScale);
 
@@ -316,9 +319,7 @@ void GL3DScales::InitDialog()
 
 void GL3DScales::OnCpScale()
 {
-    MainFrame* pMainFrame = (MainFrame*)s_pMainFrame;
-    Sail7 *pSail7 = (Sail7*)s_pSail7;
-
+    if(!s_pMainFrame || !s_pSail7) return;
     s_bAutoCpScale = m_pctrlAutoCpScale->isChecked();
     m_pctrlLegendMin->setEnabled(!s_bAutoCpScale);
     m_pctrlLegendMax->setEnabled(!s_bAutoCpScale);
@@ -327,74 +328,61 @@ void GL3DScales::OnCpScale()
     s_LegendMin = m_pctrlLegendMin->Value();
 
 //        pSail7->m_bResetglOpp = true;
-    pSail7->m_bResetglLegend = true;
-    pSail7->m_bResetglCPForces = true;
+    s_pSail7->m_bResetglLegend = true;
+    s_pSail7->m_bResetglCPForces = true;
 
-    pMainFrame->UpdateView();
+    s_pMainFrame->UpdateView();
 }
 
 
 void GL3DScales::OnApply()
 {
-    MainFrame* pMainFrame = (MainFrame*)s_pMainFrame;
-    Sail7 *pSail7 = (Sail7*)s_pSail7;
     s_bAutoCpScale = m_pctrlAutoCpScale->isChecked();
     s_LegendMax = m_pctrlLegendMax->Value();
     s_LegendMin = m_pctrlLegendMin->Value();
 
     OnStreamParams();
-    pSail7->m_bResetglStream = true;
+    if(s_pSail7) s_pSail7->m_bResetglStream = true;
 
-    pMainFrame->UpdateView();
+    if(s_pMainFrame) s_pMainFrame->UpdateView();
 }
 
 
 void GL3DScales::OnLiftScale(int pos)
 {
-    MainFrame* pMainFrame = (MainFrame*)s_pMainFrame;
-    Sail7 *pSail7 = (Sail7*)s_pSail7;
-
     s_LiftScale    = pos/100.0/sqrt(1.01-pos/100.0);
-    pSail7->m_bResetglLift = true;
-    pSail7->m_bResetglCPForces = true;
+    s_pSail7->m_bResetglLift = true;
+    s_pSail7->m_bResetglCPForces = true;
 
-    pMainFrame->UpdateView();
+    s_pMainFrame->UpdateView();
 }
 
 
 void GL3DScales::OnDragScale(int pos)
 {
-    MainFrame* pMainFrame = (MainFrame*)s_pMainFrame;
-    Sail7 *pSail7 = (Sail7*)s_pSail7;
-
     s_DragScale    = pos/100.0/sqrt(1.01-pos/100.0);
-    pSail7->m_bResetglDrag = true;
+    s_pSail7->m_bResetglDrag = true;
 
-    pMainFrame->UpdateView();
+    s_pMainFrame->UpdateView();
 }
 
 
 void GL3DScales::OnVelocityScale(int pos)
 {
-    MainFrame* pMainFrame = (MainFrame*)s_pMainFrame;
-    Sail7 *pSail7 = (Sail7*)s_pSail7;
     s_VelocityScale    = pos/100.0/sqrt(1.01-pos/100.0);
-    pSail7->m_bResetglDownwash = true;
-    pMainFrame->UpdateView();
+    s_pSail7->m_bResetglDownwash = true;
+    s_pMainFrame->UpdateView();
 }
 
 
 void GL3DScales::OnVelocitySet()
 {
-    MainFrame* pMainFrame = (MainFrame*)s_pMainFrame;
-    Sail7 *pSail7 = (Sail7*)s_pSail7;
-
     int pos = m_pctrlVelocityScaleSlider->sliderPosition();
 
     s_VelocityScale    = pos/100.0/sqrt(1.01-pos/100.0);
-    pSail7->m_bResetglSpeeds   = true;
-    pSail7->m_bResetglDownwash = true;
-    pMainFrame->UpdateView();
+    s_pSail7->m_bResetglSpeeds   = true;
+    s_pSail7->m_bResetglDownwash = true;
+    s_pMainFrame->UpdateView();
 }
 
 
@@ -407,19 +395,19 @@ void GL3DScales::showEvent(QShowEvent *)
 
 void GL3DScales::ReadStreamParams()
 {
-    MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
-    s_NX = m_pctrlNXPoint->Value();
-    s_DeltaL  = m_pctrlDeltaL->Value()  / pMainFrame->m_mtoUnit;
+    if(!s_pMainFrame) return;
+    s_NX = int(m_pctrlNXPoint->Value());
+    s_DeltaL  = m_pctrlDeltaL->Value()  / s_pMainFrame->m_mtoUnit;
     s_XFactor = m_pctrlXFactor->Value();
 
-    s_XOffset = m_pctrlXOffset->Value() / pMainFrame->m_mtoUnit;
-    s_YOffset = m_pctrlYOffset->Value() / pMainFrame->m_mtoUnit;
-    s_ZOffset = m_pctrlZOffset->Value() / pMainFrame->m_mtoUnit;
+    s_XOffset = m_pctrlXOffset->Value() / s_pMainFrame->m_mtoUnit;
+    s_YOffset = m_pctrlYOffset->Value() / s_pMainFrame->m_mtoUnit;
+    s_ZOffset = m_pctrlZOffset->Value() / s_pMainFrame->m_mtoUnit;
 
-    s_NStreamLines = (int)m_pctrlNStreamLines->Value();
+    s_NStreamLines = int(m_pctrlNStreamLines->Value());
     s_StreamlineSpacing = m_pctrlStreamLineSpacing->Value();
 
-    if(m_pctrlLE->isChecked())             s_pos=LEADINGEDGE;
+    if     (m_pctrlLE->isChecked())      s_pos=LEADINGEDGE;
     else if(m_pctrlTE->isChecked())      s_pos=TRAILINGEDGE;
     else if(m_pctrlYLine->isChecked())   s_pos=YLINE;
     else if(m_pctrlZLine->isChecked())   s_pos=ZLINE;
@@ -470,9 +458,9 @@ bool GL3DScales::LoadSettings(QSettings *pSettings)
     m_pctrlLiftScaleSlider->setSliderPosition(l);
     m_pctrlDragScaleSlider->setSliderPosition(d);
     m_pctrlVelocityScaleSlider->setSliderPosition(v);
-    s_LiftScale     = (double)l/100.0/sqrt(1.01-(double)l/100.0);
-    s_DragScale     = (double)d/100.0/sqrt(1.01-(double)d/100.0);
-    s_VelocityScale = (double)v/100.0/sqrt(1.01-(double)v/100.0);
+    s_LiftScale     = double(l)/100.0/sqrt(1.01-double(l)/100.0);
+    s_DragScale     = double(d)/100.0/sqrt(1.01-double(d)/100.0);
+    s_VelocityScale = double(v)/100.0/sqrt(1.01-double(v)/100.0);
 
 
     return true;
@@ -512,8 +500,7 @@ void GL3DScales::keyPressEvent(QKeyEvent *event)
     {
         case Qt::Key_Escape:
         {
-            MainFrame* pMainFrame = (MainFrame*)s_pMainFrame;
-            pMainFrame->m_pctrl3DScalesWidget->setVisible(false);
+            s_pMainFrame->m_pctrl3DScalesWidget->setVisible(false);
             return;
         }
         case  Qt::Key_Return:

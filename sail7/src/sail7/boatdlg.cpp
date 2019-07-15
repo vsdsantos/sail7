@@ -26,8 +26,8 @@
 #include "../objects/nurbssail.h"
 #include "../objects/sailcutsail.h"
 
-void * BoatDlg::s_pMainFrame;
-void * BoatDlg::s_pSail7;
+MainFrame * BoatDlg::s_pMainFrame;
+Sail7* BoatDlg::s_pSail7;
 
 
 
@@ -202,13 +202,12 @@ void BoatDlg::InitDialog(Boat *pBoat)
 {
     //Load the controls with the boat definition data
     if(!pBoat) return;
-    MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
     QString strLen;
 
     m_pBoat = pBoat;
     m_pctrlBoatName->setText(m_pBoat->m_BoatName);
 
-    GetLengthUnit(strLen, pMainFrame->m_LengthUnit);
+    GetLengthUnit(strLen, s_pMainFrame->m_LengthUnit);
 
     m_pSailModel = new QStandardItemModel(this);
     m_pSailModel->setRowCount(10);//temporary
@@ -278,10 +277,10 @@ void BoatDlg::InitDialog(Boat *pBoat)
 
 void BoatDlg::keyPressEvent(QKeyEvent *event)
 {
-    bool bShift = false;
+/*    bool bShift = false;
     bool bCtrl  = false;
     if(event->modifiers() & Qt::ShiftModifier)   bShift =true;
-    if(event->modifiers() & Qt::ControlModifier) bCtrl =true;
+    if(event->modifiers() & Qt::ControlModifier) bCtrl =true;*/
 
     switch (event->key())
     {
@@ -322,7 +321,7 @@ void BoatDlg::OnDeleteHull()
 {
     int iSelect = m_pctrlHullTable->currentIndex().row();
     if(iSelect<0 || iSelect>=m_pBoat->m_poaHull.size()) return;
-    Body *pCurHull = (Body*)m_pBoat->m_poaHull.at(iSelect);
+    Body *pCurHull = m_pBoat->m_poaHull.at(iSelect);
     if(!pCurHull) return;
 
     QString strange = tr("Are you sure you want to delete the Hull")+" "+pCurHull->m_BodyName+"?";
@@ -331,7 +330,7 @@ void BoatDlg::OnDeleteHull()
     if(resp != QMessageBox::Yes) return;
     for(int is=m_pBoat->m_poaHull.size()-1;is>=0;is--)
     {
-        Body* pHull = (Body*)m_pBoat->m_poaHull.at(is);
+        Body* pHull = m_pBoat->m_poaHull.at(is);
         if(is==iSelect)
         {
             //delete
@@ -356,9 +355,6 @@ void BoatDlg::OnImportHull()
     Body *pNewHull = new Body();
     if(!pNewHull) return;
 
-
-    MainFrame* pMainFrame = (MainFrame*)s_pMainFrame;
-
     double mtoUnit,xo,yo,zo;
     xo = yo = zo = 0.0;
 
@@ -367,12 +363,12 @@ void BoatDlg::OnImportHull()
     UnitsDlg Dlg;
 
     Dlg.m_bLengthOnly = true;
-    Dlg.m_Length    = pMainFrame->m_LengthUnit;
-    Dlg.m_Area      = pMainFrame->m_AreaUnit;
-    Dlg.m_Speed     = pMainFrame->m_SpeedUnit;
-    Dlg.m_Weight    = pMainFrame->m_WeightUnit;
-    Dlg.m_Force     = pMainFrame->m_ForceUnit;
-    Dlg.m_Moment    = pMainFrame->m_MomentUnit;
+    Dlg.m_Length    = s_pMainFrame->m_LengthUnit;
+    Dlg.m_Area      = s_pMainFrame->m_AreaUnit;
+    Dlg.m_Speed     = s_pMainFrame->m_SpeedUnit;
+    Dlg.m_Weight    = s_pMainFrame->m_WeightUnit;
+    Dlg.m_Force     = s_pMainFrame->m_ForceUnit;
+    Dlg.m_Moment    = s_pMainFrame->m_MomentUnit;
     Dlg.m_Question = QObject::tr("Choose the length unit to read this file :");
     Dlg.InitDialog();
 
@@ -412,24 +408,24 @@ void BoatDlg::OnImportHull()
     }
     else return;
 
-    QString PathName = QFileDialog::getOpenFileName(pMainFrame, QObject::tr("Open File"),
-                                            pMainFrame->m_LastDirName,
+    QString PathName = QFileDialog::getOpenFileName(s_pMainFrame, QObject::tr("Open File"),
+                                            s_pMainFrame->m_LastDirName,
                                             QObject::tr("All files (*.*)"));
     if(!PathName.length()) return;
     int pos = PathName.lastIndexOf("/");
-    if(pos>0) pMainFrame->m_LastDirName = PathName.left(pos);
+    if(pos>0) s_pMainFrame->m_LastDirName = PathName.left(pos);
 
     QFile XFile(PathName);
     if (!XFile.open(QIODevice::ReadOnly))
     {
         QString strange = QObject::tr("Could not read the file\n")+PathName;
-        QMessageBox::warning(pMainFrame, QObject::tr("Warning"), strange);
+        QMessageBox::warning(s_pMainFrame, QObject::tr("Warning"), strange);
         return;
     }
 
     QTextStream in(&XFile);
 
-    if(!pNewHull->ImportDefinition(in, pMainFrame->m_mtoUnit))
+    if(!pNewHull->ImportDefinition(in, s_pMainFrame->m_mtoUnit))
     {
         delete pNewHull;
         return;
@@ -449,15 +445,14 @@ void BoatDlg::OnGetHull()
     SelectObjectDlg dlg;
     QStringList NameList;
     QString BoatName, HullName;
-    Sail7 *pSail7= (Sail7*)s_pSail7;
 
     NameList.clear();
-    for(int k=0; k<pSail7->m_poaBoat->size(); k++)
+    for(int k=0; k<s_pSail7->m_poaBoat->size(); k++)
     {
-        Boat *pBoat = (Boat*)pSail7->m_poaBoat->at(k);
+        Boat *pBoat = s_pSail7->m_poaBoat->at(k);
         for(int j=0; j<pBoat->m_poaHull.size(); j++)
         {
-            Body*pHull = (Body*)pBoat->m_poaHull.at(j);
+            Body*pHull = pBoat->m_poaHull.at(j);
             NameList.append(pBoat->m_BoatName + " / " + pHull->m_BodyName);
         }
     }
@@ -475,7 +470,7 @@ void BoatDlg::OnGetHull()
             Body *pNewHull = new Body;
             pNewHull->m_BodyName = HullName;
 
-            Boat *pBoat = pSail7->GetBoat(BoatName);
+            Boat *pBoat = s_pSail7->GetBoat(BoatName);
             if(!pBoat) return;
 
             Body *pHull = pBoat->GetBody(HullName);
@@ -498,7 +493,7 @@ void BoatDlg::OnDuplicateHull()
 {
     int iSelect = m_pctrlHullTable->currentIndex().row();
     if(iSelect<0 || iSelect>=m_pBoat->m_poaHull.size()) return;
-    Body *pCurHull = (Body*)m_pBoat->m_poaHull.at(iSelect);
+    Body *pCurHull = m_pBoat->m_poaHull.at(iSelect);
     if(!pCurHull) return;
 
     Body *pNewBody = new Body;
@@ -582,13 +577,12 @@ void BoatDlg::OnImportNURBSSail()
 
 void BoatDlg::OnImportSailcutSail()
 {
-    MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
-    QString filePath = QFileDialog::getOpenFileName(this, tr("Open File"),pMainFrame->m_XMLPath,
+    QString filePath = QFileDialog::getOpenFileName(this, tr("Open File"),s_pMainFrame->m_XMLPath,
                                                     tr("Sailcut files (*.saildef *.xml)"));
     if (!filePath.isEmpty())
     {
         SailcutSail *pSCSail = new SailcutSail;
-        pMainFrame->m_XMLPath = filePath;
+        s_pMainFrame->m_XMLPath = filePath;
         QFile file(filePath);
         if(pSCSail->Import(&file))
             m_pBoat->m_poaSail.append(pSCSail);
@@ -603,7 +597,7 @@ void BoatDlg::OnDeleteSail()
 {
     int iSelect = m_pctrlSailTable->currentIndex().row();
     if(iSelect<0 || iSelect>=m_pBoat->m_poaSail.size()) return;
-    Sail *pCurSail = (Sail*)m_pBoat->m_poaSail.at(iSelect);
+    Sail *pCurSail = m_pBoat->m_poaSail.at(iSelect);
     if(!pCurSail) return;
 
     QString strange = tr("Are you sure you want to delete the sail")+" "+pCurSail->m_SailName+"?";
@@ -612,7 +606,7 @@ void BoatDlg::OnDeleteSail()
     if(resp != QMessageBox::Yes) return;
     for(int is=m_pBoat->m_poaSail.size()-1;is>=0;is--)
     {
-        Sail* pSail = (Sail*)m_pBoat->m_poaSail.at(is);
+        Sail* pSail = m_pBoat->m_poaSail.at(is);
         if(is==iSelect)
         {
             //delete
@@ -686,7 +680,7 @@ void BoatDlg::OnExportSail()
 {
     int iSelect = m_pctrlSailTable->currentIndex().row();
     if(iSelect<0 || iSelect>=m_pBoat->m_poaSail.size()) return;
-    Sail *pCurSail = (Sail*)m_pBoat->m_poaSail.at(iSelect);
+    Sail *pCurSail = m_pBoat->m_poaSail.at(iSelect);
     if(!pCurSail) return;
     pCurSail->Export();
 }
@@ -697,15 +691,14 @@ void BoatDlg::OnImportSail()
     SelectObjectDlg dlg;
     QStringList NameList;
     QString BoatName, SailName;
-    Sail7 *pSail7 = (Sail7*)s_pSail7;
 
     NameList.clear();
-    for(int k=0; k<pSail7->m_poaBoat->size(); k++)
+    for(int k=0; k<s_pSail7->m_poaBoat->size(); k++)
     {
-        Boat *pBoat = (Boat*)pSail7->m_poaBoat->at(k);
+        Boat *pBoat = s_pSail7->m_poaBoat->at(k);
         for(int j=0; j<pBoat->m_poaSail.size(); j++)
         {
-            Sail *pSail = (Sail*)pBoat->m_poaSail.at(j);
+            Sail *pSail = pBoat->m_poaSail.at(j);
             NameList.append(pBoat->m_BoatName + " / " + pSail->m_SailName);
         }
     }
@@ -720,7 +713,7 @@ void BoatDlg::OnImportSail()
             BoatName = dlg.m_SelectedName.left(pos);
             SailName = dlg.m_SelectedName.right(dlg.m_SelectedName.length()-pos-3);
 
-            Boat *pBoat = pSail7->GetBoat(BoatName);
+            Boat *pBoat = s_pSail7->GetBoat(BoatName);
             if(!pBoat) return;
 
             Sail *pSail = pBoat->GetSail(SailName);
@@ -795,39 +788,37 @@ void BoatDlg::OnHullCellChanged(QWidget *)
 
 void BoatDlg::ReadData()
 {
-    MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
-
     for(int is=0; is<m_pSailModel->rowCount(); is++)
     {
-        Sail *pSail = (Sail*)m_pBoat->m_poaSail.at(is);
+        Sail *pSail = m_pBoat->m_poaSail.at(is);
         if(pSail)
         {
             QModelIndex index = m_pSailModel->index(is, 0, QModelIndex());
             pSail->m_SailName = index.data().toString();
 
             index = m_pSailModel->index(is,1, QModelIndex());
-            pSail->m_LEPosition.x = index.data().toDouble()/pMainFrame->m_mtoUnit;
+            pSail->m_LEPosition.x = index.data().toDouble()/s_pMainFrame->m_mtoUnit;
 
             index = m_pSailModel->index(is,2, QModelIndex());
-            pSail->m_LEPosition.z = index.data().toDouble()/pMainFrame->m_mtoUnit;
+            pSail->m_LEPosition.z = index.data().toDouble()/s_pMainFrame->m_mtoUnit;
         }
     }
     for(int ib=0; ib<m_pHullModel->rowCount(); ib++)
     {
-        Body *pHull = (Body*)m_pBoat->m_poaHull.at(ib);
+        Body *pHull = m_pBoat->m_poaHull.at(ib);
         if(pHull)
         {
             QModelIndex index = m_pHullModel->index(ib, 0, QModelIndex());
             pHull->m_BodyName= index.data().toString();
 
             index = m_pHullModel->index(ib,1, QModelIndex());
-            pHull->m_LEPosition.x = index.data().toDouble()/pMainFrame->m_mtoUnit;
+            pHull->m_LEPosition.x = index.data().toDouble()/s_pMainFrame->m_mtoUnit;
 
             index = m_pHullModel->index(ib,2, QModelIndex());
-            pHull->m_LEPosition.y = index.data().toDouble()/pMainFrame->m_mtoUnit;
+            pHull->m_LEPosition.y = index.data().toDouble()/s_pMainFrame->m_mtoUnit;
 
             index = m_pHullModel->index(ib,3, QModelIndex());
-            pHull->m_LEPosition.z = index.data().toDouble()/pMainFrame->m_mtoUnit;
+            pHull->m_LEPosition.z = index.data().toDouble()/s_pMainFrame->m_mtoUnit;
         }
     }
 }
@@ -837,24 +828,23 @@ void BoatDlg::FillHullList()
 {
     //fill the Hull list
     QModelIndex ind;
-    MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
     m_pHullModel->setRowCount(m_pBoat->m_poaHull.size());
     for(int is=0; is<m_pBoat->m_poaHull.size(); is++)
     {
-        Body *pHull = (Body*)m_pBoat->m_poaHull.at(is);
+        Body *pHull = m_pBoat->m_poaHull.at(is);
         if(pHull)
         {
             ind = m_pHullModel->index(is, 0, QModelIndex());
             m_pHullModel->setData(ind, pHull->m_BodyName);
 
             ind = m_pHullModel->index(is, 1, QModelIndex());
-            m_pHullModel->setData(ind, pHull->m_LEPosition.x * pMainFrame->m_mtoUnit);
+            m_pHullModel->setData(ind, pHull->m_LEPosition.x * s_pMainFrame->m_mtoUnit);
 
             ind = m_pHullModel->index(is, 2, QModelIndex());
-            m_pHullModel->setData(ind, pHull->m_LEPosition.y * pMainFrame->m_mtoUnit);
+            m_pHullModel->setData(ind, pHull->m_LEPosition.y * s_pMainFrame->m_mtoUnit);
 
             ind = m_pHullModel->index(is, 3, QModelIndex());
-            m_pHullModel->setData(ind, pHull->m_LEPosition.z * pMainFrame->m_mtoUnit);
+            m_pHullModel->setData(ind, pHull->m_LEPosition.z * s_pMainFrame->m_mtoUnit);
         }
     }
 }
@@ -864,21 +854,21 @@ void BoatDlg::FillSailList()
 {
     //fill the sail list
     QModelIndex ind;
-    MainFrame *pMainFrame = (MainFrame*)s_pMainFrame;
+
     m_pSailModel->setRowCount(m_pBoat->m_poaSail.size());
     for(int is=0; is<m_pBoat->m_poaSail.size(); is++)
     {
-        Sail *pSail = (Sail*)m_pBoat->m_poaSail.at(is);
+        Sail *pSail = m_pBoat->m_poaSail.at(is);
         if(pSail)
         {
             ind = m_pSailModel->index(is, 0, QModelIndex());
             m_pSailModel->setData(ind, pSail->m_SailName);
 
             ind = m_pSailModel->index(is, 1, QModelIndex());
-            m_pSailModel->setData(ind, pSail->m_LEPosition.x * pMainFrame->m_mtoUnit);
+            m_pSailModel->setData(ind, pSail->m_LEPosition.x * s_pMainFrame->m_mtoUnit);
 
             ind = m_pSailModel->index(is, 2, QModelIndex());
-            m_pSailModel->setData(ind, pSail->m_LEPosition.z * pMainFrame->m_mtoUnit);
+            m_pSailModel->setData(ind, pSail->m_LEPosition.z * s_pMainFrame->m_mtoUnit);
         }
     }
 }

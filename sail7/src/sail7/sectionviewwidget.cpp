@@ -464,7 +464,7 @@ void SectionViewWidget::OnRemoveCtrlPt()
     {
         //reduce the degree
         pNSail->m_SplineSurface.m_ivDegree = m_pSailSection->m_CtrlPoint.size()-1;
-        m_pSailDlg->m_pctrlNXDegree->SetValue(pNSail->m_SplineSurface.m_ivDegree);
+        m_pSailDlg->m_pctrlNXDegree->setValue(pNSail->m_SplineSurface.m_ivDegree);
         m_pSail->SplineSurface();
         QString strong = tr("The degree has been reduced to be less than the number of points");
         QMessageBox::warning(window(), tr("Warning"), strong);

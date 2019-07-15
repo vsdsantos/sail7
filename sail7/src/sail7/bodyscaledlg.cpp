@@ -47,15 +47,15 @@ BodyScaleDlg::BodyScaleDlg(void *pParent )
 
 void BodyScaleDlg::InitDialog()
 {
-    m_pctrlXScaleFactor->SetValue(m_XFactor);
-    m_pctrlYScaleFactor->SetValue(m_YFactor);
-    m_pctrlZScaleFactor->SetValue(m_ZFactor);
+    m_pctrlXScaleFactor->setValue(m_XFactor);
+    m_pctrlYScaleFactor->setValue(m_YFactor);
+    m_pctrlZScaleFactor->setValue(m_ZFactor);
 
     m_pctrlXScaleFactor->setFocus();
 
 
     m_pctrlFrameID->setEnabled(false);
-    m_pctrlFrameID->SetValue(m_FrameID+1);
+    m_pctrlFrameID->setValue(m_FrameID+1);
 
     if(!m_bFrameOnly)
     {
